@@ -83,8 +83,10 @@ extern "C" {
 # if !defined(_PATH_UTMPX) && defined(_UTMPX_FILE)
 #  define _PATH_UTMPX _UTMPX_FILE
 # endif
-# if !defined(_PATH_WTMPX) && defined(_WTMPX_FILE)
-#  define _PATH_WTMPX _WTMPX_FILE
+# ifdef HAVE_UPDWTMPX
+#  if !defined(_PATH_WTMPX) && defined(_WTMPX_FILE)
+#   define _PATH_WTMPX _WTMPX_FILE
+#  endif
 # endif
 #endif
 
@@ -488,7 +490,9 @@ void KPty::login(const char *user, const char *remotehost)
     setutxent();
     pututxline(&l_struct);
     endutxent();
+#   ifdef HAVE_UPDWTMPX
     updwtmpx(_PATH_WTMPX, &l_struct);
+#   endif
 #  else
     utmpname(_PATH_UTMP);
     setutent();
@@ -553,7 +557,7 @@ void KPty::logout()
         ut->ut_type = DEAD_PROCESS;
 #  endif
 #  ifdef HAVE_UTMPX
-        gettimeofday(ut->ut_tv, 0);
+        gettimeofday(&ut->ut_tv, 0);
         pututxline(ut);
     }
     endutxent();

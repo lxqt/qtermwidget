@@ -2,6 +2,7 @@
 
 #| 2.6 is out, but most distros only have 2.4
 cmake_minimum_required ( VERSION 2.4 )
+include(CheckFunctionExists)
 
 #| Project
 project ( qtermwidget )
@@ -59,6 +60,15 @@ include_directories ( ${PROJECT_SOURCE_DIR} ) # You mark some of the headers as 
 #| Defines
 add_definitions ( -DHAVE_POSIX_OPENPT )
 #add_definitions( -DHAVE_GETPT )
+if (APPLE)
+    add_definitions( -DHAVE_UTMPX -D_UTMPX_COMPAT )
+endif (APPLE)
+
+CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
+if (HAVE_UPDWTMPX)
+    add_definitions( -DHAVE_UPDWTMPX )
+endif (HAVE_UPDWTMPX)
+
 
 #| Create the Library
 #add_library( qtermwidget STATIC ${SRCS} ${MOC_SRCS} )
