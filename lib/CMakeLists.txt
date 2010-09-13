@@ -7,6 +7,28 @@ include(CheckFunctionExists)
 #| Project
 project ( qtermwidget )
 
+
+IF (NOT LIB_SUFFIX)
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS "LIB_SUFFIX variable is not defined. It will be autodetected now.")
+    MESSAGE(STATUS "You can set it manually with -DLIB_SUFFIX=<value> (64 for example)")
+    IF (NOT APPLE)
+        # check 64 bit
+        if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+            SET (LIB_SUFFIX "")
+        else (CMAKE_SIZEOF_VOID_P EQUAL 4)
+            set (LIB_SUFFIX "64")
+            MESSAGE(STATUS "   LIB_SUFFIX is set to '${LIB_SUFFIX}'")
+        endif (CMAKE_SIZEOF_VOID_P EQUAL 4)
+    ELSE (NOT APPLE)
+        SET (LIB_SUFFIX "")
+    ENDIF (NOT APPLE)
+    MESSAGE(STATUS "")
+ENDIF (NOT LIB_SUFFIX)
+
+
+
+
 #| Sources
 set ( SRCS
 	TerminalCharacterDecoder.cpp
@@ -30,6 +52,9 @@ set ( HDRS
 	Session.h 
 	qtermwidget.h
 )
+
+set ( HDRS_DISTRIB
+	${CMAKE_SOURCE_DIR}/lib/qtermwidget.h )
 
 #| Library Output
 #|	CMake supports out-of-source builds, so the binary dir is not
@@ -94,4 +119,6 @@ set_target_properties ( qtermwidget PROPERTIES
 #| Link Qt4 Libraries
 target_link_libraries ( qtermwidget ${QT_LIBRARIES} )
 
-install(TARGETS qtermwidget DESTINATION lib)
+install(TARGETS qtermwidget DESTINATION lib${LIB_SUFFIX})
+install(FILES ${HDRS_DISTRIB} DESTINATION include)
+
