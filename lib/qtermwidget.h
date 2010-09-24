@@ -101,6 +101,13 @@ public:
      * when the flow control stop key (Ctrl+S) is pressed.
      */
     void setFlowControlWarningEnabled(bool enabled);
+
+    /*! Get all available keyboard bindings
+     */
+    QStringList availableKeyBindings();
+
+    //! Return current key bindings
+    QString keyBindings();
             
 signals:
     void finished();
@@ -109,8 +116,12 @@ public slots:
     // Paste clipboard content to terminal
     void copyClipboard();
     
-     // Copies selection to clipboard
+    // Copies selection to clipboard
     void pasteClipboard();
+
+    /*! Set named key binding for given widget
+     */
+    void setKeyBindings(const QString & kb);
         
 protected: 
     virtual void resizeEvent(QResizeEvent *);

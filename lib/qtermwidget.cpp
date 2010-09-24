@@ -21,6 +21,7 @@
 
 #include "Session.h"
 #include "TerminalDisplay.h"
+#include "KeyboardTranslator.h"
 
 using namespace Konsole;
 
@@ -234,9 +235,24 @@ void QTermWidget::pasteClipboard()
     m_impl->m_terminalDisplay->pasteClipboard();
 }
 
+void QTermWidget::setKeyBindings(const QString & kb)
+{
+    m_impl->m_session->setKeyBindings(kb);
+}
+
 void QTermWidget::setFlowControlEnabled(bool enabled)
 {
     m_impl->m_session->setFlowControlEnabled(enabled);
+}
+
+QStringList QTermWidget::availableKeyBindings()
+{
+    return KeyboardTranslatorManager::instance()->allTranslators();
+}
+
+QString QTermWidget::keyBindings()
+{
+    return m_impl->m_session->keyBindings();
 }
 
 bool QTermWidget::flowControlEnabled(void)

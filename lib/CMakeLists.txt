@@ -82,6 +82,15 @@ QT4_WRAP_CPP ( MOC_SRCS ${HDRS} ) # Moc's the headers
 #| qtermwidget specific
 include_directories ( ${PROJECT_SOURCE_DIR} ) # You mark some of the headers as global, so I just add the source directory to the includes
 
+
+# dirs
+set ( SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share )
+message ( STATUS "Share dire: ${SHARE_DIR}" )
+
+set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/ )
+message ( STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}" )
+add_definitions( -DKB_LAYOUT_DIR="\\"${KB_LAYOUT_DIR}\\"" )
+
 #| Defines
 add_definitions ( -DHAVE_POSIX_OPENPT )
 #add_definitions( -DHAVE_GETPT )
@@ -100,12 +109,14 @@ endif (HAVE_UPDWTMPX)
 add_library ( qtermwidget SHARED ${SRCS} ${MOC_SRCS} )
 
 #| Set Build Type
-set ( CMAKE_BUILD_TYPE
+if (NOT CMAKE_BUILD_TYPE)
+    set ( CMAKE_BUILD_TYPE
 	#"release"
 	"relwithdebinfo" # Default
 	#"debug"
 	#"debugfull"
-)
+    )
+endif (NOT CMAKE_BUILD_TYPE)
 
 #| Library Properties
 set_target_properties ( qtermwidget PROPERTIES
@@ -121,4 +132,7 @@ target_link_libraries ( qtermwidget ${QT_LIBRARIES} )
 
 install(TARGETS qtermwidget DESTINATION lib${LIB_SUFFIX})
 install(FILES ${HDRS_DISTRIB} DESTINATION include)
+
+# keyboard layouts
+install(DIRECTORY kb-layouts/ DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
 

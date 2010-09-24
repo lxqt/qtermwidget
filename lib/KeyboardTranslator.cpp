@@ -64,11 +64,11 @@ KeyboardTranslatorManager::~KeyboardTranslatorManager()
 }
 QString KeyboardTranslatorManager::findTranslatorPath(const QString& name)
 {
-    return QString("kb-layouts/" + name + ".keytab");
+    return QString(KB_LAYOUT_DIR + name + ".keytab");
 }
 void KeyboardTranslatorManager::findTranslators()
 {
-    QDir dir("kb-layouts/");
+    QDir dir(KB_LAYOUT_DIR);
     QStringList filters;
     filters << "*.keytab";
     dir.setNameFilters(filters);
