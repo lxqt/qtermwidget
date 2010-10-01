@@ -24,252 +24,282 @@
 
 using namespace Konsole;
 
-void * createTermWidget(int startnow, void * parent) {
-  return (void *) new QTermWidget(startnow, (QWidget *)parent);
+void * createTermWidget(int startnow, void * parent)
+{
+    return (void *) new QTermWidget(startnow, (QWidget *)parent);
 }
 
 struct TermWidgetImpl {
-  TermWidgetImpl(QWidget * parent = 0);
+    TermWidgetImpl(QWidget * parent = 0);
 
-  TerminalDisplay * m_terminalDisplay;
-  Session * m_session;
+    TerminalDisplay * m_terminalDisplay;
+    Session * m_session;
 
-  Session * createSession();
-  TerminalDisplay * createTerminalDisplay(Session * session, QWidget * parent);
+    Session * createSession();
+    TerminalDisplay * createTerminalDisplay(Session * session, QWidget * parent);
 };
 
-TermWidgetImpl::TermWidgetImpl(QWidget * parent) {
-  this->m_session = createSession();
-  this->m_terminalDisplay = createTerminalDisplay(this->m_session, parent);
+TermWidgetImpl::TermWidgetImpl(QWidget * parent)
+{
+    this->m_session = createSession();
+    this->m_terminalDisplay = createTerminalDisplay(this->m_session, parent);
 }
 
 
-Session * TermWidgetImpl::createSession() {
-  Session * session = new Session();
-  QStringList env("");
-  env.push_front("TERM=xterm");
-  session->setEnvironment(env);
-  session->setTitle(Session::NameRole, "QTermWidget");
-  session->setProgram("/bin/bash");
-  QStringList args("");
-  session->setArguments(args);
-  session->setAutoClose(true);
+Session * TermWidgetImpl::createSession()
+{
+    Session * session = new Session();
+    QStringList env("");
+    env.push_front("TERM=xterm");
+    session->setEnvironment(env);
+    session->setTitle(Session::NameRole, "QTermWidget");
+    session->setProgram("/bin/bash");
+    QStringList args("");
+    session->setArguments(args);
+    session->setAutoClose(true);
 
-  session->setCodec(QTextCodec::codecForName("UTF-8"));
+    session->setCodec(QTextCodec::codecForName("UTF-8"));
 
-  session->setFlowControlEnabled(true);
-  session->setHistoryType(HistoryTypeBuffer(1000));
+    session->setFlowControlEnabled(true);
+    session->setHistoryType(HistoryTypeBuffer(1000));
 
-  session->setDarkBackground(true);
+    session->setDarkBackground(true);
 
-  session->setKeyBindings("");
-  return session;
+    session->setKeyBindings("");
+    return session;
 }
 
-TerminalDisplay * TermWidgetImpl::createTerminalDisplay(Session * session, QWidget * parent) {
+TerminalDisplay * TermWidgetImpl::createTerminalDisplay(Session * session, QWidget * parent)
+{
 //    TerminalDisplay* display = new TerminalDisplay(this);
-  TerminalDisplay * display = new TerminalDisplay(parent);
+    TerminalDisplay * display = new TerminalDisplay(parent);
 
-  display->setBellMode(TerminalDisplay::NotifyBell);
-  display->setTerminalSizeHint(true);
-  display->setTripleClickMode(TerminalDisplay::SelectWholeLine);
-  display->setTerminalSizeStartup(true);
+    display->setBellMode(TerminalDisplay::NotifyBell);
+    display->setTerminalSizeHint(true);
+    display->setTripleClickMode(TerminalDisplay::SelectWholeLine);
+    display->setTerminalSizeStartup(true);
 
-  display->setRandomSeed(session->sessionId() * 31);
+    display->setRandomSeed(session->sessionId() * 31);
 
-  return display;
+    return display;
 }
 
 
 QTermWidget::QTermWidget(int startnow, QWidget * parent)
-  :QWidget(parent) {
-  m_impl = new TermWidgetImpl(this);
+        :QWidget(parent)
+{
+    m_impl = new TermWidgetImpl(this);
 
-  init();
+    init();
 
-  if (startnow && m_impl->m_session) {
+    if (startnow && m_impl->m_session) {
+        m_impl->m_session->run();
+    }
+
+    this->setFocus( Qt::OtherFocusReason );
+    m_impl->m_terminalDisplay->resize(this->size());
+
+    this->setFocusProxy(m_impl->m_terminalDisplay);
+    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),this, SLOT(selectionChanged(bool)));
+}
+
+void QTermWidget::selectionChanged(bool textSelected)
+{
+    emit copyAvailable(textSelected);
+}
+
+int QTermWidget::getShellPID()
+{
+    return m_impl->m_session->processId();
+}
+
+void QTermWidget::changeDir(const QString & dir)
+{
+    /*
+       this is a very hackish way of trying to determine if the shell is in
+       the foreground before attempting to change the directory.  It may not
+       be portable to anything other than Linux.
+    */
+    QString strCmd;
+    strCmd.setNum(getShellPID());
+    strCmd.prepend("ps -j ");
+    strCmd.append(" | tail -1 | awk '{ print $5 }' | grep -q \\+");
+    int retval = system(strCmd.toStdString().c_str());
+
+    if (!retval) {
+        QString cmd = "cd " + dir + "\n";
+        sendText(cmd);
+    }
+}
+
+QSize QTermWidget::sizeHint() const
+{
+    QSize size = m_impl->m_terminalDisplay->sizeHint();
+    size.rheight() = 150;
+    return size;
+}
+
+void QTermWidget::startShellProgram()
+{
+    if ( m_impl->m_session->isRunning() ) {
+        return;
+    }
+
     m_impl->m_session->run();
-  }
-
-  this->setFocus( Qt::OtherFocusReason );
-  m_impl->m_terminalDisplay->resize(this->size());
-
-  this->setFocusProxy(m_impl->m_terminalDisplay);
-  connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),this, SLOT(selectionChanged(bool)));
 }
 
-void QTermWidget::selectionChanged(bool textSelected) {
-  emit copyAvailable(textSelected);
-}
+void QTermWidget::init()
+{
+    m_impl->m_terminalDisplay->setSize(80, 40);
 
-int QTermWidget::getShellPID() {
-  return m_impl->m_session->processId();
-}
+    QFont font = QApplication::font();
+    font.setFamily("Monospace");
+    font.setPointSize(10);
+    font.setStyleHint(QFont::TypeWriter);
+    setTerminalFont(font);
+    setScrollBarPosition(NoScrollBar);
 
-void QTermWidget::changeDir(const QString & dir) {
-  /*
-     this is a very hackish way of trying to determine if the shell is in
-     the foreground before attempting to change the directory.  It may not
-     be portable to anything other than Linux.
-  */
-  QString strCmd;
-  strCmd.setNum(getShellPID());
-  strCmd.prepend("ps -j ");
-  strCmd.append(" | tail -1 | awk '{ print $5 }' | grep -q \\+");
-  int retval = system(strCmd.toStdString().c_str());
+    m_impl->m_session->addView(m_impl->m_terminalDisplay);
 
-  if (!retval) {
-    QString cmd = "cd " + dir + "\n";
-    sendText(cmd);
-  }
-}
-
-QSize QTermWidget::sizeHint() const {
-  QSize size = m_impl->m_terminalDisplay->sizeHint();
-  size.rheight() = 150;
-  return size;
-}
-
-void QTermWidget::startShellProgram() {
-  if ( m_impl->m_session->isRunning() ) {
-    return;
-  }
-
-  m_impl->m_session->run();
-}
-
-void QTermWidget::init() {
-  m_impl->m_terminalDisplay->setSize(80, 40);
-
-  QFont font = QApplication::font();
-  font.setFamily("Monospace");
-  font.setPointSize(10);
-  font.setStyleHint(QFont::TypeWriter);
-  setTerminalFont(font);
-  setScrollBarPosition(NoScrollBar);
-
-  m_impl->m_session->addView(m_impl->m_terminalDisplay);
-
-  connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
+    connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
 }
 
 
-QTermWidget::~QTermWidget() {
-  emit destroyed();
+QTermWidget::~QTermWidget()
+{
+    emit destroyed();
 }
 
 
-void QTermWidget::setTerminalFont(QFont & font) {
-  if (!m_impl->m_terminalDisplay) {
-    return;
-  }
-  m_impl->m_terminalDisplay->setVTFont(font);
+void QTermWidget::setTerminalFont(QFont & font)
+{
+    if (!m_impl->m_terminalDisplay) {
+        return;
+    }
+    m_impl->m_terminalDisplay->setVTFont(font);
 }
 
-void QTermWidget::setShellProgram(const QString & progname) {
-  if (!m_impl->m_session) {
-    return;
-  }
-  m_impl->m_session->setProgram(progname);
+void QTermWidget::setShellProgram(const QString & progname)
+{
+    if (!m_impl->m_session) {
+        return;
+    }
+    m_impl->m_session->setProgram(progname);
 }
 
-void QTermWidget::setWorkingDirectory(const QString & dir) {
-  if (!m_impl->m_session) {
-    return;
-  }
-  m_impl->m_session->setInitialWorkingDirectory(dir);
+void QTermWidget::setWorkingDirectory(const QString & dir)
+{
+    if (!m_impl->m_session) {
+        return;
+    }
+    m_impl->m_session->setInitialWorkingDirectory(dir);
 }
 
-void QTermWidget::setArgs(QStringList & args) {
-  if (!m_impl->m_session) {
-    return;
-  }
-  m_impl->m_session->setArguments(args);
+void QTermWidget::setArgs(QStringList & args)
+{
+    if (!m_impl->m_session) {
+        return;
+    }
+    m_impl->m_session->setArguments(args);
 }
 
-void QTermWidget::setTextCodec(QTextCodec * codec) {
-  if (!m_impl->m_session) {
-    return;
-  }
-  m_impl->m_session->setCodec(codec);
+void QTermWidget::setTextCodec(QTextCodec * codec)
+{
+    if (!m_impl->m_session) {
+        return;
+    }
+    m_impl->m_session->setCodec(codec);
 }
 
-void QTermWidget::setColorScheme(int scheme) {
-  switch(scheme) {
+void QTermWidget::setColorScheme(int scheme)
+{
+    switch (scheme) {
     case COLOR_SCHEME_WHITE_ON_BLACK:
-      m_impl->m_terminalDisplay->setColorTable(whiteonblack_color_table);
-      break;
+        m_impl->m_terminalDisplay->setColorTable(whiteonblack_color_table);
+        break;
     case COLOR_SCHEME_GREEN_ON_BLACK:
-      m_impl->m_terminalDisplay->setColorTable(greenonblack_color_table);
-      break;
+        m_impl->m_terminalDisplay->setColorTable(greenonblack_color_table);
+        break;
     case COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW:
-      m_impl->m_terminalDisplay->setColorTable(blackonlightyellow_color_table);
-      break;
+        m_impl->m_terminalDisplay->setColorTable(blackonlightyellow_color_table);
+        break;
     default: //do nothing
-      break;
-  };
+        break;
+    };
 }
 
-void QTermWidget::setSize(int h, int v) {
-  if (!m_impl->m_terminalDisplay) {
-    return;
-  }
-  m_impl->m_terminalDisplay->setSize(h, v);
+void QTermWidget::setSize(int h, int v)
+{
+    if (!m_impl->m_terminalDisplay) {
+        return;
+    }
+    m_impl->m_terminalDisplay->setSize(h, v);
 }
 
-void QTermWidget::setHistorySize(int lines) {
-  if (lines < 0) {
-    m_impl->m_session->setHistoryType(HistoryTypeFile());
-  } else {
-    m_impl->m_session->setHistoryType(HistoryTypeBuffer(lines));
-  }
+void QTermWidget::setHistorySize(int lines)
+{
+    if (lines < 0) {
+        m_impl->m_session->setHistoryType(HistoryTypeFile());
+    } else {
+        m_impl->m_session->setHistoryType(HistoryTypeBuffer(lines));
+    }
 }
 
-void QTermWidget::setScrollBarPosition(ScrollBarPosition pos) {
-  if (!m_impl->m_terminalDisplay) {
-    return;
-  }
-  m_impl->m_terminalDisplay->setScrollBarPosition((TerminalDisplay::ScrollBarPosition)pos);
+void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
+{
+    if (!m_impl->m_terminalDisplay) {
+        return;
+    }
+    m_impl->m_terminalDisplay->setScrollBarPosition((TerminalDisplay::ScrollBarPosition)pos);
 }
 
-void QTermWidget::sendText(QString & text) {
-  m_impl->m_session->sendText(text);
+void QTermWidget::sendText(QString & text)
+{
+    m_impl->m_session->sendText(text);
 }
 
-void QTermWidget::resizeEvent(QResizeEvent *) {
+void QTermWidget::resizeEvent(QResizeEvent *)
+{
 //qDebug("global window resizing...with %d %d", this->size().width(), this->size().height());
-  m_impl->m_terminalDisplay->resize(this->size());
+    m_impl->m_terminalDisplay->resize(this->size());
 }
 
 
-void QTermWidget::sessionFinished() {
-  emit finished();
+void QTermWidget::sessionFinished()
+{
+    emit finished();
 }
 
 
-void QTermWidget::copyClipboard() {
-  m_impl->m_terminalDisplay->copyClipboard();
+void QTermWidget::copyClipboard()
+{
+    m_impl->m_terminalDisplay->copyClipboard();
 }
 
-void QTermWidget::pasteClipboard() {
-  m_impl->m_terminalDisplay->pasteClipboard();
+void QTermWidget::pasteClipboard()
+{
+    m_impl->m_terminalDisplay->pasteClipboard();
 }
 
-void QTermWidget::setFlowControlEnabled(bool enabled) {
-  m_impl->m_session->setFlowControlEnabled(enabled);
+void QTermWidget::setFlowControlEnabled(bool enabled)
+{
+    m_impl->m_session->setFlowControlEnabled(enabled);
 }
 
-bool QTermWidget::flowControlEnabled(void) {
-  return m_impl->m_session->flowControlEnabled();
+bool QTermWidget::flowControlEnabled(void)
+{
+    return m_impl->m_session->flowControlEnabled();
 }
 
-void QTermWidget::setFlowControlWarningEnabled(bool enabled) {
-  if(flowControlEnabled()) {
-    // Do not show warning label if flow control is disabled
-    m_impl->m_terminalDisplay->setFlowControlWarningEnabled(enabled);
-  }
+void QTermWidget::setFlowControlWarningEnabled(bool enabled)
+{
+    if (flowControlEnabled()) {
+        // Do not show warning label if flow control is disabled
+        m_impl->m_terminalDisplay->setFlowControlWarningEnabled(enabled);
+    }
 }
 
-void QTermWidget::setEnvironment(const QStringList & environment) {
-  m_impl->m_session->setEnvironment(environment);
+void QTermWidget::setEnvironment(const QStringList & environment)
+{
+    m_impl->m_session->setEnvironment(environment);
 }

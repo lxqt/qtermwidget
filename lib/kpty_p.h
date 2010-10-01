@@ -28,17 +28,17 @@
 #include <QtCore/QByteArray>
 
 struct KPtyPrivate {
-  Q_DECLARE_PUBLIC(KPty)
+    Q_DECLARE_PUBLIC(KPty)
 
-  KPtyPrivate();
-  bool chownpty(bool grant);
+    KPtyPrivate();
+    bool chownpty(bool grant);
 
-  int masterFd;
-  int slaveFd;
+    int masterFd;
+    int slaveFd;
 
-  QByteArray ttyName;
+    QByteArray ttyName;
 
-  KPty * q_ptr;
+    KPty * q_ptr;
 };
 
 #endif

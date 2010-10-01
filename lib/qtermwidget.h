@@ -29,106 +29,107 @@ enum COLOR_SCHEME {     COLOR_SCHEME_WHITE_ON_BLACK = 1,
                         COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW
                   };
 
-class QTermWidget : public QWidget {
-  Q_OBJECT
+class QTermWidget : public QWidget
+{
+    Q_OBJECT
 public:
 
-  enum ScrollBarPosition {
-    /** Do not show the scroll bar. */
-    NoScrollBar=0,
-    /** Show the scroll bar on the left side of the display. */
-    ScrollBarLeft=1,
-    /** Show the scroll bar on the right side of the display. */
-    ScrollBarRight=2
-  };
+    enum ScrollBarPosition {
+        /** Do not show the scroll bar. */
+        NoScrollBar=0,
+        /** Show the scroll bar on the left side of the display. */
+        ScrollBarLeft=1,
+        /** Show the scroll bar on the right side of the display. */
+        ScrollBarRight=2
+    };
 
 
-  //Creation of widget
-  QTermWidget(int startnow = 1, //start shell programm immediatelly
-              QWidget * parent = 0);
-  ~QTermWidget();
+    //Creation of widget
+    QTermWidget(int startnow = 1, //start shell programm immediatelly
+                QWidget * parent = 0);
+    ~QTermWidget();
 
-  //Initial size
-  QSize sizeHint() const;
+    //Initial size
+    QSize sizeHint() const;
 
-  //start shell program if it was not started in constructor
-  void startShellProgram();
+    //start shell program if it was not started in constructor
+    void startShellProgram();
 
-  int getShellPID();
+    int getShellPID();
 
-  void changeDir(const QString & dir);
+    void changeDir(const QString & dir);
 
-  //look-n-feel, if you don`t like defaults
+    //look-n-feel, if you don`t like defaults
 
-  //  Terminal font
-  // Default is application font with family Monospace, size 10
-  // USE ONLY FIXED-PITCH FONT!
-  // otherwise symbols' position could be incorrect
-  void setTerminalFont(QFont & font);
+    //  Terminal font
+    // Default is application font with family Monospace, size 10
+    // USE ONLY FIXED-PITCH FONT!
+    // otherwise symbols' position could be incorrect
+    void setTerminalFont(QFont & font);
 
-  //environment
-  void setEnvironment(const QStringList & environment);
+    //environment
+    void setEnvironment(const QStringList & environment);
 
-  //  Shell program, default is /bin/bash
-  void setShellProgram(const QString & progname);
+    //  Shell program, default is /bin/bash
+    void setShellProgram(const QString & progname);
 
-  //working directory
-  void setWorkingDirectory(const QString & dir);
+    //working directory
+    void setWorkingDirectory(const QString & dir);
 
-  // Shell program args, default is none
-  void setArgs(QStringList & args);
+    // Shell program args, default is none
+    void setArgs(QStringList & args);
 
-  //Text codec, default is UTF-8
-  void setTextCodec(QTextCodec * codec);
+    //Text codec, default is UTF-8
+    void setTextCodec(QTextCodec * codec);
 
-  //Color scheme, default is white on black
-  void setColorScheme(int scheme);
+    //Color scheme, default is white on black
+    void setColorScheme(int scheme);
 
-  //set size
-  void setSize(int h, int v);
+    //set size
+    void setSize(int h, int v);
 
-  // History size for scrolling
-  void setHistorySize(int lines); //infinite if lines < 0
+    // History size for scrolling
+    void setHistorySize(int lines); //infinite if lines < 0
 
-  // Presence of scrollbar
-  void setScrollBarPosition(ScrollBarPosition);
+    // Presence of scrollbar
+    void setScrollBarPosition(ScrollBarPosition);
 
-  // Send some text to terminal
-  void sendText(QString & text);
+    // Send some text to terminal
+    void sendText(QString & text);
 
-  // Sets whether flow control is enabled
-  void setFlowControlEnabled(bool enabled);
+    // Sets whether flow control is enabled
+    void setFlowControlEnabled(bool enabled);
 
-  // Returns whether flow control is enabled
-  bool flowControlEnabled(void);
+    // Returns whether flow control is enabled
+    bool flowControlEnabled(void);
 
-  /**
-   * Sets whether the flow control warning box should be shown
-   * when the flow control stop key (Ctrl+S) is pressed.
-   */
-  void setFlowControlWarningEnabled(bool enabled);
+    /**
+     * Sets whether the flow control warning box should be shown
+     * when the flow control stop key (Ctrl+S) is pressed.
+     */
+    void setFlowControlWarningEnabled(bool enabled);
 
 signals:
-  void finished();
-  void copyAvailable(bool);
+    void finished();
+    void copyAvailable(bool);
 
 public slots:
-  // Paste clipboard content to terminal
-  void copyClipboard();
+    // Paste clipboard content to terminal
+    void copyClipboard();
 
-  // Copies selection to clipboard
-  void pasteClipboard();
+    // Copies selection to clipboard
+    void pasteClipboard();
 
 protected:
-  virtual void resizeEvent(QResizeEvent *);
+    virtual void resizeEvent(QResizeEvent *);
 
 protected slots:
-  void sessionFinished();
-  void selectionChanged(bool textSelected);
+    void sessionFinished();
+    void selectionChanged(bool textSelected);
 
 private:
-  void init();
-  TermWidgetImpl * m_impl;
+    void init();
+    TermWidgetImpl * m_impl;
 };
 
 
