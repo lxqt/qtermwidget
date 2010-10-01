@@ -1,7 +1,7 @@
 /*
     This file is part of Konsole, an X terminal.
     Copyright (C) 2000 by Stephan Kulow <coolo@kde.org>
-   
+
     Rewritten for QT4 by e_k <e_k at users.sourceforge.net>, Copyright (C)2008
 
     This program is free software; you can redistribute it and/or modify
@@ -34,14 +34,17 @@ namespace Konsole
 {
 
 struct Block {
-    Block() { size = 0; }
+    Block() {
+        size = 0;
+    }
     unsigned char data[ENTRIES];
     size_t size;
 };
 
 // ///////////////////////////////////////////////////////
 
-class BlockArray {
+class BlockArray
+{
 public:
     /**
     * Creates a history file for holding
@@ -95,11 +98,15 @@ public:
     */
     bool setSize(size_t newsize);
 
-    size_t len() const { return length; }
+    size_t len() const {
+        return length;
+    }
 
     bool has(size_t index) const;
 
-    size_t getCurrent() const { return current; }
+    size_t getCurrent() const {
+        return current;
+    }
 
 private:
     void unmap();

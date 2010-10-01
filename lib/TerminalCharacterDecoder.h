@@ -1,8 +1,8 @@
 /*
     This file is part of Konsole, an X terminal.
-    
+
     Copyright (C) 2006-7 by Robert Knight <robertknight@gmail.com>
-    
+
     Rewritten for QT4 by e_k <e_k at users.sourceforge.net>, Copyright (C)2008
 
     This program is free software; you can redistribute it and/or modify
@@ -38,29 +38,29 @@ namespace Konsole
  * and background colours and other appearance-related properties into text strings.
  *
  * Derived classes may produce either plain text with no other colour or appearance information, or
- * they may produce text which incorporates these additional properties. 
+ * they may produce text which incorporates these additional properties.
  */
 class TerminalCharacterDecoder
 {
 public:
-	virtual ~TerminalCharacterDecoder() {}
+    virtual ~TerminalCharacterDecoder() {}
 
     /** Begin decoding characters.  The resulting text is appended to @p output. */
     virtual void begin(QTextStream* output) = 0;
     /** End decoding. */
     virtual void end() = 0;
 
-	/**
-	 * Converts a line of terminal characters with associated properties into a text string
-	 * and writes the string into an output QTextStream.
-	 *
-	 * @param characters An array of characters of length @p count.
-	 * @param properties Additional properties which affect all characters in the line
-	 * @param output The output stream which receives the decoded text
-	 */
-	virtual void decodeLine(const Character* const characters, 
-							int count,
-							LineProperty properties) = 0; 
+    /**
+     * Converts a line of terminal characters with associated properties into a text string
+     * and writes the string into an output QTextStream.
+     *
+     * @param characters An array of characters of length @p count.
+     * @param properties Additional properties which affect all characters in the line
+     * @param output The output stream which receives the decoded text
+     */
+    virtual void decodeLine(const Character* const characters,
+                            int count,
+                            LineProperty properties) = 0;
 };
 
 /**
@@ -70,10 +70,10 @@ public:
 class PlainTextDecoder : public TerminalCharacterDecoder
 {
 public:
-	PlainTextDecoder(); 
+    PlainTextDecoder();
 
-    /** 
-     * Set whether trailing whitespace at the end of lines should be included 
+    /**
+     * Set whether trailing whitespace at the end of lines should be included
      * in the output.
      * Defaults to true.
      */
@@ -87,11 +87,11 @@ public:
     virtual void begin(QTextStream* output);
     virtual void end();
 
-	virtual void decodeLine(const Character* const characters,
-							int count,
-							LineProperty properties);	
+    virtual void decodeLine(const Character* const characters,
+                            int count,
+                            LineProperty properties);
 
-    
+
 private:
     QTextStream* _output;
     bool _includeTrailingWhitespace;
@@ -103,34 +103,34 @@ private:
 class HTMLDecoder : public TerminalCharacterDecoder
 {
 public:
-	/** 
-	 * Constructs an HTML decoder using a default black-on-white color scheme.
-	 */
-	HTMLDecoder();
+    /**
+     * Constructs an HTML decoder using a default black-on-white color scheme.
+     */
+    HTMLDecoder();
 
-	/**
-	 * Sets the colour table which the decoder uses to produce the HTML colour codes in its
-	 * output
-	 */
-	void setColorTable( const ColorEntry* table );
-		
-	virtual void decodeLine(const Character* const characters,
-							int count,
-							LineProperty properties);
+    /**
+     * Sets the colour table which the decoder uses to produce the HTML colour codes in its
+     * output
+     */
+    void setColorTable( const ColorEntry* table );
+
+    virtual void decodeLine(const Character* const characters,
+                            int count,
+                            LineProperty properties);
 
     virtual void begin(QTextStream* output);
     virtual void end();
 
 private:
-	void openSpan(QString& text , const QString& style);
-	void closeSpan(QString& text);
+    void openSpan(QString& text , const QString& style);
+    void closeSpan(QString& text);
 
     QTextStream* _output;
-	const ColorEntry* _colorTable;
-    bool _innerSpanOpen; 
-	quint8 _lastRendition;
-	CharacterColor _lastForeColor;
-	CharacterColor _lastBackColor;
+    const ColorEntry* _colorTable;
+    bool _innerSpanOpen;
+    quint8 _lastRendition;
+    CharacterColor _lastForeColor;
+    CharacterColor _lastBackColor;
 
 };
 

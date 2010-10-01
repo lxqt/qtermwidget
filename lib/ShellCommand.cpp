@@ -38,8 +38,7 @@ ShellCommand::ShellCommand(const QString& fullCommand)
 
     QString builder;
 
-    for ( int i = 0 ; i < fullCommand.count() ; i++ )
-    {
+    for ( int i = 0 ; i < fullCommand.count() ; i++ ) {
         QChar ch = fullCommand[i];
 
         const bool isLastChar = ( i == fullCommand.count() - 1 );
@@ -47,15 +46,13 @@ ShellCommand::ShellCommand(const QString& fullCommand)
 
         if ( !isLastChar && isQuote )
             inQuotes = !inQuotes;
-        else
-        { 
+        else {
             if ( (!ch.isSpace() || inQuotes) && !isQuote )
                 builder.append(ch);
 
-            if ( (ch.isSpace() && !inQuotes) || ( i == fullCommand.count()-1 ) )
-            {
-                _arguments << builder;      
-                builder.clear(); 
+            if ( (ch.isSpace() && !inQuotes) || ( i == fullCommand.count()-1 ) ) {
+                _arguments << builder;
+                builder.clear();
             }
         }
     }
@@ -63,7 +60,7 @@ ShellCommand::ShellCommand(const QString& fullCommand)
 ShellCommand::ShellCommand(const QString& command , const QStringList& arguments)
 {
     _arguments = arguments;
-    
+
     if ( !_arguments.isEmpty() )
         _arguments[0] == command;
 }
@@ -90,14 +87,14 @@ bool ShellCommand::isRootCommand() const
 bool ShellCommand::isAvailable() const
 {
     Q_ASSERT(0); // not implemented yet
-    return false; 
+    return false;
 }
 QStringList ShellCommand::expand(const QStringList& items)
 {
     QStringList result;
 
     foreach( QString item , items )
-        result << expand(item);
+    result << expand(item);
 
     return result;
 }
@@ -116,53 +113,52 @@ QString ShellCommand::expand(const QString& text)
  */
 static bool expandEnv( QString &text )
 {
-	// Find all environment variables beginning with '$'
-	//
-	int pos = 0;
+    // Find all environment variables beginning with '$'
+    //
+    int pos = 0;
 
-	bool expanded = false;
+    bool expanded = false;
 
-	while ( (pos = text.indexOf(QLatin1Char('$'), pos)) != -1 ) {
+    while ( (pos = text.indexOf(QLatin1Char('$'), pos)) != -1 ) {
 
-		// Skip escaped '$'
-		//
-		if ( pos > 0 && text.at(pos-1) == QLatin1Char('\\') ) {
-			pos++;
-		}
-		// Variable found => expand
-		//
-		else {
-			// Find the end of the variable = next '/' or ' '
-			//
-			int pos2 = text.indexOf( QLatin1Char(' '), pos+1 );
-			int pos_tmp = text.indexOf( QLatin1Char('/'), pos+1 );
+        // Skip escaped '$'
+        //
+        if ( pos > 0 && text.at(pos-1) == QLatin1Char('\\') ) {
+            pos++;
+        }
+        // Variable found => expand
+        //
+        else {
+            // Find the end of the variable = next '/' or ' '
+            //
+            int pos2 = text.indexOf( QLatin1Char(' '), pos+1 );
+            int pos_tmp = text.indexOf( QLatin1Char('/'), pos+1 );
 
-			if ( pos2 == -1 || (pos_tmp != -1 && pos_tmp < pos2) )
-				pos2 = pos_tmp;
+            if ( pos2 == -1 || (pos_tmp != -1 && pos_tmp < pos2) )
+                pos2 = pos_tmp;
 
-			if ( pos2 == -1 )
-				pos2 = text.length();
+            if ( pos2 == -1 )
+                pos2 = text.length();
 
-			// Replace if the variable is terminated by '/' or ' '
-			// and defined
-			//
-			if ( pos2 >= 0 ) {
-				int len	= pos2 - pos;
-				QString key	= text.mid( pos+1, len-1);
-				QString value =
-					QString::fromLocal8Bit( ::getenv(key.toLocal8Bit()) );
+            // Replace if the variable is terminated by '/' or ' '
+            // and defined
+            //
+            if ( pos2 >= 0 ) {
+                int len	= pos2 - pos;
+                QString key	= text.mid( pos+1, len-1);
+                QString value =
+                    QString::fromLocal8Bit( ::getenv(key.toLocal8Bit()) );
 
-				if ( !value.isEmpty() ) {
-					expanded = true;
-					text.replace( pos, len, value );
-					pos = pos + value.length();
-				}
-				else {
-					pos = pos2;
-				}
-			}
-		}
-	}
+                if ( !value.isEmpty() ) {
+                    expanded = true;
+                    text.replace( pos, len, value );
+                    pos = pos + value.length();
+                } else {
+                    pos = pos2;
+                }
+            }
+        }
+    }
 
-	return expanded;
+    return expanded;
 }
