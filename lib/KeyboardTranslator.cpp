@@ -50,7 +50,7 @@ using namespace Konsole;
 //;
 
 //and this is default now translator - default.keytab from original Konsole
-const char* KeyboardTranslatorManager::defaultTranslatorText =
+const char * KeyboardTranslatorManager::defaultTranslatorText =
 #include "ExtendedDefaultTranslator.h"
     ;
 
@@ -62,7 +62,7 @@ KeyboardTranslatorManager::~KeyboardTranslatorManager()
 {
     qDeleteAll(_translators.values());
 }
-QString KeyboardTranslatorManager::findTranslatorPath(const QString& name)
+QString KeyboardTranslatorManager::findTranslatorPath(const QString & name)
 {
     return QString(KB_LAYOUT_DIR + name + ".keytab");
 }
@@ -92,10 +92,11 @@ void KeyboardTranslatorManager::findTranslators()
     _haveLoadedAll = true;
 }
 
-const KeyboardTranslator* KeyboardTranslatorManager::findTranslator(const QString& name)
+const KeyboardTranslator * KeyboardTranslatorManager::findTranslator(const QString & name)
 {
-    if ( name.isEmpty() )
+    if ( name.isEmpty() ) {
         return defaultTranslator();
+    }
 
 //here was smth wrong in original Konsole source
     findTranslators();
@@ -104,17 +105,18 @@ const KeyboardTranslator* KeyboardTranslatorManager::findTranslator(const QStrin
         return _translators[name];
     }
 
-    KeyboardTranslator* translator = loadTranslator(name);
+    KeyboardTranslator * translator = loadTranslator(name);
 
-    if ( translator != 0 )
+    if ( translator != 0 ) {
         _translators[name] = translator;
-    else if ( !name.isEmpty() )
+    } else if ( !name.isEmpty() ) {
         qWarning() << "Unable to load translator" << name;
+    }
 
     return translator;
 }
 
-bool KeyboardTranslatorManager::saveTranslator(const KeyboardTranslator* translator)
+bool KeyboardTranslatorManager::saveTranslator(const KeyboardTranslator * translator)
 {
     const QString path = ".keytab";// = KGlobal::dirs()->saveLocation("data","konsole/")+translator->name()
 //           +".keytab";
@@ -135,8 +137,9 @@ bool KeyboardTranslatorManager::saveTranslator(const KeyboardTranslator* transla
         writer.writeHeader(translator->description());
 
         QListIterator<KeyboardTranslator::Entry> iter(translator->entries());
-        while ( iter.hasNext() )
+        while ( iter.hasNext() ) {
             writer.writeEntry(iter.next());
+        }
     }
 
     destination.close();
@@ -144,33 +147,35 @@ bool KeyboardTranslatorManager::saveTranslator(const KeyboardTranslator* transla
     return true;
 }
 
-KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(const QString& name)
+KeyboardTranslator * KeyboardTranslatorManager::loadTranslator(const QString & name)
 {
-    const QString& path = findTranslatorPath(name);
+    const QString & path = findTranslatorPath(name);
 
     QFile source(path);
 
-    if (name.isEmpty() || !source.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (name.isEmpty() || !source.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return 0;
+    }
 
     return loadTranslator(&source,name);
 }
 
-const KeyboardTranslator* KeyboardTranslatorManager::defaultTranslator()
+const KeyboardTranslator * KeyboardTranslatorManager::defaultTranslator()
 {
     qDebug() << "Loading default translator from text";
     QBuffer textBuffer;
     textBuffer.setData(defaultTranslatorText,strlen(defaultTranslatorText));
 
-    if (!textBuffer.open(QIODevice::ReadOnly))
+    if (!textBuffer.open(QIODevice::ReadOnly)) {
         return 0;
+    }
 
     return loadTranslator(&textBuffer,"fallback");
 }
 
-KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(QIODevice* source,const QString& name)
+KeyboardTranslator * KeyboardTranslatorManager::loadTranslator(QIODevice * source,const QString & name)
 {
-    KeyboardTranslator* translator = new KeyboardTranslator(name);
+    KeyboardTranslator * translator = new KeyboardTranslator(name);
     KeyboardTranslatorReader reader(source);
     translator->setDescription( reader.description() );
 
@@ -188,7 +193,7 @@ KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(QIODevice* source,
     }
 }
 
-KeyboardTranslatorWriter::KeyboardTranslatorWriter(QIODevice* destination)
+KeyboardTranslatorWriter::KeyboardTranslatorWriter(QIODevice * destination)
         : _destination(destination)
 {
     Q_ASSERT( destination && destination->isWritable() );
@@ -199,18 +204,19 @@ KeyboardTranslatorWriter::~KeyboardTranslatorWriter()
 {
     delete _writer;
 }
-void KeyboardTranslatorWriter::writeHeader( const QString& description )
+void KeyboardTranslatorWriter::writeHeader( const QString & description )
 {
     *_writer << "keyboard \"" << description << '\"' << '\n';
 }
-void KeyboardTranslatorWriter::writeEntry( const KeyboardTranslator::Entry& entry )
+void KeyboardTranslatorWriter::writeEntry( const KeyboardTranslator::Entry & entry )
 {
     QString result;
 
-    if ( entry.command() != KeyboardTranslator::NoCommand )
+    if ( entry.command() != KeyboardTranslator::NoCommand ) {
         result = entry.resultToString();
-    else
+    } else {
         result = '\"' + entry.resultToString() + '\"';
+    }
 
     *_writer << "key " << entry.conditionToString() << " : " << result << '\n';
 }
@@ -235,7 +241,7 @@ void KeyboardTranslatorWriter::writeEntry( const KeyboardTranslator::Entry& entr
 // already been removed)
 //
 
-KeyboardTranslatorReader::KeyboardTranslatorReader( QIODevice* source )
+KeyboardTranslatorReader::KeyboardTranslatorReader( QIODevice * source )
         : _source(source)
         , _hasNext(false)
 {
@@ -278,8 +284,9 @@ void KeyboardTranslatorReader::readNext()
                 text = tokens[2].text.toLocal8Bit();
             } else if ( tokens[2].type == Token::Command ) {
                 // identify command
-                if (!parseAsCommand(tokens[2].text,command))
+                if (!parseAsCommand(tokens[2].text,command)) {
                     qWarning() << "Command" << tokens[2].text << "not understood.";
+                }
             }
 
             KeyboardTranslator::Entry newEntry;
@@ -302,32 +309,33 @@ void KeyboardTranslatorReader::readNext()
     _hasNext = false;
 }
 
-bool KeyboardTranslatorReader::parseAsCommand(const QString& text,KeyboardTranslator::Command& command)
+bool KeyboardTranslatorReader::parseAsCommand(const QString & text,KeyboardTranslator::Command & command)
 {
-    if ( text.compare("erase",Qt::CaseInsensitive) == 0 )
+    if ( text.compare("erase",Qt::CaseInsensitive) == 0 ) {
         command = KeyboardTranslator::EraseCommand;
-    else if ( text.compare("scrollpageup",Qt::CaseInsensitive) == 0 )
+    } else if ( text.compare("scrollpageup",Qt::CaseInsensitive) == 0 ) {
         command = KeyboardTranslator::ScrollPageUpCommand;
-    else if ( text.compare("scrollpagedown",Qt::CaseInsensitive) == 0 )
+    } else if ( text.compare("scrollpagedown",Qt::CaseInsensitive) == 0 ) {
         command = KeyboardTranslator::ScrollPageDownCommand;
-    else if ( text.compare("scrolllineup",Qt::CaseInsensitive) == 0 )
+    } else if ( text.compare("scrolllineup",Qt::CaseInsensitive) == 0 ) {
         command = KeyboardTranslator::ScrollLineUpCommand;
-    else if ( text.compare("scrolllinedown",Qt::CaseInsensitive) == 0 )
+    } else if ( text.compare("scrolllinedown",Qt::CaseInsensitive) == 0 ) {
         command = KeyboardTranslator::ScrollLineDownCommand;
-    else if ( text.compare("scrolllock",Qt::CaseInsensitive) == 0 )
+    } else if ( text.compare("scrolllock",Qt::CaseInsensitive) == 0 ) {
         command = KeyboardTranslator::ScrollLockCommand;
-    else
+    } else {
         return false;
+    }
 
     return true;
 }
 
-bool KeyboardTranslatorReader::decodeSequence(const QString& text,
-        int& keyCode,
-        Qt::KeyboardModifiers& modifiers,
-        Qt::KeyboardModifiers& modifierMask,
-        KeyboardTranslator::States& flags,
-        KeyboardTranslator::States& flagMask)
+bool KeyboardTranslatorReader::decodeSequence(const QString & text,
+        int & keyCode,
+        Qt::KeyboardModifiers & modifiers,
+        Qt::KeyboardModifiers & modifierMask,
+        KeyboardTranslator::States & flags,
+        KeyboardTranslator::States & flagMask)
 {
     bool isWanted = true;
     bool endOfItem = false;
@@ -339,7 +347,7 @@ bool KeyboardTranslatorReader::decodeSequence(const QString& text,
     KeyboardTranslator::States tempFlagMask = flagMask;
 
     for ( int i = 0 ; i < text.count() ; i++ ) {
-        const QChar& ch = text[i];
+        const QChar & ch = text[i];
         bool isLastLetter = ( i == text.count()-1 );
 
         endOfItem = true;
@@ -356,27 +364,31 @@ bool KeyboardTranslatorReader::decodeSequence(const QString& text,
             if ( parseAsModifier(buffer,itemModifier) ) {
                 tempModifierMask |= itemModifier;
 
-                if ( isWanted )
+                if ( isWanted ) {
                     tempModifiers |= itemModifier;
+                }
             } else if ( parseAsStateFlag(buffer,itemFlag) ) {
                 tempFlagMask |= itemFlag;
 
-                if ( isWanted )
+                if ( isWanted ) {
                     tempFlags |= itemFlag;
-            } else if ( parseAsKeyCode(buffer,itemKeyCode) )
+                }
+            } else if ( parseAsKeyCode(buffer,itemKeyCode) ) {
                 keyCode = itemKeyCode;
-            else
+            } else {
                 qDebug() << "Unable to parse key binding item:" << buffer;
+            }
 
             buffer.clear();
         }
 
         // check if this is a wanted / not-wanted flag and update the
         // state ready for the next item
-        if ( ch == '+' )
+        if ( ch == '+' ) {
             isWanted = true;
-        else if ( ch == '-' )
+        } else if ( ch == '-' ) {
             isWanted = false;
+        }
     }
 
     modifiers = tempModifiers;
@@ -387,41 +399,43 @@ bool KeyboardTranslatorReader::decodeSequence(const QString& text,
     return true;
 }
 
-bool KeyboardTranslatorReader::parseAsModifier(const QString& item , Qt::KeyboardModifier& modifier)
+bool KeyboardTranslatorReader::parseAsModifier(const QString & item , Qt::KeyboardModifier & modifier)
 {
-    if ( item == "shift" )
+    if ( item == "shift" ) {
         modifier = Qt::ShiftModifier;
-    else if ( item == "ctrl" || item == "control" )
+    } else if ( item == "ctrl" || item == "control" ) {
         modifier = Qt::ControlModifier;
-    else if ( item == "alt" )
+    } else if ( item == "alt" ) {
         modifier = Qt::AltModifier;
-    else if ( item == "meta" )
+    } else if ( item == "meta" ) {
         modifier = Qt::MetaModifier;
-    else if ( item == "keypad" )
+    } else if ( item == "keypad" ) {
         modifier = Qt::KeypadModifier;
-    else
+    } else {
         return false;
+    }
 
     return true;
 }
-bool KeyboardTranslatorReader::parseAsStateFlag(const QString& item , KeyboardTranslator::State& flag)
+bool KeyboardTranslatorReader::parseAsStateFlag(const QString & item , KeyboardTranslator::State & flag)
 {
-    if ( item == "appcukeys" )
+    if ( item == "appcukeys" ) {
         flag = KeyboardTranslator::CursorKeysState;
-    else if ( item == "ansi" )
+    } else if ( item == "ansi" ) {
         flag = KeyboardTranslator::AnsiState;
-    else if ( item == "newline" )
+    } else if ( item == "newline" ) {
         flag = KeyboardTranslator::NewLineState;
-    else if ( item == "appscreen" )
+    } else if ( item == "appscreen" ) {
         flag = KeyboardTranslator::AlternateScreenState;
-    else if ( item == "anymod" )
+    } else if ( item == "anymod" ) {
         flag = KeyboardTranslator::AnyModifierState;
-    else
+    } else {
         return false;
+    }
 
     return true;
 }
-bool KeyboardTranslatorReader::parseAsKeyCode(const QString& item , int& keyCode)
+bool KeyboardTranslatorReader::parseAsKeyCode(const QString & item , int & keyCode)
 {
     QKeySequence sequence = QKeySequence::fromString(item);
     if ( !sequence.isEmpty() ) {
@@ -432,12 +446,13 @@ bool KeyboardTranslatorReader::parseAsKeyCode(const QString& item , int& keyCode
         }
     }
     // additional cases implemented for backwards compatibility with KDE 3
-    else if ( item == "prior" )
+    else if ( item == "prior" ) {
         keyCode = Qt::Key_PageUp;
-    else if ( item == "next" )
+    } else if ( item == "next" ) {
         keyCode = Qt::Key_PageDown;
-    else
+    } else {
         return false;
+    }
 
     return true;
 }
@@ -450,8 +465,8 @@ bool KeyboardTranslatorReader::hasNextEntry()
 {
     return _hasNext;
 }
-KeyboardTranslator::Entry KeyboardTranslatorReader::createEntry( const QString& condition ,
-        const QString& result )
+KeyboardTranslator::Entry KeyboardTranslatorReader::createEntry( const QString & condition ,
+        const QString & result )
 {
     QString entryString("keyboard \"temporary\"\nkey ");
     entryString.append(condition);
@@ -461,10 +476,11 @@ KeyboardTranslator::Entry KeyboardTranslatorReader::createEntry( const QString& 
     // otherwise the result will be treated as a string to echo when the key sequence
     // specified by 'condition' is pressed
     KeyboardTranslator::Command command;
-    if (parseAsCommand(result,command))
+    if (parseAsCommand(result,command)) {
         entryString.append(result);
-    else
+    } else {
         entryString.append('\"' + result + '\"');
+    }
 
     QByteArray array = entryString.toUtf8();
 
@@ -474,8 +490,9 @@ KeyboardTranslator::Entry KeyboardTranslatorReader::createEntry( const QString& 
     buffer.open(QIODevice::ReadOnly);
     KeyboardTranslatorReader reader(&buffer);
 
-    if ( reader.hasNextEntry() )
+    if ( reader.hasNextEntry() ) {
         entry = reader.nextEntry();
+    }
 
     return entry;
 }
@@ -495,7 +512,7 @@ bool KeyboardTranslatorReader::parseError()
 {
     return false;
 }
-QList<KeyboardTranslatorReader::Token> KeyboardTranslatorReader::tokenize(const QString& line)
+QList<KeyboardTranslatorReader::Token> KeyboardTranslatorReader::tokenize(const QString & line)
 {
     QString text = line.simplified();
 
@@ -559,7 +576,7 @@ KeyboardTranslator::Entry::Entry()
 {
 }
 
-bool KeyboardTranslator::Entry::operator==(const Entry& rhs) const
+bool KeyboardTranslator::Entry::operator==(const Entry & rhs) const
 {
     return _keyCode == rhs._keyCode &&
            _modifiers == rhs._modifiers &&
@@ -574,30 +591,36 @@ bool KeyboardTranslator::Entry::matches(int keyCode ,
                                         Qt::KeyboardModifiers modifiers,
                                         States state) const
 {
-    if ( _keyCode != keyCode )
+    if ( _keyCode != keyCode ) {
         return false;
+    }
 
-    if ( (modifiers & _modifierMask) != (_modifiers & _modifierMask) )
+    if ( (modifiers & _modifierMask) != (_modifiers & _modifierMask) ) {
         return false;
+    }
 
     // if modifiers is non-zero, the 'any modifier' state is implicit
-    if ( modifiers != 0 )
+    if ( modifiers != 0 ) {
         state |= AnyModifierState;
+    }
 
-    if ( (state & _stateMask) != (_state & _stateMask) )
+    if ( (state & _stateMask) != (_state & _stateMask) ) {
         return false;
+    }
 
     // special handling for the 'Any Modifier' state, which checks for the presence of
     // any or no modifiers.  In this context, the 'keypad' modifier does not count.
     bool anyModifiersSet = modifiers != 0 && modifiers != Qt::KeypadModifier;
     if ( _stateMask & KeyboardTranslator::AnyModifierState ) {
         // test fails if any modifier is required but none are set
-        if ( (_state & KeyboardTranslator::AnyModifierState) && !anyModifiersSet )
+        if ( (_state & KeyboardTranslator::AnyModifierState) && !anyModifiersSet ) {
             return false;
+        }
 
         // test fails if no modifier is allowed but one or more are set
-        if ( !(_state & KeyboardTranslator::AnyModifierState) && anyModifiersSet )
+        if ( !(_state & KeyboardTranslator::AnyModifierState) && anyModifiersSet ) {
             return false;
+        }
     }
 
     return true;
@@ -632,8 +655,9 @@ QByteArray KeyboardTranslator::Entry::escapedText(bool expandWildCards,Qt::Keybo
         default:
             // any character which is not printable is replaced by an equivalent
             // \xhh escape sequence (where 'hh' are the corresponding hex digits)
-            if ( !QChar(ch).isPrint() )
+            if ( !QChar(ch).isPrint() ) {
                 replacement = 'x';
+            }
         }
 
         if ( replacement == 'x' ) {
@@ -647,7 +671,7 @@ QByteArray KeyboardTranslator::Entry::escapedText(bool expandWildCards,Qt::Keybo
 
     return result;
 }
-QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
+QByteArray KeyboardTranslator::Entry::unescape(const QByteArray & input) const
 {
     QByteArray result(input);
 
@@ -684,10 +708,12 @@ QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
                 // with the corresponding character value
                 char hexDigits[3] = {0};
 
-                if ( (i < result.count()-2) && isxdigit(result[i+2]) )
+                if ( (i < result.count()-2) && isxdigit(result[i+2]) ) {
                     hexDigits[0] = result[i+2];
-                if ( (i < result.count()-3) && isxdigit(result[i+3]) )
+                }
+                if ( (i < result.count()-3) && isxdigit(result[i+3]) ) {
                     hexDigits[1] = result[i+3];
+                }
 
                 int charValue = 0;
                 sscanf(hexDigits,"%x",&charValue);
@@ -701,72 +727,80 @@ QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
                 escapedChar = false;
             }
 
-            if ( escapedChar )
+            if ( escapedChar ) {
                 result.replace(i,charsToRemove,replacement);
+            }
         }
     }
 
     return result;
 }
 
-void KeyboardTranslator::Entry::insertModifier( QString& item , int modifier ) const
+void KeyboardTranslator::Entry::insertModifier( QString & item , int modifier ) const
 {
-    if ( !(modifier & _modifierMask) )
+    if ( !(modifier & _modifierMask) ) {
         return;
+    }
 
-    if ( modifier & _modifiers )
+    if ( modifier & _modifiers ) {
         item += '+';
-    else
+    } else {
         item += '-';
+    }
 
-    if ( modifier == Qt::ShiftModifier )
+    if ( modifier == Qt::ShiftModifier ) {
         item += "Shift";
-    else if ( modifier == Qt::ControlModifier )
+    } else if ( modifier == Qt::ControlModifier ) {
         item += "Ctrl";
-    else if ( modifier == Qt::AltModifier )
+    } else if ( modifier == Qt::AltModifier ) {
         item += "Alt";
-    else if ( modifier == Qt::MetaModifier )
+    } else if ( modifier == Qt::MetaModifier ) {
         item += "Meta";
-    else if ( modifier == Qt::KeypadModifier )
+    } else if ( modifier == Qt::KeypadModifier ) {
         item += "KeyPad";
+    }
 }
-void KeyboardTranslator::Entry::insertState( QString& item , int state ) const
+void KeyboardTranslator::Entry::insertState( QString & item , int state ) const
 {
-    if ( !(state & _stateMask) )
+    if ( !(state & _stateMask) ) {
         return;
+    }
 
-    if ( state & _state )
+    if ( state & _state ) {
         item += '+' ;
-    else
+    } else {
         item += '-' ;
+    }
 
-    if ( state == KeyboardTranslator::AlternateScreenState )
+    if ( state == KeyboardTranslator::AlternateScreenState ) {
         item += "AppScreen";
-    else if ( state == KeyboardTranslator::NewLineState )
+    } else if ( state == KeyboardTranslator::NewLineState ) {
         item += "NewLine";
-    else if ( state == KeyboardTranslator::AnsiState )
+    } else if ( state == KeyboardTranslator::AnsiState ) {
         item += "Ansi";
-    else if ( state == KeyboardTranslator::CursorKeysState )
+    } else if ( state == KeyboardTranslator::CursorKeysState ) {
         item += "AppCuKeys";
-    else if ( state == KeyboardTranslator::AnyModifierState )
+    } else if ( state == KeyboardTranslator::AnyModifierState ) {
         item += "AnyMod";
+    }
 }
 QString KeyboardTranslator::Entry::resultToString(bool expandWildCards,Qt::KeyboardModifiers modifiers) const
 {
-    if ( !_text.isEmpty() )
+    if ( !_text.isEmpty() ) {
         return escapedText(expandWildCards,modifiers);
-    else if ( _command == EraseCommand )
+    } else if ( _command == EraseCommand ) {
         return "Erase";
-    else if ( _command == ScrollPageUpCommand )
+    } else if ( _command == ScrollPageUpCommand ) {
         return "ScrollPageUp";
-    else if ( _command == ScrollPageDownCommand )
+    } else if ( _command == ScrollPageDownCommand ) {
         return "ScrollPageDown";
-    else if ( _command == ScrollLineUpCommand )
+    } else if ( _command == ScrollLineUpCommand ) {
         return "ScrollLineUp";
-    else if ( _command == ScrollLineDownCommand )
+    } else if ( _command == ScrollLineDownCommand ) {
         return "ScrollLineDown";
-    else if ( _command == ScrollLockCommand )
+    } else if ( _command == ScrollLockCommand ) {
         return "ScrollLock";
+    }
 
     return QString();
 }
@@ -790,12 +824,12 @@ QString KeyboardTranslator::Entry::conditionToString() const
     return result;
 }
 
-KeyboardTranslator::KeyboardTranslator(const QString& name)
+KeyboardTranslator::KeyboardTranslator(const QString & name)
         : _name(name)
 {
 }
 
-void KeyboardTranslator::setDescription(const QString& description)
+void KeyboardTranslator::setDescription(const QString & description)
 {
     _description = description;
 }
@@ -803,7 +837,7 @@ QString KeyboardTranslator::description() const
 {
     return _description;
 }
-void KeyboardTranslator::setName(const QString& name)
+void KeyboardTranslator::setName(const QString & name)
 {
     _name = name;
 }
@@ -817,18 +851,19 @@ QList<KeyboardTranslator::Entry> KeyboardTranslator::entries() const
     return _entries.values();
 }
 
-void KeyboardTranslator::addEntry(const Entry& entry)
+void KeyboardTranslator::addEntry(const Entry & entry)
 {
     const int keyCode = entry.keyCode();
     _entries.insertMulti(keyCode,entry);
 }
-void KeyboardTranslator::replaceEntry(const Entry& existing , const Entry& replacement)
+void KeyboardTranslator::replaceEntry(const Entry & existing , const Entry & replacement)
 {
-    if ( !existing.isNull() )
+    if ( !existing.isNull() ) {
         _entries.remove(existing.keyCode());
+    }
     _entries.insertMulti(replacement.keyCode(),replacement);
 }
-void KeyboardTranslator::removeEntry(const Entry& entry)
+void KeyboardTranslator::removeEntry(const Entry & entry)
 {
     _entries.remove(entry.keyCode());
 }
@@ -840,9 +875,10 @@ KeyboardTranslator::Entry KeyboardTranslator::findEntry(int keyCode, Qt::Keyboar
         QListIterator<Entry> iter(entriesForKey);
 
         while (iter.hasNext()) {
-            const Entry& next = iter.next();
-            if ( next.matches(keyCode,modifiers,state) )
+            const Entry & next = iter.next();
+            if ( next.matches(keyCode,modifiers,state) ) {
                 return next;
+            }
         }
 
         return Entry(); // entry not found
@@ -851,7 +887,7 @@ KeyboardTranslator::Entry KeyboardTranslator::findEntry(int keyCode, Qt::Keyboar
     }
 
 }
-void KeyboardTranslatorManager::addTranslator(KeyboardTranslator* translator)
+void KeyboardTranslatorManager::addTranslator(KeyboardTranslator * translator)
 {
     _translators.insert(translator->name(),translator);
 
@@ -859,7 +895,7 @@ void KeyboardTranslatorManager::addTranslator(KeyboardTranslator* translator)
         qWarning() << "Unable to save translator" << translator->name()
         << "to disk.";
 }
-bool KeyboardTranslatorManager::deleteTranslator(const QString& name)
+bool KeyboardTranslatorManager::deleteTranslator(const QString & name)
 {
     Q_ASSERT( _translators.contains(name) );
 
@@ -874,7 +910,7 @@ bool KeyboardTranslatorManager::deleteTranslator(const QString& name)
     }
 }
 K_GLOBAL_STATIC( KeyboardTranslatorManager , theKeyboardTranslatorManager )
-KeyboardTranslatorManager* KeyboardTranslatorManager::instance()
+KeyboardTranslatorManager * KeyboardTranslatorManager::instance()
 {
     return theKeyboardTranslatorManager;
 }

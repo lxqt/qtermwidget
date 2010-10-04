@@ -24,7 +24,7 @@
 
 struct TermWidgetImpl;
 
-enum COLOR_SCHEME {     COLOR_SCHEME_WHITE_ON_BLACK	= 1,
+enum COLOR_SCHEME {     COLOR_SCHEME_WHITE_ON_BLACK = 1,
                         COLOR_SCHEME_GREEN_ON_BLACK,
                         COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW
                   };
@@ -46,34 +46,41 @@ public:
 
     //Creation of widget
     QTermWidget(int startnow = 1, //start shell programm immediatelly
-                QWidget *parent = 0);
+                QWidget * parent = 0);
     ~QTermWidget();
+
+    //Initial size
+    QSize sizeHint() const;
 
     //start shell program if it was not started in constructor
     void startShellProgram();
 
+    int getShellPID();
+
+    void changeDir(const QString & dir);
+
     //look-n-feel, if you don`t like defaults
 
-    //	Terminal font
+    //  Terminal font
     // Default is application font with family Monospace, size 10
     // USE ONLY FIXED-PITCH FONT!
     // otherwise symbols' position could be incorrect
-    void setTerminalFont(QFont &font);
+    void setTerminalFont(QFont & font);
 
     //environment
-    void setEnvironment(const QStringList& environment);
+    void setEnvironment(const QStringList & environment);
 
-    //	Shell program, default is /bin/bash
-    void setShellProgram(const QString &progname);
+    //  Shell program, default is /bin/bash
+    void setShellProgram(const QString & progname);
 
     //working directory
-    void setWorkingDirectory(const QString& dir);
+    void setWorkingDirectory(const QString & dir);
 
     // Shell program args, default is none
-    void setArgs(QStringList &args);
+    void setArgs(QStringList & args);
 
     //Text codec, default is UTF-8
-    void setTextCodec(QTextCodec *codec);
+    void setTextCodec(QTextCodec * codec);
 
     //Color scheme, default is white on black
     void setColorScheme(int scheme);
@@ -88,7 +95,7 @@ public:
     void setScrollBarPosition(ScrollBarPosition);
 
     // Send some text to terminal
-    void sendText(QString &text);
+    void sendText(QString & text);
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
@@ -111,6 +118,7 @@ public:
 
 signals:
     void finished();
+    void copyAvailable(bool);
 
 public slots:
     // Paste clipboard content to terminal
@@ -128,10 +136,11 @@ protected:
 
 protected slots:
     void sessionFinished();
+    void selectionChanged(bool textSelected);
 
 private:
     void init();
-    TermWidgetImpl *m_impl;
+    TermWidgetImpl * m_impl;
 };
 
 
@@ -140,7 +149,7 @@ private:
 #ifdef __cplusplus
 extern "C"
 #endif
-void *createTermWidget(int startnow, void *parent);
+void * createTermWidget(int startnow, void * parent);
 
 #endif
 

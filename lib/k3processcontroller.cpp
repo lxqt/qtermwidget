@@ -50,16 +50,16 @@ public:
 
     int fd[2];
     bool needcheck;
-    QSocketNotifier *notifier;
-    QList<K3Process*> kProcessList;
+    QSocketNotifier * notifier;
+    QList<K3Process *> kProcessList;
     QList<int> unixProcessList;
     static struct sigaction oldChildHandlerData;
     static bool handlerSet;
     static int refCount;
-    static K3ProcessController* instance;
+    static K3ProcessController * instance;
 };
 
-K3ProcessController *K3ProcessController::Private::instance = 0;
+K3ProcessController * K3ProcessController::Private::instance = 0;
 int K3ProcessController::Private::refCount = 0;
 
 void K3ProcessController::ref()
@@ -81,7 +81,7 @@ void K3ProcessController::deref()
     }
 }
 
-K3ProcessController* K3ProcessController::instance()
+K3ProcessController * K3ProcessController::instance()
 {
     /*
      * there were no safety guards in previous revisions, is that ok?
@@ -139,8 +139,9 @@ bool K3ProcessController::Private::handlerSet = false;
 
 void K3ProcessController::setupHandlers()
 {
-    if ( Private::handlerSet )
+    if ( Private::handlerSet ) {
         return;
+    }
     Private::handlerSet = true;
 
 #ifdef Q_OS_UNIX
@@ -170,8 +171,9 @@ void K3ProcessController::setupHandlers()
 
 void K3ProcessController::resetHandlers()
 {
-    if ( !Private::handlerSet )
+    if ( !Private::handlerSet ) {
         return;
+    }
     Private::handlerSet = false;
 
 #ifdef Q_OS_UNIX
@@ -227,8 +229,9 @@ int K3ProcessController::notifierFd() const
 void K3ProcessController::unscheduleCheck()
 {
     char dummy[16]; // somewhat bigger - just in case several have queued up
-    if ( ::read( d->fd[0], dummy, sizeof(dummy) ) > 0 )
+    if ( ::read( d->fd[0], dummy, sizeof(dummy) ) > 0 ) {
         d->needcheck = true;
+    }
 }
 
 void
@@ -255,15 +258,16 @@ void K3ProcessController::slotDoHousekeeping()
 
     int status;
 again:
-    QList<K3Process*>::iterator it( d->kProcessList.begin() );
-    QList<K3Process*>::iterator eit( d->kProcessList.end() );
+    QList<K3Process *>::iterator it( d->kProcessList.begin() );
+    QList<K3Process *>::iterator eit( d->kProcessList.end() );
     while ( it != eit ) {
-        K3Process *prc = *it;
+        K3Process * prc = *it;
         if ( prc->runs && waitpid( prc->pid_, &status, WNOHANG ) > 0 ) {
             prc->processHasExited( status );
             // the callback can nuke the whole process list and even 'this'
-            if (!instance())
+            if (!instance()) {
                 return;
+            }
             goto again;
         }
         ++it;
@@ -274,8 +278,9 @@ again:
         if ( waitpid( *uit, 0, WNOHANG ) > 0 ) {
             uit = d->unixProcessList.erase( uit );
             deref(); // counterpart to addProcess, can invalidate 'this'
-        } else
+        } else {
             ++uit;
+        }
     }
 }
 
@@ -284,9 +289,9 @@ bool K3ProcessController::waitForProcessExit( int timeout )
 #ifdef Q_OS_UNIX
     for (;;) {
         struct timeval tv, *tvp;
-        if (timeout < 0)
+        if (timeout < 0) {
             tvp = 0;
-        else {
+        } else {
             tv.tv_sec = timeout;
             tv.tv_usec = 0;
             tvp = &tv;
@@ -298,8 +303,9 @@ bool K3ProcessController::waitForProcessExit( int timeout )
 
         switch ( select( d->fd[0]+1, &fds, 0, 0, tvp ) ) {
         case -1:
-            if ( errno == EINTR )
+            if ( errno == EINTR ) {
                 continue;
+            }
             // fall through; should never happen
         case 0:
             return false;
@@ -314,12 +320,12 @@ bool K3ProcessController::waitForProcessExit( int timeout )
 #endif
 }
 
-void K3ProcessController::addKProcess( K3Process* p )
+void K3ProcessController::addKProcess( K3Process * p )
 {
     d->kProcessList.append( p );
 }
 
-void K3ProcessController::removeKProcess( K3Process* p )
+void K3ProcessController::removeKProcess( K3Process * p )
 {
     d->kProcessList.removeAll( p );
 }

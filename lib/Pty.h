@@ -88,9 +88,9 @@ public:
      * @param dbusSession Specifies the value of the KONSOLE_DBUS_SESSION
      * environment variable in the process's environment.
      */
-    int start( const QString& program,
-               const QStringList& arguments,
-               const QStringList& environment,
+    int start( const QString & program,
+               const QStringList & arguments,
+               const QStringList & environment,
                ulong winid,
                bool addToUtmp
 //               const QString& dbusService,
@@ -164,7 +164,7 @@ public slots:
      * @param buffer Pointer to the data to send.
      * @param length Length of @p buffer.
      */
-    void sendData(const char* buffer, int length);
+    void sendData(const char * buffer, int length);
 
 signals:
 
@@ -182,7 +182,7 @@ signals:
      * @param buffer Pointer to the data received.
      * @param length Length of @p buffer
      */
-    void receivedData(const char* buffer, int length);
+    void receivedData(const char * buffer, int length);
 
     /**
      * Emitted when the buffer used to send data to the terminal
@@ -196,7 +196,7 @@ private slots:
     // called when terminal process exits
     void donePty();
     // called when data is received from the terminal process
-    void dataReceived(K3Process*, char* buffer, int length);
+    void dataReceived(K3Process *, char * buffer, int length);
     // sends the first enqueued buffer of data to the
     // terminal process
     void doSendJobs();
@@ -207,11 +207,11 @@ private slots:
 private:
     // takes a list of key=value pairs and adds them
     // to the environment for the process
-    void addEnvironmentVariables(const QStringList& environment);
+    void addEnvironmentVariables(const QStringList & environment);
 
     // enqueues a buffer of data to be sent to the
     // terminal process
-    void appendSendJob(const char* buffer, int length);
+    void appendSendJob(const char * buffer, int length);
 
     // a buffer of data in the queue to be sent to the
     // terminal process
@@ -219,11 +219,11 @@ private:
     {
     public:
         SendJob() {}
-        SendJob(const char* b, int len) : buffer(len) {
+        SendJob(const char * b, int len) : buffer(len) {
             memcpy( buffer.data() , b , len );
         }
 
-        const char* data() const {
+        const char * data() const {
             return buffer.constData();
         }
         int length() const {
@@ -241,7 +241,7 @@ private:
     char _eraseChar;
     bool _xonXoff;
     bool _utf8;
-    KPty *_pty;
+    KPty * _pty;
 };
 
 }

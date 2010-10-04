@@ -65,13 +65,13 @@ public:
      * to notify the window when the associated screen has changed and synchronize selection updates
      * between all views on a session.
      */
-    ScreenWindow(QObject* parent = 0);
+    ScreenWindow(QObject * parent = 0);
     virtual ~ScreenWindow();
 
     /** Sets the screen which this window looks onto */
-    void setScreen(Screen* screen);
+    void setScreen(Screen * screen);
     /** Returns the screen which this window looks onto */
-    Screen* screen() const;
+    Screen * screen() const;
 
     /**
      * Returns the image of characters which are currently visible through this window
@@ -80,7 +80,7 @@ public:
      * The buffer is managed by the ScreenWindow instance and does not need to be
      * deleted by the caller.
      */
-    Character* getImage();
+    Character * getImage();
 
     /**
      * Returns the line attributes associated with the lines of characters which
@@ -128,11 +128,11 @@ public:
     /**
      * Retrieves the start of the selection within the window.
      */
-    void getSelectionStart( int& column , int& line );
+    void getSelectionStart( int & column , int & line );
     /**
      * Retrieves the end of the selection within the window.
      */
-    void getSelectionEnd( int& column , int& line );
+    void getSelectionEnd( int & column , int & line );
     /**
      * Returns true if the character at @p line , @p column is part of the selection.
      */
@@ -239,8 +239,8 @@ private:
     int endWindowLine() const;
     void fillUnusedArea();
 
-    Screen* _screen; // see setScreen() , screen()
-    Character* _windowBuffer;
+    Screen * _screen; // see setScreen() , screen()
+    Character * _windowBuffer;
     int _windowBufferSize;
     bool _bufferNeedsUpdate;
 

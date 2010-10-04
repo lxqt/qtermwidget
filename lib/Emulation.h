@@ -133,7 +133,7 @@ public:
      * of the window are then rendered by views which are set to use this window using the
      * TerminalDisplay::setScreenWindow() method.
      */
-    ScreenWindow* createWindow();
+    ScreenWindow * createWindow();
 
     /** Returns the size of the screen image which the emulation produces */
     QSize imageSize();
@@ -152,9 +152,9 @@ public:
      * The number of lines which are kept and the storage location depend on the
      * type of store.
      */
-    void setHistory(const HistoryType&);
+    void setHistory(const HistoryType &);
     /** Returns the history store used by this emulation.  See setHistory() */
-    const HistoryType& history();
+    const HistoryType & history();
     /** Clears the history scroll. */
     void clearHistory();
 
@@ -168,15 +168,15 @@ public:
      * used decoder.
      * @param startLine The first
      */
-    virtual void writeToStream(TerminalCharacterDecoder* decoder,int startLine,int endLine);
+    virtual void writeToStream(TerminalCharacterDecoder * decoder,int startLine,int endLine);
 
 
     /** Returns the codec used to decode incoming characters.  See setCodec() */
-    const QTextCodec* codec() {
+    const QTextCodec * codec() {
         return _codec;
     }
     /** Sets the codec used to decode incoming characters.  */
-    void setCodec(const QTextCodec*);
+    void setCodec(const QTextCodec *);
 
     /**
      * Convenience method.
@@ -197,7 +197,7 @@ public:
      * ( received through sendKeyEvent() ) into character
      * streams to send to the terminal.
      */
-    void setKeyBindings(const QString& name);
+    void setKeyBindings(const QString & name);
     /**
      * Returns the name of the emulation's current key bindings.
      * See setKeyBindings()
@@ -230,13 +230,13 @@ public slots:
      * Interprets a sequence of characters and sends the result to the terminal.
      * This is equivalent to calling sendKeyEvent() for each character in @p text in succession.
      */
-    virtual void sendText(const QString& text) = 0;
+    virtual void sendText(const QString & text) = 0;
 
     /**
      * Interprets a key press event and emits the sendData() signal with
      * the resulting character stream.
      */
-    virtual void sendKeyEvent(QKeyEvent*);
+    virtual void sendKeyEvent(QKeyEvent *);
 
     /**
      * Converts information about a mouse event into an xterm-compatible escape
@@ -251,7 +251,7 @@ public slots:
      * @param length Length of @p string or if set to a negative value, @p string will
      * be treated as a null-terminated string and its length will be determined automatically.
      */
-    virtual void sendString(const char* string, int length = -1) = 0;
+    virtual void sendString(const char * string, int length = -1) = 0;
 
     /**
      * Processes an incoming stream of characters.  receiveData() decodes the incoming
@@ -265,7 +265,7 @@ public slots:
      * @param buffer A string of characters received from the terminal program.
      * @param len The length of @p buffer
      */
-    void receiveData(const char* buffer,int len);
+    void receiveData(const char * buffer,int len);
 
 signals:
 
@@ -276,7 +276,7 @@ signals:
      * @param data The buffer of data ready to be sent
      * @paran len The length of @p data in bytes
      */
-    void sendData(const char* data,int len);
+    void sendData(const char * data,int len);
 
     /**
      * Requests that sending of input to the emulation
@@ -374,7 +374,7 @@ signals:
      * @param newTitle Specifies the new title
      */
 
-    void titleChanged(int title,const QString& newTitle);
+    void titleChanged(int title,const QString & newTitle);
 
     /**
      * Emitted when the program running in the terminal changes the
@@ -393,7 +393,7 @@ signals:
      * @param text A string expected to contain a series of key and value pairs in
      * the form:  name=value;name2=value2 ...
      */
-    void profileChangeCommandReceived(const QString& text);
+    void profileChangeCommandReceived(const QString & text);
 
 protected:
     virtual void setMode  (int mode) = 0;
@@ -421,12 +421,12 @@ protected:
     void setCodec(EmulationCodec codec); // codec number, 0 = locale, 1=utf8
 
 
-    QList<ScreenWindow*> _windows;
+    QList<ScreenWindow *> _windows;
 
-    Screen* _currentScreen;  // pointer to the screen which is currently active,
+    Screen * _currentScreen; // pointer to the screen which is currently active,
     // this is one of the elements in the screen[] array
 
-    Screen* _screen[2];      // 0 = primary screen ( used by most programs, including the shell
+    Screen * _screen[2];     // 0 = primary screen ( used by most programs, including the shell
     //                      scrollbars are enabled in this mode )
     // 1 = alternate      ( used by vi , emacs etc.
     //                      scrollbars are not enabled in this mode )
@@ -434,10 +434,10 @@ protected:
 
     //decodes an incoming C-style character stream into a unicode QString using
     //the current text codec.  (this allows for rendering of non-ASCII characters in text files etc.)
-    const QTextCodec* _codec;
-    QTextDecoder* _decoder;
+    const QTextCodec * _codec;
+    QTextDecoder * _decoder;
 
-    const KeyboardTranslator* _keyTranslator; // the keyboard layout
+    const KeyboardTranslator * _keyTranslator; // the keyboard layout
 
 protected slots:
     /**

@@ -228,7 +228,7 @@ public:
                         Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
         /** Sets the character sequence associated with this entry */
-        void setText(const QByteArray& text);
+        void setText(const QByteArray & text);
 
         /**
          * Returns the character sequence associated with this entry,
@@ -313,12 +313,12 @@ public:
                       Qt::KeyboardModifiers modifiers ,
                       States flags ) const;
 
-        bool operator==(const Entry& rhs) const;
+        bool operator==(const Entry & rhs) const;
 
     private:
-        void insertModifier( QString& item , int modifier ) const;
-        void insertState( QString& item , int state ) const;
-        QByteArray unescape(const QByteArray& text) const;
+        void insertModifier( QString & item , int modifier ) const;
+        void insertState( QString & item , int state ) const;
+        QByteArray unescape(const QByteArray & text) const;
 
         int _keyCode;
         Qt::KeyboardModifiers _modifiers;
@@ -331,7 +331,7 @@ public:
     };
 
     /** Constructs a new keyboard translator with the given @p name */
-    KeyboardTranslator(const QString& name);
+    KeyboardTranslator(const QString & name);
 
     //KeyboardTranslator(const KeyboardTranslator& other);
 
@@ -339,13 +339,13 @@ public:
     QString name() const;
 
     /** Sets the name of this keyboard translator */
-    void setName(const QString& name);
+    void setName(const QString & name);
 
     /** Returns the descriptive name of this keyboard translator */
     QString description() const;
 
     /** Sets the descriptive name of this keyboard translator */
-    void setDescription(const QString& description);
+    void setDescription(const QString & description);
 
     /**
      * Looks for an entry in this keyboard translator which matches the given
@@ -366,18 +366,18 @@ public:
      * Adds an entry to this keyboard translator's table.  Entries can be looked up according
      * to their key sequence using findEntry()
      */
-    void addEntry(const Entry& entry);
+    void addEntry(const Entry & entry);
 
     /**
      * Replaces an entry in the translator.  If the @p existing entry is null,
      * then this is equivalent to calling addEntry(@p replacement)
      */
-    void replaceEntry(const Entry& existing , const Entry& replacement);
+    void replaceEntry(const Entry & existing , const Entry & replacement);
 
     /**
      * Removes an entry from the table.
      */
-    void removeEntry(const Entry& entry);
+    void removeEntry(const Entry & entry);
 
     /** Returns a list of all entries in the translator. */
     QList<Entry> entries() const;
@@ -425,7 +425,7 @@ class KeyboardTranslatorReader
 {
 public:
     /** Constructs a new reader which parses the given @p source */
-    KeyboardTranslatorReader( QIODevice* source );
+    KeyboardTranslatorReader( QIODevice * source );
 
     /**
      * Returns the description text.
@@ -450,8 +450,8 @@ public:
      *
      * The condition and result strings are in the same format as in
      */
-    static KeyboardTranslator::Entry createEntry( const QString& condition ,
-            const QString& result );
+    static KeyboardTranslator::Entry createEntry( const QString & condition ,
+            const QString & result );
 private:
     struct Token {
         enum Type {
@@ -465,21 +465,21 @@ private:
         Type type;
         QString text;
     };
-    QList<Token> tokenize(const QString&);
+    QList<Token> tokenize(const QString &);
     void readNext();
-    bool decodeSequence(const QString& ,
-                        int& keyCode,
-                        Qt::KeyboardModifiers& modifiers,
-                        Qt::KeyboardModifiers& modifierMask,
-                        KeyboardTranslator::States& state,
-                        KeyboardTranslator::States& stateFlags);
+    bool decodeSequence(const QString & ,
+                        int & keyCode,
+                        Qt::KeyboardModifiers & modifiers,
+                        Qt::KeyboardModifiers & modifierMask,
+                        KeyboardTranslator::States & state,
+                        KeyboardTranslator::States & stateFlags);
 
-    static bool parseAsModifier(const QString& item , Qt::KeyboardModifier& modifier);
-    static bool parseAsStateFlag(const QString& item , KeyboardTranslator::State& state);
-    static bool parseAsKeyCode(const QString& item , int& keyCode);
-    static bool parseAsCommand(const QString& text , KeyboardTranslator::Command& command);
+    static bool parseAsModifier(const QString & item , Qt::KeyboardModifier & modifier);
+    static bool parseAsStateFlag(const QString & item , KeyboardTranslator::State & state);
+    static bool parseAsKeyCode(const QString & item , int & keyCode);
+    static bool parseAsCommand(const QString & text , KeyboardTranslator::Command & command);
 
-    QIODevice* _source;
+    QIODevice * _source;
     QString _description;
     KeyboardTranslator::Entry _nextEntry;
     bool _hasNext;
@@ -493,20 +493,20 @@ public:
      * Constructs a new writer which saves data into @p destination.
      * The caller is responsible for closing the device when writing is complete.
      */
-    KeyboardTranslatorWriter(QIODevice* destination);
+    KeyboardTranslatorWriter(QIODevice * destination);
     ~KeyboardTranslatorWriter();
 
     /**
      * Writes the header for the keyboard translator.
      * @param description Description of the keyboard translator.
      */
-    void writeHeader( const QString& description );
+    void writeHeader( const QString & description );
     /** Writes a translator entry. */
-    void writeEntry( const KeyboardTranslator::Entry& entry );
+    void writeEntry( const KeyboardTranslator::Entry & entry );
 
 private:
-    QIODevice* _destination;
-    QTextStream* _writer;
+    QIODevice * _destination;
+    QTextStream * _writer;
 };
 
 /**
@@ -532,17 +532,17 @@ public:
      *
      * TODO: More documentation.
      */
-    void addTranslator(KeyboardTranslator* translator);
+    void addTranslator(KeyboardTranslator * translator);
 
     /**
      * Deletes a translator.  Returns true on successful deletion or false otherwise.
      *
      * TODO: More documentation
      */
-    bool deleteTranslator(const QString& name);
+    bool deleteTranslator(const QString & name);
 
     /** Returns the default translator for Konsole. */
-    const KeyboardTranslator* defaultTranslator();
+    const KeyboardTranslator * defaultTranslator();
 
     /**
      * Returns the keyboard translator with the given name or 0 if no translator
@@ -551,7 +551,7 @@ public:
      * The first time that a translator with a particular name is requested,
      * the on-disk .keyboard file is loaded and parsed.
      */
-    const KeyboardTranslator* findTranslator(const QString& name);
+    const KeyboardTranslator * findTranslator(const QString & name);
     /**
      * Returns a list of the names of available keyboard translators.
      *
@@ -561,20 +561,20 @@ public:
     QList<QString> allTranslators();
 
     /** Returns the global KeyboardTranslatorManager instance. */
-    static KeyboardTranslatorManager* instance();
+    static KeyboardTranslatorManager * instance();
 
 private:
-    static const char* defaultTranslatorText;
+    static const char * defaultTranslatorText;
 
     void findTranslators(); // locate the available translators
-    KeyboardTranslator* loadTranslator(const QString& name); // loads the translator
+    KeyboardTranslator * loadTranslator(const QString & name); // loads the translator
     // with the given name
-    KeyboardTranslator* loadTranslator(QIODevice* device,const QString& name);
+    KeyboardTranslator * loadTranslator(QIODevice * device,const QString & name);
 
-    bool saveTranslator(const KeyboardTranslator* translator);
-    QString findTranslatorPath(const QString& name);
+    bool saveTranslator(const KeyboardTranslator * translator);
+    QString findTranslatorPath(const QString & name);
 
-    QHash<QString,KeyboardTranslator*> _translators; // maps translator-name -> KeyboardTranslator
+    QHash<QString,KeyboardTranslator *> _translators; // maps translator-name -> KeyboardTranslator
     // instance
     bool _haveLoadedAll;
 };
@@ -620,7 +620,7 @@ inline KeyboardTranslator::Command KeyboardTranslator::Entry::command() const
     return _command;
 }
 
-inline void KeyboardTranslator::Entry::setText( const QByteArray& text )
+inline void KeyboardTranslator::Entry::setText( const QByteArray & text )
 {
     _text = unescape(text);
 }
@@ -639,8 +639,9 @@ inline QByteArray KeyboardTranslator::Entry::text(bool expandWildCards,Qt::Keybo
         modifierValue += oneOrZero(modifiers & Qt::ControlModifier) << 2;
 
         for (int i=0; i<_text.length(); i++) {
-            if (expandedText[i] == '*')
+            if (expandedText[i] == '*') {
                 expandedText[i] = '0' + modifierValue;
+            }
         }
     }
 
@@ -668,7 +669,7 @@ inline KeyboardTranslator::States KeyboardTranslator::Entry::stateMask() const
 }
 
 Q_DECLARE_METATYPE(Konsole::KeyboardTranslator::Entry)
-Q_DECLARE_METATYPE(const Konsole::KeyboardTranslator*)
+Q_DECLARE_METATYPE(const Konsole::KeyboardTranslator *)
 
 #endif // KEYBOARDTRANSLATOR_H
 

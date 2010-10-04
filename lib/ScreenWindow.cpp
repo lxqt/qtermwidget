@@ -30,7 +30,7 @@
 
 using namespace Konsole;
 
-ScreenWindow::ScreenWindow(QObject* parent)
+ScreenWindow::ScreenWindow(QObject * parent)
         : QObject(parent)
         , _windowBuffer(0)
         , _windowBufferSize(0)
@@ -45,19 +45,19 @@ ScreenWindow::~ScreenWindow()
 {
     delete[] _windowBuffer;
 }
-void ScreenWindow::setScreen(Screen* screen)
+void ScreenWindow::setScreen(Screen * screen)
 {
     Q_ASSERT( screen );
 
     _screen = screen;
 }
 
-Screen* ScreenWindow::screen() const
+Screen * ScreenWindow::screen() const
 {
     return _screen;
 }
 
-Character* ScreenWindow::getImage()
+Character * ScreenWindow::getImage()
 {
     // reallocate internal buffer if the window size has changed
     int size = windowLines() * windowColumns();
@@ -68,8 +68,9 @@ Character* ScreenWindow::getImage()
         _bufferNeedsUpdate = true;
     }
 
-    if (!_bufferNeedsUpdate)
+    if (!_bufferNeedsUpdate) {
         return _windowBuffer;
+    }
 
     _screen->getImage(_windowBuffer,size,
                       currentLine(),endWindowLine());
@@ -110,8 +111,9 @@ QVector<LineProperty> ScreenWindow::getLineProperties()
 {
     QVector<LineProperty> result = _screen->getLineProperties(currentLine(),endWindowLine());
 
-    if (result.count() != windowLines())
+    if (result.count() != windowLines()) {
         result.resize(windowLines());
+    }
 
     return result;
 }
@@ -121,12 +123,12 @@ QString ScreenWindow::selectedText( bool preserveLineBreaks ) const
     return _screen->selectedText( preserveLineBreaks );
 }
 
-void ScreenWindow::getSelectionStart( int& column , int& line )
+void ScreenWindow::getSelectionStart( int & column , int & line )
 {
     _screen->getSelectionStart(column,line);
     line -= currentLine();
 }
-void ScreenWindow::getSelectionEnd( int& column , int& line )
+void ScreenWindow::getSelectionEnd( int & column , int & line )
 {
     _screen->getSelectionEnd(column,line);
     line -= currentLine();
@@ -254,10 +256,11 @@ QRect ScreenWindow::scrollRegion() const
 {
     bool equalToScreenSize = windowLines() == _screen->getLines();
 
-    if ( atEndOfOutput() && equalToScreenSize )
+    if ( atEndOfOutput() && equalToScreenSize ) {
         return _screen->lastScrolledRegion();
-    else
+    } else {
         return QRect(0,0,windowColumns(),windowLines());
+    }
 }
 
 void ScreenWindow::notifyOutputChanged()

@@ -51,8 +51,9 @@ void Pty::setWindowSize(int lines, int cols)
     _windowColumns = cols;
     _windowLines = lines;
 
-    if (pty()->masterFd() >= 0)
+    if (pty()->masterFd() >= 0) {
         pty()->setWinSize(lines, cols);
+    }
 }
 QSize Pty::windowSize() const
 {
@@ -66,12 +67,14 @@ void Pty::setXonXoff(bool enable)
     if (pty()->masterFd() >= 0) {
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
-        if (!enable)
+        if (!enable) {
             ttmode.c_iflag &= ~(IXOFF | IXON);
-        else
+        } else {
             ttmode.c_iflag |= (IXOFF | IXON);
-        if (!pty()->tcSetAttr(&ttmode))
+        }
+        if (!pty()->tcSetAttr(&ttmode)) {
             qWarning("Unable to set terminal attributes.");
+        }
     }
 }
 
@@ -83,12 +86,14 @@ void Pty::setUtf8Mode(bool enable)
     if (pty()->masterFd() >= 0) {
         struct ::termios ttmode;
         pty()->tcGetAttr(&ttmode);
-        if (!enable)
+        if (!enable) {
             ttmode.c_iflag &= ~IUTF8;
-        else
+        } else {
             ttmode.c_iflag |= IUTF8;
-        if (!pty()->tcSetAttr(&ttmode))
+        }
+        if (!pty()->tcSetAttr(&ttmode)) {
             qWarning("Unable to set terminal attributes.");
+        }
     }
 #endif
 }
@@ -104,8 +109,9 @@ void Pty::setErase(char erase)
 
         ttmode.c_cc[VERASE] = erase;
 
-        if (!pty()->tcSetAttr(&ttmode))
+        if (!pty()->tcSetAttr(&ttmode)) {
             qWarning("Unable to set terminal attributes.");
+        }
     }
 }
 
@@ -121,7 +127,7 @@ char Pty::erase() const
     return _eraseChar;
 }
 
-void Pty::addEnvironmentVariables(const QStringList& environment)
+void Pty::addEnvironmentVariables(const QStringList & environment)
 {
     QListIterator<QString> iter(environment);
     while (iter.hasNext()) {
@@ -142,9 +148,9 @@ void Pty::addEnvironmentVariables(const QStringList& environment)
     }
 }
 
-int Pty::start(const QString& program,
-               const QStringList& programArguments,
-               const QStringList& environment,
+int Pty::start(const QString & program,
+               const QStringList & programArguments,
+               const QStringList & environment,
                ulong winid,
                bool addToUtmp
 //               const QString& dbusService,
@@ -158,8 +164,9 @@ int Pty::start(const QString& program,
     addEnvironmentVariables(environment);
 
     QStringListIterator it( programArguments );
-    while (it.hasNext())
+    while (it.hasNext()) {
         arguments.append( it.next().toUtf8() );
+    }
 
 //  if ( !dbusService.isEmpty() )
 //     setEnvironment("KONSOLE_DBUS_SERVICE",dbusService);
@@ -179,8 +186,9 @@ int Pty::start(const QString& program,
     // does not have a translation for
     //
     // BR:149300
-    if (!environment.contains("LANGUAGE"))
+    if (!environment.contains("LANGUAGE")) {
         setEnvironment("LANGUAGE",QString());
+    }
 
     setUsePty(All, addToUtmp);
 
@@ -188,27 +196,32 @@ int Pty::start(const QString& program,
 
     struct ::termios ttmode;
     pty()->tcGetAttr(&ttmode);
-    if (!_xonXoff)
+    if (!_xonXoff) {
         ttmode.c_iflag &= ~(IXOFF | IXON);
-    else
+    } else {
         ttmode.c_iflag |= (IXOFF | IXON);
+    }
 #ifdef IUTF8 // XXX not a reasonable place to check it.
-    if (!_utf8)
+    if (!_utf8) {
         ttmode.c_iflag &= ~IUTF8;
-    else
+    } else {
         ttmode.c_iflag |= IUTF8;
+    }
 #endif
 
-    if (_eraseChar != 0)
+    if (_eraseChar != 0) {
         ttmode.c_cc[VERASE] = _eraseChar;
+    }
 
-    if (!pty()->tcSetAttr(&ttmode))
+    if (!pty()->tcSetAttr(&ttmode)) {
         qWarning("Unable to set terminal attributes.");
+    }
 
     pty()->setWinSize(_windowLines, _windowColumns);
 
-    if ( K3Process::start(NotifyOnExit, (Communication) (Stdin | Stdout)) == false )
+    if ( K3Process::start(NotifyOnExit, (Communication) (Stdin | Stdout)) == false ) {
         return -1;
+    }
 
     resume(); // Start...
     return 0;
@@ -219,10 +232,11 @@ void Pty::setWriteable(bool writeable)
 {
     struct stat sbuf;
     stat(pty()->ttyName(), &sbuf);
-    if (writeable)
+    if (writeable) {
         chmod(pty()->ttyName(), sbuf.st_mode | S_IWGRP);
-    else
+    } else {
         chmod(pty()->ttyName(), sbuf.st_mode & ~(S_IWGRP|S_IWOTH));
+    }
 }
 
 Pty::Pty()
@@ -263,7 +277,7 @@ void Pty::doSendJobs()
         return;
     }
 
-    SendJob& job = _pendingSendJobs.first();
+    SendJob & job = _pendingSendJobs.first();
 
 
     if (!writeStdin( job.data(), job.length() )) {
@@ -273,29 +287,31 @@ void Pty::doSendJobs()
     _bufferFull = true;
 }
 
-void Pty::appendSendJob(const char* s, int len)
+void Pty::appendSendJob(const char * s, int len)
 {
     _pendingSendJobs.append(SendJob(s,len));
 }
 
-void Pty::sendData(const char* s, int len)
+void Pty::sendData(const char * s, int len)
 {
     appendSendJob(s,len);
-    if (!_bufferFull)
+    if (!_bufferFull) {
         doSendJobs();
+    }
 }
 
-void Pty::dataReceived(K3Process *,char *buf, int len)
+void Pty::dataReceived(K3Process *,char * buf, int len)
 {
     emit receivedData(buf,len);
 }
 
 void Pty::lockPty(bool lock)
 {
-    if (lock)
+    if (lock) {
         suspend();
-    else
+    } else {
         resume();
+    }
 }
 
 int Pty::foregroundProcessGroup() const

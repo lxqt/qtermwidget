@@ -46,7 +46,7 @@ public:
     virtual ~TerminalCharacterDecoder() {}
 
     /** Begin decoding characters.  The resulting text is appended to @p output. */
-    virtual void begin(QTextStream* output) = 0;
+    virtual void begin(QTextStream * output) = 0;
     /** End decoding. */
     virtual void end() = 0;
 
@@ -58,7 +58,7 @@ public:
      * @param properties Additional properties which affect all characters in the line
      * @param output The output stream which receives the decoded text
      */
-    virtual void decodeLine(const Character* const characters,
+    virtual void decodeLine(const Character * const characters,
                             int count,
                             LineProperty properties) = 0;
 };
@@ -84,16 +84,16 @@ public:
      */
     bool trailingWhitespace() const;
 
-    virtual void begin(QTextStream* output);
+    virtual void begin(QTextStream * output);
     virtual void end();
 
-    virtual void decodeLine(const Character* const characters,
+    virtual void decodeLine(const Character * const characters,
                             int count,
                             LineProperty properties);
 
 
 private:
-    QTextStream* _output;
+    QTextStream * _output;
     bool _includeTrailingWhitespace;
 };
 
@@ -112,21 +112,21 @@ public:
      * Sets the colour table which the decoder uses to produce the HTML colour codes in its
      * output
      */
-    void setColorTable( const ColorEntry* table );
+    void setColorTable( const ColorEntry * table );
 
-    virtual void decodeLine(const Character* const characters,
+    virtual void decodeLine(const Character * const characters,
                             int count,
                             LineProperty properties);
 
-    virtual void begin(QTextStream* output);
+    virtual void begin(QTextStream * output);
     virtual void end();
 
 private:
-    void openSpan(QString& text , const QString& style);
-    void closeSpan(QString& text);
+    void openSpan(QString & text , const QString & style);
+    void closeSpan(QString & text);
 
-    QTextStream* _output;
-    const ColorEntry* _colorTable;
+    QTextStream * _output;
+    const ColorEntry * _colorTable;
     bool _innerSpanOpen;
     quint8 _lastRendition;
     CharacterColor _lastForeColor;

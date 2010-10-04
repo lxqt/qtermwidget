@@ -105,7 +105,7 @@ extern "C" {
 #endif
 
 #ifdef HAVE_SYS_STROPTS_H
-# include <sys/stropts.h>	// Defines I_PUSH
+# include <sys/stropts.h> // Defines I_PUSH
 # define _NEW_TTY_CTRL
 #endif
 
@@ -130,7 +130,7 @@ extern "C" {
 #endif
 
 //#include <kdebug.h>
-//#include <kstandarddirs.h>	// findExe
+//#include <kstandarddirs.h>  // findExe
 
 #include <QtCore>
 
@@ -244,14 +244,14 @@ bool KPty::open()
 #else
     int ptyno;
     if (!ioctl(d->masterFd, TIOCGPTN, &ptyno)) {
-        char buf[32];
-        sprintf(buf, "/dev/pts/%d", ptyno);
-        d->ttyName = buf;
+        d->ttyName = QByteArray("/dev/pts/") + QByteArray::number(ptyno);
 #endif
 #ifdef HAVE_GRANTPT
-            if (!grantpt(d->masterFd))
+            if (!grantpt(d->masterFd)) {
                 goto grantedpt;
+            }
 #else
+
     goto gotpty;
 #endif
         }
@@ -261,8 +261,8 @@ bool KPty::open()
 #endif // HAVE_PTSNAME || TIOCGPTN
 
     // Linux device names, FIXME: Trouble on other systems?
-    for (const char* s3 = "pqrstuvwxyzabcde"; *s3; s3++) {
-        for (const char* s4 = "0123456789abcdef"; *s4; s4++) {
+    for (const char * s3 = "pqrstuvwxyzabcde"; *s3; s3++) {
+        for (const char * s4 = "0123456789abcdef"; *s4; s4++) {
             ptyName = QString().sprintf("/dev/pty%c%c", *s3, *s4).toAscii();
             d->ttyName = QString().sprintf("/dev/tty%c%c", *s3, *s4).toAscii();
 
@@ -282,9 +282,10 @@ bool KPty::open()
 #endif /* Q_OS_SOLARIS */
                 if (!access(d->ttyName.data(),R_OK|W_OK)) { // checks availability based on permission bits
                     if (!geteuid()) {
-                        struct group* p = getgrnam(TTY_GROUP);
-                        if (!p)
+                        struct group * p = getgrnam(TTY_GROUP);
+                        if (!p) {
                             p = getgrnam("wheel");
+                        }
                         gid_t gid = p ? p->gr_gid : getgid ();
 
                         if (!chown(d->ttyName.data(), getuid(), gid)) {
@@ -304,10 +305,11 @@ bool KPty::open()
 
 gotpty:
     struct stat st;
-    if (stat(d->ttyName.data(), &st))
+    if (stat(d->ttyName.data(), &st)) {
         return false; // this just cannot happen ... *cough*  Yeah right, I just
-    // had it happen when pty #349 was allocated.  I guess
-    // there was some sort of leak?  I only had a few open.
+        // had it happen when pty #349 was allocated.  I guess
+        // there was some sort of leak?  I only had a few open.
+    }
     if (((st.st_uid != getuid()) ||
             (st.st_mode & (S_IRGRP|S_IXGRP|S_IROTH|S_IWOTH|S_IXOTH))) &&
             !d->chownpty(true)) {
@@ -316,7 +318,7 @@ gotpty:
         << "\nThis means the communication can be eavesdropped." << endl;
     }
 
-#if defined(HAVE_GRANTPT) || defined(HAVE__GETPTY)
+#if defined (HAVE__GETPTY) || defined (HAVE_GRANTPT)
 grantedpt:
 #endif
 
@@ -357,8 +359,9 @@ void KPty::closeSlave()
 {
     Q_D(KPty);
 
-    if (d->slaveFd < 0)
+    if (d->slaveFd < 0) {
         return;
+    }
     ::close(d->slaveFd);
     d->slaveFd = -1;
 }
@@ -367,17 +370,17 @@ void KPty::close()
 {
     Q_D(KPty);
 
-    if (d->masterFd < 0)
+    if (d->masterFd < 0) {
         return;
+    }
     closeSlave();
     // don't bother resetting unix98 pty, it will go away after closing master anyway.
     if (memcmp(d->ttyName.data(), "/dev/pts/", 9)) {
         if (!geteuid()) {
             struct stat st;
             if (!stat(d->ttyName.data(), &st)) {
-                if (!chown(d->ttyName.data(), 0, st.st_gid == getgid() ? 0 : -1)) {
-                    chmod(d->ttyName.data(), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-                }
+                chown(d->ttyName.data(), 0, st.st_gid == getgid() ? 0 : -1);
+                chmod(d->ttyName.data(), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
             }
         } else {
             fcntl(d->masterFd, F_SETFD, 0);
@@ -415,7 +418,7 @@ void KPty::setCTty()
 #endif
 }
 
-void KPty::login(const char *user, const char *remotehost)
+void KPty::login(const char * user, const char * remotehost)
 {
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
@@ -431,8 +434,9 @@ void KPty::login(const char *user, const char *remotehost)
     memset(&l_struct, 0, sizeof(l_struct));
     // note: strncpy without terminators _is_ correct here. man 4 utmp
 
-    if (user)
+    if (user) {
         strncpy(l_struct.ut_name, user, sizeof(l_struct.ut_name));
+    }
 
     if (remotehost) {
         strncpy(l_struct.ut_host, remotehost, sizeof(l_struct.ut_host));
@@ -443,9 +447,10 @@ void KPty::login(const char *user, const char *remotehost)
 
 # ifndef __GLIBC__
     Q_D(KPty);
-    const char *str_ptr = d->ttyName.data();
-    if (!memcmp(str_ptr, "/dev/", 5))
+    const char * str_ptr = d->ttyName.data();
+    if (!memcmp(str_ptr, "/dev/", 5)) {
         str_ptr += 5;
+    }
     strncpy(l_struct.ut_line, str_ptr, sizeof(l_struct.ut_line));
 #  ifdef HAVE_STRUCT_UTMP_UT_ID
     strncpy(l_struct.ut_id,
@@ -505,13 +510,15 @@ void KPty::logout()
     Q_D(KPty);
 
     const char *str_ptr = d->ttyName.data();
-    if (!memcmp(str_ptr, "/dev/", 5))
+    if (!memcmp(str_ptr, "/dev/", 5)) {
         str_ptr += 5;
+    }
 # ifdef __GLIBC__
     else {
-        const char *sl_ptr = strrchr(str_ptr, '/');
-        if (sl_ptr)
+        const char * sl_ptr = strrchr(str_ptr, '/');
+        if (sl_ptr) {
             str_ptr = sl_ptr + 1;
+        }
     }
 # endif
 # ifdef HAVE_LOGIN
@@ -565,14 +572,14 @@ endutent();
 // XXX Supposedly, tc[gs]etattr do not work with the master on Solaris.
 // Please verify.
 
-bool KPty::tcGetAttr(struct ::termios *ttmode) const
+bool KPty::tcGetAttr(struct ::termios * ttmode) const
 {
     Q_D(const KPty);
 
     return _tcgetattr(d->masterFd, ttmode) == 0;
 }
 
-bool KPty::tcSetAttr(struct ::termios *ttmode)
+bool KPty::tcSetAttr(struct ::termios * ttmode)
 {
     Q_D(KPty);
 
@@ -593,16 +600,18 @@ bool KPty::setWinSize(int lines, int columns)
 bool KPty::setEcho(bool echo)
 {
     struct ::termios ttmode;
-    if (!tcGetAttr(&ttmode))
+    if (!tcGetAttr(&ttmode)) {
         return false;
-    if (!echo)
+    }
+    if (!echo) {
         ttmode.c_lflag &= ~ECHO;
-    else
+    } else {
         ttmode.c_lflag |= ECHO;
+    }
     return tcSetAttr(&ttmode);
 }
 
-const char *KPty::ttyName() const
+const char * KPty::ttyName() const
 {
     Q_D(const KPty);
 

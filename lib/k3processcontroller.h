@@ -57,7 +57,7 @@ public:
      * Only a single instance of this class is allowed at a time.
      * This method provides access to that instance.
      */
-    static K3ProcessController *instance();
+    static K3ProcessController * instance();
 
     /**
      * Automatically called upon SIGCHLD. Never call it directly.
@@ -102,11 +102,11 @@ public:
     /**
      * @internal
      */
-    void addKProcess( K3Process* );
+    void addKProcess( K3Process * );
     /**
      * @internal
      */
-    void removeKProcess( K3Process* );
+    void removeKProcess( K3Process * );
     /**
      * @internal
      */
@@ -126,8 +126,8 @@ private:
     ~K3ProcessController();
 
     // Disallow assignment and copy-construction
-    K3ProcessController( const K3ProcessController& );
-    K3ProcessController& operator= ( const K3ProcessController& );
+    K3ProcessController( const K3ProcessController & );
+    K3ProcessController & operator= ( const K3ProcessController & );
 
     class Private;
     Private * const d;

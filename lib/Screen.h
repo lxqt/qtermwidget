@@ -343,7 +343,7 @@ public:
     void ShowCharacter(unsigned short c);
 
     // Do composition with last shown character FIXME: Not implemented yet for KDE 4
-    void compose(const QString& compose);
+    void compose(const QString & compose);
 
     /**
      * Resizes the image to a new fixed size of @p new_lines by @p new_columns.
@@ -366,7 +366,7 @@ public:
      * @param startLine Index of first line to copy
      * @param endLine Index of last line to copy
      */
-    void getImage( Character* dest , int size , int startLine , int endLine ) const;
+    void getImage( Character * dest , int size , int startLine , int endLine ) const;
 
     /**
      * Returns the additional attributes associated with lines in the image.
@@ -392,9 +392,9 @@ public:
      * If @p copyPreviousScroll is true then the contents of the previous
      * history buffer are copied into the new scroll.
      */
-    void setScroll(const HistoryType& , bool copyPreviousScroll = true);
+    void setScroll(const HistoryType & , bool copyPreviousScroll = true);
     /** Returns the type of storage used to keep lines in the history. */
-    const HistoryType& getScroll();
+    const HistoryType & getScroll();
     /**
      * Returns true if this screen keeps lines that are scrolled off the screen
      * in a history buffer.
@@ -422,13 +422,13 @@ public:
      * Retrieves the start of the selection or the cursor position if there
      * is no selection.
      */
-    void getSelectionStart(int& column , int& line);
+    void getSelectionStart(int & column , int & line);
 
     /**
      * Retrieves the end of the selection or the cursor position if there
      * is no selection.
      */
-    void getSelectionEnd(int& column , int& line);
+    void getSelectionEnd(int & column , int & line);
 
     /** Clears the current selection */
     void clearSelection();
@@ -438,9 +438,9 @@ public:
     }
 
     /**
-      * 	Returns true if the character at (@p column, @p line) is part of the
-      *  current selection.
-      */
+       *  Returns true if the character at (@p column, @p line) is part of the
+       *  current selection.
+       */
     bool isSelected(const int column,const int line) const;
 
     /**
@@ -457,7 +457,7 @@ public:
      * @param from The first line in the history to retrieve
      * @param to The last line in the history to retrieve
      */
-    void writeToStream(TerminalCharacterDecoder* decoder, int from, int to);
+    void writeToStream(TerminalCharacterDecoder * decoder, int from, int to);
 
     /**
      * Sets the selection to line @p no in the history and returns
@@ -472,10 +472,10 @@ public:
      * @param decoder A decoder which converts terminal characters into text.
      * PlainTextDecoder is the most commonly used decoder which coverts characters
      * into plain text with no formatting.
-     * @param preserveLineBreaks Specifies whether new line characters should
-     * be inserted into the returned text at the end of each terminal line.
+       * @param preserveLineBreaks Specifies whether new line characters should
+       * be inserted into the returned text at the end of each terminal line.
      */
-    void writeSelectionToStream(TerminalCharacterDecoder* decoder , bool
+    void writeSelectionToStream(TerminalCharacterDecoder * decoder , bool
                                 preserveLineBreaks = true);
 
     /** TODO Document me */
@@ -486,12 +486,12 @@ public:
      *
      * @param property The attribute to set or clear
      * Possible properties are:
-     * LINE_WRAPPED:	 Specifies that the line is wrapped.
+     * LINE_WRAPPED:   Specifies that the line is wrapped.
      * LINE_DOUBLEWIDTH: Specifies that the characters in the current line should be double the normal width.
      * LINE_DOUBLEHEIGHT:Specifies that the characters in the current line should be double the normal height.
-     *                   Double-height lines are formed of two lines containing the same characters,
-     *                   with both having the LINE_DOUBLEHEIGHT attribute.  This allows other parts of the
-     *                   code to work on the assumption that all lines are the same height.
+       *                   Double-height lines are formed of two lines containing the same characters,
+       *                   with both having the LINE_DOUBLEHEIGHT attribute.  This allows other parts of the
+       *                   code to work on the assumption that all lines are the same height.
      *
      * @param enable true to apply the attribute to the current line or false to remove it
      */
@@ -539,17 +539,17 @@ public:
     void resetDroppedLines();
 
     /**
-      * Fills the buffer @p dest with @p count instances of the default (ie. blank)
-      * Character style.
-      */
-    static void fillWithDefaultChar(Character* dest, int count);
+     * Fills the buffer @p dest with @p count instances of the default (ie. blank)
+     * Character style.
+     */
+    static void fillWithDefaultChar(Character * dest, int count);
 
 private:
 
     //copies a line of text from the screen or history into a stream using a
     //specified character decoder
     //line - the line number to copy, from 0 (the earliest line in the history) up to
-    //		 hist->getLines() + lines - 1
+    //     hist->getLines() + lines - 1
     //start - the first column on the line to copy
     //count - the number of characters on the line to copy
     //decoder - a decoder which coverts terminal characters (an Character array) into text
@@ -557,7 +557,7 @@ private:
     void copyLineToStream(int line,
                           int start,
                           int count,
-                          TerminalCharacterDecoder* decoder,
+                          TerminalCharacterDecoder * decoder,
                           bool appendNewLine,
                           bool preserveLineBreaks);
 
@@ -579,16 +579,16 @@ private:
     void initTabStops();
 
     void effectiveRendition();
-    void reverseRendition(Character& p) const;
+    void reverseRendition(Character & p) const;
 
     bool isSelectionValid() const;
 
     // copies 'count' lines from the screen buffer into 'dest',
     // starting from 'startLine', where 0 is the first line in the screen buffer
-    void copyFromScreen(Character* dest, int startLine, int count) const;
+    void copyFromScreen(Character * dest, int startLine, int count) const;
     // copies 'count' lines from the history buffer into 'dest',
     // starting from 'startLine', where 0 is the first line in the history
-    void copyFromHistory(Character* dest, int startLine, int count) const;
+    void copyFromHistory(Character * dest, int startLine, int count) const;
 
 
     // screen image ----------------
@@ -596,7 +596,7 @@ private:
     int columns;
 
     typedef QVector<Character> ImageLine;      // [0..columns]
-    ImageLine*          screenLines;    // [lines]
+    ImageLine     *     screenLines;    // [lines]
 
     int _scrolledLines;
     QRect _lastScrolledRegion;
@@ -606,7 +606,7 @@ private:
     QVarLengthArray<LineProperty,64> lineProperties;
 
     // history buffer ---------------
-    HistoryScroll *hist;
+    HistoryScroll * hist;
 
     // cursor location
     int cuX;
@@ -626,7 +626,7 @@ private:
 
     // ----------------------------
 
-    bool* tabstops;
+    bool * tabstops;
 
     // selection -------------------
     int sel_begin; // The first location selected.

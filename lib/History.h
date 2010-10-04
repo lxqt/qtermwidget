@@ -46,8 +46,8 @@ public:
     HistoryFile();
     virtual ~HistoryFile();
 
-    virtual void add(const unsigned char* bytes, int len);
-    virtual void get(unsigned char* bytes, int len, int loc);
+    virtual void add(const unsigned char * bytes, int len);
+    virtual void get(unsigned char * bytes, int len, int loc);
     virtual int  len();
 
     //mmaps the file in read-only mode
@@ -64,7 +64,7 @@ private:
     QTemporaryFile tmpFile;
 
     //pointer to start of mmap'ed file data, or 0 if the file is not mmap'ed
-    char* fileMap;
+    char * fileMap;
 
     //incremented whenver 'add' is called and decremented whenever
     //'get' is called.
@@ -87,7 +87,7 @@ class HistoryType;
 class HistoryScroll
 {
 public:
-    HistoryScroll(HistoryType*);
+    HistoryScroll(HistoryType *);
     virtual ~HistoryScroll();
 
     virtual bool hasScroll();
@@ -120,12 +120,12 @@ public:
     // is very unsafe, because those references will no longer
     // be valid if the history scroll is deleted.
     //
-    const HistoryType& getType() {
+    const HistoryType & getType() {
         return *m_histType;
     }
 
 protected:
-    HistoryType* m_histType;
+    HistoryType * m_histType;
 
 };
 
@@ -138,7 +138,7 @@ protected:
 class HistoryScrollFile : public HistoryScroll
 {
 public:
-    HistoryScrollFile(const QString &logFileName);
+    HistoryScrollFile(const QString & logFileName);
     virtual ~HistoryScrollFile();
 
     virtual int  getLines();
@@ -188,7 +188,7 @@ public:
 private:
     int bufferIndex(int lineNumber);
 
-    HistoryLine* _historyBuffer;
+    HistoryLine * _historyBuffer;
     QBitArray _wrappedLine;
     int _maxLineCount;
     int _usedLines;
@@ -287,7 +287,7 @@ public:
      */
     virtual int maximumLineCount()    const = 0;
 
-    virtual HistoryScroll* scroll(HistoryScroll *) const = 0;
+    virtual HistoryScroll * scroll(HistoryScroll *) const = 0;
 };
 
 class HistoryTypeNone : public HistoryType
@@ -298,7 +298,7 @@ public:
     virtual bool isEnabled() const;
     virtual int maximumLineCount() const;
 
-    virtual HistoryScroll* scroll(HistoryScroll *) const;
+    virtual HistoryScroll * scroll(HistoryScroll *) const;
 };
 
 class HistoryTypeBlockArray : public HistoryType
@@ -309,7 +309,7 @@ public:
     virtual bool isEnabled() const;
     virtual int maximumLineCount() const;
 
-    virtual HistoryScroll* scroll(HistoryScroll *) const;
+    virtual HistoryScroll * scroll(HistoryScroll *) const;
 
 protected:
     size_t m_size;
@@ -319,13 +319,13 @@ protected:
 class HistoryTypeFile : public HistoryType
 {
 public:
-    HistoryTypeFile(const QString& fileName=QString());
+    HistoryTypeFile(const QString & fileName=QString());
 
     virtual bool isEnabled() const;
-    virtual const QString& getFileName() const;
+    virtual const QString & getFileName() const;
     virtual int maximumLineCount() const;
 
-    virtual HistoryScroll* scroll(HistoryScroll *) const;
+    virtual HistoryScroll * scroll(HistoryScroll *) const;
 
 protected:
     QString m_fileName;
@@ -340,7 +340,7 @@ public:
     virtual bool isEnabled() const;
     virtual int maximumLineCount() const;
 
-    virtual HistoryScroll* scroll(HistoryScroll *) const;
+    virtual HistoryScroll * scroll(HistoryScroll *) const;
 
 protected:
     unsigned int m_nbLines;

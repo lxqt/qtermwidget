@@ -97,27 +97,27 @@ public:
      * Returns true if this character has a transparent background when
      * it is drawn with the specified @p palette.
      */
-    bool   isTransparent(const ColorEntry* palette) const;
+    bool   isTransparent(const ColorEntry * palette) const;
     /**
      * Returns true if this character should always be drawn in bold when
      * it is drawn with the specified @p palette, independent of whether
      * or not the character has the RE_BOLD rendition flag.
      */
-    bool   isBold(const ColorEntry* base) const;
+    bool   isBold(const ColorEntry * base) const;
 
     /**
      * Compares two characters and returns true if they have the same unicode character value,
      * rendition and colors.
      */
-    friend bool operator == (const Character& a, const Character& b);
+    friend bool operator == (const Character & a, const Character & b);
     /**
      * Compares two characters and returns true if they have different unicode character values,
      * renditions or colors.
      */
-    friend bool operator != (const Character& a, const Character& b);
+    friend bool operator != (const Character & a, const Character & b);
 };
 
-inline bool operator == (const Character& a, const Character& b)
+inline bool operator == (const Character & a, const Character & b)
 {
     return a.character == b.character &&
            a.rendition == b.rendition &&
@@ -125,7 +125,7 @@ inline bool operator == (const Character& a, const Character& b)
            a.backgroundColor == b.backgroundColor;
 }
 
-inline bool operator != (const Character& a, const Character& b)
+inline bool operator != (const Character & a, const Character & b)
 {
     return    a.character != b.character ||
               a.rendition != b.rendition ||
@@ -133,7 +133,7 @@ inline bool operator != (const Character& a, const Character& b)
               a.backgroundColor != b.backgroundColor;
 }
 
-inline bool Character::isTransparent(const ColorEntry* base) const
+inline bool Character::isTransparent(const ColorEntry * base) const
 {
     return ((backgroundColor._colorSpace == COLOR_SPACE_DEFAULT) &&
             base[backgroundColor._u+0+(backgroundColor._v?BASE_COLORS:0)].transparent)
@@ -141,7 +141,7 @@ inline bool Character::isTransparent(const ColorEntry* base) const
                base[backgroundColor._u+2+(backgroundColor._v?BASE_COLORS:0)].transparent);
 }
 
-inline bool Character::isBold(const ColorEntry* base) const
+inline bool Character::isBold(const ColorEntry * base) const
 {
     return ((backgroundColor._colorSpace == COLOR_SPACE_DEFAULT) &&
             base[backgroundColor._u+0+(backgroundColor._v?BASE_COLORS:0)].bold)
@@ -176,7 +176,7 @@ public:
      * @param unicodePoints An array of unicode character points
      * @param length Length of @p unicodePoints
      */
-    ushort createExtendedChar(ushort* unicodePoints , ushort length);
+    ushort createExtendedChar(ushort * unicodePoints , ushort length);
     /**
      * Looks up and returns a pointer to a sequence of unicode characters
      * which was added to the table using createExtendedChar().
@@ -187,20 +187,20 @@ public:
      *
      * @return A unicode character sequence of size @p length.
      */
-    ushort* lookupExtendedChar(ushort hash , ushort& length) const;
+    ushort * lookupExtendedChar(ushort hash , ushort & length) const;
 
     /** The global ExtendedCharTable instance. */
     static ExtendedCharTable instance;
 private:
     // calculates the hash key of a sequence of unicode points of size 'length'
-    ushort extendedCharHash(ushort* unicodePoints , ushort length) const;
+    ushort extendedCharHash(ushort * unicodePoints , ushort length) const;
     // tests whether the entry in the table specified by 'hash' matches the
     // character sequence 'unicodePoints' of size 'length'
-    bool extendedCharMatch(ushort hash , ushort* unicodePoints , ushort length) const;
+    bool extendedCharMatch(ushort hash , ushort * unicodePoints , ushort length) const;
     // internal, maps hash keys to character sequence buffers.  The first ushort
     // in each value is the length of the buffer, followed by the ushorts in the buffer
     // themselves.
-    QHash<ushort,ushort*> extendedCharTable;
+    QHash<ushort,ushort *> extendedCharTable;
 };
 
 }

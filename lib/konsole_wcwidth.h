@@ -7,8 +7,8 @@
 */
 
 
-#ifndef	_KONSOLE_WCWIDTH_H_
-#define	_KONSOLE_WCWIDTH_H_
+#ifndef _KONSOLE_WCWIDTH_H_
+#define _KONSOLE_WCWIDTH_H_
 
 // Qt
 #include <QtCore/QBool>
@@ -19,6 +19,6 @@ int konsole_wcwidth(quint16 ucs);
 int konsole_wcwidth_cjk(Q_UINT16 ucs);
 #endif
 
-int string_width( const QString &txt );
+int string_width( const QString & txt );
 
 #endif

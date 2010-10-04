@@ -88,7 +88,7 @@ public:
     bool addUtmp : 1;
     bool useShell : 1;
 
-    KPty *pty;
+    KPty * pty;
 
     int priority;
 
@@ -102,7 +102,7 @@ public:
 // public member functions //
 /////////////////////////////
 
-K3Process::K3Process( QObject* parent )
+K3Process::K3Process( QObject * parent )
         : QObject( parent ),
         run_mode(NotifyOnExit),
         runs(false),
@@ -128,13 +128,13 @@ K3Process::K3Process( QObject* parent )
 }
 
 void
-K3Process::setEnvironment(const QString &name, const QString &value)
+K3Process::setEnvironment(const QString & name, const QString & value)
 {
     d->env.insert(name, value);
 }
 
 void
-K3Process::setWorkingDirectory(const QString &dir)
+K3Process::setWorkingDirectory(const QString & dir)
 {
     d->wd = dir;
 }
@@ -170,11 +170,13 @@ bool
 K3Process::setPriority(int prio)
 {
     if (runs) {
-        if (setpriority(PRIO_PROCESS, pid_, prio))
+        if (setpriority(PRIO_PROCESS, pid_, prio)) {
             return false;
+        }
     } else {
-        if (prio > 19 || prio < (geteuid() ? getpriority(PRIO_PROCESS, 0) : -20))
+        if (prio > 19 || prio < (geteuid() ? getpriority(PRIO_PROCESS, 0) : -20)) {
             return false;
+        }
     }
     d->priority = prio;
     return true;
@@ -182,8 +184,9 @@ K3Process::setPriority(int prio)
 
 K3Process::~K3Process()
 {
-    if (run_mode != DontCare)
+    if (run_mode != DontCare) {
         kill(SIGKILL);
+    }
     detach();
 
     delete d->pty;
@@ -203,31 +206,32 @@ void K3Process::detach()
     }
 }
 
-void K3Process::setBinaryExecutable(const char *filename)
+void K3Process::setBinaryExecutable(const char * filename)
 {
     d->executable = filename;
 }
 
-K3Process &K3Process::operator<<(const QStringList& args)
+K3Process & K3Process::operator<<(const QStringList & args)
 {
     QStringList::ConstIterator it = args.begin();
-    for ( ; it != args.end() ; ++it )
+    for ( ; it != args.end() ; ++it ) {
         arguments.append(QFile::encodeName(*it));
+    }
     return *this;
 }
 
-K3Process &K3Process::operator<<(const QByteArray& arg)
+K3Process & K3Process::operator<<(const QByteArray & arg)
 {
     return operator<< (arg.data());
 }
 
-K3Process &K3Process::operator<<(const char* arg)
+K3Process & K3Process::operator<<(const char * arg)
 {
     arguments.append(arg);
     return *this;
 }
 
-K3Process &K3Process::operator<<(const QString& arg)
+K3Process & K3Process::operator<<(const QString & arg)
 {
     arguments.append(QFile::encodeName(arg));
     return *this;
@@ -250,7 +254,7 @@ bool K3Process::start(RunMode runmode, Communication comm)
         qDebug() << "Attempted to start a process without arguments" << endl;
         return false;
     }
-    char **arglist;
+    char ** arglist;
     QByteArray shellCmd;
     if (d->useShell) {
         if (d->shell.isEmpty()) {
@@ -270,8 +274,9 @@ bool K3Process::start(RunMode runmode, Communication comm)
         arglist[3] = 0;
     } else {
         arglist = static_cast<char **>(malloc( (n + 1) * sizeof(char *)));
-        for (uint i = 0; i < n; i++)
+        for (uint i = 0; i < n; i++) {
             arglist[i] = arguments[i].data();
+        }
         arglist[n] = 0;
     }
 
@@ -286,12 +291,13 @@ bool K3Process::start(RunMode runmode, Communication comm)
     // We do this in the parent because if we do it in the child process
     // gdb gets confused when the application runs from gdb.
 #ifdef HAVE_INITGROUPS
-    struct passwd *pw = geteuid() ? 0 : getpwuid(getuid());
+    struct passwd * pw = geteuid() ? 0 : getpwuid(getuid());
 #endif
 
     int fd[2];
-    if (pipe(fd))
-        fd[0] = fd[1] = -1; // Pipe failed.. continue
+    if (pipe(fd)) {
+        fd[0] = fd[1] = -1;  // Pipe failed.. continue
+    }
 
     // we don't use vfork() because
     // - it has unclear semantics and is not standardized
@@ -304,47 +310,52 @@ bool K3Process::start(RunMode runmode, Communication comm)
         // Closing of fd[1] indicates that the execvp() succeeded!
         fcntl(fd[1], F_SETFD, FD_CLOEXEC);
 
-        if (!commSetupDoneC())
+        if (!commSetupDoneC()) {
             qDebug() << "Could not finish comm setup in child!" << endl;
+        }
 
         // reset all signal handlers
         struct sigaction act;
         sigemptyset(&act.sa_mask);
         act.sa_handler = SIG_DFL;
         act.sa_flags = 0;
-        for (int sig = 1; sig < NSIG; sig++)
+        for (int sig = 1; sig < NSIG; sig++) {
             sigaction(sig, &act, 0L);
+        }
 
-        if (d->priority)
+        if (d->priority) {
             setpriority(PRIO_PROCESS, 0, d->priority);
+        }
 
         if (!runPrivileged()) {
             setgid(getgid());
 #ifdef HAVE_INITGROUPS
-            if (pw)
+            if (pw) {
                 initgroups(pw->pw_name, pw->pw_gid);
+            }
 #endif
-            if (geteuid() != getuid())
+            if (geteuid() != getuid()) {
                 setuid(getuid());
-            if (geteuid() != getuid())
+            }
+            if (geteuid() != getuid()) {
                 _exit(1);
+            }
         }
 
         setupEnvironment();
 
-        if (runmode == DontCare || runmode == OwnGroup)
+        if (runmode == DontCare || runmode == OwnGroup) {
             setsid();
+        }
 
-        const char *executable = arglist[0];
-        if (!d->executable.isEmpty())
+        const char * executable = arglist[0];
+        if (!d->executable.isEmpty()) {
             executable = d->executable.data();
+        }
         execvp(executable, arglist);
 
         char resultByte = 1;
-        ssize_t result = write(fd[1], &resultByte, 1);
-        if (result<0) {
-            qDebug() << "Write failed with the error code " << result << endl;
-        }
+        write(fd[1], &resultByte, 1);
         _exit(-1);
     } else if (pid_ == -1) {
         // forking failed
@@ -357,8 +368,9 @@ bool K3Process::start(RunMode runmode, Communication comm)
     // the parent continues here
     free(arglist);
 
-    if (!commSetupDoneP())
+    if (!commSetupDoneP()) {
         qDebug() << "Could not finish comm setup in parent!" << endl;
+    }
 
     // Check whether client could be started.
     close(fd[1]);
@@ -374,8 +386,9 @@ bool K3Process::start(RunMode runmode, Communication comm)
             return false;
         }
         if (n == -1) {
-            if (errno == EINTR)
-                continue; // Ignore
+            if (errno == EINTR) {
+                continue;  // Ignore
+            }
         }
         break; // success
     }
@@ -419,8 +432,9 @@ bool K3Process::start(RunMode runmode, Communication comm)
 
 bool K3Process::kill(int signo)
 {
-    if (runs && pid_ > 0 && !::kill(run_mode == OwnGroup ? -pid_ : pid_, signo))
+    if (runs && pid_ > 0 && !::kill(run_mode == OwnGroup ? -pid_ : pid_, signo)) {
         return true;
+    }
     return false;
 }
 
@@ -452,16 +466,17 @@ pid_t K3Process::pid() const
 
 bool K3Process::wait(int timeout)
 {
-    if (!runs)
+    if (!runs) {
         return true;
+    }
 
 #ifndef __linux__
     struct timeval etv;
 #endif
     struct timeval tv, *tvp;
-    if (timeout < 0)
+    if (timeout < 0) {
         tvp = 0;
-    else {
+    } else {
 #ifndef __linux__
         gettimeofday(&etv, 0);
         etv.tv_sec += timeout;
@@ -482,15 +497,17 @@ bool K3Process::wait(int timeout)
         if (tvp) {
             gettimeofday(&tv, 0);
             timersub(&etv, &tv, &tv);
-            if (tv.tv_sec < 0)
+            if (tv.tv_sec < 0) {
                 tv.tv_sec = tv.tv_usec = 0;
+            }
         }
 #endif
 
         switch ( select( fd+1, &fds, 0, 0, tvp ) ) {
         case -1:
-            if ( errno == EINTR )
+            if ( errno == EINTR ) {
                 break;
+            }
             // fall through; should happen if tvp->tv_sec < 0
         case 0:
             K3ProcessController::instance()->rescheduleCheck();
@@ -543,36 +560,41 @@ int K3Process::exitSignal() const
 }
 
 
-bool K3Process::writeStdin(const char *buffer, int buflen)
+bool K3Process::writeStdin(const char * buffer, int buflen)
 {
     // if there is still data pending, writing new data
     // to stdout is not allowed (since it could also confuse
     // kprocess ...)
-    if (input_data != 0)
+    if (input_data != 0) {
         return false;
+    }
 
     if (communication & Stdin) {
         input_data = buffer;
         input_sent = 0;
         input_total = buflen;
         innot->setEnabled(true);
-        if (input_total)
+        if (input_total) {
             slotSendData(0);
+        }
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 void K3Process::suspend()
 {
-    if (outnot)
+    if (outnot) {
         outnot->setEnabled(false);
+    }
 }
 
 void K3Process::resume()
 {
-    if (outnot)
+    if (outnot) {
         outnot->setEnabled(true);
+    }
 }
 
 bool K3Process::closeStdin()
@@ -581,12 +603,14 @@ bool K3Process::closeStdin()
         communication = communication & ~Stdin;
         delete innot;
         innot = 0;
-        if (!(d->usePty & Stdin))
+        if (!(d->usePty & Stdin)) {
             close(in[1]);
+        }
         in[1] = -1;
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 bool K3Process::closeStdout()
@@ -595,12 +619,14 @@ bool K3Process::closeStdout()
         communication = communication & ~Stdout;
         delete outnot;
         outnot = 0;
-        if (!(d->usePty & Stdout))
+        if (!(d->usePty & Stdout)) {
             close(out[0]);
+        }
         out[0] = -1;
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 bool K3Process::closeStderr()
@@ -609,23 +635,27 @@ bool K3Process::closeStderr()
         communication = communication & ~Stderr;
         delete errnot;
         errnot = 0;
-        if (!(d->usePty & Stderr))
+        if (!(d->usePty & Stderr)) {
             close(err[0]);
+        }
         err[0] = -1;
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 bool K3Process::closePty()
 {
     if (d->pty && d->pty->masterFd() >= 0) {
-        if (d->addUtmp)
+        if (d->addUtmp) {
             d->pty->logout();
+        }
         d->pty->close();
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 void K3Process::closeAll()
@@ -644,15 +674,17 @@ void K3Process::closeAll()
 
 void K3Process::slotChildOutput(int fdno)
 {
-    if (!childOutput(fdno))
+    if (!childOutput(fdno)) {
         closeStdout();
+    }
 }
 
 
 void K3Process::slotChildError(int fdno)
 {
-    if (!childError(fdno))
+    if (!childError(fdno)) {
         closeStderr();
+    }
 }
 
 
@@ -673,26 +705,26 @@ void K3Process::slotSendData(int)
     }
 }
 
-void K3Process::setUseShell(bool useShell, const char *shell)
+void K3Process::setUseShell(bool useShell, const char * shell)
 {
     d->useShell = useShell;
-    if (shell && *shell)
+    if (shell && *shell) {
         d->shell = shell;
-    else
+    } else
 // #ifdef NON_FREE // ... as they ship non-POSIX /bin/sh
 #if !defined(__linux__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(__GNU__) && !defined(__DragonFly__)
         // Solaris POSIX ...
-        if (!access( "/usr/xpg4/bin/sh", X_OK ))
+        if (!access( "/usr/xpg4/bin/sh", X_OK )) {
             d->shell = "/usr/xpg4/bin/sh";
-        else
+        } else
             // ... which links here anyway
-            if (!access( "/bin/ksh", X_OK ))
+            if (!access( "/bin/ksh", X_OK )) {
                 d->shell = "/bin/ksh";
-            else
+            } else
                 // dunno, maybe superfluous?
-                if (!access( "/usr/ucb/sh", X_OK ))
+                if (!access( "/usr/ucb/sh", X_OK )) {
                     d->shell = "/usr/ucb/sh";
-                else
+                } else
 #endif
                     d->shell = "/bin/sh";
 }
@@ -702,20 +734,21 @@ void K3Process::setUsePty(Communication usePty, bool addUtmp)
     d->usePty = usePty;
     d->addUtmp = addUtmp;
     if (usePty) {
-        if (!d->pty)
+        if (!d->pty) {
             d->pty = new KPty;
+        }
     } else {
         delete d->pty;
         d->pty = 0;
     }
 }
 
-KPty *K3Process::pty() const
+KPty * K3Process::pty() const
 {
     return d->pty;
 }
 
-QString K3Process::quote(const QString &arg)
+QString K3Process::quote(const QString & arg)
 {
     QChar q('\'');
     return QString(arg).replace(q, "'\\''").prepend(q).append(q);
@@ -736,8 +769,9 @@ void K3Process::processHasExited(int state)
 
     commClose(); // cleanup communication sockets
 
-    if (run_mode != DontCare)
+    if (run_mode != DontCare) {
         emit processExited(this);
+    }
 }
 
 
@@ -787,37 +821,44 @@ int K3Process::setupCommunication(Communication comm)
             qWarning() << "Invalid usePty/communication combination (" << d->usePty << "/" << comm << ")" << endl;
             return 0;
         }
-        if (!d->pty->open())
+        if (!d->pty->open()) {
             return 0;
+        }
 
         int rcomm = comm & d->usePty;
         int mfd = d->pty->masterFd();
-        if (rcomm & Stdin)
+        if (rcomm & Stdin) {
             in[1] = mfd;
-        if (rcomm & Stdout)
+        }
+        if (rcomm & Stdout) {
             out[0] = mfd;
-        if (rcomm & Stderr)
+        }
+        if (rcomm & Stderr) {
             err[0] = mfd;
+        }
     }
 
     communication = comm;
 
     comm = comm & ~d->usePty;
     if (comm & Stdin) {
-        if (socketpair(AF_UNIX, SOCK_STREAM, 0, in))
+        if (socketpair(AF_UNIX, SOCK_STREAM, 0, in)) {
             goto fail0;
+        }
         fcntl(in[0], F_SETFD, FD_CLOEXEC);
         fcntl(in[1], F_SETFD, FD_CLOEXEC);
     }
     if (comm & Stdout) {
-        if (socketpair(AF_UNIX, SOCK_STREAM, 0, out))
+        if (socketpair(AF_UNIX, SOCK_STREAM, 0, out)) {
             goto fail1;
+        }
         fcntl(out[0], F_SETFD, FD_CLOEXEC);
         fcntl(out[1], F_SETFD, FD_CLOEXEC);
     }
     if (comm & Stderr) {
-        if (socketpair(AF_UNIX, SOCK_STREAM, 0, err))
+        if (socketpair(AF_UNIX, SOCK_STREAM, 0, err)) {
             goto fail2;
+        }
         fcntl(err[0], F_SETFD, FD_CLOEXEC);
         fcntl(err[1], F_SETFD, FD_CLOEXEC);
     }
@@ -844,17 +885,21 @@ fail0:
 int K3Process::commSetupDoneP()
 {
     int rcomm = communication & ~d->usePty;
-    if (rcomm & Stdin)
+    if (rcomm & Stdin) {
         close(in[0]);
-    if (rcomm & Stdout)
+    }
+    if (rcomm & Stdout) {
         close(out[1]);
-    if (rcomm & Stderr)
+    }
+    if (rcomm & Stderr) {
         close(err[1]);
+    }
     in[0] = out[1] = err[1] = -1;
 
     // Don't create socket notifiers if no interactive comm is to be expected
-    if (run_mode != NotifyOnExit && run_mode != OwnGroup)
+    if (run_mode != NotifyOnExit && run_mode != OwnGroup) {
         return 1;
+    }
 
     if (communication & Stdin) {
         fcntl(in[1], F_SETFL, O_NONBLOCK | fcntl(in[1], F_GETFL));
@@ -870,8 +915,9 @@ int K3Process::commSetupDoneP()
         Q_CHECK_PTR(outnot);
         QObject::connect(outnot, SIGNAL(activated(int)),
                          this, SLOT(slotChildOutput(int)));
-        if (communication & NoRead)
+        if (communication & NoRead) {
             suspend();
+        }
     }
 
     if (communication & Stderr) {
@@ -890,33 +936,46 @@ int K3Process::commSetupDoneC()
 {
     int ok = 1;
     if (d->usePty & Stdin) {
-        if (dup2(d->pty->slaveFd(), STDIN_FILENO) < 0) ok = 0;
+        if (dup2(d->pty->slaveFd(), STDIN_FILENO) < 0) {
+            ok = 0;
+        }
     } else if (communication & Stdin) {
-        if (dup2(in[0], STDIN_FILENO) < 0) ok = 0;
+        if (dup2(in[0], STDIN_FILENO) < 0) {
+            ok = 0;
+        }
     } else {
         int null_fd = open( "/dev/null", O_RDONLY );
-        if (dup2( null_fd, STDIN_FILENO ) < 0) ok = 0;
+        if (dup2( null_fd, STDIN_FILENO ) < 0) {
+            ok = 0;
+        }
         close( null_fd );
     }
     struct linger so;
     memset(&so, 0, sizeof(so));
     if (d->usePty & Stdout) {
-        if (dup2(d->pty->slaveFd(), STDOUT_FILENO) < 0) ok = 0;
+        if (dup2(d->pty->slaveFd(), STDOUT_FILENO) < 0) {
+            ok = 0;
+        }
     } else if (communication & Stdout) {
         if (dup2(out[1], STDOUT_FILENO) < 0 ||
-                setsockopt(out[1], SOL_SOCKET, SO_LINGER, (char *)&so, sizeof(so)))
+                setsockopt(out[1], SOL_SOCKET, SO_LINGER, (char *)&so, sizeof(so))) {
             ok = 0;
+        }
         if (communication & MergedStderr) {
-            if (dup2(out[1], STDERR_FILENO) < 0)
+            if (dup2(out[1], STDERR_FILENO) < 0) {
                 ok = 0;
+            }
         }
     }
     if (d->usePty & Stderr) {
-        if (dup2(d->pty->slaveFd(), STDERR_FILENO) < 0) ok = 0;
+        if (dup2(d->pty->slaveFd(), STDERR_FILENO) < 0) {
+            ok = 0;
+        }
     } else if (communication & Stderr) {
         if (dup2(err[1], STDERR_FILENO) < 0 ||
-                setsockopt(err[1], SOL_SOCKET, SO_LINGER, (char *)&so, sizeof(so)))
+                setsockopt(err[1], SOL_SOCKET, SO_LINGER, (char *)&so, sizeof(so))) {
             ok = 0;
+        }
     }
 
     // don't even think about closing all open fds here or anywhere else
@@ -924,8 +983,9 @@ int K3Process::commSetupDoneC()
     // PTY stuff //
     if (d->usePty) {
         d->pty->setCTty();
-        if (d->addUtmp)
+        if (d->addUtmp) {
             d->pty->login(getenv("USER"), getenv("DISPLAY"));
+        }
     }
 
     return ok;
@@ -956,13 +1016,15 @@ void K3Process::commClose()
             }
             if (communication & Stderr) {
                 FD_SET(err[0], &rfds);
-                if (err[0] > max_fd)
+                if (err[0] > max_fd) {
                     max_fd = err[0];
+                }
             }
             if (runs) {
                 FD_SET(notfd, &rfds);
-                if (notfd > max_fd)
+                if (notfd > max_fd) {
                     max_fd = notfd;
+                }
                 // If the process is still running we block until we
                 // receive data or the process exits.
                 p_timeout = 0; // no timeout
@@ -975,17 +1037,21 @@ void K3Process::commClose()
 
             int fds_ready = select(max_fd+1, &rfds, 0, 0, p_timeout);
             if (fds_ready < 0) {
-                if (errno == EINTR)
+                if (errno == EINTR) {
                     continue;
+                }
                 break;
-            } else if (!fds_ready)
+            } else if (!fds_ready) {
                 break;
+            }
 
-            if ((communication & Stdout) && FD_ISSET(out[0], &rfds))
+            if ((communication & Stdout) && FD_ISSET(out[0], &rfds)) {
                 slotChildOutput(out[0]);
+            }
 
-            if ((communication & Stderr) && FD_ISSET(err[0], &rfds))
+            if ((communication & Stderr) && FD_ISSET(err[0], &rfds)) {
                 slotChildError(err[0]);
+            }
 
             if (runs && FD_ISSET(notfd, &rfds)) {
                 runs = false; // hack: signal potential exit
@@ -1006,7 +1072,7 @@ void K3Process::commClose()
 // CC: Class K3ShellProcess
 ///////////////////////////
 
-K3ShellProcess::K3ShellProcess(const char *shellname):
+K3ShellProcess::K3ShellProcess(const char * shellname):
         K3Process(), d(0)
 {
     setUseShell( true, shellname ? shellname : getenv("SHELL") );
@@ -1016,7 +1082,7 @@ K3ShellProcess::~K3ShellProcess()
 {
 }
 
-QString K3ShellProcess::quote(const QString &arg)
+QString K3ShellProcess::quote(const QString & arg)
 {
     return K3Process::quote(arg);
 }

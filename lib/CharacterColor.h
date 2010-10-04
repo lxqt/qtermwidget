@@ -65,7 +65,7 @@ public:
     /**
      * Sets the color, transparency and boldness of this color to those of @p rhs.
      */
-    void operator=(const ColorEntry& rhs) {
+    void operator=(const ColorEntry & rhs) {
         color = rhs.color;
         transparent = rhs.transparent;
         bold = rhs.bold;
@@ -216,7 +216,7 @@ public:
      * The @p palette is only used if this color is one of the 16 system colors, otherwise
      * it is ignored.
      */
-    QColor color(const ColorEntry* palette) const;
+    QColor color(const ColorEntry * palette) const;
 
     /**
      * Compares two colors and returns true if they represent the same color value and
@@ -227,7 +227,7 @@ public:
      * Compares two colors and returns true if they represent different color values
      * or use different color spaces.
      */
-    friend bool operator != (const CharacterColor& a, const CharacterColor& b);
+    friend bool operator != (const CharacterColor & a, const CharacterColor & b);
 
 private:
     quint8 _colorSpace;
@@ -238,7 +238,7 @@ private:
     quint8 _w;
 };
 
-inline bool operator == (const CharacterColor& a, const CharacterColor& b)
+inline bool operator == (const CharacterColor & a, const CharacterColor & b)
 {
     return a._colorSpace == b._colorSpace &&
            a._u == b._u &&
@@ -246,17 +246,21 @@ inline bool operator == (const CharacterColor& a, const CharacterColor& b)
            a._w == b._w;
 }
 
-inline bool operator != (const CharacterColor& a, const CharacterColor& b)
+inline bool operator != (const CharacterColor & a, const CharacterColor & b)
 {
     return !operator==(a,b);
 }
 
-inline const QColor color256(quint8 u, const ColorEntry* base)
+inline const QColor color256(quint8 u, const ColorEntry * base)
 {
     //   0.. 16: system colors
-    if (u <   8) return base[u+2            ].color;
+    if (u <   8) {
+        return base[u+2            ].color;
+    }
     u -= 8;
-    if (u <   8) return base[u+2+BASE_COLORS].color;
+    if (u <   8) {
+        return base[u+2+BASE_COLORS].color;
+    }
     u -= 8;
 
     //  16..231: 6x6x6 rgb color cube
@@ -270,7 +274,7 @@ inline const QColor color256(quint8 u, const ColorEntry* base)
     return QColor(gray,gray,gray);
 }
 
-inline QColor CharacterColor::color(const ColorEntry* base) const
+inline QColor CharacterColor::color(const ColorEntry * base) const
 {
     switch (_colorSpace) {
     case COLOR_SPACE_DEFAULT:

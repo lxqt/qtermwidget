@@ -99,12 +99,50 @@ QTermWidget::QTermWidget(int startnow, QWidget *parent)
     m_impl->m_terminalDisplay->resize(this->size());
 
     this->setFocusProxy(m_impl->m_terminalDisplay);
+    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),this, SLOT(selectionChanged(bool)));
+}
+
+void QTermWidget::selectionChanged(bool textSelected)
+{
+    emit copyAvailable(textSelected);
+}
+
+int QTermWidget::getShellPID()
+{
+    return m_impl->m_session->processId();
+}
+
+void QTermWidget::changeDir(const QString & dir)
+{
+    /*
+       this is a very hackish way of trying to determine if the shell is in
+       the foreground before attempting to change the directory.  It may not
+       be portable to anything other than Linux.
+    */
+    QString strCmd;
+    strCmd.setNum(getShellPID());
+    strCmd.prepend("ps -j ");
+    strCmd.append(" | tail -1 | awk '{ print $5 }' | grep -q \\+");
+    int retval = system(strCmd.toStdString().c_str());
+
+    if (!retval) {
+        QString cmd = "cd " + dir + "\n";
+        sendText(cmd);
+    }
+}
+
+QSize QTermWidget::sizeHint() const
+{
+    QSize size = m_impl->m_terminalDisplay->sizeHint();
+    size.rheight() = 150;
+    return size;
 }
 
 void QTermWidget::startShellProgram()
 {
-    if ( m_impl->m_session->isRunning() )
+    if ( m_impl->m_session->isRunning() ) {
         return;
+    }
 
     m_impl->m_session->run();
 }
