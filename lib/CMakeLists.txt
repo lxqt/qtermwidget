@@ -21,8 +21,15 @@ IF (NOT LIB_SUFFIX)
             MESSAGE(STATUS "   LIB_SUFFIX is set to '${LIB_SUFFIX}'")
         endif (CMAKE_SIZEOF_VOID_P EQUAL 4)
     ELSE (NOT APPLE)
+        message(STATUS "LIB_SUFFIX is disabled for APPLE: ${CMAKE_SYSTEM_NAME}")    
         SET (LIB_SUFFIX "")
     ENDIF (NOT APPLE)
+    # BSD does not use lib64 for 64bit libs
+    IF (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD" OR ${CMAKE_SYSTEM_NAME} MATCHES "OpenBSD")
+        message(STATUS "LIB_SUFFIX is disabled for *BSD: ${CMAKE_SYSTEM_NAME}")
+        SET (LIB_SUFFIX "")
+    ENDIF()
+    #
     MESSAGE(STATUS "")
 ENDIF (NOT LIB_SUFFIX)
 
