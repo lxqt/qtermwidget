@@ -41,8 +41,8 @@ set ( CMAKE_BUILD_TYPE
 )
 
 #| Link Qt4 Libraries
-target_link_libraries ( test ${QT_LIBRARIES} )
+target_link_libraries ( test ${QT_LIBRARIES} util )
 
 #| Link qtermwidget Library 
-target_link_libraries ( test ${QTERMWIDGET_LIB} ) 
+target_link_libraries ( test ${QTERMWIDGET_LIB} util ) 
 
