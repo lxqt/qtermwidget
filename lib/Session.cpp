@@ -36,6 +36,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
+#include <QtCore/QFile>
 #include <QtCore>
 
 #include "Pty.h"
@@ -260,18 +261,30 @@ void Session::run()
 
     // Upon a KPty error, there is no description on what that error was...
     // Check to see if the given program is executable.
+    
+    
+    /* ok iam not exactly sure where _program comes from - however it was set to /bin/bash on my system 
+     * Thats bad for BSD as its /usr/local/bin/bash there - its also bad for arch as its /usr/bin/bash there too! 
+     * So i added a check to see if /bin/bash exists - if no then we use $SHELL - if that does not exist either, we fall back to /bin/sh
+     * As far as i know /bin/sh exists on every unix system.. You could also just put some ifdef __FREEBSD__ here but i think these 2 filechecks are worth
+     * their computing time on any system - especially with the problem on arch linux beeing there too.
+     */
     QString exec = QFile::encodeName(_program);
-
+    qDebug() << exec;
     // if 'exec' is not specified, fall back to default shell.  if that
     // is not set then fall back to /bin/sh
-    if ( exec.isEmpty() ) {
+    QFile excheck(exec);
+    if ( exec.isEmpty() || !excheck.exists() ) {
         exec = getenv("SHELL");
     }
-    if ( exec.isEmpty() ) {
+    excheck.setFileName(exec);
+    
+    if ( exec.isEmpty() || !excheck.exists() ) {
         exec = "/bin/sh";
     }
-
-    // if no arguments are specified, fall back to shell
+    qDebug() << exec;
+    
+    
     QStringList arguments =  _arguments.join(QChar(' ')).isEmpty() ?
                              QStringList() << exec : _arguments;
     QString pexec = exec;
@@ -300,18 +313,23 @@ void Session::run()
     // the background color is deemed dark or not
     QString backgroundColorHint = _hasDarkBackground ? "COLORFGBG=15;0" : "COLORFGBG=0;15";
 
-    int result = _shellProcess->start(QFile::encodeName(_program),
+    /* if we do all the checking if this shell exists then we use it ;)
+     * Dont know about the arguments though.. maybe youll need some more checking im not sure
+     * However this works on Arch and FreeBSD now.
+     */
+    int result = _shellProcess->start(exec,
                                       arguments,
                                       _environment << backgroundColorHint,
                                       windowId(),
                                       _addToUtmp);
-
+    
     if (result < 0) {
+        qDebug() << "CRASHED! result: " << result;
         return;
     }
 
     _shellProcess->setWriteable(false);  // We are reachable via kwrited.
-
+    qDebug() << "started!";
     emit started();
 }
 
