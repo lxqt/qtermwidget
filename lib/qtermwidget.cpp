@@ -112,7 +112,12 @@ QTermWidget::QTermWidget(int startnow, QWidget *parent)
     m_impl->m_terminalDisplay->resize(this->size());
 
     this->setFocusProxy(m_impl->m_terminalDisplay);
-    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),this, SLOT(selectionChanged(bool)));
+    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),
+            this, SLOT(selectionChanged(bool)));
+    connect(m_impl->m_terminalDisplay, SIGNAL(termGetFocus()),
+            this, SIGNAL(termGetFocus()));
+    connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
+            this, SIGNAL(termLostFocus()));
 }
 
 void QTermWidget::selectionChanged(bool textSelected)

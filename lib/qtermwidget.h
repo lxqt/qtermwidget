@@ -120,6 +120,9 @@ signals:
     void finished();
     void copyAvailable(bool);
 
+    void termGetFocus();
+    void termLostFocus();
+
 public slots:
     // Paste clipboard content to terminal
     void copyClipboard();

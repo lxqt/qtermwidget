@@ -533,6 +533,10 @@ signals:
     void isBusySelecting(bool);
     void sendStringToEmu(const char *);
 
+    //! Signals to inform that the widget get or lost focus
+    void termGetFocus();
+    void termLostFocus();
+
 protected:
     virtual bool event( QEvent * );
 
@@ -552,7 +556,10 @@ protected:
     virtual void extendSelection( const QPoint & pos );
     virtual void wheelEvent( QWheelEvent * );
 
+    // focus handling
     virtual bool focusNextPrevChild( bool next );
+    virtual void focusInEvent(QFocusEvent * event);
+    virtual void focusOutEvent(QFocusEvent * event);
 
     // drag and drop
     virtual void dragEnterEvent(QDragEnterEvent * event);

@@ -2211,6 +2211,17 @@ bool TerminalDisplay::focusNextPrevChild( bool next )
     return QWidget::focusNextPrevChild( next );
 }
 
+void TerminalDisplay::focusInEvent(QFocusEvent * event)
+{
+    emit termGetFocus();
+    QWidget::focusInEvent(event);
+}
+
+void TerminalDisplay::focusOutEvent(QFocusEvent * event)
+{
+    emit termLostFocus();
+    QWidget::focusOutEvent(event);
+}
 
 int TerminalDisplay::charClass(quint16 ch) const
 {
