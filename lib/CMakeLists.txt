@@ -94,7 +94,7 @@ include_directories ( ${PROJECT_SOURCE_DIR} ) # You mark some of the headers as 
 set ( SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share )
 message ( STATUS "Share dire: ${SHARE_DIR}" )
 
-set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/ )
+set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/kb-layouts/ )
 message ( STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}" )
 add_definitions( -DKB_LAYOUT_DIR="\\"${KB_LAYOUT_DIR}\\"" )
 

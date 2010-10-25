@@ -18,6 +18,7 @@
 
 
 #include "qtermwidget.h"
+#include "ColorTables.h"
 
 #include "Session.h"
 #include "TerminalDisplay.h"
