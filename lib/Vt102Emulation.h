@@ -47,8 +47,7 @@
 #define MODE_Ansi      (MODES_SCREEN+7)
 #define MODE_total     (MODES_SCREEN+8)
 
-namespace Konsole
-{
+namespace Konsole {
 
 struct DECpar {
     bool mode[MODE_total];
@@ -74,8 +73,7 @@ struct CharCodes {
  * sequences.
  *
  */
-class Vt102Emulation : public Emulation
-{
+class Vt102Emulation : public Emulation {
     Q_OBJECT
 
 public:

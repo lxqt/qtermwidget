@@ -40,8 +40,7 @@ typedef void (*CleanUpFunction)();
  * Helper class for K_GLOBAL_STATIC to clean up the object on library unload or application
  * shutdown.
  */
-class CleanUpGlobalStatic
-{
+class CleanUpGlobalStatic {
 public:
     CleanUpFunction func;
 
@@ -112,8 +111,7 @@ static struct K_GLOBAL_STATIC_STRUCT_NAME(NAME)                                \
 class QIODevice;
 class QTextStream;
 
-namespace Konsole
-{
+namespace Konsole {
 
 /**
  * A convertor which maps between key sequences pressed by the user and the
@@ -128,8 +126,7 @@ namespace Konsole
  * (Shift,Ctrl,Alt,Meta etc.) and state flags which indicate the state
  * which the terminal must be in for the key sequence to apply.
  */
-class KeyboardTranslator
-{
+class KeyboardTranslator {
 public:
     /**
      * The meaning of a particular key sequence may depend upon the state which
@@ -193,8 +190,7 @@ public:
      * and the character sequence and commands associated with it for a particular
      * KeyboardTranslator.
      */
-    class Entry
-    {
+    class Entry {
     public:
         /**
          * Constructs a new entry for a keyboard translator.
@@ -421,8 +417,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KeyboardTranslator::Commands)
  *  }
  * @endcode
  */
-class KeyboardTranslatorReader
-{
+class KeyboardTranslatorReader {
 public:
     /** Constructs a new reader which parses the given @p source */
     KeyboardTranslatorReader( QIODevice * source );
@@ -486,8 +481,7 @@ private:
 };
 
 /** Writes a keyboard translation to disk. */
-class KeyboardTranslatorWriter
-{
+class KeyboardTranslatorWriter {
 public:
     /**
      * Constructs a new writer which saves data into @p destination.
@@ -513,8 +507,7 @@ private:
  * Manages the keyboard translations available for use by terminal sessions,
  * see KeyboardTranslator.
  */
-class KeyboardTranslatorManager
-{
+class KeyboardTranslatorManager {
 public:
     /**
      * Constructs a new KeyboardTranslatorManager and loads the list of

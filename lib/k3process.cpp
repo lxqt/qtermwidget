@@ -74,8 +74,7 @@
 // private data //
 //////////////////
 
-class K3ProcessPrivate
-{
+class K3ProcessPrivate {
 public:
     K3ProcessPrivate() :
             usePty(K3Process::NoCommunication),

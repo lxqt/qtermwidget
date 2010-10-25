@@ -124,8 +124,7 @@ class KPty;
  * @author Christian Czezatke e9025461@student.tuwien.ac.at
  *
  **/
-class K3Process : public QObject
-{
+class K3Process : public QObject {
     Q_OBJECT
 
 public:
@@ -860,8 +859,7 @@ class K3ShellProcessPrivate;
 *     processes through a shell.
 *   @author Christian Czezatke <e9025461@student.tuwien.ac.at>
 */
-class K3ShellProcess : public K3Process
-{
+class K3ShellProcess : public K3Process {
     Q_OBJECT
 
 public:

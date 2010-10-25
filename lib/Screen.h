@@ -42,8 +42,7 @@
 #define MODE_NewLine   5
 #define MODES_SCREEN   6
 
-namespace Konsole
-{
+namespace Konsole {
 
 /*!
 */
@@ -76,8 +75,7 @@ class TerminalCharacterDecoder;
     using selectedText().  When getImage() is used to retrieve the the visible image,
     characters which are part of the selection have their colours inverted.
 */
-class Screen
-{
+class Screen {
 public:
     /** Construct a new screen image of size @p lines by @p columns. */
     Screen(int lines, int columns);

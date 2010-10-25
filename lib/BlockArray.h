@@ -30,8 +30,7 @@
 #define BlockSize (1 << 12)
 #define ENTRIES   ((BlockSize - sizeof(size_t) ) / sizeof(unsigned char))
 
-namespace Konsole
-{
+namespace Konsole {
 
 struct Block {
     Block() {
@@ -43,8 +42,7 @@ struct Block {
 
 // ///////////////////////////////////////////////////////
 
-class BlockArray
-{
+class BlockArray {
 public:
     /**
     * Creates a history file for holding

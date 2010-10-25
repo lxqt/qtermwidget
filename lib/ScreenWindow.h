@@ -30,8 +30,7 @@
 // Konsole
 #include "Character.h"
 
-namespace Konsole
-{
+namespace Konsole {
 
 class Screen;
 
@@ -51,8 +50,7 @@ class Screen;
  * be called.  This in turn will update the window's position and emit the outputChanged() signal
  * if necessary.
  */
-class ScreenWindow : public QObject
-{
+class ScreenWindow : public QObject {
     Q_OBJECT
 
 public:

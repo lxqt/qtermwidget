@@ -36,8 +36,7 @@
  *
  * This class takes care of the actual (UN*X) signal handling.
  */
-class K3ProcessController : public QObject
-{
+class K3ProcessController : public QObject {
     Q_OBJECT
 
 public:

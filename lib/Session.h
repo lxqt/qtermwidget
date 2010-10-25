@@ -35,8 +35,7 @@
 
 class KProcess;
 
-namespace Konsole
-{
+namespace Konsole {
 
 class Emulation;
 class Pty;
@@ -54,8 +53,7 @@ class TerminalDisplay;
  * or send input to the program in the terminal in the form of keypresses and mouse
  * activity.
  */
-class Session : public QObject
-{
+class Session : public QObject {
     Q_OBJECT
 
 public:
@@ -552,8 +550,7 @@ private:
  * The type of activity which is propagated and method of propagation is controlled
  * by the masterMode() flags.
  */
-class SessionGroup : public QObject
-{
+class SessionGroup : public QObject {
     Q_OBJECT
 
 public:

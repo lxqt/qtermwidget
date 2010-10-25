@@ -32,8 +32,7 @@ struct termios;
  * Provides primitives for opening & closing a pseudo TTY pair, assigning the
  * controlling TTY, utmp registration and setting various terminal attributes.
  */
-class KPty
-{
+class KPty {
     Q_DECLARE_PRIVATE(KPty)
 
 public:

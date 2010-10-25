@@ -34,8 +34,7 @@
 #include "k3process.h"
 
 
-namespace Konsole
-{
+namespace Konsole {
 
 /**
  * The Pty class is used to start the terminal process,
@@ -50,8 +49,7 @@ namespace Konsole
  * To start the terminal process, call the start() method
  * with the program name and appropriate arguments.
  */
-class Pty: public K3Process
-{
+class Pty: public K3Process {
     Q_OBJECT
 
 public:
@@ -215,8 +213,7 @@ private:
 
     // a buffer of data in the queue to be sent to the
     // terminal process
-    class SendJob
-    {
+    class SendJob {
     public:
         SendJob() {}
         SendJob(const char * b, int len) : buffer(len) {

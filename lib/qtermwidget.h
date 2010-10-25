@@ -29,8 +29,7 @@ enum COLOR_SCHEME {     COLOR_SCHEME_WHITE_ON_BLACK = 1,
                         COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW
                   };
 
-class QTermWidget : public QWidget
-{
+class QTermWidget : public QWidget {
     Q_OBJECT
 public:
 

@@ -36,8 +36,7 @@
 #include <QtCore/QTimer>
 
 
-namespace Konsole
-{
+namespace Konsole {
 
 class KeyboardTranslator;
 class HistoryType;
@@ -118,8 +117,7 @@ enum {
  * how long the emulation has been active/idle for and also respond to
  * a 'bell' event in different ways.
  */
-class Emulation : public QObject
-{
+class Emulation : public QObject {
     Q_OBJECT
 
 public:

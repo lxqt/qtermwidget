@@ -33,8 +33,7 @@
 // Local
 #include "Character.h"
 
-namespace Konsole
-{
+namespace Konsole {
 
 /**
  * A filter processes blocks of text looking for certain patterns (such as URLs or keywords from a list)
@@ -54,8 +53,7 @@ namespace Konsole
  * When processing the text they should create instances of Filter::HotSpot subclasses for sections of interest
  * and add them to the filter's list of hotspots using addHotSpot()
  */
-class Filter
-{
+class Filter {
 public:
     /**
     * Represents an area of text which matched the pattern a particular filter has been looking for.
@@ -69,8 +67,7 @@ public:
     * Hotspots may have more than one action, in which case the list of actions can be obtained using the
     * actions() method.  These actions may then be displayed in a popup menu or toolbar for example.
     */
-    class HotSpot
-    {
+    class HotSpot {
     public:
         /**
          * Constructs a new hotspot which covers the area from (@p startLine,@p startColumn) to (@p endLine,@p endColumn)
@@ -190,15 +187,13 @@ private:
  * Subclasses can reimplement newHotSpot() to return custom hotspot types when matches for the regular expression
  * are found.
  */
-class RegExpFilter : public Filter
-{
+class RegExpFilter : public Filter {
 public:
     /**
      * Type of hotspot created by RegExpFilter.  The capturedTexts() method can be used to find the text
      * matched by the filter's regular expression.
      */
-    class HotSpot : public Filter::HotSpot
-    {
+    class HotSpot : public Filter::HotSpot {
     public:
         HotSpot(int startLine, int startColumn, int endLine , int endColumn);
         virtual void activate(QObject * object = 0);
@@ -247,15 +242,13 @@ private:
 class FilterObject;
 
 /** A filter which matches URLs in blocks of text */
-class UrlFilter : public RegExpFilter
-{
+class UrlFilter : public RegExpFilter {
 public:
     /**
      * Hotspot type created by UrlFilter instances.  The activate() method opens a web browser
      * at the given URL when called.
      */
-    class HotSpot : public RegExpFilter::HotSpot
-    {
+    class HotSpot : public RegExpFilter::HotSpot {
     public:
         HotSpot(int startLine,int startColumn,int endLine,int endColumn);
         virtual ~HotSpot();
@@ -294,8 +287,7 @@ private:
     static const QRegExp CompleteUrlRegExp;
 };
 
-class FilterObject : public QObject
-{
+class FilterObject : public QObject {
     Q_OBJECT
 public:
     FilterObject(Filter::HotSpot * filter) : _filter(filter) {}
@@ -322,8 +314,7 @@ private:
  * The hotSpots() and hotSpotsAtLine() method return all of the hotspots in the text and on
  * a given line respectively.
  */
-class FilterChain : protected QList<Filter *>
-{
+class FilterChain : protected QList<Filter *> {
 public:
     virtual ~FilterChain();
 
@@ -356,8 +347,7 @@ public:
 };
 
 /** A filter chain which processes character images from terminal displays */
-class TerminalImageFilterChain : public FilterChain
-{
+class TerminalImageFilterChain : public FilterChain {
 public:
     TerminalImageFilterChain();
     virtual ~TerminalImageFilterChain();

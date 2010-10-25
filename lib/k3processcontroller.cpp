@@ -36,8 +36,7 @@
 #include <QtCore/QSocketNotifier>
 #include <QDebug>
 
-class K3ProcessController::Private
-{
+class K3ProcessController::Private {
 public:
     Private()
             : needcheck( false ),

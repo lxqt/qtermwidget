@@ -32,16 +32,14 @@
 #include "BlockArray.h"
 #include "Character.h"
 
-namespace Konsole
-{
+namespace Konsole {
 
 #if 1
 /*
    An extendable tmpfile(1) based buffer.
 */
 
-class HistoryFile
-{
+class HistoryFile {
 public:
     HistoryFile();
     virtual ~HistoryFile();
@@ -84,8 +82,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 class HistoryType;
 
-class HistoryScroll
-{
+class HistoryScroll {
 public:
     HistoryScroll(HistoryType *);
     virtual ~HistoryScroll();
@@ -135,8 +132,7 @@ protected:
 // File-based history (e.g. file log, no limitation in length)
 //////////////////////////////////////////////////////////////////////
 
-class HistoryScrollFile : public HistoryScroll
-{
+class HistoryScrollFile : public HistoryScroll {
 public:
     HistoryScrollFile(const QString & logFileName);
     virtual ~HistoryScrollFile();
@@ -162,8 +158,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 // Buffer-based history (limited to a fixed nb of lines)
 //////////////////////////////////////////////////////////////////////
-class HistoryScrollBuffer : public HistoryScroll
-{
+class HistoryScrollBuffer : public HistoryScroll {
 public:
     typedef QVector<Character> HistoryLine;
 
@@ -221,8 +216,7 @@ public:
 //////////////////////////////////////////////////////////////////////
 // Nothing-based history (no history :-)
 //////////////////////////////////////////////////////////////////////
-class HistoryScrollNone : public HistoryScroll
-{
+class HistoryScrollNone : public HistoryScroll {
 public:
     HistoryScrollNone();
     virtual ~HistoryScrollNone();
@@ -241,8 +235,7 @@ public:
 //////////////////////////////////////////////////////////////////////
 // BlockArray-based history
 //////////////////////////////////////////////////////////////////////
-class HistoryScrollBlockArray : public HistoryScroll
-{
+class HistoryScrollBlockArray : public HistoryScroll {
 public:
     HistoryScrollBlockArray(size_t size);
     virtual ~HistoryScrollBlockArray();
@@ -264,8 +257,7 @@ protected:
 // History type
 //////////////////////////////////////////////////////////////////////
 
-class HistoryType
-{
+class HistoryType {
 public:
     HistoryType();
     virtual ~HistoryType();
@@ -290,8 +282,7 @@ public:
     virtual HistoryScroll * scroll(HistoryScroll *) const = 0;
 };
 
-class HistoryTypeNone : public HistoryType
-{
+class HistoryTypeNone : public HistoryType {
 public:
     HistoryTypeNone();
 
@@ -301,8 +292,7 @@ public:
     virtual HistoryScroll * scroll(HistoryScroll *) const;
 };
 
-class HistoryTypeBlockArray : public HistoryType
-{
+class HistoryTypeBlockArray : public HistoryType {
 public:
     HistoryTypeBlockArray(size_t size);
 
@@ -316,8 +306,7 @@ protected:
 };
 
 #if 1
-class HistoryTypeFile : public HistoryType
-{
+class HistoryTypeFile : public HistoryType {
 public:
     HistoryTypeFile(const QString & fileName=QString());
 
@@ -332,8 +321,7 @@ protected:
 };
 
 
-class HistoryTypeBuffer : public HistoryType
-{
+class HistoryTypeBuffer : public HistoryType {
 public:
     HistoryTypeBuffer(unsigned int nbLines);
 

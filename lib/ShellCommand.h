@@ -25,8 +25,7 @@
 // Qt
 #include <QtCore/QStringList>
 
-namespace Konsole
-{
+namespace Konsole {
 
 /**
  * A class to parse and extract information about shell commands.
@@ -49,8 +48,7 @@ namespace Konsole
  *      </li>
  * </ul>
  */
-class ShellCommand
-{
+class ShellCommand {
 public:
     /**
      * Constructs a ShellCommand from a command line.
