@@ -115,6 +115,13 @@ endif (HAVE_UPDWTMPX)
 #add_library( qtermwidget STATIC ${SRCS} ${MOC_SRCS} )
 add_library ( qtermwidget SHARED ${SRCS} ${MOC_SRCS} )
 
+if (APPLE)
+    # this is a must to load the lib correctly
+    set_target_properties( qtermwidget PROPERTIES
+                            INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
+endif (APPLE)
+
+
 #| Set Build Type
 if (NOT CMAKE_BUILD_TYPE)
     set ( CMAKE_BUILD_TYPE
