@@ -232,6 +232,14 @@ void TerminalDisplay::setVTFont(const QFont& f)
 {
     QFont font = f;
 
+#ifdef Q_WS_MAC
+#if QT_VERSION >= 0x040700
+    font.setStyleStrategy(QFont::ForceIntegerMetrics);
+#else
+#warning "Correct handling of the QFont metrics requited Qt>=4.7"
+#endif
+#endif    
+
     QFontMetrics metrics(font);
 
     if ( !QFontInfo(font).fixedPitch() ) {
