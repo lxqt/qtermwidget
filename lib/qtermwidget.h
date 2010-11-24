@@ -110,7 +110,7 @@ public:
 
     /*! Get all available keyboard bindings
      */
-    QStringList availableKeyBindings();
+    static QStringList availableKeyBindings();
 
     //! Return current key bindings
     QString keyBindings();
