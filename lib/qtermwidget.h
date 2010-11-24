@@ -66,6 +66,8 @@ public:
     // otherwise symbols' position could be incorrect
     void setTerminalFont(QFont & font);
 
+    void setTerminalOpacity(qreal level);
+
     //environment
     void setEnvironment(const QStringList & environment);
 
