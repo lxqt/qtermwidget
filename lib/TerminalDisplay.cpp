@@ -232,6 +232,16 @@ void TerminalDisplay::setVTFont(const QFont& f)
 {
     QFont font = f;
 
+#ifdef Q_WS_MAC
+#if QT_VERSION >= 0x040700
+    // mac uses floats for font width specification.
+    // this ensures the same handling for all platforms
+    font.setStyleStrategy(QFont::ForceIntegerMetrics);
+#else
+#warning "Correct handling of the QFont metrics requited Qt>=4.7"
+#endif
+#endif    
+
     QFontMetrics metrics(font);
 
     if ( !QFontInfo(font).fixedPitch() ) {
@@ -549,14 +559,14 @@ void TerminalDisplay::setOpacity(qreal opacity)
 
     // enable automatic background filling to prevent the display
     // flickering if there is no transparency
-    /*if ( color.alpha() == 255 )
+    if ( color.alpha() == 255 )
     {
         setAutoFillBackground(true);
     }
     else
     {
         setAutoFillBackground(false);
-    }*/
+    }
 
     _blendColor = color.rgba();
 }

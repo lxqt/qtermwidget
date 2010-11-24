@@ -196,6 +196,13 @@ void QTermWidget::setTerminalFont(QFont &font)
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
+void QTermWidget::setTerminalOpacity(qreal level)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->setOpacity(level);
+}
+
 void QTermWidget::setShellProgram(const QString &progname)
 {
     if (!m_impl->m_session)

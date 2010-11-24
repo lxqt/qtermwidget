@@ -115,6 +115,13 @@ endif (HAVE_UPDWTMPX)
 #add_library( qtermwidget STATIC ${SRCS} ${MOC_SRCS} )
 add_library ( qtermwidget SHARED ${SRCS} ${MOC_SRCS} )
 
+if (APPLE)
+    # this is a must to load the lib correctly
+    set_target_properties( qtermwidget PROPERTIES
+                            INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
+endif (APPLE)
+
+
 #| Set Build Type
 if (NOT CMAKE_BUILD_TYPE)
     set ( CMAKE_BUILD_TYPE
@@ -143,3 +150,40 @@ install(FILES ${HDRS_DISTRIB} DESTINATION include)
 # keyboard layouts
 install(DIRECTORY kb-layouts/ DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
 
+
+#
+# Qt4 designer plugin
+# 
+if (BUILD_DESIGNER_PLUGIN)
+    message(STATUS "Building Qt designer plugin")
+
+    include_directories(designer
+                        ${QT_QTDESIGNER_INCLUDE_DIR})
+
+    set(DESIGNER_SRC designer/qtermwidgetplugin.cpp)
+    QT4_WRAP_CPP( DESIGNER_MOC	designer/qtermwidgetplugin.h)
+    QT4_ADD_RESOURCES( DESIGNER_QRC designer/qtermwidgetplugin.qrc)
+
+    link_directories(${CMAKE_BINARY_DIR})
+    add_library( qtermwidgetplugin SHARED 
+        ${DESIGNER_MOC}
+        ${DESIGNER_QRC}
+        ${DESIGNER_SRC}
+    )
+
+    target_link_libraries( qtermwidgetplugin  
+        ${QT_QTCORE_LIBRARY}
+        ${QT_QTDESIGNER_LIBRARY}
+        ${QT_QTDESIGNERCOMPONENTS_LIBRARY}
+        qtermwidget
+    )
+
+    if (APPLE)
+        # this is a must to load the lib correctly
+        set_target_properties( qtermwidgetplugin PROPERTIES
+                                INSTALL_NAME_DIR ${QT_PLUGINS_DIR}/designer )
+    endif (APPLE)
+    
+    install( TARGETS qtermwidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
+
+endif (BUILD_DESIGNER_PLUGIN)
