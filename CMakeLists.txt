@@ -22,6 +22,12 @@ subdirs(
 	src
 )
 
+# a helper for macosx to build 32/64 bit universals
+IF (WANT_UNIVERSAL)
+    SET (CMAKE_OSX_ARCHITECTURES "i386;x86_64;")
+    MESSAGE(STATUS "Archs builds: ${CMAKE_OSX_ARCHITECTURES}")
+ENDIF (WANT_UNIVERSAL)
+
 
 # make dist custom target
 SET(CPACK_PACKAGE_NAME "qtermwidget")
