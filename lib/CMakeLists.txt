@@ -40,12 +40,19 @@ ENDIF (NOT LIB_SUFFIX)
 set ( SRCS
 	TerminalCharacterDecoder.cpp
 	KeyboardTranslator.cpp 
-	Screen.cpp History.cpp BlockArray.cpp konsole_wcwidth.cpp 
+	Screen.cpp History.cpp
+    BlockArray.cpp
+    konsole_wcwidth.cpp 
 	ScreenWindow.cpp 
 	Emulation.cpp 
-	Vt102Emulation.cpp TerminalDisplay.cpp Filter.cpp 
-	Pty.cpp kpty.cpp k3process.cpp k3processcontroller.cpp 
-	Session.cpp ShellCommand.cpp 
+	Vt102Emulation.cpp
+    TerminalDisplay.cpp
+    Filter.cpp 
+	Pty.cpp kpty.cpp
+    k3process.cpp 
+    k3processcontroller.cpp 
+	Session.cpp
+    ShellCommand.cpp 
 	qtermwidget.cpp
 )
 
@@ -54,8 +61,12 @@ set ( SRCS
 set ( HDRS
 	ScreenWindow.h 
 	Emulation.h 
-	Vt102Emulation.h TerminalDisplay.h Filter.h 
-	Pty.h k3process.h k3processcontroller.h 
+	Vt102Emulation.h
+    TerminalDisplay.h
+    Filter.h 
+	Pty.h
+    k3process.h
+    k3processcontroller.h 
 	Session.h 
 	qtermwidget.h
 )
@@ -70,14 +81,6 @@ set ( LIBRARY_OUTPUT_PATH
 	${PROJECT_BINARY_DIR}/../.
 )
 
-#| Library Versioning
-#|	Libraries are not versioned by default
-set ( qtermwidget_VERSION_MAJOR "0" )
-set ( qtermwidget_VERSION_MINOR "1" )
-set ( qtermwidget_VERSION_PATCH "0" )
-set ( qtermwidget_VERSION 
-	"${qtermwidget_VERSION_MAJOR}.${qtermwidget_VERSION_MINOR}.${qtermwidget_VERSION_PATCH}"
-)
 
 #| Qt4 Required Options
 add_definitions ( -Wall )
