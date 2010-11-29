@@ -21,7 +21,7 @@ IF (NOT LIB_SUFFIX)
             MESSAGE(STATUS "   LIB_SUFFIX is set to '${LIB_SUFFIX}'")
         endif (CMAKE_SIZEOF_VOID_P EQUAL 4)
     ELSE (NOT APPLE)
-        message(STATUS "LIB_SUFFIX is disabled for APPLE: ${CMAKE_SYSTEM_NAME}")    
+        message(STATUS "LIB_SUFFIX is disabled for APPLE: ${CMAKE_SYSTEM_NAME}")
         SET (LIB_SUFFIX "")
     ENDIF (NOT APPLE)
     # BSD does not use lib64 for 64bit libs
@@ -39,35 +39,35 @@ ENDIF (NOT LIB_SUFFIX)
 #| Sources
 set ( SRCS
 	TerminalCharacterDecoder.cpp
-	KeyboardTranslator.cpp 
+	KeyboardTranslator.cpp
 	Screen.cpp History.cpp
     BlockArray.cpp
-    konsole_wcwidth.cpp 
-	ScreenWindow.cpp 
-	Emulation.cpp 
+    konsole_wcwidth.cpp
+	ScreenWindow.cpp
+	Emulation.cpp
 	Vt102Emulation.cpp
     TerminalDisplay.cpp
-    Filter.cpp 
+    Filter.cpp
 	Pty.cpp kpty.cpp
-    k3process.cpp 
-    k3processcontroller.cpp 
+    k3process.cpp
+    k3processcontroller.cpp
 	Session.cpp
-    ShellCommand.cpp 
+    ShellCommand.cpp
 	qtermwidget.cpp
 )
 
 #| Headers
 #| 	Only the Headers that need to be moc'd go here
 set ( HDRS
-	ScreenWindow.h 
-	Emulation.h 
+	ScreenWindow.h
+	Emulation.h
 	Vt102Emulation.h
     TerminalDisplay.h
-    Filter.h 
+    Filter.h
 	Pty.h
     k3process.h
-    k3processcontroller.h 
-	Session.h 
+    k3processcontroller.h
+	Session.h
 	qtermwidget.h
 )
 
@@ -138,7 +138,7 @@ endif (NOT CMAKE_BUILD_TYPE)
 #| Library Properties
 set_target_properties ( qtermwidget PROPERTIES
 	#OUTPUT_NAME "alternateName"
-	#PREFIX "lib" 
+	#PREFIX "lib"
 	SOVERSION ${qtermwidget_VERSION_MAJOR}
 	#SUFFIX "so"
 	VERSION ${qtermwidget_VERSION}
@@ -156,7 +156,7 @@ install(DIRECTORY kb-layouts/ DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTER
 
 #
 # Qt4 designer plugin
-# 
+#
 if (BUILD_DESIGNER_PLUGIN)
     message(STATUS "Building Qt designer plugin")
 
@@ -168,13 +168,13 @@ if (BUILD_DESIGNER_PLUGIN)
     QT4_ADD_RESOURCES( DESIGNER_QRC designer/qtermwidgetplugin.qrc)
 
     link_directories(${CMAKE_BINARY_DIR})
-    add_library( qtermwidgetplugin SHARED 
+    add_library( qtermwidgetplugin SHARED
         ${DESIGNER_MOC}
         ${DESIGNER_QRC}
         ${DESIGNER_SRC}
     )
 
-    target_link_libraries( qtermwidgetplugin  
+    target_link_libraries( qtermwidgetplugin
         ${QT_QTCORE_LIBRARY}
         ${QT_QTDESIGNER_LIBRARY}
         ${QT_QTDESIGNERCOMPONENTS_LIBRARY}
@@ -184,9 +184,10 @@ if (BUILD_DESIGNER_PLUGIN)
     if (APPLE)
         # this is a must to load the lib correctly
         set_target_properties( qtermwidgetplugin PROPERTIES
-                                INSTALL_NAME_DIR ${QT_PLUGINS_DIR}/designer )
+                                INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer )
     endif (APPLE)
-    
-    install( TARGETS qtermwidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
+
+    #install( TARGETS qtermwidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
+    install( TARGETS qtermwidgetplugin DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer )
 
 endif (BUILD_DESIGNER_PLUGIN)
