@@ -62,13 +62,42 @@ KeyboardTranslatorManager::~KeyboardTranslatorManager()
 {
     qDeleteAll(_translators.values());
 }
+
+/*! Helper function to get possible location of layout files.
+By default the KB_LAYOUT_DIR is used (linux/BSD/macports).
+But in some cases (apple bundle) there can be more locations).
+*/
+QString get_kb_layout_dir()
+{
+    qDebug() << "get_kb_layout_dir";
+    QString k(KB_LAYOUT_DIR);
+    QDir d(k);
+    qDebug() << k;
+    if (d.exists())
+        return k;
+    // subdir in the app location
+    d.setPath(QCoreApplication::applicationDirPath() + "/kb-layouts/");
+    qDebug() << d.path();
+    if (d.exists())
+        return QCoreApplication::applicationDirPath() + "/kb-layouts/";
+    // apple bundle
+    d.setPath(QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/");
+    qDebug() << d.path();
+    if (d.exists())
+        return QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/";
+    qDebug() << "Cannot find kb-layouts in any location!";
+    return "";
+}
+
+
 QString KeyboardTranslatorManager::findTranslatorPath(const QString & name)
 {
-    return QString(KB_LAYOUT_DIR + name + ".keytab");
+    return QString(get_kb_layout_dir() + name + ".keytab");
 }
 void KeyboardTranslatorManager::findTranslators()
 {
-    QDir dir(KB_LAYOUT_DIR);
+    QDir dir(get_kb_layout_dir());
+    qDebug() << "D" << dir.path();
     QStringList filters;
     filters << "*.keytab";
     dir.setNameFilters(filters);
@@ -110,7 +139,8 @@ const KeyboardTranslator * KeyboardTranslatorManager::findTranslator(const QStri
     if ( translator != 0 ) {
         _translators[name] = translator;
     } else if ( !name.isEmpty() ) {
-        qWarning() << "Unable to load translator" << name;
+        qWarning() << "Unable to load translator" << name << "using default";
+        _translators[name] = const_cast<KeyboardTranslator*>(defaultTranslator());
     }
 
     return translator;
