@@ -57,6 +57,8 @@ public:
      */
     bool open();
 
+    bool open(int fd);
+
     /**
      * Close the pty master/slave pair.
      */
@@ -75,6 +77,7 @@ public:
      * used.
      */
     void closeSlave();
+    bool openSlave();
 
     /**
      * Creates a new session and process group and makes this pty the

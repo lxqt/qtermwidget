@@ -25,12 +25,10 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-// Qt
-#include <QtCore/QStringList>
-#include <QtCore>
+
+#include <QStringList>
 #include <QWidget>
 
-// Konsole
 #include "History.h"
 
 class KProcess;
@@ -491,7 +489,7 @@ private:
 
     int            _uniqueIdentifier;
 
-    Pty     *     _shellProcess;
+    Pty     *_shellProcess;
     Emulation  *  _emulation;
 
     QList<TerminalDisplay *> _views;

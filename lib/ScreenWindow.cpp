@@ -1,8 +1,6 @@
 /*
     Copyright (C) 2007 by Robert Knight <robertknight@gmail.com>
 
-    Rewritten for QT4 by e_k <e_k at users.sourceforge.net>, Copyright (C)2008
-
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -23,59 +21,59 @@
 #include "ScreenWindow.h"
 
 // Qt
-#include <QtCore>
+#include <QtDebug>
 
 // Konsole
 #include "Screen.h"
 
 using namespace Konsole;
 
-ScreenWindow::ScreenWindow(QObject * parent)
-        : QObject(parent)
-        , _windowBuffer(0)
-        , _windowBufferSize(0)
-        , _bufferNeedsUpdate(true)
-        , _windowLines(1)
-        , _currentLine(0)
-        , _trackOutput(true)
-        , _scrollCount(0)
+ScreenWindow::ScreenWindow(QObject* parent)
+    : QObject(parent)
+    , _windowBuffer(0)
+    , _windowBufferSize(0)
+    , _bufferNeedsUpdate(true)
+    , _windowLines(1)
+    , _currentLine(0)
+    , _trackOutput(true)
+    , _scrollCount(0)
 {
 }
 ScreenWindow::~ScreenWindow()
 {
     delete[] _windowBuffer;
 }
-void ScreenWindow::setScreen(Screen * screen)
+void ScreenWindow::setScreen(Screen* screen)
 {
     Q_ASSERT( screen );
 
     _screen = screen;
 }
 
-Screen * ScreenWindow::screen() const
+Screen* ScreenWindow::screen() const
 {
     return _screen;
 }
 
-Character * ScreenWindow::getImage()
+Character* ScreenWindow::getImage()
 {
     // reallocate internal buffer if the window size has changed
     int size = windowLines() * windowColumns();
-    if (_windowBuffer == 0 || _windowBufferSize != size) {
+    if (_windowBuffer == 0 || _windowBufferSize != size) 
+    {
         delete[] _windowBuffer;
         _windowBufferSize = size;
         _windowBuffer = new Character[size];
         _bufferNeedsUpdate = true;
     }
 
-    if (!_bufferNeedsUpdate) {
+     if (!_bufferNeedsUpdate)
         return _windowBuffer;
-    }
-
+ 
     _screen->getImage(_windowBuffer,size,
                       currentLine(),endWindowLine());
 
-    // this window may look beyond the end of the screen, in which
+    // this window may look beyond the end of the screen, in which 
     // case there will be an unused area which needs to be filled
     // with blank characters
     fillUnusedArea();
@@ -92,10 +90,10 @@ void ScreenWindow::fillUnusedArea()
     int unusedLines = windowEndLine - screenEndLine;
     int charsToFill = unusedLines * windowColumns();
 
-    Screen::fillWithDefaultChar(_windowBuffer + _windowBufferSize - charsToFill,charsToFill);
+    Screen::fillWithDefaultChar(_windowBuffer + _windowBufferSize - charsToFill,charsToFill); 
 }
 
-// return the index of the line at the end of this window, or if this window
+// return the index of the line at the end of this window, or if this window 
 // goes beyond the end of the screen, the index of the line at the end
 // of the screen.
 //
@@ -110,10 +108,9 @@ int ScreenWindow::endWindowLine() const
 QVector<LineProperty> ScreenWindow::getLineProperties()
 {
     QVector<LineProperty> result = _screen->getLineProperties(currentLine(),endWindowLine());
-
-    if (result.count() != windowLines()) {
+    
+    if (result.count() != windowLines())
         result.resize(windowLines());
-    }
 
     return result;
 }
@@ -123,12 +120,12 @@ QString ScreenWindow::selectedText( bool preserveLineBreaks ) const
     return _screen->selectedText( preserveLineBreaks );
 }
 
-void ScreenWindow::getSelectionStart( int & column , int & line )
+void ScreenWindow::getSelectionStart( int& column , int& line )
 {
     _screen->getSelectionStart(column,line);
     line -= currentLine();
 }
-void ScreenWindow::getSelectionEnd( int & column , int & line )
+void ScreenWindow::getSelectionEnd( int& column , int& line )
 {
     _screen->getSelectionEnd(column,line);
     line -= currentLine();
@@ -136,7 +133,7 @@ void ScreenWindow::getSelectionEnd( int & column , int & line )
 void ScreenWindow::setSelectionStart( int column , int line , bool columnMode )
 {
     _screen->setSelectionStart( column , qMin(line + currentLine(),endWindowLine())  , columnMode);
-
+    
     _bufferNeedsUpdate = true;
     emit selectionChanged();
 }
@@ -168,7 +165,7 @@ void ScreenWindow::setWindowLines(int lines)
 }
 int ScreenWindow::windowLines() const
 {
-    return _windowLines;
+    return _windowLines;        
 }
 
 int ScreenWindow::windowColumns() const
@@ -189,11 +186,11 @@ int ScreenWindow::columnCount() const
 QPoint ScreenWindow::cursorPosition() const
 {
     QPoint position;
-
+    
     position.setX( _screen->getCursorX() );
     position.setY( _screen->getCursorY() );
 
-    return position;
+    return position; 
 }
 
 int ScreenWindow::currentLine() const
@@ -203,10 +200,13 @@ int ScreenWindow::currentLine() const
 
 void ScreenWindow::scrollBy( RelativeScrollMode mode , int amount )
 {
-    if ( mode == ScrollLines ) {
+    if ( mode == ScrollLines )
+    {
         scrollTo( currentLine() + amount );
-    } else if ( mode == ScrollPages ) {
-        scrollTo( currentLine() + amount * ( windowLines() / 2 ) );
+    }
+    else if ( mode == ScrollPages )
+    {
+        scrollTo( currentLine() + amount * ( windowLines() / 2 ) ); 
     }
 }
 
@@ -247,7 +247,7 @@ int ScreenWindow::scrollCount() const
     return _scrollCount;
 }
 
-void ScreenWindow::resetScrollCount()
+void ScreenWindow::resetScrollCount() 
 {
     _scrollCount = 0;
 }
@@ -256,28 +256,30 @@ QRect ScreenWindow::scrollRegion() const
 {
     bool equalToScreenSize = windowLines() == _screen->getLines();
 
-    if ( atEndOfOutput() && equalToScreenSize ) {
+    if ( atEndOfOutput() && equalToScreenSize )
         return _screen->lastScrolledRegion();
-    } else {
+    else
         return QRect(0,0,windowColumns(),windowLines());
-    }
 }
 
 void ScreenWindow::notifyOutputChanged()
 {
     // move window to the bottom of the screen and update scroll count
     // if this window is currently tracking the bottom of the screen
-    if ( _trackOutput ) {
+    if ( _trackOutput )
+    { 
         _scrollCount -= _screen->scrolledLines();
         _currentLine = qMax(0,_screen->getHistLines() - (windowLines()-_screen->getLines()));
-    } else {
-        // if the history is not unlimited then it may
+    }
+    else
+    {
+        // if the history is not unlimited then it may 
         // have run out of space and dropped the oldest
         // lines of output - in this case the screen
-        // window's current line number will need to
+        // window's current line number will need to 
         // be adjusted - otherwise the output will scroll
-        _currentLine = qMax(0,_currentLine -
-                            _screen->droppedLines());
+        _currentLine = qMax(0,_currentLine - 
+                              _screen->droppedLines());
 
         // ensure that the screen window's current position does
         // not go beyond the bottom of the screen
@@ -286,7 +288,7 @@ void ScreenWindow::notifyOutputChanged()
 
     _bufferNeedsUpdate = true;
 
-    emit outputChanged();
+    emit outputChanged(); 
 }
 
-//#include "moc_ScreenWindow.cpp"
+//#include "ScreenWindow.moc"

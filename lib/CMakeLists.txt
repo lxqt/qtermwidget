@@ -38,48 +38,47 @@ ENDIF (NOT LIB_SUFFIX)
 
 #| Sources
 set ( SRCS
-	TerminalCharacterDecoder.cpp
-	KeyboardTranslator.cpp
-	Screen.cpp History.cpp
     BlockArray.cpp
-    konsole_wcwidth.cpp
-	ScreenWindow.cpp
-	Emulation.cpp
-	Vt102Emulation.cpp
-    TerminalDisplay.cpp
+    ColorScheme.cpp
+    Emulation.cpp
     Filter.cpp
-	Pty.cpp kpty.cpp
-    k3process.cpp
-    k3processcontroller.cpp
-	Session.cpp
+    History.cpp
+    KeyboardTranslator.cpp
+    konsole_wcwidth.cpp
+    kprocess.cpp
+    kpty.cpp
+    kptydevice.cpp
+    kptyprocess.cpp
+    Pty.cpp
+    qtermwidget.cpp
+    Screen.cpp
+    ScreenWindow.cpp
+    Session.cpp
     ShellCommand.cpp
-	qtermwidget.cpp
+    TerminalCharacterDecoder.cpp
+    TerminalDisplay.cpp
+    tools.cpp
+    Vt102Emulation.cpp
 )
 
 #| Headers
 #| 	Only the Headers that need to be moc'd go here
 set ( HDRS
-	ScreenWindow.h
-	Emulation.h
-	Vt102Emulation.h
-    TerminalDisplay.h
+    Emulation.h
     Filter.h
-	Pty.h
-    k3process.h
-    k3processcontroller.h
-	Session.h
-	qtermwidget.h
+    kprocess.h
+    kptydevice.h
+    kptyprocess.h
+    Pty.h
+    qtermwidget.h
+    ScreenWindow.h
+    Session.h
+    TerminalDisplay.h
+    Vt102Emulation.h
 )
 
 set ( HDRS_DISTRIB
 	${CMAKE_SOURCE_DIR}/lib/qtermwidget.h )
-
-#| Library Output
-#|	CMake supports out-of-source builds, so the binary dir is not
-#|	necessarily the same as the source directory
-set ( LIBRARY_OUTPUT_PATH
-	${PROJECT_BINARY_DIR}/../.
-)
 
 
 #| Qt4 Required Options
@@ -100,6 +99,10 @@ message ( STATUS "Share dire: ${SHARE_DIR}" )
 set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/kb-layouts/ )
 message ( STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}" )
 add_definitions( -DKB_LAYOUT_DIR="\\"${KB_LAYOUT_DIR}\\"" )
+
+set ( COLORSCHEMES_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/color-schemes/ )
+message ( STATUS "Color schemes will be insatlled in: ${COLORSCHEMES_DIR}" )
+add_definitions( -DCOLORSCHEMES_DIR="\\"${COLORSCHEMES_DIR}\\"" )
 
 #| Defines
 add_definitions ( -DHAVE_POSIX_OPENPT )
@@ -152,6 +155,8 @@ install(FILES ${HDRS_DISTRIB} DESTINATION include)
 
 # keyboard layouts
 install(DIRECTORY kb-layouts/ DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
+# color schemes
+install(DIRECTORY color-schemes/ DESTINATION ${COLORSCHEMES_DIR} FILES_MATCHING PATTERN "*.*schem*")
 
 
 #

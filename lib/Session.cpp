@@ -40,6 +40,7 @@
 #include <QtCore>
 
 #include "Pty.h"
+//#include "kptyprocess.h"
 #include "TerminalDisplay.h"
 #include "ShellCommand.h"
 #include "Vt102Emulation.h"
@@ -105,8 +106,8 @@ Session::Session() :
     connect( _emulation,SIGNAL(lockPtyRequest(bool)),_shellProcess,SLOT(lockPty(bool)) );
     connect( _emulation,SIGNAL(useUtf8Request(bool)),_shellProcess,SLOT(setUtf8Mode(bool)) );
 
-
-    connect( _shellProcess,SIGNAL(done(int)), this, SLOT(done(int)) );
+    connect( _shellProcess,SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(done(int)) );
+    // not in kprocess anymore connect( _shellProcess,SIGNAL(done(int)), this, SLOT(done(int)) );
 
     //setup timer for monitoring session activity
     _monitorTimer = new QTimer(this);
@@ -153,7 +154,7 @@ bool Session::hasDarkBackground() const
 }
 bool Session::isRunning() const
 {
-    return _shellProcess->isRunning();
+    return _shellProcess->state() == QProcess::Running;
 }
 
 void Session::setCodec(QTextCodec * codec)
@@ -304,8 +305,8 @@ void Session::run()
     }
 //    _shellProcess->setWorkingDirectory(QDir::homePath());
 
-    _shellProcess->setXonXoff(_flowControl);
-    _shellProcess->setErase(_emulation->getErase());
+    _shellProcess->setFlowControlEnabled(_flowControl);
+    _shellProcess->setErase(_emulation->eraseChar());
 
     // this is not strictly accurate use of the COLORFGBG variable.  This does not
     // tell the terminal exactly which colors are being used, but instead approximates
@@ -544,7 +545,15 @@ void Session::refresh()
 
 bool Session::sendSignal(int signal)
 {
-    return _shellProcess->kill(signal);
+    int result = ::kill(_shellProcess->pid(),signal);
+
+     if ( result == 0 )
+     {
+         _shellProcess->waitForFinished();
+         return true;
+     }
+     else
+         return false;
 }
 
 void Session::close()
@@ -582,32 +591,29 @@ QString Session::profileKey() const
 void Session::done(int exitStatus)
 {
     if (!_autoClose) {
-        _userTitle = ("<Finished>");
+        _userTitle = ("This session is done. Finished");
         emit titleChanged();
         return;
     }
-    if (!_wantedClose && (exitStatus || _shellProcess->signalled())) {
-        QString message;
 
-        if (_shellProcess->normalExit()) {
-            message.sprintf ("Session '%s' exited with status %d.", _nameTitle.toAscii().data(), exitStatus);
-        } else if (_shellProcess->signalled()) {
-            if (_shellProcess->coreDumped()) {
+    QString message;
+    if (!_wantedClose || exitStatus != 0) {
 
-                message.sprintf("Session '%s' exited with signal %d and dumped core.", _nameTitle.toAscii().data(), _shellProcess->exitSignal());
-            } else {
-                message.sprintf("Session '%s' exited with signal %d.", _nameTitle.toAscii().data(), _shellProcess->exitSignal());
-            }
+        if (_shellProcess->exitStatus() == QProcess::NormalExit) {
+            message.sprintf("Session '%s' exited with status %d.",
+                          _nameTitle.toAscii().data(), exitStatus);
         } else {
-            message.sprintf ("Session '%s' exited unexpectedly.", _nameTitle.toAscii().data());
+            message.sprintf("Session '%s' crashed.",
+                          _nameTitle.toAscii().data());
         }
-
-        //FIXME: See comments in Session::monitorTimerDone()
-//    KNotification::event("Finished", message , QPixmap(),
-//                         QApplication::activeWindow(),
-//                         KNotification::CloseWhenWidgetActivated);
     }
-    emit finished();
+
+    if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit )
+        message.sprintf("Session '%s' exited unexpectedly.",
+                        _nameTitle.toAscii().data());
+    else
+        emit finished();
+
 }
 
 Emulation * Session::emulation() const
@@ -770,7 +776,7 @@ void Session::setFlowControlEnabled(bool enabled)
     _flowControl = enabled;
 
     if (_shellProcess) {
-        _shellProcess->setXonXoff(_flowControl);
+        _shellProcess->setFlowControlEnabled(_flowControl);
     }
 
     emit flowControlEnabledChanged(enabled);

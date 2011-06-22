@@ -361,6 +361,48 @@ grantedpt:
     return true;
 }
 
+bool KPty::open(int fd)
+{
+#if !defined(HAVE_PTSNAME) && !defined(TIOCGPTN)
+     qWarning() << "Unsupported attempt to open pty with fd" << fd;
+     return false;
+#else
+    Q_D(KPty);
+
+    if (d->masterFd >= 0) {
+        qWarning() << "Attempting to open an already open pty";
+         return false;
+    }
+
+    d->ownMaster = false;
+
+# ifdef HAVE_PTSNAME
+    char *ptsn = ptsname(fd);
+    if (ptsn) {
+        d->ttyName = ptsn;
+# else
+    int ptyno;
+    if (!ioctl(fd, TIOCGPTN, &ptyno)) {
+        char buf[32];
+        sprintf(buf, "/dev/pts/%d", ptyno);
+        d->ttyName = buf;
+# endif
+    } else {
+        qWarning() << "Failed to determine pty slave device for fd" << fd;
+        return false;
+    }
+
+    d->masterFd = fd;
+    if (!openSlave()) {
+
+        d->masterFd = -1;
+        return false;
+    }
+
+    return true;
+#endif
+}
+
 void KPty::closeSlave()
 {
     Q_D(KPty);
@@ -370,6 +412,26 @@ void KPty::closeSlave()
     }
     ::close(d->slaveFd);
     d->slaveFd = -1;
+}
+
+bool KPty::openSlave()
+{
+    Q_D(KPty);
+
+    if (d->slaveFd >= 0)
+	return true;
+    if (d->masterFd < 0) {
+	qDebug() << "Attempting to open pty slave while master is closed";
+	return false;
+    }
+    //d->slaveFd = KDE_open(d->ttyName.data(), O_RDWR | O_NOCTTY);
+    d->slaveFd = ::open(d->ttyName.data(), O_RDWR | O_NOCTTY);
+    if (d->slaveFd < 0) {
+	qDebug() << "Can't open slave pseudo teletype";
+	return false;
+    }
+    fcntl(d->slaveFd, F_SETFD, FD_CLOEXEC);
+    return true;
 }
 
 void KPty::close()

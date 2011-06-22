@@ -23,6 +23,7 @@
 #include "Session.h"
 #include "TerminalDisplay.h"
 #include "KeyboardTranslator.h"
+#include "ColorScheme.h"
 
 using namespace Konsole;
 
@@ -200,6 +201,7 @@ void QTermWidget::setTerminalOpacity(qreal level)
 {
     if (!m_impl->m_terminalDisplay)
         return;
+
     m_impl->m_terminalDisplay->setOpacity(level);
 }
 
@@ -231,21 +233,33 @@ void QTermWidget::setTextCodec(QTextCodec *codec)
     m_impl->m_session->setCodec(codec);
 }
 
-void QTermWidget::setColorScheme(int scheme)
+void QTermWidget::setColorScheme(const QString & name)
 {
-    switch (scheme) {
-    case COLOR_SCHEME_WHITE_ON_BLACK:
-        m_impl->m_terminalDisplay->setColorTable(whiteonblack_color_table);
-        break;
-    case COLOR_SCHEME_GREEN_ON_BLACK:
-        m_impl->m_terminalDisplay->setColorTable(greenonblack_color_table);
-        break;
-    case COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW:
-        m_impl->m_terminalDisplay->setColorTable(blackonlightyellow_color_table);
-        break;
-    default: //do nothing
-        break;
-    };
+    const ColorScheme *cs;
+    // avoid legacy (int) solution
+    if (!availableColorSchemes().contains(name))
+        cs = ColorSchemeManager::instance()->defaultColorScheme();
+    else
+        cs = ColorSchemeManager::instance()->findColorScheme(name);
+
+    if (! cs)
+    {
+        QMessageBox::information(this,
+                                 tr("Color Scheme Error"),
+                                 tr("Cannot load color scheme: %1").arg(name));
+        return;
+    }
+    ColorEntry table[TABLE_COLORS];
+    cs->getColorTable(table);
+    m_impl->m_terminalDisplay->setColorTable(table);
+}
+
+QStringList QTermWidget::availableColorSchemes()
+{
+    QStringList ret;
+    foreach (const ColorScheme* cs, ColorSchemeManager::instance()->allColorSchemes())
+        ret.append(cs->name());
+    return ret;
 }
 
 void QTermWidget::setSize(int h, int v)

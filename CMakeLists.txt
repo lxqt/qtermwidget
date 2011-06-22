@@ -11,7 +11,7 @@ project( qtermwidget )
 #| Library Versioning
 #|	Libraries are not versioned by default
 set ( qtermwidget_VERSION_MAJOR "0" )
-set ( qtermwidget_VERSION_MINOR "2" )
+set ( qtermwidget_VERSION_MINOR "4" )
 set ( qtermwidget_VERSION_PATCH "0" )
 set ( qtermwidget_VERSION 
 	"${qtermwidget_VERSION_MAJOR}.${qtermwidget_VERSION_MINOR}.${qtermwidget_VERSION_PATCH}"
@@ -27,6 +27,15 @@ IF (WANT_UNIVERSAL)
     SET (CMAKE_OSX_ARCHITECTURES "i386;x86_64;")
     MESSAGE(STATUS "Archs builds: ${CMAKE_OSX_ARCHITECTURES}")
 ENDIF (WANT_UNIVERSAL)
+
+
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY
+)
+ADD_CUSTOM_TARGET(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 
 # make dist custom target

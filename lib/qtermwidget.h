@@ -24,10 +24,6 @@
 
 struct TermWidgetImpl;
 
-enum COLOR_SCHEME {     COLOR_SCHEME_WHITE_ON_BLACK = 1,
-                        COLOR_SCHEME_GREEN_ON_BLACK,
-                        COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW
-                  };
 
 class QTermWidget : public QWidget {
     Q_OBJECT
@@ -84,7 +80,8 @@ public:
     void setTextCodec(QTextCodec * codec);
 
     //Color scheme, default is white on black
-    void setColorScheme(int scheme);
+    void setColorScheme(const QString & name);
+    static QStringList availableColorSchemes();
 
     //set size
     void setSize(int h, int v);
