@@ -32,6 +32,8 @@ endif(COMMAND cmake_policy)
 #| Create the Library
 add_executable ( test ${SRCS} )
 
+add_dependencies(test qtermwidget)
+
 #| Set Build Type
 set ( CMAKE_BUILD_TYPE
 	#"release"

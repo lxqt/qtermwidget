@@ -178,6 +178,7 @@ if (BUILD_DESIGNER_PLUGIN)
         ${DESIGNER_QRC}
         ${DESIGNER_SRC}
     )
+    add_dependencies(qtermwidgetplugin qtermwidget)
 
     target_link_libraries( qtermwidgetplugin
         ${QT_QTCORE_LIBRARY}
