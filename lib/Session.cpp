@@ -256,8 +256,15 @@ void Session::run()
     if (_program.isEmpty()) {
         qDebug() << "Session::run() - program to run not set.";
     }
+    else {
+        qDebug() << "Session::run() - program:" << _program;
+    }
+
     if (_arguments.isEmpty()) {
         qDebug() << "Session::run() - no command line arguments specified.";
+    }
+    else {
+        qDebug() << "Session::run() - arguments:" << _arguments;
     }
 
     // Upon a KPty error, there is no description on what that error was...
@@ -271,39 +278,38 @@ void Session::run()
      * their computing time on any system - especially with the problem on arch linux beeing there too.
      */
     QString exec = QFile::encodeName(_program);
-    qDebug() << exec;
     // if 'exec' is not specified, fall back to default shell.  if that
     // is not set then fall back to /bin/sh
-    QFile excheck(exec);
-    if ( exec.isEmpty() || !excheck.exists() ) {
-        exec = getenv("SHELL");
-    }
-    excheck.setFileName(exec);
 
-    if ( exec.isEmpty() || !excheck.exists() ) {
-        exec = "/bin/sh";
-    }
-    qDebug() << exec;
+    // here we expect full path. If there is no fullpath let's expect it's
+    // a custom shell (eg. python, etc.) available in the PATH.
+    if (exec.startsWith("/"))
+    {
+        QFile excheck(exec);
+        if ( exec.isEmpty() || !excheck.exists() ) {
+            exec = getenv("SHELL");
+        }
+        excheck.setFileName(exec);
 
-
-    QStringList arguments =  _arguments.join(QChar(' ')).isEmpty() ?
-                             QStringList() << exec : _arguments;
-    QString pexec = exec;
-
-    if ( pexec.isEmpty() ) {
-        qDebug()<<"can not execute "<<exec<<endl;
-        QTimer::singleShot(1, this, SIGNAL(finished()));
-        return;
+        if ( exec.isEmpty() || !excheck.exists() ) {
+            exec = "/bin/sh";
+        }
     }
 
-//  QString cwd_save = QDir::currentPath();
+    // _arguments sometimes contain ("") so isEmpty()
+    // or count() does not work as expected...
+    QString argsTmp(_arguments.join(" ").trimmed());
+    QStringList arguments;
+    arguments << exec;
+    if (argsTmp.length())
+        arguments << _arguments;
+
     QString cwd = QDir::currentPath();
     if (!_initialWorkingDir.isEmpty()) {
         _shellProcess->setWorkingDirectory(_initialWorkingDir);
     } else {
         _shellProcess->setWorkingDirectory(cwd);
     }
-//    _shellProcess->setWorkingDirectory(QDir::homePath());
 
     _shellProcess->setFlowControlEnabled(_flowControl);
     _shellProcess->setErase(_emulation->eraseChar());
