@@ -105,7 +105,7 @@ message ( STATUS "Color schemes will be insatlled in: ${COLORSCHEMES_DIR}" )
 add_definitions( -DCOLORSCHEMES_DIR="\\"${COLORSCHEMES_DIR}\\"" )
 
 #| Defines
-add_definitions ( -DHAVE_POSIX_OPENPT )
+add_definitions ( -DHAVE_POSIX_OPENPT -DHAVE_SYS_TIME_H )
 #add_definitions( -DHAVE_GETPT )
 if (APPLE)
     add_definitions( -DHAVE_UTMPX -D_UTMPX_COMPAT )
