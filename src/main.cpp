@@ -20,6 +20,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QApplication>
+#include <QtDebug>
 
 #include "qtermwidget.h"
 
@@ -31,17 +32,37 @@ int main(int argc, char *argv[])
     QTermWidget *console = new QTermWidget();
     
     QFont font = QApplication::font();
+#ifdef Q_WS_MAC
+    font.setFamily("Monaco");
+#else
     font.setFamily("Monospace");
+#endif
     font.setPointSize(12);
     
     console->setTerminalFont(font);
     
     //console->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
     console->setScrollBarPosition(QTermWidget::ScrollBarRight);
+
+    foreach (QString arg, QApplication::arguments())
+    {
+        if (console->availableColorSchemes().contains(arg))
+            console->setColorScheme(arg);
+        if (console->availableKeyBindings().contains(arg))
+            console->setKeyBindings(arg);
+    }
     
     mainWindow->setCentralWidget(console);
-    mainWindow->resize(902, 810);
+    mainWindow->resize(600, 400);
     
+    // info output
+    qDebug() << "* INFO *************************";
+    qDebug() << " availableKeyBindings:" << console->availableKeyBindings();
+    qDebug() << " keyBindings:" << console->keyBindings();
+    qDebug() << " availableColorSchemes:" << console->availableColorSchemes();
+    qDebug() << "* INFO END *********************";
+    
+    // real startup
     QObject::connect(console, SIGNAL(finished()), mainWindow, SLOT(close()));
 
     mainWindow->show();    

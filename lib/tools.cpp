@@ -11,13 +11,13 @@ But in some cases (apple bundle) there can be more locations).
 */
 QString get_kb_layout_dir()
 {
-    qDebug() << __FILE__ << __FUNCTION__;
+//    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
     QString k(KB_LAYOUT_DIR);
     QDir d(k);
 
-    qDebug() << "default KB_LAYOUT_DIR: " << k;
+//    qDebug() << "default KB_LAYOUT_DIR: " << k;
 
     if (d.exists())
         rval =  k.append("/");
@@ -48,13 +48,13 @@ But in some cases (apple bundle) there can be more locations).
 */
 QString get_color_schemes_dir()
 {
-    qDebug() << __FILE__ << __FUNCTION__;
+//    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
     QString k(COLORSCHEMES_DIR);
     QDir d(k);
 
-    qDebug() << "default COLORSCHEMES_DIR: " << k;
+//    qDebug() << "default COLORSCHEMES_DIR: " << k;
 
     if (d.exists())
         rval =  k.append("/");
