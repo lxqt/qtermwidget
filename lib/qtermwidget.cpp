@@ -120,6 +120,8 @@ QTermWidget::QTermWidget(int startnow, QWidget *parent)
             this, SIGNAL(termGetFocus()));
     connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
             this, SIGNAL(termLostFocus()));
+    connect(m_impl->m_terminalDisplay, SIGNAL(keyPressedSignal(QKeyEvent *)),
+            this, SIGNAL(termKeyPressed(QKeyEvent *)));
 }
 
 void QTermWidget::selectionChanged(bool textSelected)
@@ -282,6 +284,13 @@ void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
     if (!m_impl->m_terminalDisplay)
         return;
     m_impl->m_terminalDisplay->setScrollBarPosition((TerminalDisplay::ScrollBarPosition)pos);
+}
+
+void QTermWidget::scrollToEnd()
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->scrollToEnd();
 }
 
 void QTermWidget::sendText(QString &text)

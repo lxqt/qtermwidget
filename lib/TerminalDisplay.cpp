@@ -1684,6 +1684,16 @@ void TerminalDisplay::setScroll(int cursor, int slines)
   connect(_scrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollBarPositionChanged(int)));
 }
 
+void TerminalDisplay::scrollToEnd()
+{
+  disconnect(_scrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollBarPositionChanged(int)));
+  _scrollBar->setValue( _scrollBar->maximum() );
+  connect(_scrollBar, SIGNAL(valueChanged(int)), this, SLOT(scrollBarPositionChanged(int)));
+
+  _screenWindow->scrollTo( _scrollBar->value() + 1 );
+  _screenWindow->setTrackOutput( _screenWindow->atEndOfOutput() );
+}
+
 void TerminalDisplay::setScrollBarPosition(ScrollBarPosition position)
 {
   if (_scrollbarLocation == position) 
