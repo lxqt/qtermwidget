@@ -117,6 +117,11 @@ public:
      */
     void setScroll(int cursor, int lines);
 
+    /**
+     * Scroll to the bottom of the terminal (reset scrolling).
+     */
+    void scrollToEnd();
+
     /** 
      * Returns the display's filter chain.  When the image for the display is updated,
      * the text is passed through each filter in the chain.  Each filter can define
