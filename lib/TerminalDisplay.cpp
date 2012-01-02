@@ -2563,10 +2563,6 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     if ( emitKeyPressSignal )
         emit keyPressedSignal(event);
 
-    // a little hack to ensure terminal goes into its "edit" line
-    _scrollBar->setValue(_scrollBar->maximum());
-    // end of the hack
-
     event->accept();
 }
 
