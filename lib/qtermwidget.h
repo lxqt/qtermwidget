@@ -92,6 +92,9 @@ public:
     // Presence of scrollbar
     void setScrollBarPosition(ScrollBarPosition);
 
+    // Wrapped, scroll to end.
+    void scrollToEnd();
+
     // Send some text to terminal
     void sendText(QString & text);
 
@@ -120,6 +123,8 @@ signals:
 
     void termGetFocus();
     void termLostFocus();
+
+    void termKeyPressed(QKeyEvent *);
 
 public slots:
     // Paste clipboard content to terminal
