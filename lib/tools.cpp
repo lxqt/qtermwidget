@@ -12,7 +12,7 @@ But in some cases (apple bundle) there can be more locations).
 QString get_kb_layout_dir()
 {
 #ifdef BUNDLE_KEYBOARDLAYOUTS
-    return QString();
+    return QLatin1String(":/");
 #else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
@@ -53,7 +53,7 @@ But in some cases (apple bundle) there can be more locations).
 QString get_color_schemes_dir()
 {
 #ifdef BUNDLE_COLORSCHEMES
-    return QString();
+    return QLatin1String(":/");
 #else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
