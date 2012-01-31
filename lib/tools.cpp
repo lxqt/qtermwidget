@@ -11,6 +11,9 @@ But in some cases (apple bundle) there can be more locations).
 */
 QString get_kb_layout_dir()
 {
+#ifdef BUNDLE_KEYBOARDLAYOUTS
+    return QLatin1String(":/");
+#else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
@@ -40,6 +43,7 @@ QString get_kb_layout_dir()
     }
 #endif
     return rval;
+#endif // BUNDLE_KEYBOARDLAYOUTS
 }
 
 /*! Helper function to get possible location of layout files.
@@ -48,6 +52,9 @@ But in some cases (apple bundle) there can be more locations).
 */
 QString get_color_schemes_dir()
 {
+#ifdef BUNDLE_COLORSCHEMES
+    return QLatin1String(":/");
+#else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
@@ -77,4 +84,5 @@ QString get_color_schemes_dir()
     }
 #endif
     return rval;
+#endif // BUNDLE_COLORSCHEMES
 }
