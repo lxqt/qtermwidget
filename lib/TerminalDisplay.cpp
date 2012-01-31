@@ -2561,7 +2561,10 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     }
 
     if ( emitKeyPressSignal )
+    {
         emit keyPressedSignal(event);
+        scrollToEnd();
+    }
 
     event->accept();
 }
