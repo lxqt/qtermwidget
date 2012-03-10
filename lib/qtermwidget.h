@@ -137,6 +137,10 @@ public slots:
      */
     void setKeyBindings(const QString & kb);
 
+    /*! Clear the terminal content and move to home position
+     */
+    void clear();
+
 protected:
     virtual void resizeEvent(QResizeEvent *);
 

@@ -21,6 +21,9 @@
 #include "ColorTables.h"
 
 #include "Session.h"
+#include "Screen.h"
+#include "ScreenWindow.h"
+#include "Emulation.h"
 #include "TerminalDisplay.h"
 #include "KeyboardTranslator.h"
 #include "ColorScheme.h"
@@ -324,6 +327,13 @@ void QTermWidget::pasteClipboard()
 void QTermWidget::setKeyBindings(const QString & kb)
 {
     m_impl->m_session->setKeyBindings(kb);
+}
+
+void QTermWidget::clear()
+{
+    m_impl->m_session->emulation()->reset();
+    m_impl->m_session->refresh();
+    m_impl->m_session->clearHistory();
 }
 
 void QTermWidget::setFlowControlEnabled(bool enabled)
