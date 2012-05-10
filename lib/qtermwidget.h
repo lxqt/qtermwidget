@@ -40,8 +40,11 @@ public:
 
 
     //Creation of widget
-    QTermWidget(int startnow = 1, //start shell programm immediatelly
+    QTermWidget(int startnow, // 1 = start shell programm immediatelly
                 QWidget * parent = 0);
+    // A dummy constructor for Qt Designer. startnow is 1 by default
+    QTermWidget(QWidget *parent = 0);
+
     ~QTermWidget();
 
     //Initial size
@@ -149,7 +152,7 @@ protected slots:
     void selectionChanged(bool textSelected);
 
 private:
-    void init();
+    void init(int startnow);
     TermWidgetImpl * m_impl;
 };
 

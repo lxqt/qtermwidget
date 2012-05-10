@@ -103,28 +103,15 @@ TerminalDisplay *TermWidgetImpl::createTerminalDisplay(Session *session, QWidget
 
 
 QTermWidget::QTermWidget(int startnow, QWidget *parent)
-        :QWidget(parent)
+    : QWidget(parent)
 {
-    m_impl = new TermWidgetImpl(this);
+    init(startnow);
+}
 
-    init();
-
-    if (startnow && m_impl->m_session) {
-        m_impl->m_session->run();
-    }
-
-    this->setFocus( Qt::OtherFocusReason );
-    m_impl->m_terminalDisplay->resize(this->size());
-
-    this->setFocusProxy(m_impl->m_terminalDisplay);
-    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),
-            this, SLOT(selectionChanged(bool)));
-    connect(m_impl->m_terminalDisplay, SIGNAL(termGetFocus()),
-            this, SIGNAL(termGetFocus()));
-    connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
-            this, SIGNAL(termLostFocus()));
-    connect(m_impl->m_terminalDisplay, SIGNAL(keyPressedSignal(QKeyEvent *)),
-            this, SIGNAL(termKeyPressed(QKeyEvent *)));
+QTermWidget::QTermWidget(QWidget *parent)
+    : QWidget(parent)
+{
+    init(1);
 }
 
 void QTermWidget::selectionChanged(bool textSelected)
@@ -172,9 +159,27 @@ void QTermWidget::startShellProgram()
     m_impl->m_session->run();
 }
 
-void QTermWidget::init()
+void QTermWidget::init(int startnow)
 {
-    m_impl->m_terminalDisplay->setSize(80, 40);
+    m_impl = new TermWidgetImpl(this);
+
+    if (startnow && m_impl->m_session) {
+        m_impl->m_session->run();
+    }
+
+    this->setFocus( Qt::OtherFocusReason );
+    m_impl->m_terminalDisplay->resize(this->size());
+
+    this->setFocusProxy(m_impl->m_terminalDisplay);
+    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),
+            this, SLOT(selectionChanged(bool)));
+    connect(m_impl->m_terminalDisplay, SIGNAL(termGetFocus()),
+            this, SIGNAL(termGetFocus()));
+    connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
+            this, SIGNAL(termLostFocus()));
+    connect(m_impl->m_terminalDisplay, SIGNAL(keyPressedSignal(QKeyEvent *)),
+            this, SIGNAL(termKeyPressed(QKeyEvent *)));
+//    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
     font.setFamily("Monospace");
