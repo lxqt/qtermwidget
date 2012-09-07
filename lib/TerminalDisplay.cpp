@@ -728,7 +728,11 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
         if (_bidiEnabled)
             painter.drawText(rect,0,text);
         else
-            painter.drawText(rect,0,LTR_OVERRIDE_CHAR+text);
+#if QT_VERSION >= 0x040800
+            painter.drawText(rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + text);
+#else
+            painter.drawText(rect, 0, LTR_OVERRIDE_CHAR + text);
+#endif
     }
 }
 
