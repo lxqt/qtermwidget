@@ -2537,6 +2537,14 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
         {
             _screenWindow->scrollBy( ScreenWindow::ScrollLines , 1 );
         }
+        else if ( event->key() == Qt::Key_End)
+        {
+            scrollToEnd();
+        }
+        else if ( event->key() == Qt::Key_Home)
+        {
+            _screenWindow->scrollTo(0);
+        }
         else
             update = false;
 
@@ -2567,7 +2575,13 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     if ( emitKeyPressSignal )
     {
         emit keyPressedSignal(event);
-        scrollToEnd();
+
+        if(!(event->modifiers().testFlag(Qt::ShiftModifier)
+             || event->modifiers().testFlag(Qt::ControlModifier)
+             || event->modifiers().testFlag(Qt::AltModifier)))
+        {
+            scrollToEnd();
+        }
     }
 
     event->accept();
