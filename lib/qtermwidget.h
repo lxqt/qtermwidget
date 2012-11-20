@@ -138,7 +138,8 @@ public slots:
     void pasteClipboard();
 
     // Set zoom
-    void setZoom(uint step);
+    void zoomIn();
+    void zoomOut();
     
     /*! Set named key binding for given widget
      */
@@ -156,6 +157,7 @@ protected slots:
     void selectionChanged(bool textSelected);
 
 private:
+    void setZoom(int step);
     void init(int startnow);
     TermWidgetImpl * m_impl;
 };

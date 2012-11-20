@@ -338,6 +338,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_filterChain(new TerminalImageFilterChain())
 ,_cursorShape(BlockCursor)
 ,mMotionAfterPasting(NoMoveScreenWindow)
+,m_stepzoom(3)
 {
   // terminal applications are not designed with Right-To-Left in mind,
   // so the layout is forced to Left-To-Right
@@ -2532,7 +2533,7 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     {
         bool update = true;
 
-        if ( event->key() == Qt::Key_PageUp )
+        else if ( event->key() == Qt::Key_PageUp )
         {
             _screenWindow->scrollBy( ScreenWindow::ScrollPages , -1 );
         }
@@ -2591,8 +2592,6 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
              || event->modifiers().testFlag(Qt::ControlModifier)
              || event->modifiers().testFlag(Qt::AltModifier))
         {
-            qDebug() << mMotionAfterPasting;
-            
             switch(mMotionAfterPasting)
             {
             case MoveStartScreenWindow:
@@ -2604,6 +2603,10 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
             case NoMoveScreenWindow:
                 break;
             }
+        }
+        else
+        {
+            scrollToEnd();
         }
     }
 
