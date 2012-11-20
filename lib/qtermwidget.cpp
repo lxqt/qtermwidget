@@ -332,18 +332,19 @@ void QTermWidget::pasteClipboard()
 void QTermWidget::setZoom(int step)
 {
     QFont font = m_impl->m_terminalDisplay->getVTFont();
-    font.setPixelSize(font.pointSize() + step > 5 ? font.pointSize() + step: font.pointSize());
+    font.setPixelSize(font.pixelSize() + step > 6 && font.pixelSize() + step < 72 
+                      ? font.pixelSize() + step: font.pixelSize());
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
 void QTermWidget::zoomIn()
 {
-    setZoom(2);
+    setZoom(5);
 }
 
 void QTermWidget::zoomOut()
 {
-    setZoom(-2);
+    setZoom(-5);
 }
 
 void QTermWidget::setKeyBindings(const QString & kb)
