@@ -329,6 +329,13 @@ void QTermWidget::pasteClipboard()
     m_impl->m_terminalDisplay->pasteClipboard();
 }
 
+void QTermWidget::setZoom(uint step)
+{
+    QFont font = m_impl->m_terminalDisplay->getVTFont();
+    font.setPixelSize(font.pointSize() + step > 5 ? font.pointSize() + step: font.pointSize());
+    m_impl->m_terminalDisplay->setVTFont(font);
+}
+
 void QTermWidget::setKeyBindings(const QString & kb)
 {
     m_impl->m_session->setKeyBindings(kb);
@@ -372,4 +379,9 @@ void QTermWidget::setFlowControlWarningEnabled(bool enabled)
 void QTermWidget::setEnvironment(const QStringList& environment)
 {
     m_impl->m_session->setEnvironment(environment);
+}
+
+void QTermWidget::setMotionAfterPasting(int action)
+{
+    m_impl->m_terminalDisplay->setMotionAfterPasting((Konsole::MotionAfterPasting) action);
 }

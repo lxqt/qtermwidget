@@ -38,7 +38,6 @@ public:
         ScrollBarRight=2
     };
 
-
     //Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
                 QWidget * parent = 0);
@@ -119,6 +118,8 @@ public:
 
     //! Return current key bindings
     QString keyBindings();
+    
+    void setMotionAfterPasting(int);
 
 signals:
     void finished();
@@ -136,6 +137,9 @@ public slots:
     // Copies selection to clipboard
     void pasteClipboard();
 
+    // Set zoom
+    void setZoom(uint step);
+    
     /*! Set named key binding for given widget
      */
     void setKeyBindings(const QString & kb);
