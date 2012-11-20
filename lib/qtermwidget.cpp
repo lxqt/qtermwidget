@@ -209,6 +209,13 @@ void QTermWidget::setTerminalFont(QFont &font)
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
+QFont QTermWidget::getTerminalFont()
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->getVTFont();
+}
+
 void QTermWidget::setTerminalOpacity(qreal level)
 {
     if (!m_impl->m_terminalDisplay)
@@ -333,12 +340,13 @@ void QTermWidget::pasteClipboard()
 
 void QTermWidget::setZoom(int step)
 {
+    if (!m_impl->m_terminalDisplay)
+        return;
+    
     QFont font = m_impl->m_terminalDisplay->getVTFont();
     
-    qDebug() << "Before" << font << "pointsize" << font.pointSize() << "pixelsize" << font.pixelSize();
     font.setPointSize(font.pointSize() + step);
-    qDebug() << "After" << font << "pointsize" << font.pointSize() << "pixelsize" << font.pixelSize();
-    m_impl->m_terminalDisplay->setVTFont(font);
+    setTerminalFont(font);
 }
 
 void QTermWidget::zoomIn()

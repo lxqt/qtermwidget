@@ -63,7 +63,7 @@ public:
     // USE ONLY FIXED-PITCH FONT!
     // otherwise symbols' position could be incorrect
     void setTerminalFont(QFont & font);
-
+    QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
 
     //environment
