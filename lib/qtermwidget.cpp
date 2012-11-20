@@ -28,6 +28,8 @@
 #include "KeyboardTranslator.h"
 #include "ColorScheme.h"
 
+#define STEP_ZOOM 3
+
 using namespace Konsole;
 
 void *createTermWidget(int startnow, void *parent)
@@ -332,18 +334,18 @@ void QTermWidget::pasteClipboard()
 void QTermWidget::setZoom(int step)
 {
     QFont font = m_impl->m_terminalDisplay->getVTFont();
-    font.setPixelSize(font.pixelSize() + step);
+    font.setPixelSize(font.pointSize() + step);
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
 void QTermWidget::zoomIn()
 {
-    setZoom(5);
+    setZoom(STEP_ZOOM);
 }
 
 void QTermWidget::zoomOut()
 {
-    setZoom(-5);
+    setZoom(-STEP_ZOOM);
 }
 
 void QTermWidget::setKeyBindings(const QString & kb)
