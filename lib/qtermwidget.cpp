@@ -28,6 +28,8 @@
 #include "KeyboardTranslator.h"
 #include "ColorScheme.h"
 
+#define STEP_ZOOM 3
+
 using namespace Konsole;
 
 void *createTermWidget(int startnow, void *parent)
@@ -207,6 +209,13 @@ void QTermWidget::setTerminalFont(QFont &font)
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
+QFont QTermWidget::getTerminalFont()
+{
+    if (!m_impl->m_terminalDisplay)
+        return QFont();
+    return m_impl->m_terminalDisplay->getVTFont();
+}
+
 void QTermWidget::setTerminalOpacity(qreal level)
 {
     if (!m_impl->m_terminalDisplay)
@@ -329,6 +338,27 @@ void QTermWidget::pasteClipboard()
     m_impl->m_terminalDisplay->pasteClipboard();
 }
 
+void QTermWidget::setZoom(int step)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    
+    QFont font = m_impl->m_terminalDisplay->getVTFont();
+    
+    font.setPointSize(font.pointSize() + step);
+    setTerminalFont(font);
+}
+
+void QTermWidget::zoomIn()
+{
+    setZoom(STEP_ZOOM);
+}
+
+void QTermWidget::zoomOut()
+{
+    setZoom(-STEP_ZOOM);
+}
+
 void QTermWidget::setKeyBindings(const QString & kb)
 {
     m_impl->m_session->setKeyBindings(kb);
@@ -372,4 +402,9 @@ void QTermWidget::setFlowControlWarningEnabled(bool enabled)
 void QTermWidget::setEnvironment(const QStringList& environment)
 {
     m_impl->m_session->setEnvironment(environment);
+}
+
+void QTermWidget::setMotionAfterPasting(int action)
+{
+    m_impl->m_terminalDisplay->setMotionAfterPasting((Konsole::MotionAfterPasting) action);
 }

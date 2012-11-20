@@ -51,6 +51,17 @@ class QWidget;
 namespace Konsole
 {
 
+    enum MotionAfterPasting
+    {
+        // No move screenwindow after pasting
+        NoMoveScreenWindow = 0,
+        // Move start of screenwindow after pasting
+        MoveStartScreenWindow = 1,
+        // Move end of screenwindow after pasting
+        MoveEndScreenWindow = 2
+    };
+
+
 extern unsigned short vt100_graphics[32];
 
 class ScreenWindow;
@@ -414,7 +425,10 @@ public:
     ScreenWindow* screenWindow() const;
 
     static bool HAVE_TRANSPARENCY;
-
+    
+    void setMotionAfterPasting(MotionAfterPasting action);
+    int motionAfterPasting();
+    
 public slots:
 
     /** 
@@ -793,6 +807,8 @@ private:
     // color of the character under the cursor is used
     QColor _cursorColor;  
 
+
+    MotionAfterPasting mMotionAfterPasting;
 
     struct InputMethodData
     {

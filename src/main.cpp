@@ -21,12 +21,14 @@
 #include <QtGui>
 #include <QApplication>
 #include <QtDebug>
+#include <cstdlib>
 
 #include "qtermwidget.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    setenv("TERM", "xterm", 1);
+   QApplication app(argc, argv);
     QMainWindow *mainWindow = new QMainWindow();
 
     QTermWidget *console = new QTermWidget();
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
     
     console->setTerminalFont(font);
     
-    //console->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
+   // console->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
     console->setScrollBarPosition(QTermWidget::ScrollBarRight);
 
     foreach (QString arg, QApplication::arguments())
