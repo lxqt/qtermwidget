@@ -2587,10 +2587,12 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     {
         emit keyPressedSignal(event);
 
-        if(!(event->modifiers().testFlag(Qt::ShiftModifier)
+        if(event->modifiers().testFlag(Qt::ShiftModifier)
              || event->modifiers().testFlag(Qt::ControlModifier)
-             || event->modifiers().testFlag(Qt::AltModifier)))
+             || event->modifiers().testFlag(Qt::AltModifier))
         {
+            qDebug() << mMotionAfterPasting;
+            
             switch(mMotionAfterPasting)
             {
             case MoveStartScreenWindow:
