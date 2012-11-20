@@ -212,8 +212,8 @@ void QTermWidget::setTerminalFont(QFont &font)
 QFont QTermWidget::getTerminalFont()
 {
     if (!m_impl->m_terminalDisplay)
-        return;
-    m_impl->m_terminalDisplay->getVTFont();
+        return QFont();
+    return m_impl->m_terminalDisplay->getVTFont();
 }
 
 void QTermWidget::setTerminalOpacity(qreal level)
