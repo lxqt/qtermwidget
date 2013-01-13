@@ -14,6 +14,7 @@ set ( SRCS
 #| qtermwidget Library
 include_directories (
 	${PROJECT_SOURCE_DIR}/../lib
+    ${CMAKE_CURRENT_BINARY_DIR}/../lib
 )
 
 set(QTERMWIDGET_LIB qtermwidget)
