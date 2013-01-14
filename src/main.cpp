@@ -21,15 +21,23 @@
 #include <QtGui>
 #include <QApplication>
 #include <QtDebug>
-
+#include <QIcon>
+#include <QtGui/qicon.h>
 #include "qtermwidget.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    QIcon::setThemeName("oxygen");
     QMainWindow *mainWindow = new QMainWindow();
-
+   
     QTermWidget *console = new QTermWidget();
+ 
+    QMenuBar *menuBar = new QMenuBar(mainWindow);
+    QMenu *actionsMenu = new QMenu("Actions", menuBar);
+    menuBar->addMenu(actionsMenu);
+    actionsMenu->addAction("Find..", console, SLOT(toggleShowSearchBar()), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    mainWindow->setMenuBar(menuBar);       
     
     QFont font = QApplication::font();
 #ifdef Q_WS_MAC
