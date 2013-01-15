@@ -38,7 +38,6 @@ public:
         ScrollBarRight=2
     };
 
-
     //Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
                 QWidget * parent = 0);
@@ -64,7 +63,7 @@ public:
     // USE ONLY FIXED-PITCH FONT!
     // otherwise symbols' position could be incorrect
     void setTerminalFont(QFont & font);
-
+    QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
 
     //environment
@@ -119,6 +118,8 @@ public:
 
     //! Return current key bindings
     QString keyBindings();
+    
+    void setMotionAfterPasting(int);
 
 signals:
     void finished();
@@ -136,6 +137,10 @@ public slots:
     // Copies selection to clipboard
     void pasteClipboard();
 
+    // Set zoom
+    void zoomIn();
+    void zoomOut();
+    
     /*! Set named key binding for given widget
      */
     void setKeyBindings(const QString & kb);
@@ -152,6 +157,7 @@ protected slots:
     void selectionChanged(bool textSelected);
 
 private:
+    void setZoom(int step);
     void init(int startnow);
     TermWidgetImpl * m_impl;
 };

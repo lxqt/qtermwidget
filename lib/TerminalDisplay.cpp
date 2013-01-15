@@ -337,6 +337,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_blendColor(qRgba(0,0,0,0xff))
 ,_filterChain(new TerminalImageFilterChain())
 ,_cursorShape(BlockCursor)
+,mMotionAfterPasting(NoMoveScreenWindow)
 {
   // terminal applications are not designed with Right-To-Left in mind,
   // so the layout is forced to Left-To-Right
@@ -2512,6 +2513,16 @@ void TerminalDisplay::setFlowControlWarningEnabled( bool enable )
         outputSuspended(false);
 }
 
+void TerminalDisplay::setMotionAfterPasting(MotionAfterPasting action)
+{
+    mMotionAfterPasting = action;
+}
+
+int TerminalDisplay::motionAfterPasting()
+{
+    return mMotionAfterPasting;
+}
+
 void TerminalDisplay::keyPressEvent( QKeyEvent* event )
 {
     bool emitKeyPressSignal = true;
@@ -2576,9 +2587,23 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     {
         emit keyPressedSignal(event);
 
-        if(!(event->modifiers().testFlag(Qt::ShiftModifier)
+        if(event->modifiers().testFlag(Qt::ShiftModifier)
              || event->modifiers().testFlag(Qt::ControlModifier)
-             || event->modifiers().testFlag(Qt::AltModifier)))
+             || event->modifiers().testFlag(Qt::AltModifier))
+        {
+            switch(mMotionAfterPasting)
+            {
+            case MoveStartScreenWindow:
+                _screenWindow->scrollTo(0);
+                break;
+            case MoveEndScreenWindow:
+                scrollToEnd();
+                break;
+            case NoMoveScreenWindow:
+                break;
+            }
+        }
+        else
         {
             scrollToEnd();
         }
