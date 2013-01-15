@@ -23,6 +23,7 @@
 #include <QtGui>
 
 struct TermWidgetImpl;
+class SearchBar;
 
 
 class QTermWidget : public QWidget {
@@ -149,6 +150,8 @@ public slots:
      */
     void clear();
 
+    void toggleShowSearchBar();
+
 protected:
     virtual void resizeEvent(QResizeEvent *);
 
@@ -156,10 +159,17 @@ protected slots:
     void sessionFinished();
     void selectionChanged(bool textSelected);
 
+private slots:
+    void search(QRegExp, bool forwards, bool skip);
+    void matchFound(int startColumn, int startLine, int endColumn, int endLine);
+    void noMatchFound();
+
 private:
     void setZoom(int step);
     void init(int startnow);
     TermWidgetImpl * m_impl;
+    SearchBar* m_searchBar;
+    QVBoxLayout *m_layout;
 };
 
 
