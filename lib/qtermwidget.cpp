@@ -148,6 +148,7 @@ void QTermWidget::search(QRegExp regexp, bool forwards, bool next)
             new HistorySearch(m_impl->m_session->emulation(), regexp, forwards, startColumn, startLine, this);
     connect(historySearch, SIGNAL(matchFound(int, int, int, int)), this, SLOT(matchFound(int, int, int, int)));
     connect(historySearch, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
+    connect(historySearch, SIGNAL(noMatchFound()), m_searchBar, SLOT(noMatchFound()));
     historySearch->search();
 }
 

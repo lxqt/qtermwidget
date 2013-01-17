@@ -34,6 +34,7 @@ public:
 
 public slots:
     void toggleShown();
+    void noMatchFound();
 
 signals:
     void search(QRegExp regexp, bool forwards, bool skip);
@@ -45,6 +46,7 @@ private slots:
     void searchTextChanged(); 
     void findNext();
     void findPrevious();
+    void clearBackgroundColor();
 
 private:
     QRegExp m_regExp;

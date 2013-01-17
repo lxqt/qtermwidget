@@ -48,12 +48,13 @@ void HistorySearch::search() {
         } else {
             found = search(0, 0, m_startColumn, m_startLine) || search(m_startColumn, m_startLine, -1, m_emulation->lineCount());
         }
-    }
-
-    if (found) {
-        emit matchFound(m_foundStartColumn, m_foundStartLine, m_foundEndColumn, m_foundEndLine);
-    } else {
-        emit noMatchFound();
+   
+        if (found) {
+            emit matchFound(m_foundStartColumn, m_foundStartLine, m_foundEndColumn, m_foundEndLine);
+        } 
+        else {
+            emit noMatchFound();
+        }
     }
 
     deleteLater();

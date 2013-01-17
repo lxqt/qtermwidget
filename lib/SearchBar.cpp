@@ -67,6 +67,13 @@ void SearchBar::toggleShown()
     isHidden() ? show() : hide();
 }
 
+void SearchBar::noMatchFound()
+{
+    QPalette palette;
+    palette.setColor(widget.searchTextEdit->backgroundRole(), QColor(255, 128, 128));
+    widget.searchTextEdit->setPalette(palette);
+}
+
 void SearchBar::searchTextChanged()
 {
     m_regExp = QRegExp(widget.searchTextEdit->text());
@@ -77,8 +84,13 @@ void SearchBar::searchTextChanged()
     if (! m_matchCaseMenuEntry->isChecked()) {
         m_regExp.setCaseSensitivity(Qt::CaseInsensitive);
     }
-
-    emit search(m_regExp, true, false);
+    
+    clearBackgroundColor();
+    
+    if (!m_regExp.isEmpty()) 
+    {
+        emit search(m_regExp, true, false);
+    }
 }
 
 void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
@@ -102,10 +114,20 @@ void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
 
 void SearchBar::findNext()
 {
+    clearBackgroundColor();
     emit search(m_regExp, true, true);
 }
 
 void SearchBar::findPrevious()
 {
+    clearBackgroundColor();
     emit search(m_regExp, false, false);
+}
+
+void SearchBar::clearBackgroundColor()
+{
+    QPalette p;
+    p.setColor(QPalette::Base, Qt::white);
+    widget.searchTextEdit->setPalette(p);
+
 }
