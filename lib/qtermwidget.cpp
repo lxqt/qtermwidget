@@ -130,9 +130,10 @@ void QTermWidget::search(QRegExp regexp, bool forwards, bool next)
 {
     int startColumn, startLine;
     
-    if (next) // search from end of current selection
+    if (next) // search from just after current selection
     {
         m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionEnd(startColumn, startLine);
+        startColumn++;
     }
     else // search from start of current selection
     {
