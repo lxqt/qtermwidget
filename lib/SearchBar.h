@@ -38,6 +38,9 @@ public slots:
 signals:
     void search(QRegExp regexp, bool forwards, bool skip);
 
+protected:
+    virtual void keyReleaseEvent(QKeyEvent* keyEvent);
+
 private slots:
     void searchTextChanged(); 
     void findNext();

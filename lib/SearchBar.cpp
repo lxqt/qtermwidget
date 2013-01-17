@@ -81,6 +81,25 @@ void SearchBar::searchTextChanged()
     emit search(m_regExp, true, false);
 }
 
+void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
+{
+    if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) 
+    {
+        if (keyEvent->modifiers() == Qt::ShiftModifier)
+        {
+            findPrevious();
+        }
+        else 
+        {
+            findNext();
+        }
+    }
+    else if (keyEvent->key() == Qt::Key_Escape)
+    {
+        toggleShown();
+    }
+}
+
 void SearchBar::findNext()
 {
     emit search(m_regExp, true, true);
