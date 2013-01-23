@@ -160,11 +160,14 @@ protected slots:
     void selectionChanged(bool textSelected);
 
 private slots:
-    void search(QRegExp, bool forwards, bool skip);
+    void find();
+    void findNext();
+    void findPrevious();
     void matchFound(int startColumn, int startLine, int endColumn, int endLine);
     void noMatchFound();
 
 private:
+    void search(bool forwards, bool next);
     void setZoom(int step);
     void init(int startnow);
     TermWidgetImpl * m_impl;

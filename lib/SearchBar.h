@@ -30,27 +30,27 @@ public:
     SearchBar(QWidget* parent = 0);
     virtual ~SearchBar();
     virtual void show();
-    virtual void hide();
+    QString searchText();
+    bool useRegularExpression();
+    bool matchCase();
+    bool highlightAllMatches();    
 
 public slots:
-    void toggleShown();
     void noMatchFound();
 
 signals:
-    void search(QRegExp regexp, bool forwards, bool skip);
+    void searchCriteriaChanged();
+    void highlightMatchesChanged(bool highlightMatches);
+    void findNext();
+    void findPrevious();
 
 protected:
     virtual void keyReleaseEvent(QKeyEvent* keyEvent);
 
 private slots:
-    void searchTextChanged(); 
-    void findNext();
-    void findPrevious();
     void clearBackgroundColor();
 
 private:
-    QRegExp m_regExp;
-
     Ui::SearchBar widget;
     QAction *m_matchCaseMenuEntry;
     QAction *m_useRegularExpressionMenuEntry;

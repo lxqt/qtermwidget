@@ -126,7 +126,22 @@ void QTermWidget::selectionChanged(bool textSelected)
     emit copyAvailable(textSelected);
 }
 
-void QTermWidget::search(QRegExp regexp, bool forwards, bool next)
+void QTermWidget::find()
+{
+    search(true, false);
+}
+
+void QTermWidget::findNext()
+{
+    search(true, true);
+}
+
+void QTermWidget::findPrevious()
+{
+    search(false, false);
+}
+
+void QTermWidget::search(bool forwards, bool next)
 {
     int startColumn, startLine;
     
@@ -143,9 +158,12 @@ void QTermWidget::search(QRegExp regexp, bool forwards, bool next)
     qDebug() << "current selection starts at: " << startColumn << startLine;
     qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition(); 
 
+    QRegExp regExp(m_searchBar->searchText());
+    regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
+    regExp.setCaseSensitivity(m_searchBar->matchCase() ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
     HistorySearch *historySearch = 
-            new HistorySearch(m_impl->m_session->emulation(), regexp, forwards, startColumn, startLine, this);
+            new HistorySearch(m_impl->m_session->emulation(), regExp, forwards, startColumn, startLine, this);
     connect(historySearch, SIGNAL(matchFound(int, int, int, int)), this, SLOT(matchFound(int, int, int, int)));
     connect(historySearch, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
     connect(historySearch, SIGNAL(noMatchFound()), m_searchBar, SLOT(noMatchFound()));
@@ -221,7 +239,9 @@ void QTermWidget::init(int startnow)
 
     m_searchBar = new SearchBar(this);
     m_searchBar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-    connect(m_searchBar, SIGNAL(search(QRegExp, bool, bool)), this, SLOT(search(QRegExp, bool, bool)));
+    connect(m_searchBar, SIGNAL(searchCriteriaChanged()), this, SLOT(find()));
+    connect(m_searchBar, SIGNAL(findNext()), this, SLOT(findNext()));
+    connect(m_searchBar, SIGNAL(findPrevious()), this, SLOT(findPrevious()));
     m_layout->addWidget(m_searchBar);
     m_searchBar->hide();
 
@@ -450,7 +470,7 @@ QString QTermWidget::keyBindings()
 
 void QTermWidget::toggleShowSearchBar()
 {
-    m_searchBar->toggleShown();
+    m_searchBar->isHidden() ? m_searchBar->show() : m_searchBar->hide();
 }
 
 bool QTermWidget::flowControlEnabled(void)
