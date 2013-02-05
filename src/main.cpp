@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
     QFont font = QApplication::font();
 #ifdef Q_WS_MAC
     font.setFamily("Monaco");
+#elif defined(Q_WS_QWS)
+    font.setFamily("fixed");
 #else
     font.setFamily("Monospace");
 #endif
