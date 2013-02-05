@@ -952,8 +952,15 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
         {
             textToSend += _codec->fromUnicode(entry.text(true,modifiers));
         }
-        else
+        else if((modifiers & Qt::ControlModifier) && event->key() >= 0x40 && event->key() < 0x5f) {
+            textToSend += (event->key() & 0x1f);
+        }
+        else if(event->key() == Qt::Key_Tab) {
+            textToSend += 0x09;
+        }
+        else {
             textToSend += _codec->fromUnicode(event->text());
+        }
 
         sendData( textToSend.constData() , textToSend.length() );
     }
