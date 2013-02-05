@@ -303,9 +303,13 @@ void Pty::setupChildProcess()
     // signals generated via key sequences such as Ctrl+C
     // (which sends SIGINT)
     struct sigaction action;
+    sigset_t sigset;
     sigemptyset(&action.sa_mask);
     action.sa_handler = SIG_DFL;
     action.sa_flags = 0;
-    for (int signal=1;signal < NSIG; signal++)
+    for (int signal=1;signal < NSIG; signal++) {
         sigaction(signal,&action,0L);
+        sigaddset(&sigset, signal);
+    }
+    sigprocmask(SIG_UNBLOCK, &sigset, NULL);
 }
