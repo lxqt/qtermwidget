@@ -250,6 +250,7 @@ void QTermWidget::init(int startnow)
     }
 
     this->setFocus( Qt::OtherFocusReason );
+    this->setFocusPolicy( Qt::WheelFocus );
     m_impl->m_terminalDisplay->resize(this->size());
 
     this->setFocusProxy(m_impl->m_terminalDisplay);
