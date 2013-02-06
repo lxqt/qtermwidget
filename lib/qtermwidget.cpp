@@ -421,6 +421,11 @@ void QTermWidget::pasteClipboard()
     m_impl->m_terminalDisplay->pasteClipboard();
 }
 
+void QTermWidget::pasteSelection()
+{
+    m_impl->m_terminalDisplay->pasteSelection();
+}
+
 void QTermWidget::setZoom(int step)
 {
     if (!m_impl->m_terminalDisplay)

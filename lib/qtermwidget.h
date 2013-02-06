@@ -132,11 +132,14 @@ signals:
     void termKeyPressed(QKeyEvent *);
 
 public slots:
-    // Paste clipboard content to terminal
+    // Copy selection to clipboard
     void copyClipboard();
 
-    // Copies selection to clipboard
+    // Paste clipboard to terminal
     void pasteClipboard();
+
+    // Paste selection to terminal 
+    void pasteSelection();
 
     // Set zoom
     void zoomIn();
