@@ -244,16 +244,13 @@ void TerminalDisplay::fontChange(const QFont&)
 void TerminalDisplay::setVTFont(const QFont& f)
 {
   QFont font = f;
-    
-#ifdef Q_WS_MAC
-#if QT_VERSION >= 0x040700
-    // mac uses floats for font width specification.
-    // this ensures the same handling for all platforms
+
+    // This was originally set for OS X only:    
+    //     mac uses floats for font width specification.
+    //     this ensures the same handling for all platforms
+    // but then there was revealed that various Linux distros
+    // have this problem too...
     font.setStyleStrategy(QFont::ForceIntegerMetrics);
-#else
-#warning "Correct handling of the QFont metrics requited Qt>=4.7"
-#endif
-#endif
 
   QFontMetrics metrics(font);
 
