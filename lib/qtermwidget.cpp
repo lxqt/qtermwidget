@@ -48,20 +48,20 @@ struct TermWidgetImpl {
     TerminalDisplay *m_terminalDisplay;
     Session *m_session;
 
-    Session* createSession();
+    Session* createSession(QWidget* parent);
     TerminalDisplay* createTerminalDisplay(Session *session, QWidget* parent);
 };
 
 TermWidgetImpl::TermWidgetImpl(QWidget* parent)
 {
-    this->m_session = createSession();
+    this->m_session = createSession(parent);
     this->m_terminalDisplay = createTerminalDisplay(this->m_session, parent);
 }
 
 
-Session *TermWidgetImpl::createSession()
+Session *TermWidgetImpl::createSession(QWidget* parent)
 {
-    Session *session = new Session();
+    Session *session = new Session(parent);
 
     session->setTitle(Session::NameRole, "QTermWidget");
 
@@ -281,6 +281,7 @@ void QTermWidget::init(int startnow)
 
 QTermWidget::~QTermWidget()
 {
+    delete m_impl;
     emit destroyed();
 }
 
