@@ -45,7 +45,7 @@ public:
     // A dummy constructor for Qt Designer. startnow is 1 by default
     QTermWidget(QWidget *parent = 0);
 
-    ~QTermWidget();
+    virtual ~QTermWidget();
 
     //Initial size
     QSize sizeHint() const;
