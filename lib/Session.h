@@ -71,8 +71,8 @@ public:
      * falls back to using the program specified in the SHELL environment
      * variable.
      */
-    Session();
-    ~Session();
+    Session(QObject* parent = 0);
+    virtual ~Session();
 
     /**
      * Returns true if the session is currently running.  This will be true
