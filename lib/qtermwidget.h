@@ -75,6 +75,7 @@ public:
 
     //working directory
     void setWorkingDirectory(const QString & dir);
+    QString workingDirectory();
 
     // Shell program args, default is none
     void setArgs(QStringList & args);

@@ -33,7 +33,7 @@
 #include "ColorScheme.h"
 #include "SearchBar.h"
 
-#define STEP_ZOOM 3
+#define STEP_ZOOM 1
 
 using namespace Konsole;
 
@@ -320,6 +320,13 @@ void QTermWidget::setWorkingDirectory(const QString& dir)
     if (!m_impl->m_session)
         return;
     m_impl->m_session->setInitialWorkingDirectory(dir);
+}
+
+QString QTermWidget::workingDirectory()
+{
+    if (!m_impl->m_session)
+        return QString();
+    return m_impl->m_session->initialWorkingDirectory();
 }
 
 void QTermWidget::setArgs(QStringList &args)
