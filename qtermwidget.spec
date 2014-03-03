@@ -9,8 +9,8 @@ Release:	1
 License:	GPL
 Source:		%{name}-%{version}.tar.bz2
 Group:		Utility
-URL:		http://gitorious.org/qtermwidget
-Vendor:		petr@scribus.info
+URL:		https://github.com/qterminal
+Vendor:		petr@yarpen.cz
 
 
 %if 0%{?fedora_version}
