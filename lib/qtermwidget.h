@@ -100,7 +100,7 @@ public:
     void scrollToEnd();
 
     // Send some text to terminal
-    void sendText(QString & text);
+    void sendText(const QString & text);
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
