@@ -20,8 +20,9 @@
 #ifndef _Q_TERM_WIDGET
 #define _Q_TERM_WIDGET
 
-#include <QtGui>
+#include <QWidget>
 
+class QVBoxLayout;
 struct TermWidgetImpl;
 class SearchBar;
 

@@ -30,14 +30,14 @@
 #include <stdlib.h>
 
 // Qt
-#include <QtGui/QApplication>
-#include <QtCore/QByteRef>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-#include <QtCore>
+#include <QApplication>
+#include <QByteRef>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
+#include <QStringList>
+#include <QFile>
+#include <QtDebug>
 
 #include "Pty.h"
 //#include "kptyprocess.h"
@@ -460,7 +460,7 @@ void Session::activityStateSet(int state)
 {
     if (state==NOTIFYBELL) {
         QString s;
-        s.sprintf("Bell in session '%s'",_nameTitle.toAscii().data());
+        s.sprintf("Bell in session '%s'",_nameTitle.toUtf8().data());
 
         emit bellRequest( s );
     } else if (state==NOTIFYACTIVITY) {
@@ -608,16 +608,16 @@ void Session::done(int exitStatus)
 
         if (_shellProcess->exitStatus() == QProcess::NormalExit) {
             message.sprintf("Session '%s' exited with status %d.",
-                          _nameTitle.toAscii().data(), exitStatus);
+                          _nameTitle.toUtf8().data(), exitStatus);
         } else {
             message.sprintf("Session '%s' crashed.",
-                          _nameTitle.toAscii().data());
+                          _nameTitle.toUtf8().data());
         }
     }
 
     if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit )
         message.sprintf("Session '%s' exited unexpectedly.",
-                        _nameTitle.toAscii().data());
+                        _nameTitle.toUtf8().data());
     else
         emit finished();
 

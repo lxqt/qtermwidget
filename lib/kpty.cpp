@@ -24,6 +24,8 @@
 
 #include "kpty_p.h"
 
+#include <QtDebug>
+
 
 #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 #define HAVE_LOGIN
@@ -137,8 +139,6 @@ extern "C" {
 
 //#include <kdebug.h>
 //#include <kstandarddirs.h>  // findExe
-
-#include <QtCore>
 
 // not defined on HP-UX for example
 #ifndef CTRL
@@ -269,8 +269,8 @@ bool KPty::open()
     // Linux device names, FIXME: Trouble on other systems?
     for (const char * s3 = "pqrstuvwxyzabcde"; *s3; s3++) {
         for (const char * s4 = "0123456789abcdef"; *s4; s4++) {
-            ptyName = QString().sprintf("/dev/pty%c%c", *s3, *s4).toAscii();
-            d->ttyName = QString().sprintf("/dev/tty%c%c", *s3, *s4).toAscii();
+            ptyName = QString().sprintf("/dev/pty%c%c", *s3, *s4).toUtf8();
+            d->ttyName = QString().sprintf("/dev/tty%c%c", *s3, *s4).toUtf8();
 
             d->masterFd = ::open(ptyName.data(), O_RDWR);
             if (d->masterFd >= 0) {

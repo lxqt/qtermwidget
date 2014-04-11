@@ -21,10 +21,10 @@
 
 */
 
+#include <QtDebug>
+
 // Own
 #include "BlockArray.h"
-
-#include <QtCore>
 
 // System
 #include <assert.h>

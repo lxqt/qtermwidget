@@ -24,7 +24,7 @@
 #define CHARACTERCOLOR_H
 
 // Qt
-#include <QtGui/QColor>
+#include <QColor>
 
 //#include <kdemacros.h>
 #define KDE_NO_EXPORT

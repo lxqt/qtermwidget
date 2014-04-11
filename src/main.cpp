@@ -15,15 +15,13 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
-						
 
-#include <QtCore>
-#include <QtGui>
+
 #include <QApplication>
 #include <QtDebug>
-
 #include <QIcon>
-#include <QtGui/qicon.h>
+#include <QMainWindow>
+#include <QMenuBar>
 
 #include "qtermwidget.h"
 
@@ -39,6 +37,7 @@ int main(int argc, char *argv[])
     QMenu *actionsMenu = new QMenu("Actions", menuBar);
     menuBar->addMenu(actionsMenu);
     actionsMenu->addAction("Find..", console, SLOT(toggleShowSearchBar()), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    actionsMenu->addAction("About Qt", &app, SLOT(aboutQt()));
     mainWindow->setMenuBar(menuBar);       
     
     QFont font = QApplication::font();

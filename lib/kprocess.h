@@ -32,7 +32,7 @@
 
 //#include <kdecore_export.h>
 
-#include <QtCore/QProcess>
+#include <QProcess>
 
 class KProcessPrivate;
 

@@ -24,13 +24,13 @@
 #include <iostream>
 
 // Qt
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
-#include <QtCore/QString>
-#include <QtCore/QTextStream>
-#include <QtCore/QSharedData>
-#include <QtCore/QFile>
+#include <QAction>
+#include <QApplication>
+#include <QClipboard>
+#include <QString>
+#include <QTextStream>
+#include <QSharedData>
+#include <QFile>
 #include <QDesktopServices>
 #include <QUrl>
 

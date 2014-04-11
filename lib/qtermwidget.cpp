@@ -17,13 +17,12 @@
 */
 
 #include <QLayout>
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qlayoutitem.h>
-#include <QtGui/qsizepolicy.h>
-#include "SearchBar.h"
-#include "qtermwidget.h"
-#include "ColorTables.h"
+#include <QBoxLayout>
+#include <QtDebug>
+#include <QDir>
+#include <QMessageBox>
 
+#include "ColorTables.h"
 #include "Session.h"
 #include "Screen.h"
 #include "ScreenWindow.h"
@@ -32,6 +31,8 @@
 #include "KeyboardTranslator.h"
 #include "ColorScheme.h"
 #include "SearchBar.h"
+#include "qtermwidget.h"
+
 
 #define STEP_ZOOM 1
 

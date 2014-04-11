@@ -24,9 +24,9 @@
 #include "tools.h"
 
 // Qt
-#include <QtGui/QBrush>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QBrush>
+#include <QFile>
+#include <QFileInfo>
 #include <QtDebug>
 #include <QSettings>
 #include <QDir>

@@ -25,7 +25,7 @@
 
 #include "kpty.h"
 
-#include <QtCore/QByteArray>
+#include <QByteArray>
 
 struct KPtyPrivate {
 

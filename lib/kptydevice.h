@@ -31,11 +31,12 @@
 
 #include "kpty_p.h"
 
-#include <QtCore/QIODevice>
+#include <QIODevice>
 
 #define KMAXINT ((int)(~0U >> 1))
 
 struct KPtyDevicePrivate;
+class QSocketNotifier;
 
 #define Q_DECLARE_PRIVATE_MI(Class, SuperClass) \
     inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(SuperClass::d_ptr); } \
@@ -166,8 +167,8 @@ private:
 // Helper. Remove when QRingBuffer becomes public. //
 /////////////////////////////////////////////////////
 
-#include <QtCore/qbytearray.h>
-#include <QtCore/qlinkedlist.h>
+#include <QByteArray>
+#include <QLinkedList>
 
 #define CHUNKSIZE 4096
 

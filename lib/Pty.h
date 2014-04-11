@@ -32,10 +32,10 @@
 #define PTY_H
 
 // Qt
-#include <QtCore/QStringList>
-#include <QtCore/QVector>
-#include <QtCore/QList>
-#include <QtCore/QSize>
+#include <QStringList>
+#include <QVector>
+#include <QList>
+#include <QSize>
 
 // KDE
 #include "kptyprocess.h"

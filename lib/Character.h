@@ -24,7 +24,7 @@
 #define CHARACTER_H
 
 // Qt
-#include <QtCore/QHash>
+#include <QHash>
 
 // Local
 #include "CharacterColor.h"

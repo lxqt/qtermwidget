@@ -159,6 +159,9 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}_use.cmake DE
 
 # designer plugin
 if (BUILD_DESIGNER_PLUGIN)
+    if (USE_QT5)
+        message(FATAL_ERROR "Building Qt designer plugin is not supported for Qt5 yet. Use -DBUILD_DESIGNER_PLUGIN=0")
+    endif (USE_QT5)
     message(STATUS "Building Qt designer plugin")
 
     include_directories(designer

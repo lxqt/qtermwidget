@@ -29,15 +29,15 @@
 #include <unistd.h>
 
 // Qt
-#include <QtGui/QApplication>
-#include <QtGui/QClipboard>
-#include <QtCore/QHash>
-#include <QtGui/QKeyEvent>
-#include <QtCore/QRegExp>
-#include <QtCore/QTextStream>
-#include <QtCore/QThread>
+#include <QApplication>
+#include <QClipboard>
+#include <QHash>
+#include <QKeyEvent>
+#include <QRegExp>
+#include <QTextStream>
+#include <QThread>
 
-#include <QtCore/QTime>
+#include <QTime>
 
 // KDE
 //#include <kdebug.h>

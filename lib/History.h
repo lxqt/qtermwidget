@@ -22,9 +22,9 @@
 #define TEHISTORY_H
 
 // Qt
-#include <QtCore/QBitRef>
-#include <QtCore/QHash>
-#include <QtCore/QVector>
+#include <QBitRef>
+#include <QHash>
+#include <QVector>
 #include <QTemporaryFile>
 
 // KDE

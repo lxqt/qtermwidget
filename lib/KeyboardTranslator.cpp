@@ -27,11 +27,11 @@
 #include <stdio.h>
 
 // Qt
-#include <QtCore/QBuffer>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTextStream>
-#include <QtGui/QKeySequence>
+#include <QBuffer>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
+#include <QKeySequence>
 #include <QDir>
 #include <QtDebug>
 

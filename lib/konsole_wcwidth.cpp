@@ -7,6 +7,8 @@
  * Markus Kuhn -- 2001-01-12 -- public domain
  */
 
+#include <QString>
+
 #include "konsole_wcwidth.h"
 
 struct interval {

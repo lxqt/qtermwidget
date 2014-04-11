@@ -43,9 +43,9 @@
 #include <assert.h>
 
 // Qt
-#include <QtCore/QEvent>
-#include <QtGui/QKeyEvent>
-#include <QtCore/QByteRef>
+#include <QEvent>
+#include <QKeyEvent>
+#include <QByteRef>
 
 // KDE
 //#include <kdebug.h>
@@ -973,7 +973,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
                                          "into characters to send to the terminal " 
                                          "is missing.");
         reset();
-        receiveData( translatorError.toAscii().constData() , translatorError.count() );
+        receiveData( translatorError.toUtf8().constData() , translatorError.count() );
     }
 }
 

@@ -23,7 +23,7 @@
 #ifndef kpty_h
 #define kpty_h
 
-#include <QtCore>
+#include <QObject>
 
 struct KPtyPrivate;
 struct termios;
