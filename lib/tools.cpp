@@ -20,29 +20,26 @@ QString get_kb_layout_dir()
     QString k(KB_LAYOUT_DIR);
     QDir d(k);
 
-//    qDebug() << "default KB_LAYOUT_DIR: " << k;
+    qDebug() << "default KB_LAYOUT_DIR: " << k;
 
     if (d.exists())
-        rval =  k.append("/");
+    {
+        rval = k.append("/");
+        return rval;
+    }
 
     // subdir in the app location
     d.setPath(QCoreApplication::applicationDirPath() + "/kb-layouts/");
     //qDebug() << d.path();
     if (d.exists())
-        rval = QCoreApplication::applicationDirPath() + "/kb-layouts/";
+        return QCoreApplication::applicationDirPath() + "/kb-layouts/";
 #ifdef Q_WS_MAC
     d.setPath(QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/");
     if (d.exists())
-        rval = QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/";
+        return QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/";
 #endif
-#ifdef QT_DEBUG
-    if(!rval.isEmpty()) {
-        qDebug() << "Using kb-layouts: " << rval;
-    } else {
-        qDebug() << "Cannot find kb-layouts in any location!";
-    }
-#endif
-    return rval;
+    qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
+    return QString();
 #endif // BUNDLE_KEYBOARDLAYOUTS
 }
 
