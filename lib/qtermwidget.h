@@ -134,6 +134,13 @@ public:
     void getSelectionStart(int& row, int& column);
     void setSelectionEnd(int& row, int& column);
 
+    /**
+     * Returns the currently selected text.
+     * @param preserveLineBreaks Specifies whether new line characters should
+     * be inserted into the returned text at the end of each terminal line.
+     */
+    QString selectedText(bool preserveLineBreaks = true);
+
 signals:
     void finished();
     void copyAvailable(bool);

@@ -556,3 +556,8 @@ void QTermWidget::setSelectionEnd(int& row, int& column)
 {
     m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
 }
+
+QString QTermWidget::selectedText(bool preserveLineBreaks)
+{
+    return m_impl->m_terminalDisplay->screenWindow()->screen()->selectedText(preserveLineBreaks);
+}
