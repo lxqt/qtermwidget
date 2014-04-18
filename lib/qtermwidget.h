@@ -124,6 +124,16 @@ public:
     
     void setMotionAfterPasting(int);
 
+    /** Return the number of lines in the history buffer. */
+    int historyLinesCount();
+
+    int screenColumnsCount();
+
+    void setSelectionStart(int row, int column);
+    void setSelectionEnd(int row, int column);
+    void getSelectionStart(int& row, int& column);
+    void setSelectionEnd(int& row, int& column);
+
 signals:
     void finished();
     void copyAvailable(bool);

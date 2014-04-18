@@ -526,3 +526,33 @@ void QTermWidget::setMotionAfterPasting(int action)
 {
     m_impl->m_terminalDisplay->setMotionAfterPasting((Konsole::MotionAfterPasting) action);
 }
+
+int QTermWidget::historyLinesCount()
+{
+    return m_impl->m_terminalDisplay->screenWindow()->screen()->getHistLines();
+}
+
+int QTermWidget::screenColumnsCount()
+{
+    return m_impl->m_terminalDisplay->screenWindow()->screen()->getColumns();
+}
+
+void QTermWidget::setSelectionStart(int row, int column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionStart(column, row, true);
+}
+
+void QTermWidget::setSelectionEnd(int row, int column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
+}
+
+void QTermWidget::getSelectionStart(int& row, int& column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(column, row);
+}
+
+void QTermWidget::setSelectionEnd(int& row, int& column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
+}
