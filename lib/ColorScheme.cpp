@@ -645,9 +645,11 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
         return false;
 
     QFileInfo info(filePath);
+
+    const QString& schemeName = info.baseName();
     
     ColorScheme* scheme = new ColorScheme();
-    scheme->setName(info.baseName());
+    scheme->setName(schemeName);
     scheme->read(filePath);
 
     if (scheme->name().isEmpty()) 
@@ -657,13 +659,13 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
         return false;
     }    
 
-    if ( !_colorSchemes.contains(info.baseName()) )
+    if ( !_colorSchemes.contains(schemeName) )
     {
-        _colorSchemes.insert(scheme->name(),scheme);
+        _colorSchemes.insert(schemeName,scheme);
     }
     else
     {
-        qDebug() << "color scheme with name" << scheme->name() << "has already been" <<
+        qDebug() << "color scheme with name" << schemeName << "has already been" <<
             "found, ignoring.";
         
         delete scheme;
