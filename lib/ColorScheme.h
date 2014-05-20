@@ -314,6 +314,19 @@ public:
     /** Returns the global color scheme manager instance. */
     static ColorSchemeManager* instance();
 
+    /** @brief Loads a custom color scheme under given \em path.
+     *
+     * The \em path may refer to either KDE 4 .colorscheme or KDE 3
+     * .schema file
+     *
+     * The loaded color scheme is available under the name equal to
+     * the base name of the \em path via the allColorSchemes() and
+     * findColorScheme() methods after this call if loaded successfully.
+     *
+     * @param[in] path The path to KDE 4 .colorscheme or KDE 3 .schema.
+     * @return Whether the color scheme is loaded successfully.
+     */
+    bool loadCustomColorScheme(const QString& path);
 private:
     // loads a color scheme from a KDE 4+ .colorscheme file
     bool loadColorScheme(const QString& path);

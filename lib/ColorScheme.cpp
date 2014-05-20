@@ -639,6 +639,17 @@ void ColorSchemeManager::addColorScheme(ColorScheme* scheme)
     scheme->write(config);
 }
 #endif
+
+bool ColorSchemeManager::loadCustomColorScheme(const QString& path)
+{
+    if (path.endsWith(QLatin1String(".colorscheme")))
+        return loadColorScheme(path);
+    else if (path.endsWith(QLatin1String(".schema")))
+        return loadKDE3ColorScheme(path);
+    else
+        return false;
+}
+
 bool ColorSchemeManager::loadColorScheme(const QString& filePath)
 {
     if ( !filePath.endsWith(QLatin1String(".colorscheme")) || !QFile::exists(filePath) )
