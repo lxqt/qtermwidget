@@ -84,7 +84,11 @@ public:
     //Text codec, default is UTF-8
     void setTextCodec(QTextCodec * codec);
 
-    //Color scheme, default is white on black
+    /** @brief Sets the color scheme, default is white on black
+     *
+     * @param[in] name The name of the color scheme, either returned from
+     * availableColorSchemes() or a full path to a color scheme.
+     */
     void setColorScheme(const QString & name);
     static QStringList availableColorSchemes();
 

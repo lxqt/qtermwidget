@@ -360,12 +360,31 @@ void QTermWidget::setTextCodec(QTextCodec *codec)
     m_impl->m_session->setCodec(codec);
 }
 
-void QTermWidget::setColorScheme(const QString & name)
+void QTermWidget::setColorScheme(const QString& origName)
 {
-    const ColorScheme *cs;
+    const ColorScheme *cs = 0;
+
+    const bool isFile = QFile::exists(origName);
+    const QString& name = isFile ?
+            QFileInfo(origName).baseName() :
+            origName;
+
     // avoid legacy (int) solution
     if (!availableColorSchemes().contains(name))
-        cs = ColorSchemeManager::instance()->defaultColorScheme();
+    {
+        if (isFile)
+        {
+            if (ColorSchemeManager::instance()->loadCustomColorScheme(origName))
+                cs = ColorSchemeManager::instance()->findColorScheme(name);
+            else
+                qWarning () << Q_FUNC_INFO
+                        << "cannot load color scheme from"
+                        << origName;
+        }
+
+        if (!cs)
+            cs = ColorSchemeManager::instance()->defaultColorScheme();
+    }
     else
         cs = ColorSchemeManager::instance()->findColorScheme(name);
 
