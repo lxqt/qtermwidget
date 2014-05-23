@@ -52,7 +52,7 @@ namespace Konsole
  * When processing the text they should create instances of Filter::HotSpot subclasses for sections of interest
  * and add them to the filter's list of hotspots using addHotSpot()
  */
-class Filter
+class Filter : public QObject
 {
 public:
     /**
