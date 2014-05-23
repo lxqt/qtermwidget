@@ -287,7 +287,7 @@ QTermWidget::~QTermWidget()
 }
 
 
-void QTermWidget::setTerminalFont(QFont &font)
+void QTermWidget::setTerminalFont(const QFont &font)
 {
     if (!m_impl->m_terminalDisplay)
         return;
@@ -346,7 +346,7 @@ fallback:
     return m_impl->m_session->initialWorkingDirectory();
 }
 
-void QTermWidget::setArgs(QStringList &args)
+void QTermWidget::setArgs(const QStringList &args)
 {
     if (!m_impl->m_session)
         return;
