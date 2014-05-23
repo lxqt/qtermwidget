@@ -405,15 +405,19 @@ RegExpFilter::HotSpot* RegExpFilter::newHotSpot(int startLine,int startColumn,
 RegExpFilter::HotSpot* UrlFilter::newHotSpot(int startLine,int startColumn,int endLine,
                                                     int endColumn)
 {
-    return new UrlFilter::HotSpot(startLine,startColumn,
+    HotSpot *spot = new UrlFilter::HotSpot(startLine,startColumn,
                                                endLine,endColumn);
+    connect(spot->getUrlObject(), SIGNAL(activated(QUrl)), this, SIGNAL(activated(QUrl)));
+    return spot;
 }
+
 UrlFilter::HotSpot::HotSpot(int startLine,int startColumn,int endLine,int endColumn)
 : RegExpFilter::HotSpot(startLine,startColumn,endLine,endColumn)
 , _urlObject(new FilterObject(this))
 {
     setType(Link);
 }
+
 QString UrlFilter::HotSpot::tooltip() const
 {
     QString url = capturedTexts().first();
@@ -469,8 +473,7 @@ void UrlFilter::HotSpot::activate(QObject* object)
             url.prepend("mailto:");
         }
     
-        QDesktopServices::openUrl(QUrl(url));
-        //new KRun(url,QApplication::activeWindow());
+        _urlObject->emitActivated(url);
     }
 }
 
@@ -495,14 +498,27 @@ UrlFilter::UrlFilter()
 {
     setRegExp( CompleteUrlRegExp );
 }
+
 UrlFilter::HotSpot::~HotSpot()
 {
     delete _urlObject;
 }
+
+void FilterObject::emitActivated(const QUrl& url)
+{
+    emit activated(url);
+}
+
 void FilterObject::activated()
 {
     _filter->activate(sender());
 }
+
+FilterObject* UrlFilter::HotSpot::getUrlObject() const
+{
+    return _urlObject;
+}
+
 QList<QAction*> UrlFilter::HotSpot::actions()
 {
     QList<QAction*> list;
