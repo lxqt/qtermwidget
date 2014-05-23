@@ -25,7 +25,7 @@
 class QVBoxLayout;
 struct TermWidgetImpl;
 class SearchBar;
-
+class QUrl;
 
 class QTermWidget : public QWidget {
     Q_OBJECT
@@ -153,6 +153,8 @@ signals:
     void termLostFocus();
 
     void termKeyPressed(QKeyEvent *);
+
+    void urlActivated(const QUrl&);
 
 public slots:
     // Copy selection to clipboard
