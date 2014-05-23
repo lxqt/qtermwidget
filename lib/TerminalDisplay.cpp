@@ -1775,6 +1775,17 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
       {
         emit mouseSignal( 0, charColumn + 1, charLine + 1 +_scrollBar->value() -_scrollBar->maximum() , 0);
       }
+
+      if (ev->modifiers() & Qt::ControlModifier)
+      {
+          Filter::HotSpot *spot = _filterChain->hotSpotAt(charLine, charColumn);
+          if (spot && spot->type() == Filter::HotSpot::Link)
+          {
+              QObject action;
+              action.setObjectName ("open-action");
+              spot->activate(&action);
+          }
+      }
     }
   }
   else if ( ev->button() == Qt::MidButton )
