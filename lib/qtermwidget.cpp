@@ -238,6 +238,11 @@ void QTermWidget::init(int startnow)
     m_impl->m_terminalDisplay->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addWidget(m_impl->m_terminalDisplay);
 
+    // That's OK, FilterChain's dtor takes care of UrlFilter.
+    UrlFilter *urlFilter = new UrlFilter();
+    connect(urlFilter, SIGNAL(activated(QUrl)), this, SIGNAL(urlActivated(QUrl)));
+    m_impl->m_terminalDisplay->filterChain()->addFilter(urlFilter);
+
     m_searchBar = new SearchBar(this);
     m_searchBar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
     connect(m_searchBar, SIGNAL(searchCriteriaChanged()), this, SLOT(find()));

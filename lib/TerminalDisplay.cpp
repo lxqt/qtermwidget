@@ -141,6 +141,8 @@ void TerminalDisplay::setScreenWindow(ScreenWindow* window)
 //#warning "The order here is not specified - does it matter whether updateImage or updateLineProperties comes first?"
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateLineProperties()) );
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateImage()) );
+        connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateFilters()) );
+        connect( _screenWindow , SIGNAL(scrolled(int)) , this , SLOT(updateFilters()) );
         window->setWindowLines(_lines);
     }
 }
@@ -1577,6 +1579,7 @@ void TerminalDisplay::blinkCursorEvent()
 void TerminalDisplay::resizeEvent(QResizeEvent*)
 {
   updateImageSize();
+  processFilters();
 }
 
 void TerminalDisplay::propagateSize()
@@ -1771,6 +1774,17 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
       else
       {
         emit mouseSignal( 0, charColumn + 1, charLine + 1 +_scrollBar->value() -_scrollBar->maximum() , 0);
+      }
+
+      if (ev->modifiers() & Qt::ControlModifier)
+      {
+          Filter::HotSpot *spot = _filterChain->hotSpotAt(charLine, charColumn);
+          if (spot && spot->type() == Filter::HotSpot::Link)
+          {
+              QObject action;
+              action.setObjectName ("open-action");
+              spot->activate(&action);
+          }
       }
     }
   }
@@ -2195,6 +2209,14 @@ void TerminalDisplay::getCharacterPosition(const QPoint& widgetPoint,int& line,i
     // column (or left-most for right-to-left input)
     if ( column > _usedColumns )
         column = _usedColumns;
+}
+
+void TerminalDisplay::updateFilters()
+{
+    if ( !_screenWindow )
+        return;
+
+    processFilters();
 }
 
 void TerminalDisplay::updateLineProperties()

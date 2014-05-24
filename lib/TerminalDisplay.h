@@ -436,6 +436,11 @@ public slots:
      * terminal screen ( see setScreenWindow() ) and redraw the display.
      */
     void updateImage(); 
+
+    /** Essentially calles processFilters().
+     */
+    void updateFilters();
+
     /**
      * Causes the terminal display to fetch the latest line status flags from the 
      * associated terminal screen ( see setScreenWindow() ).  

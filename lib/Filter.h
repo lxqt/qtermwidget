@@ -52,7 +52,7 @@ namespace Konsole
  * When processing the text they should create instances of Filter::HotSpot subclasses for sections of interest
  * and add them to the filter's list of hotspots using addHotSpot()
  */
-class Filter
+class Filter : public QObject
 {
 public:
     /**
@@ -248,6 +248,7 @@ class FilterObject;
 /** A filter which matches URLs in blocks of text */
 class UrlFilter : public RegExpFilter 
 {
+    Q_OBJECT
 public:
     /** 
      * Hotspot type created by UrlFilter instances.  The activate() method opens a web browser 
@@ -258,6 +259,8 @@ public:
     public:
         HotSpot(int startLine,int startColumn,int endLine,int endColumn);
         virtual ~HotSpot();
+
+        FilterObject* getUrlObject() const;
 
         virtual QList<QAction*> actions();
 
@@ -292,17 +295,23 @@ private:
 
     // combined OR of FullUrlRegExp and EmailAddressRegExp
     static const QRegExp CompleteUrlRegExp; 
+signals:
+    void activated(const QUrl& url);
 };
 
 class FilterObject : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     FilterObject(Filter::HotSpot* filter) : _filter(filter) {}
+
+    void emitActivated(const QUrl& url);
 private slots:
     void activated();
 private:
     Filter::HotSpot* _filter;
+signals:
+    void activated(const QUrl& url);
 };
 
 /** 
