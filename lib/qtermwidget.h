@@ -64,7 +64,7 @@ public:
     // Default is application font with family Monospace, size 10
     // USE ONLY FIXED-PITCH FONT!
     // otherwise symbols' position could be incorrect
-    void setTerminalFont(QFont & font);
+    void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
 
@@ -79,7 +79,7 @@ public:
     QString workingDirectory();
 
     // Shell program args, default is none
-    void setArgs(QStringList & args);
+    void setArgs(const QStringList & args);
 
     //Text codec, default is UTF-8
     void setTextCodec(QTextCodec * codec);
