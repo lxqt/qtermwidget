@@ -241,6 +241,9 @@ void QTermWidget::init(int startnow)
     connect(m_impl->m_session, SIGNAL(bellRequest(QString)), m_impl->m_terminalDisplay, SLOT(bell(QString)));
     connect(m_impl->m_terminalDisplay, SIGNAL(notifyBell(QString)), this, SIGNAL(bell(QString)));
 
+    connect(m_impl->m_session, SIGNAL(activity()), this, SIGNAL(activity()));
+    connect(m_impl->m_session, SIGNAL(silence()), this, SIGNAL(silence()));
+
     // That's OK, FilterChain's dtor takes care of UrlFilter.
     UrlFilter *urlFilter = new UrlFilter();
     connect(urlFilter, SIGNAL(activated(QUrl)), this, SIGNAL(urlActivated(QUrl)));
@@ -587,4 +590,19 @@ void QTermWidget::setSelectionEnd(int& row, int& column)
 QString QTermWidget::selectedText(bool preserveLineBreaks)
 {
     return m_impl->m_terminalDisplay->screenWindow()->screen()->selectedText(preserveLineBreaks);
+}
+
+void QTermWidget::setMonitorActivity(bool monitor)
+{
+    m_impl->m_session->setMonitorActivity(monitor);
+}
+
+void QTermWidget::setMonitorSilence(bool monitor)
+{
+    m_impl->m_session->setMonitorSilence(monitor);
+}
+
+void QTermWidget::setSilenceTimeout(int seconds)
+{
+    m_impl->m_session->setMonitorSilenceSeconds(seconds);
 }
