@@ -103,12 +103,12 @@ public:
        /** 
         * Causes the an action associated with a hotspot to be triggered. 
         *
-        * @param object The object which caused the hotspot to be triggered.  This is
-        * typically null ( in which case the default action should be performed ) or
-        * one of the objects from the actions() list.  In which case the associated
+        * @param action The action to trigger.  This is
+        * typically empty ( in which case the default action should be performed ) or
+        * one of the object names from the actions() list.  In which case the associated
         * action should be performed. 
         */
-       virtual void activate(QObject* object = 0) = 0; 
+       virtual void activate(const QString& action = QString()) = 0;
        /** 
         * Returns a list of actions associated with the hotspot which can be used in a 
         * menu or toolbar 
@@ -200,7 +200,7 @@ public:
     {
     public:
         HotSpot(int startLine, int startColumn, int endLine , int endColumn);
-        virtual void activate(QObject* object = 0);
+        virtual void activate(const QString& action = QString());
 
         /** Sets the captured texts associated with this hotspot */
         void setCapturedTexts(const QStringList& texts);
@@ -268,7 +268,7 @@ public:
          * Open a web browser at the current URL.  The url itself can be determined using
          * the capturedTexts() method.
          */
-        virtual void activate(QObject* object = 0);
+        virtual void activate(const QString& action = QString());
 
         virtual QString tooltip() const;
     private:

@@ -1780,11 +1780,7 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
       {
           Filter::HotSpot *spot = _filterChain->hotSpotAt(charLine, charColumn);
           if (spot && spot->type() == Filter::HotSpot::Link)
-          {
-              QObject action;
-              action.setObjectName ("open-action");
-              spot->activate(&action);
-          }
+              spot->activate("open-action");
       }
     }
   }
