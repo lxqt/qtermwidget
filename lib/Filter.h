@@ -388,4 +388,7 @@ private:
 };
 
 }
+
+typedef Konsole::Filter Filter;
+
 #endif //FILTER_H
