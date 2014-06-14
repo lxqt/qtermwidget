@@ -428,6 +428,10 @@ public:
     
     void setMotionAfterPasting(MotionAfterPasting action);
     int motionAfterPasting();
+
+    // maps a point on the widget to the position ( ie. line and column )
+    // of the character at that point.
+    void getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const;
     
 public slots:
 
@@ -565,7 +569,6 @@ signals:
 	void copyAvailable(bool);
 	void termGetFocus();
 	void termLostFocus();
-
 protected:
     virtual bool event( QEvent * );
 
@@ -666,10 +669,6 @@ private:
 
     // maps an area in the character image to an area on the widget 
     QRect imageToWidget(const QRect& imageArea) const;
-
-    // maps a point on the widget to the position ( ie. line and column ) 
-    // of the character at that point.
-    void getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const;
 
     // the area where the preedit string for input methods will be draw
     QRect preeditRect() const;
