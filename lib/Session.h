@@ -461,6 +461,9 @@ signals:
      */
     void flowControlEnabledChanged(bool enabled);
 
+    void silence();
+    void activity();
+
 private slots:
     void done(int);
 

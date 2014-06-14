@@ -445,9 +445,7 @@ void Session::monitorTimerDone()
 
     //FIXME: Make message text for this notification and the activity notification more descriptive.
     if (_monitorSilence) {
-//    KNotification::event("Silence", ("Silence in session '%1'", _nameTitle), QPixmap(),
-//                    QApplication::activeWindow(),
-//                    KNotification::CloseWhenWidgetActivated);
+        emit silence();
         emit stateChanged(NOTIFYSILENCE);
     } else {
         emit stateChanged(NOTIFYNORMAL);
@@ -471,9 +469,7 @@ void Session::activityStateSet(int state)
         if ( _monitorActivity ) {
             //FIXME:  See comments in Session::monitorTimerDone()
             if (!_notifiedActivity) {
-//        KNotification::event("Activity", ("Activity in session '%1'", _nameTitle), QPixmap(),
-//                        QApplication::activeWindow(),
-//        KNotification::CloseWhenWidgetActivated);
+                emit activity();
                 _notifiedActivity=true;
             }
         }
