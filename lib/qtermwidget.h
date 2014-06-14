@@ -21,6 +21,7 @@
 #define _Q_TERM_WIDGET
 
 #include <QWidget>
+#include "Filter.h"
 
 class QVBoxLayout;
 struct TermWidgetImpl;
@@ -144,6 +145,9 @@ public:
      * be inserted into the returned text at the end of each terminal line.
      */
     QString selectedText(bool preserveLineBreaks = true);
+
+    Filter::HotSpot* getHotSpotAt(const QPoint& pos) const;
+    Filter::HotSpot* getHotSpotAt(int row, int column) const;
 
 signals:
     void finished();
