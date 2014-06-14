@@ -29,10 +29,12 @@
 #include <QRegExp>
 
 // Local
-#include "Character.h"
 
 namespace Konsole
 {
+
+typedef unsigned char LineProperty;
+class Character;
 
 /**
  * A filter processes blocks of text looking for certain patterns (such as URLs or keywords from a list)
