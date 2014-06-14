@@ -156,6 +156,8 @@ signals:
 
     void urlActivated(const QUrl&);
 
+    void bell(const QString& message);
+
 public slots:
     // Copy selection to clipboard
     void copyClipboard();
