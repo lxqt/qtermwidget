@@ -86,7 +86,7 @@ set(HDRS
 set(UI lib/SearchBar.ui)
 
 # for distribution
-set(HDRS_DISTRIB lib/qtermwidget.h )
+set(HDRS_DISTRIB lib/qtermwidget.h lib/Filter.h)
 
 # dirs
 set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/kb-layouts/ )
