@@ -565,6 +565,7 @@ signals:
 	void copyAvailable(bool);
 	void termGetFocus();
 	void termLostFocus();
+    void notifyBell(const QString&);
 
 protected:
     virtual bool event( QEvent * );

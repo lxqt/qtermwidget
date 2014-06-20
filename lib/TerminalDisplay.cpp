@@ -2776,8 +2776,7 @@ void TerminalDisplay::bell(const QString& message)
     } 
     else if (_bellMode==NotifyBell) 
     {
-        //KNotification::event("BellVisible", message,QPixmap(),this);
-        // TODO/FIXME: qt4 notifications?
+        emit notifyBell(message);
     } 
     else if (_bellMode==VisualBell) 
     {

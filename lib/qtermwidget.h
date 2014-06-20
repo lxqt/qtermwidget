@@ -145,6 +145,10 @@ public:
      */
     QString selectedText(bool preserveLineBreaks = true);
 
+    void setMonitorActivity(bool);
+    void setMonitorSilence(bool);
+    void setSilenceTimeout(int seconds);
+
 signals:
     void finished();
     void copyAvailable(bool);
@@ -155,6 +159,11 @@ signals:
     void termKeyPressed(QKeyEvent *);
 
     void urlActivated(const QUrl&);
+
+    void bell(const QString& message);
+
+    void activity();
+    void silence();
 
 public slots:
     // Copy selection to clipboard
