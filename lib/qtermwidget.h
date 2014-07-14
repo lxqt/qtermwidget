@@ -21,6 +21,7 @@
 #define _Q_TERM_WIDGET
 
 #include <QWidget>
+#include "Filter.h"
 
 class QVBoxLayout;
 struct TermWidgetImpl;
@@ -148,6 +149,21 @@ public:
     void setMonitorActivity(bool);
     void setMonitorSilence(bool);
     void setSilenceTimeout(int seconds);
+
+    /** Returns the available hotspot for the given point \em pos.
+     *
+     * This method may return a nullptr if no hotspot is available.
+     *
+     * @param[in] pos The point of interest in the QTermWidget coordinates.
+     * @return Hotspot for the given position, or nullptr if no hotspot.
+     */
+    Filter::HotSpot* getHotSpotAt(const QPoint& pos) const;
+
+    /** Returns the available hotspots for the given row and column.
+     *
+     * @return Hotspot for the given position, or nullptr if no hotspot.
+     */
+    Filter::HotSpot* getHotSpotAt(int row, int column) const;
 
 signals:
     void finished();

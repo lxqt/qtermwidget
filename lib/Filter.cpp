@@ -330,7 +330,7 @@ RegExpFilter::HotSpot::HotSpot(int startLine,int startColumn,int endLine,int end
     setType(Marker);
 }
 
-void RegExpFilter::HotSpot::activate(QObject*)
+void RegExpFilter::HotSpot::activate(const QString&)
 {
 }
 
@@ -443,13 +443,11 @@ UrlFilter::HotSpot::UrlType UrlFilter::HotSpot::urlType() const
         return Unknown;
 }
 
-void UrlFilter::HotSpot::activate(QObject* object)
+void UrlFilter::HotSpot::activate(const QString& actionName)
 {
     QString url = capturedTexts().first();
 
     const UrlType kind = urlType();
-
-    const QString& actionName = object ? object->objectName() : QString();
 
     if ( actionName == "copy-action" )
     {
@@ -457,7 +455,7 @@ void UrlFilter::HotSpot::activate(QObject* object)
         return;
     }
 
-    if ( !object || actionName == "open-action" )
+    if ( actionName.isEmpty() || actionName == "open-action" )
     {
         if ( kind == StandardUrl )
         {
@@ -511,7 +509,7 @@ void FilterObject::emitActivated(const QUrl& url)
 
 void FilterObject::activated()
 {
-    _filter->activate(sender());
+    _filter->activate(sender()->objectName());
 }
 
 FilterObject* UrlFilter::HotSpot::getUrlObject() const

@@ -606,3 +606,16 @@ void QTermWidget::setSilenceTimeout(int seconds)
 {
     m_impl->m_session->setMonitorSilenceSeconds(seconds);
 }
+
+Filter::HotSpot* QTermWidget::getHotSpotAt(const QPoint &pos) const
+{
+    int row = 0, column = 0;
+    m_impl->m_terminalDisplay->getCharacterPosition(pos, row, column);
+    return getHotSpotAt(row, column);
+}
+
+Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
+{
+    return m_impl->m_terminalDisplay->filterChain()->hotSpotAt(row, column);
+}
+
