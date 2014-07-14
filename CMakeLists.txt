@@ -16,7 +16,7 @@ endif (USE_QT5)
 # just change version for releases
 set ( QTERMWIDGET_VERSION_MAJOR "0" )
 set ( QTERMWIDGET_VERSION_MINOR "5" )
-set ( QTERMWIDGET_VERSION_PATCH "0" )
+set ( QTERMWIDGET_VERSION_PATCH "1" )
 
 set ( QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}" )
 
@@ -223,7 +223,7 @@ ADD_CUSTOM_TARGET(uninstall
 # make dist custom target
 SET(CPACK_PACKAGE_NAME "qtermwidget")
 # TODO/FIXME: versioning from player subdir... I don't know why it's separated...
-SET(CPACK_PACKAGE_VERSION ${qtermwidget_VERSION})
+SET(CPACK_PACKAGE_VERSION ${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH})
 SET(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 SET(CPACK_IGNORE_FILES "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;/#;\\\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;\\\\.qm$;/build/;\\\\.diff$;.DS_Store'")
