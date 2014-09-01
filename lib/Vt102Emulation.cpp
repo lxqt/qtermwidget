@@ -958,6 +958,12 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
         else if(event->key() == Qt::Key_Tab) {
             textToSend += 0x09;
         }
+        else if (event->key() == Qt::Key_PageUp) {
+            textToSend += "\033[5~";
+        }
+        else if (event->key() == Qt::Key_PageDown) {
+            textToSend += "\033[6~";
+        }
         else {
             textToSend += _codec->fromUnicode(event->text());
         }
