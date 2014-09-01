@@ -2913,6 +2913,8 @@ void TerminalDisplay::dragEnterEvent(QDragEnterEvent* event)
 {
   if (event->mimeData()->hasFormat("text/plain"))
       event->acceptProposedAction();
+  if (event->mimeData()->urls().count());
+      event->acceptProposedAction();
 }
 
 void TerminalDisplay::dropEvent(QDropEvent* event)
@@ -2929,13 +2931,14 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
     {
         //KUrl url = KIO::NetAccess::mostLocalUrl( urls[i] , 0 );
         QUrl url = urls[i];
+
         QString urlText;
 
-//        if (url.isLocalFile())
-//            urlText = url.path(); 
-//        else
-//            urlText = url.url();
-        urlText = url.toString();
+        if (url.isLocalFile())
+            urlText = url.path(); 
+        else
+            urlText = url.url();
+//        urlText = url.toString();
     
         // in future it may be useful to be able to insert file names with drag-and-drop
         // without quoting them (this only affects paths with spaces in) 
@@ -2952,10 +2955,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
     dropText = event->mimeData()->text();
   }
 
-  if(event->mimeData()->hasFormat("text/plain")) 
-  {
     emit sendStringToEmu(dropText.toLocal8Bit());
-  }
 }
 
 void TerminalDisplay::doDrag()
