@@ -2937,8 +2937,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
         if (url.isLocalFile())
             urlText = url.path(); 
         else
-            urlText = url.url();
-//        urlText = url.toString();
+            urlText = url.toString();
     
         // in future it may be useful to be able to insert file names with drag-and-drop
         // without quoting them (this only affects paths with spaces in) 
