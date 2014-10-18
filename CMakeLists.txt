@@ -128,8 +128,9 @@ set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        VERSION ${QTERMWIDGET_VERSION}
                      )
 if (APPLE)
+    set (CMAKE_SKIP_RPATH 1)
     # this is a must to load the lib correctly
-    set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_LIBDIR} )
+    set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
 endif (APPLE)
 
 install(TARGETS ${QTERMWIDGET_LIBRARY_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
@@ -188,7 +189,7 @@ if (BUILD_DESIGNER_PLUGIN)
 
     if (APPLE)
         # this is a must to load the lib correctly
-        set_target_properties( qtermwidge4tplugin PROPERTIES
+        set_target_properties( qtermwidget4plugin PROPERTIES
                                 INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer )
     endif (APPLE)
 
