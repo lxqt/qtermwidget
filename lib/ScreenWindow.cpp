@@ -69,7 +69,7 @@ Character* ScreenWindow::getImage()
 
      if (!_bufferNeedsUpdate)
         return _windowBuffer;
- 
+
     _screen->getImage(_windowBuffer,size,
                       currentLine(),endWindowLine());
 

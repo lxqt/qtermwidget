@@ -24,13 +24,18 @@
 // Qt
 #include <QColor>
 #include <QPointer>
-#include <QWidget>
+//#include <QWidget>
+#include <QQuickPaintedItem>
 
 // Konsole
 #include "Filter.h"
 #include "Character.h"
 //#include "konsole_export.h"
 #define KONSOLEPRIVATE_EXPORT
+
+// QMLTermWidget
+#include "ksession.h"
+#include "ColorScheme.h"
 
 class QDrag;
 class QDragEnterEvent;
@@ -75,13 +80,17 @@ class ScreenWindow;
  *
  * TODO More documentation
  */
-class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QWidget
+class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
 {
    Q_OBJECT
+   Q_PROPERTY(KSession* session       READ getSession      WRITE setSession     NOTIFY sessionChanged)
+   Q_PROPERTY(QFont font              READ getVTFont       WRITE setVTFont                           )
+   Q_PROPERTY(QString  colorScheme                         WRITE setColorScheme                      )
+
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
-    TerminalDisplay(QWidget *parent=0);
+    TerminalDisplay(QQuickItem *parent=0);
     virtual ~TerminalDisplay();
 
     /** Returns the terminal color palette used by the display. */
@@ -431,7 +440,7 @@ public:
 
     // maps a point on the widget to the position ( ie. line and column )
     // of the character at that point.
-    void getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const;
+    void getCharacterPosition(const QPoint &widgetPoint, int& line, int& column) const;
     
 public slots:
 
@@ -525,6 +534,17 @@ public slots:
     
     void selectionChanged();
 
+    // QMLTermWidget
+    void setColorScheme(const QString &name);
+    QStringList availableColorSchemes();
+
+    void simulateKeyPress(int key, int modifiers, bool pressed, quint32 nativeScanCode, const QString &text);
+    void simulateWheel(int x, int y, int buttons, int modifiers, QPointF angleDelta);
+    void simulateMouseMove(int x, int y, int button, int buttons, int modifiers);
+    void simulateMousePress(int x, int y, int button, int buttons, int modifiers);
+    void simulateMouseRelease(int x, int y, int button, int buttons, int modifiers);
+    void simulateMouseDoubleClick(int x, int y, int button, int buttons, int modifiers);
+
 signals:
 
     /**
@@ -572,10 +592,13 @@ signals:
 
     void notifyBell(const QString&);
 
+    // QMLTermWidget
+    void sessionChanged();
+
 protected:
     virtual bool event( QEvent * );
 
-    virtual void paintEvent( QPaintEvent * );
+    //virtual void paintEvent( QPaintEvent * );
 
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
@@ -621,6 +644,10 @@ protected:
     // reimplemented
     virtual void inputMethodEvent ( QInputMethodEvent* event );
     virtual QVariant inputMethodQuery( Qt::InputMethodQuery query ) const;
+
+    // QMLTermWidget
+    void paint(QPainter * painter);
+    virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
 
 protected slots:
 
@@ -830,6 +857,29 @@ private:
     static const int TEXT_BLINK_DELAY = 500;
     static const int DEFAULT_LEFT_MARGIN = 1;
     static const int DEFAULT_TOP_MARGIN = 1;
+
+    // QMLTermWidget port functions
+    QFont m_font;
+    QPalette m_palette;
+    QPalette::ColorRole m_color_role;
+    KSession *m_session;
+
+    QFont font() const { return m_font; }
+
+    const QPalette palette() { return m_palette; }
+    void setPalette(const QPalette &p){ m_palette = p; }
+
+    QPalette::ColorRole backgroundRole() { return m_color_role; }
+    void setBackgroundRole(QPalette::ColorRole role) { m_color_role = role; }
+
+    void update(const QRegion &region);
+    void update();
+
+    QRect contentsRect() const;
+    QSize size() const;
+
+    void setSession(KSession *session);
+    KSession* getSession();
 
 public:
     static void setTransparencyEnabled(bool enable)

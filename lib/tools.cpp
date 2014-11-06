@@ -17,7 +17,7 @@ QString get_kb_layout_dir()
 //    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
-    QString k(KB_LAYOUT_DIR);
+    QString k(qgetenv("KB_LAYOUT_DIR"));
     QDir d(k);
 
     qDebug() << "default KB_LAYOUT_DIR: " << k;
@@ -55,7 +55,7 @@ QString get_color_schemes_dir()
 //    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
-    QString k(COLORSCHEMES_DIR);
+    QString k(qgetenv("COLORSCHEMES_DIR"));
     QDir d(k);
 
 //    qDebug() << "default COLORSCHEMES_DIR: " << k;

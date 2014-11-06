@@ -45,6 +45,9 @@
 #include "ShellCommand.h"
 #include "Vt102Emulation.h"
 
+// QMLTermWidget
+#include <QQuickWindow>
+
 using namespace Konsole;
 
 int Session::lastSessionId = 0;
@@ -133,15 +136,8 @@ WId Session::windowId() const
     if ( _views.count() == 0 ) {
         return 0;
     } else {
-        QWidget * window = _views.first();
-
-        Q_ASSERT( window );
-
-        while ( window->parentWidget() != 0 ) {
-            window = window->parentWidget();
-        }
-
-        return window->winId();
+        QQuickWindow * window = _views.first()->window();
+        return (window ? window->winId() : 0);
     }
 }
 
@@ -510,7 +506,7 @@ void Session::updateTerminalSize()
     //select largest number of lines and columns that will fit in all visible views
     while ( viewIter.hasNext() ) {
         TerminalDisplay * view = viewIter.next();
-        if ( view->isHidden() == false &&
+        if ( !view->isVisible() == false &&
                 view->lines() >= VIEW_LINES_THRESHOLD &&
                 view->columns() >= VIEW_COLUMNS_THRESHOLD ) {
             minLines = (minLines == -1) ? view->lines() : qMin( minLines , view->lines() );
