@@ -3239,4 +3239,9 @@ void TerminalDisplay::simulateMouseDoubleClick(int x, int y, int button, int but
     mouseDoubleClickEvent(&event);
 }
 
+QSize TerminalDisplay::getTerminalSize()
+{
+    return QSize(_lines, _columns);
+}
+
 //#include "TerminalDisplay.moc"

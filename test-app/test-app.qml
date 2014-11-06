@@ -26,6 +26,7 @@ Rectangle {
 	    id: mainsession
             initialWorkingDirectory: "$HOME"
         }
+        onTerminalSizeChanged: console.log(terminalSize);
         Component.onCompleted: mainsession.startShellProgram();
     }
     Component.onCompleted: terminal.forceActiveFocus();

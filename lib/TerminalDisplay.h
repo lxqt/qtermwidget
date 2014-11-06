@@ -86,6 +86,7 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
    Q_PROPERTY(KSession* session       READ getSession      WRITE setSession     NOTIFY sessionChanged)
    Q_PROPERTY(QFont font              READ getVTFont       WRITE setVTFont                           )
    Q_PROPERTY(QString  colorScheme                         WRITE setColorScheme                      )
+   Q_PROPERTY(QSize terminalSize      READ getTerminalSize                      NOTIFY changedContentSizeSignal)
 
 
 public:
@@ -594,6 +595,7 @@ signals:
 
     // QMLTermWidget
     void sessionChanged();
+    void sizeChanged();
 
 protected:
     virtual bool event( QEvent * );
@@ -880,6 +882,8 @@ private:
 
     void setSession(KSession *session);
     KSession* getSession();
+
+    QSize getTerminalSize();
 
 public:
     static void setTransparencyEnabled(bool enable)
