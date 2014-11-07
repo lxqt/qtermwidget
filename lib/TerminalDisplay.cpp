@@ -2482,8 +2482,10 @@ void TerminalDisplay::setWordCharacters(const QString& wc)
 
 void TerminalDisplay::setUsesMouse(bool on)
 {
-  _mouseMarks = on;
-  setCursor( _mouseMarks ? Qt::IBeamCursor : Qt::ArrowCursor );
+    if (_mouseMarks != on) {
+        _mouseMarks = on;
+        setCursor( _mouseMarks ? Qt::IBeamCursor : Qt::ArrowCursor );
+    }
 }
 bool TerminalDisplay::usesMouse() const
 {
