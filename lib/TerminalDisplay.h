@@ -88,7 +88,7 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
    Q_PROPERTY(QString  colorScheme                         WRITE setColorScheme                      )
    Q_PROPERTY(QSize terminalSize      READ getTerminalSize                      NOTIFY changedContentSizeSignal)
    Q_PROPERTY(int lineSpacing                              WRITE setLineSpacing)
-   Q_PROPERTY(bool usesMouse          READ getUsesMouse                         NOTIFY usesMouseChanged)
+   Q_PROPERTY(bool terminalUsesMouse  READ getUsesMouse                         NOTIFY usesMouseChanged)
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
