@@ -2485,6 +2485,7 @@ void TerminalDisplay::setUsesMouse(bool on)
     if (_mouseMarks != on) {
         _mouseMarks = on;
         setCursor( _mouseMarks ? Qt::IBeamCursor : Qt::ArrowCursor );
+        emit usesMouseChanged();
     }
 }
 bool TerminalDisplay::usesMouse() const

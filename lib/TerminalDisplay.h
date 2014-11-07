@@ -596,6 +596,7 @@ signals:
     // QMLTermWidget
     void sessionChanged();
     void sizeChanged();
+    void usesMouseChanged();
 
 protected:
     virtual bool event( QEvent * );
