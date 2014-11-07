@@ -3247,4 +3247,9 @@ QSize TerminalDisplay::getTerminalSize()
     return QSize(_lines, _columns);
 }
 
+bool TerminalDisplay::getUsesMouse()
+{
+    return !usesMouse();
+}
+
 //#include "TerminalDisplay.moc"

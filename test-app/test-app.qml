@@ -26,6 +26,7 @@ Rectangle {
 	    id: mainsession
             initialWorkingDirectory: "$HOME"
         }
+        onUsesMouseChanged: console.log(usesMouse);
         onTerminalSizeChanged: console.log(terminalSize);
         Component.onCompleted: mainsession.startShellProgram();
     }
