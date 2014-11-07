@@ -571,6 +571,7 @@ signals:
 	void termLostFocus();
 
     void notifyBell(const QString&);
+    void usesMouseChanged();
 
 protected:
     virtual bool event( QEvent * );
