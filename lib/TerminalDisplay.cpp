@@ -3157,7 +3157,9 @@ void TerminalDisplay::setSession(KSession * session)
 {
     if (m_session != session) {
         qDebug() << "SetSession called";
-        session->removeView(this);
+        if (m_session)
+            m_session->removeView(this);
+
         m_session = session;
 
             connect(this, SIGNAL(copyAvailable(bool)),
