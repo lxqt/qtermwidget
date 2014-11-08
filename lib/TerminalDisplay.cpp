@@ -387,6 +387,10 @@ TerminalDisplay::TerminalDisplay(QQuickItem *parent)
 
   setFlags(ItemHasContents | ItemAcceptsInputMethod);
 
+  // TODO Forcing rendering to Framebuffer. We need to determine if this is ok
+  // always or if we need to make this customizable.
+  setRenderTarget(QQuickPaintedItem::FramebufferObject);
+
   // Enable drag and drop 
 //  setAcceptDrops(true); // attempt
 //  dragInfo.state = diNone;
@@ -972,12 +976,16 @@ void TerminalDisplay::updateImage()
   if ( !_screenWindow )
       return;
 
+  // TODO QMLTermWidget at the moment I'm disabling this.
+  // Since this can't be scrolled we need to determine if this
+  // is useful or not.
+
   // optimization - scroll the existing image where possible and 
   // avoid expensive text drawing for parts of the image that 
   // can simply be moved up or down
-  scrollImage( _screenWindow->scrollCount() ,
-               _screenWindow->scrollRegion() );
-  _screenWindow->resetScrollCount();
+//  scrollImage( _screenWindow->scrollCount() ,
+//               _screenWindow->scrollRegion() );
+//  _screenWindow->resetScrollCount();
 
   if (!_image) {
      // Create _image.
@@ -1247,9 +1255,10 @@ void TerminalDisplay::paint(QPainter *painter)
 {
     //contentsBoundingRect()
     // TODO This function might be optimized.
-    QRect rect = contentsRect();
-    drawBackground(*painter, rect, m_palette.background().color(), false /* use opacity setting */);
-    drawContents(*painter, rect);
+    QRect clipRect = painter->clipBoundingRect().toAlignedRect();
+    QRect dirtyRect = clipRect.isValid() ? clipRect : contentsRect();
+    //drawBackground(*painter, rect, m_palette.background().color(), false /* use opacity setting */);
+    drawContents(*painter, dirtyRect);
 
     emit imagePainted();
 
@@ -3133,14 +3142,14 @@ void TerminalDisplay::update(const QRegion &region)
     Q_UNUSED(region);
     // TODO this function might be optimized
 //        foreach (QRect rect, region.rects()) {
-//            QQuickPaintedItem::update(rect);
+//            QQuickPaintedItem::update(rect.adjusted(-1, -1, +1, +1));
 //        }
-    QQuickPaintedItem::update();
+    QQuickPaintedItem::update(region.boundingRect().adjusted(-1, -1, +1, +1));
 }
 
 void TerminalDisplay::update()
 {
-    QQuickPaintedItem::update();
+    QQuickPaintedItem::update(contentsRect());
 }
 
 QRect TerminalDisplay::contentsRect() const
@@ -3211,6 +3220,8 @@ void TerminalDisplay::setColorScheme(const QString &name)
     ColorEntry table[TABLE_COLORS];
     cs->getColorTable(table);
     setColorTable(table);
+
+    setFillColor(cs->backgroundColor());
 }
 
 void TerminalDisplay::simulateKeyPress(int key, int modifiers, bool pressed, quint32 nativeScanCode, const QString &text)
