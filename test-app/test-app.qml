@@ -21,7 +21,7 @@ Rectangle {
         anchors.fill: parent
         font.family: "Monospace"
         font.pointSize: 12 
-        colorScheme: "DarkPastels"
+        colorScheme: "cool-retro-term"
         session: QMLTermSession{
 	    id: mainsession
             initialWorkingDirectory: "$HOME"
