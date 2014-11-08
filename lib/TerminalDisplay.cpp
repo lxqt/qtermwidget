@@ -1251,6 +1251,8 @@ void TerminalDisplay::paint(QPainter *painter)
     drawBackground(*painter, rect, m_palette.background().color(), false /* use opacity setting */);
     drawContents(*painter, rect);
 
+    emit imagePainted();
+
     //drawInputMethodPreeditString(*painter, preeditRect());
     //paintFilters(painter);
 }

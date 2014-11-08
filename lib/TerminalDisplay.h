@@ -598,6 +598,7 @@ signals:
     void sessionChanged();
     void sizeChanged();
     void usesMouseChanged();
+    void imagePainted();
 
 protected:
     virtual bool event( QEvent * );
