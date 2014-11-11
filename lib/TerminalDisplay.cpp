@@ -666,8 +666,12 @@ void TerminalDisplay::drawCursor(QPainter& painter,
             // it is draw entirely inside 'rect'
             int penWidth = qMax(1,painter.pen().width());
 
-            painter.drawRect(cursorRect.adjusted(penWidth/2,
-                                                 penWidth/2,
+            // QMLTermWidget: we need to add penWidth%2 to have a perfectly squared cursor
+//            painter.drawRect(cursorRect.adjusted(penWidth/2 + penWidth%2,
+//                                                 penWidth/2 + penWidth%2,
+
+            painter.drawRect(cursorRect.adjusted(+ penWidth/2 + penWidth%2,
+                                                 + penWidth/2 + penWidth%2,
                                                  - penWidth/2 - penWidth%2,
                                                  - penWidth/2 - penWidth%2));
             if ( hasFocus() )
