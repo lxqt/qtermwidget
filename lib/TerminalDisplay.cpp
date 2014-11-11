@@ -3165,9 +3165,9 @@ QSize TerminalDisplay::size() const
 void TerminalDisplay::setSession(KSession * session)
 {
     if (m_session != session) {
-        qDebug() << "SetSession called";
-        if (m_session)
-            m_session->removeView(this);
+//        qDebug() << "SetSession called";
+//        if (m_session)
+//            m_session->removeView(this);
 
         m_session = session;
 
