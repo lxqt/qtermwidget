@@ -29,6 +29,17 @@ Rectangle {
         onTerminalUsesMouseChanged: console.log(terminalUsesMouse);
         onTerminalSizeChanged: console.log(terminalSize);
         Component.onCompleted: mainsession.startShellProgram();
+
+        QMLTermScrollbar {
+            terminal: terminal
+            width: 20
+            Rectangle {
+                opacity: 0.4
+                anchors.margins: 5
+                radius: width * 0.5
+                anchors.fill: parent
+            }
+        }
     }
     Component.onCompleted: terminal.forceActiveFocus();
 }

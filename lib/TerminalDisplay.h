@@ -83,12 +83,17 @@ class ScreenWindow;
 class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
 {
    Q_OBJECT
-   Q_PROPERTY(KSession* session       READ getSession      WRITE setSession     NOTIFY sessionChanged)
-   Q_PROPERTY(QFont font              READ getVTFont       WRITE setVTFont                           )
-   Q_PROPERTY(QString  colorScheme                         WRITE setColorScheme                      )
-   Q_PROPERTY(QSize terminalSize      READ getTerminalSize                      NOTIFY changedContentSizeSignal)
-   Q_PROPERTY(int lineSpacing                              WRITE setLineSpacing)
-   Q_PROPERTY(bool terminalUsesMouse  READ getUsesMouse                         NOTIFY usesMouseChanged)
+   Q_PROPERTY(KSession* session         READ getSession      WRITE setSession     NOTIFY sessionChanged          )
+   Q_PROPERTY(QFont font                READ getVTFont       WRITE setVTFont                                     )
+   Q_PROPERTY(QString  colorScheme                           WRITE setColorScheme                                )
+   Q_PROPERTY(QSize terminalSize        READ getTerminalSize                      NOTIFY changedContentSizeSignal)
+   Q_PROPERTY(int lineSpacing                                WRITE setLineSpacing                                )
+   Q_PROPERTY(bool terminalUsesMouse    READ getUsesMouse                         NOTIFY usesMouseChanged        )
+   Q_PROPERTY(int lines                 READ lines                                NOTIFY changedContentSizeSignal)
+   Q_PROPERTY(int columns               READ columns                              NOTIFY changedContentSizeSignal)
+   Q_PROPERTY(int scrollbarCurrentValue READ getScrollbarValue                    NOTIFY scrollbarParamsChanged  )
+   Q_PROPERTY(int scrollbarMaximum      READ getScrollbarMaximum                  NOTIFY scrollbarParamsChanged  )
+   Q_PROPERTY(int scrollbarMinimum      READ getScrollbarMinimum                  NOTIFY scrollbarParamsChanged  )
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
@@ -599,6 +604,8 @@ signals:
     void sizeChanged();
     void usesMouseChanged();
     void imagePainted();
+    void scrollbarValueChanged();
+    void scrollbarParamsChanged(int value);
 
 protected:
     virtual bool event( QEvent * );
@@ -890,6 +897,10 @@ private:
     QSize getTerminalSize();
 
     bool getUsesMouse();
+
+    int getScrollbarValue();
+    int getScrollbarMaximum();
+    int getScrollbarMinimum();
 
 public:
     static void setTransparencyEnabled(bool enable)

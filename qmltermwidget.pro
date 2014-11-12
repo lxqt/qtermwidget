@@ -20,7 +20,13 @@ HEADERS += $$PWD/src/qmltermwidget_plugin.h \
 SOURCES += $$PWD/src/qmltermwidget_plugin.cpp \
           $$PWD/src/ksession.cpp
 
+OTHER_FILES += \
+    src/QMLTermScrollbar.qml \
+    test-app/test-app.qml \
+    src/qmldir
+
 # Copy the files useful to the plugin in DESTDIR
 QMAKE_POST_LINK = $(COPY_DIR) $$PWD/lib/color-schemes $$DESTDIR && \
     $(COPY_DIR) $$PWD/lib/kb-layouts $$DESTDIR && \
-    $$QMAKE_COPY $$PWD/src/qmldir $$DESTDIR
+    $$QMAKE_COPY $$PWD/src/qmldir $$DESTDIR && \
+    $$QMAKE_COPY $$PWD/src/QMLTermScrollbar.qml $$DESTDIR
