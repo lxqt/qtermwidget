@@ -2686,6 +2686,14 @@ void TerminalDisplay::inputMethodEvent( QInputMethodEvent* event )
     
     event->accept();
 }
+
+void TerminalDisplay::inputMethodQuery(QInputMethodQueryEvent *event)
+{
+    event->setValue(Qt::ImEnabled, true);
+    event->setValue(Qt::ImHints, QVariant(Qt::ImhNoPredictiveText |  Qt::ImhNoAutoUppercase));
+    event->accept();
+}
+
 QVariant TerminalDisplay::inputMethodQuery( Qt::InputMethodQuery query ) const
 {
     const QPoint cursorPos = _screenWindow ? _screenWindow->cursorPosition() : QPoint(0,0);
@@ -2784,6 +2792,9 @@ bool TerminalDisplay::event(QEvent* event)
     case QEvent::PaletteChange:
     case QEvent::ApplicationPaletteChange:
         _scrollBar->setPalette( QApplication::palette() );
+    case QEvent::InputMethodQuery:
+        inputMethodQuery(static_cast<QInputMethodQueryEvent *>(event));
+        eventHandled = true;
         break;
     default:
         break;

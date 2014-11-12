@@ -653,6 +653,7 @@ protected:
     // QMLTermWidget
     void paint(QPainter * painter);
     virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
+    void inputMethodQuery(QInputMethodQueryEvent *event);
 
 protected slots:
 
