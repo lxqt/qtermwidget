@@ -3302,4 +3302,9 @@ int TerminalDisplay::getScrollbarMinimum()
     return _scrollBar->minimum();
 }
 
+QSize TerminalDisplay::getFontMetrics()
+{
+    return QSize(_fontWidth, _fontHeight);
+}
+
 //#include "TerminalDisplay.moc"
