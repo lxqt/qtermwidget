@@ -387,6 +387,9 @@ TerminalDisplay::TerminalDisplay(QQuickItem *parent)
 
   setFlags(ItemHasContents | ItemAcceptsInputMethod);
 
+  //Setup scrollbar. Be sure it is not darw on screen.
+  _scrollBar->setAttribute(Qt::WA_DontShowOnScreen);
+  _scrollBar->setVisible(false);
   connect(_scrollBar, SIGNAL(valueChanged(int)), this, SIGNAL(scrollbarParamsChanged(int)));
 
   // TODO Forcing rendering to Framebuffer. We need to determine if this is ok
