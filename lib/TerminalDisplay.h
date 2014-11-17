@@ -663,6 +663,7 @@ protected:
     void paint(QPainter * painter);
     virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
     void inputMethodQuery(QInputMethodQueryEvent *event);
+    void itemChange(ItemChange change, const ItemChangeData & value);
 
 protected slots:
 

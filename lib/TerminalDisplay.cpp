@@ -3310,4 +3310,23 @@ QSize TerminalDisplay::getFontMetrics()
     return QSize(_fontWidth, _fontHeight);
 }
 
+void TerminalDisplay::itemChange(ItemChange change, const ItemChangeData & value)
+{
+    switch (change) {
+    case QQuickItem::ItemVisibleHasChanged:
+        if (value.boolValue && _screenWindow) {
+            if (this->columns() != _screenWindow->columnCount() ||
+                this->lines() != _screenWindow->lineCount()) {
+
+                emit changedContentSizeSignal(_contentHeight, _contentWidth);
+            }
+        }
+        break;
+    default:
+        break;
+    }
+
+    QQuickPaintedItem::itemChange(change, value);
+}
+
 //#include "TerminalDisplay.moc"
