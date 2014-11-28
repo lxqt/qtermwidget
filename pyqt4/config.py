@@ -61,7 +61,7 @@ makefile = pyqtconfig.QtGuiModuleMakefile(
 # specific prefixes or extensions (e.g. the "lib" prefix on UNIX, or the
 # ".dll" extension on Windows).
 makefile.extra_lib_dirs.append("..")
-makefile.extra_libs = ["qtermwidget"]
+makefile.extra_libs = ["qtermwidget4"]
 
 # Generate the Makefile itself.
 makefile.generate()

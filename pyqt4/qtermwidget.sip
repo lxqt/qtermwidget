@@ -22,7 +22,7 @@ public:
 	void setTerminalFont(QFont &font);
 	void setArgs(QStringList &args);
 	void setTextCodec(QTextCodec *codec);
-	void setColorScheme(int scheme);
+	void setColorScheme(const QString & name);
 	void setSize(int h, int v);
 	void setHistorySize(int lines);
 	void setScrollBarPosition(ScrollBarPosition);
