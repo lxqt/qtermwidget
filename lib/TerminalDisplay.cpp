@@ -679,7 +679,8 @@ void TerminalDisplay::drawCursor(QPainter& painter,
                                                  + penWidth/2 + penWidth%2,
                                                  - penWidth/2 - penWidth%2,
                                                  - penWidth/2 - penWidth%2));
-            if ( hasFocus() )
+            //if ( hasFocus() )
+            if ( true ) //QMLTermWidget: Always fill the cursor. Even when not in focus.
             {
                 painter.fillRect(cursorRect, _cursorColor.isValid() ? _cursorColor : foregroundColor);
             
