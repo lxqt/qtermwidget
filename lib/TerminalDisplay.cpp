@@ -1399,7 +1399,8 @@ void TerminalDisplay::paintFilters(QPainter& painter)
     }
 }
 
-int TerminalDisplay::textWidth(int startColumn, int length, int line) {
+int TerminalDisplay::textWidth(const int startColumn, const int length, const int line) const
+{
   QFontMetrics fm(font());
   int result = 0;
   for (int column = 0; column < length; column++) {
@@ -2204,8 +2205,18 @@ void TerminalDisplay::mouseReleaseEvent(QMouseEvent* ev)
 
 void TerminalDisplay::getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const
 {
-    column = (widgetPoint.x() + _fontWidth/2 -contentsRect().left()-_leftMargin) / _fontWidth;
     line = (widgetPoint.y()-contentsRect().top()-_topMargin) / _fontHeight;
+
+    if ( _fixedFont )
+        column = (widgetPoint.x() + _fontWidth/2 -contentsRect().left()-_leftMargin) / _fontWidth;
+    else
+    {
+        int x = contentsRect().left() + widgetPoint.x() - _fontWidth/2;
+        column = 0;
+
+        while(x > textWidth(0, column, line))
+            column++;
+    }
 
     if ( line < 0 )
         line = 0;

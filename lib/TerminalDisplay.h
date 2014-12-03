@@ -643,7 +643,7 @@ private:
     // -- Drawing helpers --
 
     // determine the width of this text
-    int textWidth(int startColumn, int length, int line);
+    int textWidth(int startColumn, int length, int line) const;
     // determine the area that encloses this series of characters
     QRect calculateTextArea(int topLeftX, int topLeftY, int startColumn, int line, int length);
 
