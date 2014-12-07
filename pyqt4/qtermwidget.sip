@@ -50,10 +50,9 @@ public:
     int historyLinesCount();
     int screenColumnsCount();
     void setSelectionStart(int row, int column);
+    void setSelectionEnd(int row, int column);
     void getSelectionStart(int& row, int& column);
-    // TODO wait for https://github.com/qterminal/qtermwidget/pull/32
-    //void setSelectionEnd(int row, int column);
-    //void getSelectionEnd(int& row, int& column);
+    void getSelectionEnd(int& row, int& column);
     QString selectedText(bool preserveLineBreaks = true);
     void setMonitorActivity(bool);
     void setMonitorSilence(bool);
