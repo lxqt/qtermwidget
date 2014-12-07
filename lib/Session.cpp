@@ -469,8 +469,8 @@ void Session::activityStateSet(int state)
         if ( _monitorActivity ) {
             //FIXME:  See comments in Session::monitorTimerDone()
             if (!_notifiedActivity) {
-                emit activity();
                 _notifiedActivity=true;
+                emit activity();
             }
         }
     }
