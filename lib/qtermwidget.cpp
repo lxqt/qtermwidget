@@ -582,9 +582,9 @@ void QTermWidget::getSelectionStart(int& row, int& column)
     m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(column, row);
 }
 
-void QTermWidget::setSelectionEnd(int& row, int& column)
+void QTermWidget::getSelectionEnd(int& row, int& column)
 {
-    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
+    m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionEnd(column, row);
 }
 
 QString QTermWidget::selectedText(bool preserveLineBreaks)

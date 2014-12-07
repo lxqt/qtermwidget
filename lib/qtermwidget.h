@@ -137,7 +137,7 @@ public:
     void setSelectionStart(int row, int column);
     void setSelectionEnd(int row, int column);
     void getSelectionStart(int& row, int& column);
-    void setSelectionEnd(int& row, int& column);
+    void getSelectionEnd(int& row, int& column);
 
     /**
      * Returns the currently selected text.
