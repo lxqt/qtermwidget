@@ -21,6 +21,7 @@
 
 import sys, signal
 from PyQt4 import Qt
+from PyQt4.QtCore import SIGNAL, SLOT
 import QTermWidget
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -29,4 +30,5 @@ a = Qt.QApplication(sys.argv)
 w = QTermWidget.QTermWidget()
 
 w.show()
+w.connect(w, SIGNAL('finished()'), a, SLOT('quit()'))
 a.exec_()

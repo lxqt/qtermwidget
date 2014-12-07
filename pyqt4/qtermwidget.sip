@@ -57,6 +57,25 @@ public:
     void setMonitorActivity(bool);
     void setMonitorSilence(bool);
     void setSilenceTimeout(int seconds);
+signals:
+    void finished();
+    void copyAvailable(bool);
+    void termGetFocus();
+    void termLostFocus();
+    void termKeyPressed(QKeyEvent *);
+    void urlActivated(const QUrl&);
+    void bell(const QString& message);
+    void activity();
+    void silence();
+public slots:
+    void copyClipboard();
+    void pasteClipboard();
+    void pasteSelection();
+    void zoomIn();
+    void zoomOut();
+    void setKeyBindings(const QString & kb);
+    void clear();
+    void toggleShowSearchBar();
 protected:
     void resizeEvent(QResizeEvent *e);
 private:
