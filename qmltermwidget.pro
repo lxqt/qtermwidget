@@ -30,3 +30,22 @@ QMAKE_POST_LINK = $(COPY_DIR) $$PWD/lib/color-schemes $$DESTDIR && \
     $(COPY_DIR) $$PWD/lib/kb-layouts $$DESTDIR && \
     $$QMAKE_COPY $$PWD/src/qmldir $$DESTDIR && \
     $$QMAKE_COPY $$PWD/src/QMLTermScrollbar.qml $$DESTDIR
+
+#########################################
+## INTALLS
+#########################################
+
+INSTALL_DIR = $$[QT_INSTALL_QML]
+PLUGIN_IMPORT_PATH = QMLTermWidget
+PLUGIN_ASSETS = $$PWD/lib/kb-layouts \
+                $$PWD/lib/color_schemes
+
+target.path = $$INSTALL_DIR/$$PLUGIN_IMPORT_PATH
+
+assets.files += $$PLUGIN_ASSETS
+assets.path += $$INSTALL_DIR/$$PLUGIN_IMPORT_PATH
+
+qmldir.files += $$PWD/src/qmldir \
+qmldir.path += $$INSTALL_DIR/$$PLUGIN_IMPORT_PATH
+
+INSTALLS += target qmldir assets
