@@ -95,7 +95,9 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
    Q_PROPERTY(int scrollbarMaximum      READ getScrollbarMaximum                  NOTIFY scrollbarParamsChanged  )
    Q_PROPERTY(int scrollbarMinimum      READ getScrollbarMinimum                  NOTIFY scrollbarParamsChanged  )
    Q_PROPERTY(QSize fontMetrics         READ getFontMetrics                       NOTIFY changedFontMetricSignal )
+
    Q_PROPERTY(bool enableBold                                WRITE setBoldIntense)
+   Q_PROPERTY(bool fullCursorHeight                          WRITE setFullCursorHeight)
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
@@ -879,6 +881,7 @@ private:
     QPalette m_palette;
     QPalette::ColorRole m_color_role;
     KSession *m_session;
+    bool m_full_cursor_height;
 
     QFont font() const { return m_font; }
 
@@ -906,6 +909,8 @@ private:
     int getScrollbarMinimum();
 
     QSize getFontMetrics();
+
+    void setFullCursorHeight(bool val) { m_full_cursor_height = val; }
 
 public:
     static void setTransparencyEnabled(bool enable)

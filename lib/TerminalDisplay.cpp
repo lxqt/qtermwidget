@@ -345,6 +345,7 @@ TerminalDisplay::TerminalDisplay(QQuickItem *parent)
 ,mMotionAfterPasting(NoMoveScreenWindow)
 ,m_font("Monospace", 12)
 ,m_color_role(QPalette::Background)
+,m_full_cursor_height(false)
 {
   // terminal applications are not designed with Right-To-Left in mind,
   // so the layout is forced to Left-To-Right
@@ -656,7 +657,7 @@ void TerminalDisplay::drawCursor(QPainter& painter,
                                  bool& invertCharacterColor)
 {
     QRect cursorRect = rect;
-    cursorRect.setHeight(_fontHeight - _lineSpacing - 1);
+    cursorRect.setHeight(_fontHeight - ((m_full_cursor_height) ? 0 : _lineSpacing) - 1);
     
     if (!_cursorBlinking)
     {
