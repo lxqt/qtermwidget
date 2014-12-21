@@ -60,9 +60,6 @@ public:
     void setInitialWorkingDirectory(const QString & dir);
     QString getInitialWorkingDirectory();
 
-    // Shell program args, default is none
-    void setArgs(QStringList & args);
-
     //Text codec, default is UTF-8
     void setTextCodec(QTextCodec * codec);
 
@@ -114,6 +111,9 @@ public slots:
 
     //  Shell program, default is /bin/bash
     void setShellProgram(const QString & progname);
+
+    // Shell program args, default is none
+    void setArgs(const QStringList &args);
 
     int getShellPID();
     void changeDir(const QString & dir);

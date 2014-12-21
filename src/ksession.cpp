@@ -175,7 +175,7 @@ QString KSession::getInitialWorkingDirectory()
     return _initialWorkingDirectory;
 }
 
-void KSession::setArgs(QStringList &args)
+void KSession::setArgs(const QStringList &args)
 {
     m_session->setArguments(args);
 }
