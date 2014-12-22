@@ -98,6 +98,7 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
 
    Q_PROPERTY(bool enableBold                                WRITE setBoldIntense)
    Q_PROPERTY(bool fullCursorHeight                          WRITE setFullCursorHeight)
+   Q_PROPERTY(bool antialiasText        READ antialias       WRITE setAntialias)
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
