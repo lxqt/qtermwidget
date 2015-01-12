@@ -15,7 +15,6 @@ set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
-
 include(CheckFunctionExists)
 include(GNUInstallDirs)
 
@@ -92,15 +91,15 @@ set(HDRS_DISTRIB
 )
 
 # dirs
-set(KB_LAYOUT_DIR "${CMAKE_INSTALL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/kb-layouts/")
+set(KB_LAYOUT_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/kb-layouts")
 message(STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}")
-add_definitions(-DKB_LAYOUT_DIR="${CMAKE_INSTALL_PREFIX}/${KB_LAYOUT_DIR}")
+add_definitions(-DKB_LAYOUT_DIR="${KB_LAYOUT_DIR}")
 
-set(COLORSCHEMES_DIR "${CMAKE_INSTALL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/color-schemes/")
+set(COLORSCHEMES_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/color-schemes")
 message(STATUS "Color schemes will be installed in: ${COLORSCHEMES_DIR}" )
-add_definitions(-DCOLORSCHEMES_DIR="${CMAKE_INSTALL_PREFIX}/${COLORSCHEMES_DIR}")
+add_definitions(-DCOLORSCHEMES_DIR="${COLORSCHEMES_DIR}")
 
-set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
+set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
 
 #| Defines
 add_definitions(-DHAVE_POSIX_OPENPT -DHAVE_SYS_TIME_H)
@@ -133,7 +132,7 @@ set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
 if(APPLE)
     set (CMAKE_SKIP_RPATH 1)
     # this is a must to load the lib correctly
-    set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR} )
+    set_target_properties(${QTERMWIDGET_LIBRARY_NAME} PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 endif()
 
 install(TARGETS ${QTERMWIDGET_LIBRARY_NAME} DESTINATION "${CMAKE_INSTALL_LIBDIR}")
@@ -195,11 +194,11 @@ if (BUILD_DESIGNER_PLUGIN)
     if(APPLE)
         # this is a must to load the lib correctly
         set_target_properties(qtermwidget4plugin PROPERTIES
-            INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer"
+            INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/qt4/plugins/designer"
         )
     endif()
 
-    install(TARGETS qtermwidget4plugin DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer")
+    install(TARGETS qtermwidget4plugin DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/qt4/plugins/designer")
 
 endif (BUILD_DESIGNER_PLUGIN)
 # end of designer plugin
