@@ -1271,8 +1271,6 @@ void TerminalDisplay::paint(QPainter *painter)
     //drawBackground(*painter, rect, m_palette.background().color(), false /* use opacity setting */);
     drawContents(*painter, dirtyRect);
 
-    emit imagePainted();
-
     //drawInputMethodPreeditString(*painter, preeditRect());
     //paintFilters(painter);
 }
@@ -3170,6 +3168,7 @@ void TerminalDisplay::update(const QRegion &region)
 //            QQuickPaintedItem::update(rect.adjusted(-1, -1, +1, +1));
 //        }
     QQuickPaintedItem::update(region.boundingRect().adjusted(-1, -1, +1, +1));
+    emit imagePainted();
 }
 
 void TerminalDisplay::update()
