@@ -165,6 +165,13 @@ public:
      */
     Filter::HotSpot* getHotSpotAt(int row, int column) const;
 
+    /**
+     * Returns a pty slave file descriptor.
+     * This can be used for display and control
+     * a remote terminal.
+     */
+    int getPtySlaveFd() const;
+
 signals:
     void finished();
     void copyAvailable(bool);

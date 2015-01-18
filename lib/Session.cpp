@@ -929,6 +929,10 @@ int Session::processId() const
 {
     return _shellProcess->pid();
 }
+int Session::getPtySlaveFd() const
+{
+    return ptySlaveFd;
+}
 
 SessionGroup::SessionGroup()
         : _masterMode(0)

@@ -619,3 +619,7 @@ Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
     return m_impl->m_terminalDisplay->filterChain()->hotSpotAt(row, column);
 }
 
+int QTermWidget::getPtySlaveFd() const
+{
+    return m_impl->m_session->getPtySlaveFd();
+}
