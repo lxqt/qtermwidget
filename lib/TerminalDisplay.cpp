@@ -2916,7 +2916,7 @@ void TerminalDisplay::dragEnterEvent(QDragEnterEvent* event)
 {
   if (event->mimeData()->hasFormat("text/plain"))
       event->acceptProposedAction();
-  if (event->mimeData()->urls().count());
+  if (event->mimeData()->urls().count())
       event->acceptProposedAction();
 }
 
