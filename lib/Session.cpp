@@ -129,7 +129,17 @@ WId Session::windowId() const
     // there are multiple views, then the window ID for the
     // top-level window which contains the first view is
     // returned
+	//
+	// On Qt5, requesting window IDs breaks QQuickWidget and the likes,
+	// for example, see the following bug reports:
+	//
+	// https://bugreports.qt-project.org/browse/QTBUG-41779
+	// https://bugreports.qt-project.org/browse/QTBUG-40765
+	// https://bugreports.qt-project.org/browse/QTBUG-41942
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+	return 0;
+#else
     if ( _views.count() == 0 ) {
         return 0;
     } else {
@@ -143,6 +153,7 @@ WId Session::windowId() const
 
         return window->winId();
     }
+#endif
 }
 
 void Session::setDarkBackground(bool darkBackground)
