@@ -79,6 +79,7 @@ Session::Session(QObject* parent) :
 
     //create teletype for I/O with shell process
     _shellProcess = new Pty();
+    ptySlaveFd = _shellProcess->pty()->slaveFd();
 
     //create emulation backend
     _emulation = new Vt102Emulation();
@@ -938,6 +939,10 @@ int Session::foregroundProcessId() const
 int Session::processId() const
 {
     return _shellProcess->pid();
+}
+int Session::getPtySlaveFd() const
+{
+    return ptySlaveFd;
 }
 
 SessionGroup::SessionGroup()

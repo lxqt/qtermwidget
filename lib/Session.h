@@ -363,6 +363,13 @@ public:
 //  void cancelZModem();
 //  bool isZModemBusy() { return _zmodemBusy; }
 
+    /**
+     * Returns a pty slave file descriptor.
+     * This can be used for display and control
+     * a remote terminal.
+     */
+    int getPtySlaveFd() const;
+
 public slots:
 
     /**
@@ -542,6 +549,8 @@ private:
     bool _hasDarkBackground;
 
     static int lastSessionId;
+
+    int ptySlaveFd;
 
 };
 
