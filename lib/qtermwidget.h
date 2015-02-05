@@ -63,8 +63,7 @@ public:
 
     //  Terminal font
     // Default is application font with family Monospace, size 10
-    // USE ONLY FIXED-PITCH FONT!
-    // otherwise symbols' position could be incorrect
+    // Beware of a performance penalty and display/alignment issues when using a proportional font.
     void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
