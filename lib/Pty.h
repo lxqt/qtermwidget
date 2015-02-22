@@ -107,6 +107,11 @@ Q_OBJECT
                bool addToUtmp
              );
 
+    /**
+     * set properties for "EmptyPTY"
+     */
+    void setEmptyPTYProperties();
+
     /** TODO: Document me */
     void setWriteable(bool writeable);
 

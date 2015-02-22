@@ -25,7 +25,6 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-
 #include <QStringList>
 #include <QWidget>
 
@@ -378,6 +377,13 @@ public slots:
      * This creates the terminal process and connects the teletype to it.
      */
     void run();
+
+    /**
+     * Starts the terminal session for "as is" PTY
+     * (without the direction a data to internal terminal process).
+     * It can be used for control or display a remote/external terminal.
+     */
+    void runEmptyPTY();
 
     /**
      * Closes the terminal session.  This sends a hangup signal

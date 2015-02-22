@@ -55,6 +55,13 @@ public:
     //start shell program if it was not started in constructor
     void startShellProgram();
 
+    /**
+     * Start terminal teletype as is
+     * and redirect data for external recipient.
+     * It can be used for display and control a remote terminal.
+     */
+    void startTerminalTeletype();
+
     int getShellPID();
 
     void changeDir(const QString & dir);
@@ -133,6 +140,7 @@ public:
     int historyLinesCount();
 
     int screenColumnsCount();
+    int screenLinesCount();
 
     void setSelectionStart(int row, int column);
     void setSelectionEnd(int row, int column);
@@ -187,6 +195,13 @@ signals:
 
     void activity();
     void silence();
+
+    /**
+     * Emitted when emulator send data to the terminal process
+     * (redirected for external recipient). It can be used for
+     * control and display the remote terminal.
+     */
+    void sendData(const char *,int);
 
 public slots:
     // Copy selection to clipboard
