@@ -218,6 +218,28 @@ int Pty::start(const QString& program,
   return 0;
 }
 
+void Pty::setEmptyPTYProperties()
+{
+    struct ::termios ttmode;
+    pty()->tcGetAttr(&ttmode);
+    if (!_xonXoff)
+      ttmode.c_iflag &= ~(IXOFF | IXON);
+    else
+      ttmode.c_iflag |= (IXOFF | IXON);
+  #ifdef IUTF8 // XXX not a reasonable place to check it.
+    if (!_utf8)
+      ttmode.c_iflag &= ~IUTF8;
+    else
+      ttmode.c_iflag |= IUTF8;
+  #endif
+
+    if (_eraseChar != 0)
+        ttmode.c_cc[VERASE] = _eraseChar;
+
+    if (!pty()->tcSetAttr(&ttmode))
+      qWarning() << "Unable to set terminal attributes.";
+}
+
 void Pty::setWriteable(bool writeable)
 {
   struct stat sbuf;
@@ -258,7 +280,7 @@ void Pty::sendData(const char* data, int length)
 {
   if (!length)
       return;
-  
+
   if (!pty()->write(data,length)) 
   {
     qWarning() << "Pty::doSendJobs - Could not send input data to terminal process.";

@@ -353,6 +353,22 @@ void Session::run()
     emit started();
 }
 
+void Session::runEmptyPTY()
+{
+    _shellProcess->setFlowControlEnabled(_flowControl);
+    _shellProcess->setErase(_emulation->eraseChar());
+    _shellProcess->setWriteable(false);
+
+    // disconnet send data from emulator to internal terminal process
+    disconnect( _emulation,SIGNAL(sendData(const char *,int)),
+                _shellProcess, SLOT(sendData(const char *,int)) );
+
+    _shellProcess->setEmptyPTYProperties();
+
+    qDebug() << "started!";
+    emit started();
+}
+
 void Session::setUserTitle( int what, const QString & caption )
 {
     //set to true if anything is actually changed (eg. old _nameTitle != new _nameTitle )
