@@ -718,7 +718,7 @@ QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
            }
 
            if ( escapedChar )
-               result.replace(i,charsToRemove,replacement);
+               result.replace(i,charsToRemove,replacement,1);
         }
     }
 
