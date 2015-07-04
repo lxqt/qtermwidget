@@ -89,6 +89,7 @@ public:
     QString getTitle();
 
 signals:
+    void started();
     void finished();
     void copyAvailable(bool);
 
