@@ -38,6 +38,7 @@ class KSession : public QObject
     Q_PROPERTY(QString  initialWorkingDirectory READ getInitialWorkingDirectory WRITE setInitialWorkingDirectory)
     Q_PROPERTY(QString  title READ getTitle NOTIFY titleChanged)
     Q_PROPERTY(QString  shellProgram WRITE setShellProgram)
+    Q_PROPERTY(QStringList  shellProgramArgs WRITE setArgs)
 
 public:
     KSession(QObject *parent = 0);
