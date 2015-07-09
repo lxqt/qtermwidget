@@ -30,18 +30,18 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     connect(widget.searchTextEdit, SIGNAL(textChanged(QString)), this, SIGNAL(searchCriteriaChanged()));
     connect(widget.findPreviousButton, SIGNAL(clicked()), this, SIGNAL(findPrevious()));
     connect(widget.findNextButton, SIGNAL(clicked()), this, SIGNAL(findNext()));
-    
+
     connect(this, SIGNAL(searchCriteriaChanged()), this, SLOT(clearBackgroundColor()));
 
     QMenu *optionsMenu = new QMenu(widget.optionsButton);
     widget.optionsButton->setMenu(optionsMenu);
-    
+
     m_matchCaseMenuEntry = optionsMenu->addAction(tr("Match case"));
     m_matchCaseMenuEntry->setCheckable(true);
     m_matchCaseMenuEntry->setChecked(true);
     connect(m_matchCaseMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(searchCriteriaChanged()));
 
-    
+
     m_useRegularExpressionMenuEntry = optionsMenu->addAction(tr("Regular expression"));
     m_useRegularExpressionMenuEntry->setCheckable(true);
     connect(m_useRegularExpressionMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(searchCriteriaChanged()));
@@ -92,20 +92,20 @@ void SearchBar::noMatchFound()
 
 void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
 {
-    if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) 
+    if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
     {
         if (keyEvent->modifiers() == Qt::ShiftModifier)
         {
             findPrevious();
         }
-        else 
+        else
         {
             findNext();
         }
     }
     else if (keyEvent->key() == Qt::Key_Escape)
     {
-        hide(); 
+        hide();
     }
 }
 

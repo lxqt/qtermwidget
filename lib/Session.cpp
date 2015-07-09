@@ -49,7 +49,7 @@ using namespace Konsole;
 
 int Session::lastSessionId = 0;
 
-Session::Session(QObject* parent) : 
+Session::Session(QObject* parent) :
     QObject(parent),
         _shellProcess(0)
         , _emulation(0)

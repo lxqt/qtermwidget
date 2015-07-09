@@ -132,7 +132,7 @@ public:
 
     //! Return current key bindings
     QString keyBindings();
-    
+
     void setMotionAfterPasting(int);
 
     /** Return the number of lines in the history buffer. */
@@ -209,13 +209,13 @@ public slots:
     // Paste clipboard to terminal
     void pasteClipboard();
 
-    // Paste selection to terminal 
+    // Paste selection to terminal
     void pasteSelection();
 
     // Set zoom
     void zoomIn();
     void zoomOut();
-    
+
     /*! Set named key binding for given widget
      */
     void setKeyBindings(const QString & kb);
