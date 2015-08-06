@@ -84,10 +84,10 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
 {
    Q_OBJECT
    Q_PROPERTY(KSession* session         READ getSession      WRITE setSession     NOTIFY sessionChanged          )
-   Q_PROPERTY(QFont font                READ getVTFont       WRITE setVTFont                                     )
-   Q_PROPERTY(QString  colorScheme                           WRITE setColorScheme                                )
+   Q_PROPERTY(QFont font                READ getVTFont       WRITE setVTFont      NOTIFY vtFontChanged           )
+   Q_PROPERTY(QString colorScheme       READ colorScheme     WRITE setColorScheme NOTIFY colorSchemeChanged      )
    Q_PROPERTY(QSize terminalSize        READ getTerminalSize                      NOTIFY changedContentSizeSignal)
-   Q_PROPERTY(int lineSpacing                                WRITE setLineSpacing                                )
+   Q_PROPERTY(int lineSpacing           READ lineSpacing     WRITE setLineSpacing NOTIFY lineSpacingChanged      )
    Q_PROPERTY(bool terminalUsesMouse    READ getUsesMouse                         NOTIFY usesMouseChanged        )
    Q_PROPERTY(int lines                 READ lines                                NOTIFY changedContentSizeSignal)
    Q_PROPERTY(int columns               READ columns                              NOTIFY changedContentSizeSignal)
@@ -96,9 +96,10 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
    Q_PROPERTY(int scrollbarMinimum      READ getScrollbarMinimum                  NOTIFY scrollbarParamsChanged  )
    Q_PROPERTY(QSize fontMetrics         READ getFontMetrics                       NOTIFY changedFontMetricSignal )
 
-   Q_PROPERTY(bool enableBold                                WRITE setBoldIntense)
-   Q_PROPERTY(bool fullCursorHeight                          WRITE setFullCursorHeight)
+   Q_PROPERTY(bool enableBold           READ getBoldIntense   WRITE setBoldIntense NOTIFY boldIntenseChanged )
+   Q_PROPERTY(bool fullCursorHeight     READ fullCursorHeight WRITE setFullCursorHeight NOTIFY fullCursorHeightChanged)
    Q_PROPERTY(bool antialiasText        READ antialias       WRITE setAntialias)
+   Q_PROPERTY(QStringList availableColorSchemes READ availableColorSchemes NOTIFY availableColorSchemesChanged)
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
@@ -122,6 +123,7 @@ public:
 
     /** Sets the opacity of the terminal display. */
     void setOpacity(qreal opacity);
+
 
     /** 
      * This enum describes the location where the scroll bar is positioned in the display widget.
@@ -397,7 +399,7 @@ public:
      * Specifies whether characters with intense colors should be rendered
      * as bold. Defaults to true.
      */
-    void setBoldIntense(bool value) { _boldIntense = value; }
+    void setBoldIntense(bool value);
     /**
      * Returns true if characters with intense colors are rendered in bold.
      */
@@ -548,6 +550,7 @@ public slots:
 
     // QMLTermWidget
     void setColorScheme(const QString &name);
+    QString colorScheme() const;
     QStringList availableColorSchemes();
 
     void simulateKeyPress(int key, int modifiers, bool pressed, quint32 nativeScanCode, const QString &text);
@@ -594,15 +597,15 @@ signals:
      */
     void overrideShortcutCheck(QKeyEvent* keyEvent,bool& override);
 
-   void isBusySelecting(bool);
+   void isBusySelecting(bool busy);
    void sendStringToEmu(const char*);
    
    // qtermwidget signals
-	void copyAvailable(bool);
+    void copyAvailable(bool available);
 	void termGetFocus();
 	void termLostFocus();
 
-    void notifyBell(const QString&);
+    void notifyBell(const QString& bell);
 
     // QMLTermWidget
     void sessionChanged();
@@ -611,6 +614,12 @@ signals:
     void imagePainted();
     void scrollbarValueChanged();
     void scrollbarParamsChanged(int value);
+    void vtFontChanged();
+    void lineSpacingChanged();
+    void availableColorSchemesChanged();
+    void colorSchemeChanged();
+    void fullCursorHeightChanged();
+    void boldIntenseChanged();
 
 protected:
     virtual bool event( QEvent * );
@@ -842,7 +851,7 @@ private:
     QLabel* _outputSuspendedLabel; 
         
     uint _lineSpacing;
-
+    QString _colorScheme;
     bool _colorsInverted; // true during visual bell
 
     QSize _size;
@@ -911,13 +920,14 @@ private:
 
     QSize getFontMetrics();
 
-    void setFullCursorHeight(bool val) { m_full_cursor_height = val; }
+    void setFullCursorHeight(bool val);
 
 public:
     static void setTransparencyEnabled(bool enable)
     {
         HAVE_TRANSPARENCY = enable;
     }
+    bool fullCursorHeight() const;
 };
 
 class AutoScrollHandler : public QObject

@@ -280,13 +280,22 @@ void TerminalDisplay::setVTFont(const QFont& f)
 
     m_font = font;
     fontChange(font);
+    emit vtFontChanged();
   //}
+}
+
+void TerminalDisplay::setBoldIntense(bool value)
+{
+    if ( _boldIntense != value ) {
+        _boldIntense = value;
+        emit boldIntenseChanged();
+    }
 }
 
 void TerminalDisplay::setFont(const QFont &f)
 {
-  Q_UNUSED(f);
-  // ignore font change request if not coming from konsole itself
+    Q_UNUSED(f);
+    // ignore font change request if not coming from konsole itself
 }
 
 /* ------------------------------------------------------------------------- */
@@ -3086,8 +3095,11 @@ uint TerminalDisplay::lineSpacing() const
 
 void TerminalDisplay::setLineSpacing(uint i)
 {
-  _lineSpacing = i;
-  setVTFont(font()); // Trigger an update.
+    if ( i != _lineSpacing ) {
+      _lineSpacing = i;
+      setVTFont(font()); // Trigger an update.
+      emit lineSpacingChanged();
+    }
 }
 
 AutoScrollHandler::AutoScrollHandler(QWidget* parent)
@@ -3228,24 +3240,33 @@ QStringList TerminalDisplay::availableColorSchemes()
 
 void TerminalDisplay::setColorScheme(const QString &name)
 {
-    const ColorScheme *cs;
-    // avoid legacy (int) solution
-    if (!availableColorSchemes().contains(name))
-        cs = ColorSchemeManager::instance()->defaultColorScheme();
-    else
-        cs = ColorSchemeManager::instance()->findColorScheme(name);
+    if ( name != _colorScheme ) {
+        const ColorScheme *cs;
+        // avoid legacy (int) solution
+        if (!availableColorSchemes().contains(name))
+            cs = ColorSchemeManager::instance()->defaultColorScheme();
+        else
+            cs = ColorSchemeManager::instance()->findColorScheme(name);
 
-    if (! cs)
-    {
-        qDebug() << "Cannot load color scheme: " << name;
-        return;
+        if (! cs)
+        {
+            qDebug() << "Cannot load color scheme: " << name;
+            return;
+        }
+
+        ColorEntry table[TABLE_COLORS];
+        cs->getColorTable(table);
+        setColorTable(table);
+
+        setFillColor(cs->backgroundColor());
+        _colorScheme = name;
+        emit colorSchemeChanged();
     }
+}
 
-    ColorEntry table[TABLE_COLORS];
-    cs->getColorTable(table);
-    setColorTable(table);
-
-    setFillColor(cs->backgroundColor());
+QString TerminalDisplay::colorScheme() const
+{
+    return _colorScheme;
 }
 
 void TerminalDisplay::simulateKeyPress(int key, int modifiers, bool pressed, quint32 nativeScanCode, const QString &text)
@@ -3309,6 +3330,19 @@ int TerminalDisplay::getScrollbarMinimum()
 QSize TerminalDisplay::getFontMetrics()
 {
     return QSize(_fontWidth, _fontHeight);
+}
+
+void TerminalDisplay::setFullCursorHeight(bool val)
+{
+    if ( m_full_cursor_height != val ) {
+        m_full_cursor_height = val;
+        emit fullCursorHeightChanged();
+    }
+}
+
+bool TerminalDisplay::fullCursorHeight() const
+{
+    return m_full_cursor_height;
 }
 
 void TerminalDisplay::itemChange(ItemChange change, const ItemChangeData & value)
