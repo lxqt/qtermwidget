@@ -28,6 +28,7 @@
 
 // Konsole
 #include "KeyboardTranslator.h"
+#include "HistorySearch.h"
 
 KSession::KSession(QObject *parent) :
     QObject(parent), m_session(createSession(""))
@@ -222,7 +223,15 @@ void KSession::sendKey(int rep, int key, int mod) const
 //    while (rep > 0){
 //        m_session->sendKey(&qkey);
 //        --rep;
-//    }
+    //    }
+}
+
+void KSession::search(const QString &regexp, int startLine, int startColumn, bool forwards)
+{
+    HistorySearch *history = new HistorySearch( QPointer<Emulation>(m_session->emulation()), QRegExp(regexp), forwards, startColumn, startLine, this);
+    connect( history, SIGNAL(matchFound(int,int,int,int)), this, SIGNAL(matchFound(int,int,int,int)));
+    connect( history, SIGNAL(noMatchFound()), this, SIGNAL(noMatchFound()));
+    history->search();
 }
 
 void KSession::setFlowControlEnabled(bool enabled)
