@@ -166,9 +166,11 @@ void KSession::setShellProgram(const QString &progname)
 
 void KSession::setInitialWorkingDirectory(const QString &dir)
 {
-    _initialWorkingDirectory = dir;
-    m_session->setInitialWorkingDirectory(dir);
-}
+    if ( _initialWorkingDirectory == dir ) {
+        _initialWorkingDirectory = dir;
+        m_session->setInitialWorkingDirectory(dir);
+        emit initialWorkingDirectoryChanged();
+}   }
 
 QString KSession::getInitialWorkingDirectory()
 {
@@ -187,10 +189,22 @@ void KSession::setTextCodec(QTextCodec *codec)
 
 void KSession::setHistorySize(int lines)
 {
-    if (lines < 0)
-        m_session->setHistoryType(HistoryTypeFile());
-    else
-        m_session->setHistoryType(HistoryTypeBuffer(lines));
+    if ( historySize() != lines ) {
+        if (lines < 0)
+            m_session->setHistoryType(HistoryTypeFile());
+        else
+            m_session->setHistoryType(HistoryTypeBuffer(lines));
+        emit historySizeChanged();
+    }
+}
+
+int KSession::historySize() const
+{
+    if ( m_session->historyType().isUnlimited() ) {
+        return -1;
+    } else {
+        return m_session->historyType().maximumLineCount();
+    }
 }
 
 void KSession::sendText(QString text)

@@ -35,8 +35,8 @@ class KSession : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString  kbScheme  READ  getKeyBindings WRITE setKeyBindings NOTIFY changedKeyBindings)
-    Q_PROPERTY(QString  initialWorkingDirectory READ getInitialWorkingDirectory WRITE setInitialWorkingDirectory)
-    Q_PROPERTY(QString  title READ getTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString  initialWorkingDirectory READ getInitialWorkingDirectory WRITE setInitialWorkingDirectory NOTIFY initialWorkingDirectoryChanged)
+    Q_PROPERTY(QString  title READ getTitle WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString  shellProgram WRITE setShellProgram)
 
 public:
@@ -65,6 +65,7 @@ public:
 
     // History size for scrolling
     void setHistorySize(int lines); //infinite if lines < 0
+    int historySize() const;
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
@@ -99,6 +100,10 @@ signals:
     void changedKeyBindings(QString kb);
 
     void titleChanged();
+
+    void historySizeChanged();
+
+    void initialWorkingDirectoryChanged();
 
 
 public slots:
