@@ -39,6 +39,7 @@ class KSession : public QObject
     Q_PROPERTY(QString  title READ getTitle WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString  shellProgram WRITE setShellProgram)
     Q_PROPERTY(QStringList  shellProgramArgs WRITE setArgs)
+    Q_PROPERTY(QString  history READ getHistory)
 
 public:
     KSession(QObject *parent = 0);
@@ -67,6 +68,8 @@ public:
     // History size for scrolling
     void setHistorySize(int lines); //infinite if lines < 0
     int historySize() const;
+
+    QString getHistory() const;
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
@@ -131,6 +134,8 @@ public slots:
     void sendText(QString text);
     // Send some text to terminal
     void sendKey(int rep, int key, int mod) const;
+
+    void clearScreen();
 
     // Search history
     void search(const QString &regexp, int startLine = 0, int startColumn = 0, bool forwards = true );

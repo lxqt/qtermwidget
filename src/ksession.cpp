@@ -209,6 +209,19 @@ int KSession::historySize() const
     }
 }
 
+QString KSession::getHistory() const
+{
+    QString history;
+    QTextStream historyStream(&history);
+    PlainTextDecoder historyDecoder;
+
+    historyDecoder.begin(&historyStream);
+    m_session->emulation()->writeToStream(&historyDecoder);
+    historyDecoder.end();
+
+    return history;
+}
+
 void KSession::sendText(QString text)
 {
     m_session->sendText(text);
@@ -225,6 +238,11 @@ void KSession::sendKey(int rep, int key, int mod) const
 //        m_session->sendKey(&qkey);
 //        --rep;
     //    }
+}
+
+void KSession::clearScreen()
+{
+    m_session->emulation()->clearEntireScreen();
 }
 
 void KSession::search(const QString &regexp, int startLine, int startColumn, bool forwards)
