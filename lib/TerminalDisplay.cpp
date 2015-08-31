@@ -242,7 +242,30 @@ void TerminalDisplay::fontChange(const QFont&)
 
   emit changedFontMetricSignal( _fontHeight, _fontWidth );
   propagateSize();
+  
+  // We will run paint event testing procedure.
+  // Although this operation will destory the orignal content, 
+  // the content will be drawn again after the test.
+  _drawTextTestFlag = true;
   update();
+}
+
+void TerminalDisplay::calDrawTextAdditionHeight(QPainter& painter)
+{    
+    QRect test_rect, feedback_rect;
+	test_rect.setRect(1, 1, _fontWidth * 4, _fontHeight);	
+	painter.drawText(test_rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString("Mq"), &feedback_rect);
+	
+	//qDebug() << "test_rect:" << test_rect << "feeback_rect:" << feedback_rect;
+	
+	_drawTextAdditionHeight = (feedback_rect.height() - _fontHeight) / 2;
+	if(_drawTextAdditionHeight < 0) {
+	  _drawTextAdditionHeight = 0;
+	}
+	
+	// update the original content
+    _drawTextTestFlag = false;
+	update();
 }
 
 void TerminalDisplay::setVTFont(const QFont& f)
@@ -340,6 +363,10 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_cursorShape(BlockCursor)
 ,mMotionAfterPasting(NoMoveScreenWindow)
 {
+  // variables for draw text
+  _drawTextAdditionHeight = 0;
+  _drawTextTestFlag = false;
+  
   // terminal applications are not designed with Right-To-Left in mind,
   // so the layout is forced to Left-To-Right
   setLayoutDirection(Qt::LeftToRight);
@@ -729,12 +756,15 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
     // This was discussed in: http://lists.kde.org/?t=120552223600002&r=1&w=2
         if (_bidiEnabled)
             painter.drawText(rect,0,text);
-        else
+        else {
 #if QT_VERSION >= 0x040800
-            painter.drawText(rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + text);
+            QRect drawRect(rect.topLeft(), rect.size());
+			drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
+            painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + text);
 #else
             painter.drawText(rect, 0, LTR_OVERRIDE_CHAR + text);
 #endif
+        }
     }
 }
 
@@ -1230,15 +1260,19 @@ void TerminalDisplay::focusInEvent(QFocusEvent*)
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
 {
   QPainter paint(this);
-
-  foreach (const QRect &rect, (pe->region() & contentsRect()).rects())
-  {
-    drawBackground(paint,rect,palette().background().color(),
-                    true /* use opacity setting */);
-    drawContents(paint, rect);
+  
+  if(_drawTextTestFlag) {
+      calDrawTextAdditionHeight(paint);      
+  } else {
+	  foreach (const QRect &rect, (pe->region() & contentsRect()).rects())
+	  {
+		drawBackground(paint,rect,palette().background().color(),
+						true /* use opacity setting */);
+		drawContents(paint, rect);
+	  }
+	  drawInputMethodPreeditString(paint,preeditRect());
+	  paintFilters(paint);
   }
-  drawInputMethodPreeditString(paint,preeditRect());
-  paintFilters(paint);
 }
 
 QPoint TerminalDisplay::cursorPosition() const
