@@ -94,9 +94,9 @@ Session::Session(QObject* parent) :
              this, SIGNAL( changeTabTextColorRequest( int ) ) );
     connect( _emulation, SIGNAL(profileChangeCommandReceived(const QString &)),
              this, SIGNAL( profileChangeCommandReceived(const QString &)) );
-    // TODO
-    // connect( _emulation,SIGNAL(imageSizeChanged(int,int)) , this ,
-    //        SLOT(onEmulationSizeChange(int,int)) );
+
+    connect(_emulation, SIGNAL(imageSizeChanged(int, int)),
+            this, SLOT(onEmulationSizeChange(int, int)));
 
     //connect teletype to emulation backend
     _shellProcess->setUtf8Mode(_emulation->utf8());

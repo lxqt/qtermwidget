@@ -299,6 +299,7 @@ void QTermWidget::init(int startnow)
 
     m_impl->m_session->addView(m_impl->m_terminalDisplay);
 
+    connect(m_impl->m_session, SIGNAL(resizeRequest(QSize)), this, SLOT(setSize(QSize)));
     connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
 }
 
@@ -431,11 +432,11 @@ QStringList QTermWidget::availableColorSchemes()
     return ret;
 }
 
-void QTermWidget::setSize(int h, int v)
+void QTermWidget::setSize(const QSize &size)
 {
     if (!m_impl->m_terminalDisplay)
         return;
-    m_impl->m_terminalDisplay->setSize(h, v);
+    m_impl->m_terminalDisplay->setSize(size.width(), size.height());
 }
 
 void QTermWidget::setHistorySize(int lines)
