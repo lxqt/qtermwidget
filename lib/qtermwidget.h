@@ -99,9 +99,6 @@ public:
     void setColorScheme(const QString & name);
     static QStringList availableColorSchemes();
 
-    //set size
-    void setSize(int h, int v);
-
     // History size for scrolling
     void setHistorySize(int lines); //infinite if lines < 0
 
@@ -215,6 +212,9 @@ public slots:
     // Set zoom
     void zoomIn();
     void zoomOut();
+
+    // Set size
+    void setSize(const QSize &);
 
     /*! Set named key binding for given widget
      */
