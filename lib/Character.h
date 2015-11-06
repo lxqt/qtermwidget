@@ -45,8 +45,9 @@ static const int LINE_DOUBLEHEIGHT    = (1 << 2);
 #define RE_UNDERLINE       (1 << 2)
 #define RE_REVERSE         (1 << 3) // Screen only
 #define RE_INTENSIVE       (1 << 3) // Widget only
-#define RE_CURSOR          (1 << 4)
-#define RE_EXTENDED_CHAR   (1 << 5)
+#define RE_ITALIC          (1 << 4)
+#define RE_CURSOR          (1 << 5)
+#define RE_EXTENDED_CHAR   (1 << 6)
 
 /**
  * A single character in the terminal which consists of a unicode character
