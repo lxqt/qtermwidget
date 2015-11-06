@@ -486,7 +486,7 @@ private slots:
     void monitorTimerDone();
 
     void onViewSizeChange(int height, int width);
-    void onEmulationSizeChange(int lines , int columns);
+    void onEmulationSizeChange(QSize);
 
     void activityStateSet(int);
 

@@ -380,6 +380,18 @@ signals:
   void imageSizeChanged(int lineCount , int columnCount);
 
   /**
+   * Emitted when the setImageSize() is called on this emulation for
+   * the first time.
+   */
+  void imageSizeInitialized();
+
+  /**
+   * Emitted after receiving the escape sequence which asks to change
+   * the terminal emulator's size
+   */
+  void imageResizeRequest(const QSize& sizz);
+
+  /**
    * Emitted when the terminal program requests to change various properties
    * of the terminal display.
    *

@@ -95,8 +95,10 @@ Session::Session(QObject* parent) :
     connect( _emulation, SIGNAL(profileChangeCommandReceived(const QString &)),
              this, SIGNAL( profileChangeCommandReceived(const QString &)) );
 
+    connect(_emulation, SIGNAL(imageResizeRequest(QSize)),
+            this, SLOT(onEmulationSizeChange(QSize)));
     connect(_emulation, SIGNAL(imageSizeChanged(int, int)),
-            this, SLOT(onEmulationSizeChange(int, int)));
+            this, SLOT(onViewSizeChange(int, int)));
 
     //connect teletype to emulation backend
     _shellProcess->setUtf8Mode(_emulation->utf8());
@@ -517,9 +519,9 @@ void Session::onViewSizeChange(int /*height*/, int /*width*/)
 {
     updateTerminalSize();
 }
-void Session::onEmulationSizeChange(int lines , int columns)
+void Session::onEmulationSizeChange(QSize size)
 {
-    setSize( QSize(lines,columns) );
+    setSize(size);
 }
 
 void Session::updateTerminalSize()
