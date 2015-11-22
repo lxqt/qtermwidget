@@ -82,7 +82,7 @@ ldconfig
 
 %files -n %{libname}
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING Changelog INSTALL README
+%doc AUTHORS LICENSE Changelog INSTALL README
 %{_libdir}/lib%{name}.so.%{version}
 %{_datadir}/%{name}
 %{_datadir}/%{name}/*
