@@ -2,7 +2,6 @@ cmake_minimum_required( VERSION 2.8 )
 
 project(qtermwidget)
 
-option(BUILD_DESIGNER_PLUGIN "Build Qt4 designer plugin" ON)
 option(USE_QT5 "Build using Qt5. Default OFF." OFF)
 option(BUILD_TEST "Build test application. Default OFF." OFF)
 
@@ -161,47 +160,6 @@ install(FILES
     DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
 )
 # end of main library
-
-
-# designer plugin
-if (BUILD_DESIGNER_PLUGIN)
-    if(USE_QT5)
-        message(FATAL_ERROR "Building Qt designer plugin is not supported for Qt5 yet. Use -DBUILD_DESIGNER_PLUGIN=0")
-    endif()
-    message(STATUS "Building Qt designer plugin")
-
-    include_directories(designer "${QT_QTDESIGNER_INCLUDE_DIR}")
-
-    set(DESIGNER_SRC lib/designer/qtermwidgetplugin.cpp)
-    qt4_wrap_cpp(DESIGNER_MOC  lib/designer/qtermwidgetplugin.h)
-    qt4_add_resources(DESIGNER_QRC lib/designer/qtermwidgetplugin.qrc)
-
-    link_directories(${CMAKE_BINARY_DIR})
-    add_library(qtermwidget4plugin SHARED
-        ${DESIGNER_MOC}
-        ${DESIGNER_QRC}
-        ${DESIGNER_SRC}
-    )
-    add_dependencies(qtermwidget4plugin qtermwidget4)
-
-    target_link_libraries(qtermwidget4plugin
-        ${QT_QTCORE_LIBRARY}
-        ${QT_QTDESIGNER_LIBRARY}
-        ${QT_QTDESIGNERCOMPONENTS_LIBRARY}
-        ${QTERMWIDGET_LIBRARY_NAME}
-    )
-
-    if(APPLE)
-        # this is a must to load the lib correctly
-        set_target_properties(qtermwidget4plugin PROPERTIES
-            INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/qt4/plugins/designer"
-        )
-    endif()
-
-    install(TARGETS qtermwidget4plugin DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/qt4/plugins/designer")
-
-endif (BUILD_DESIGNER_PLUGIN)
-# end of designer plugin
 
 
 # test application

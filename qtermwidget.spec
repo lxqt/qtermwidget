@@ -50,8 +50,7 @@ Summary:	Qt4 terminal widget - development package
 Group:		"Development/Libraries/C and C++"
 Requires:	%{libname}
 %description devel
-Development package for QTermWidget. Contains headers, dev-libs,
-and Qt4 designer plugin.
+Development package for QTermWidget. Contains headers and dev-libs.
 
 %prep
 %setup
@@ -92,7 +91,6 @@ ldconfig
 %{_includedir}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.so.0
-%{_libdir}/qt4/plugins/designer/lib%{name}plugin.so
 
 %changelog
 * Mon Oct 29 2010 Petr Vanek <petr@scribus.info> 0.2
