@@ -18,12 +18,7 @@
 # QTERMWIDGET_QT_LIBRARIES   - The Qt libraries needed by QTermWidget
 #
 # Typical usage:
-#    option(USE_QT5 "Build using Qt5. Default off" OFF)
-#    if (USE_QT5)
-#        find_package(QTERMWIDGET4)
-#    else()
-#        find_package(QTERMWIDGET5)
-#    endif()
+#    find_package(QTERMWIDGET5)
 #
 #    include(${QTERMWIDGET_USE_FILE})
 #    add_executable(foo main.cpp)
@@ -44,4 +39,3 @@ set(QTERMWIDGET_VERSION_PATCH @QTERMWIDGET_VERSION_PATCH@)
 set(QTERMWIDGET_VERSION @QTERMWIDGET_VERSION@)
 
 mark_as_advanced(QTERMWIDGET_LIBRARY QTERMWIDGET_INCLUDE_DIR)
-

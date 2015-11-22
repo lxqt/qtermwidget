@@ -2,7 +2,6 @@ cmake_minimum_required( VERSION 2.8 )
 
 project(qtermwidget)
 
-option(USE_QT5 "Build using Qt5. Default OFF." OFF)
 option(BUILD_TEST "Build test application. Default OFF." OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
@@ -25,13 +24,8 @@ include_directories(
 add_definitions(-Wall)
 
 
-if(USE_QT5)
-    set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
-    include(qtermwidget5_use)
-else()
-    include(qtermwidget4_use)
-    set(QTERMWIDGET_LIBRARY_NAME qtermwidget4)
-endif()
+set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
+include(qtermwidget5_use)
 
 
 # main library
@@ -110,17 +104,9 @@ if(HAVE_UPDWTMPX)
     add_definitions(-DHAVE_UPDWTMPX)
 endif()
 
-
-if(USE_QT5)
-    qt5_wrap_cpp(MOCS ${HDRS})
-    qt5_wrap_ui(UI_SRCS ${UI})
-    set(PKG_CONFIG_REQ "Qt5Core, Qt5Xml, Qt5Widgets")
-else()
-    qt4_wrap_cpp(MOCS ${HDRS})
-    qt4_wrap_ui(UI_SRCS ${UI})
-    set(PKG_CONFIG_REQ "QtCore, QtXml")
-endif()
-
+qt5_wrap_cpp(MOCS ${HDRS})
+qt5_wrap_ui(UI_SRCS ${UI})
+set(PKG_CONFIG_REQ "Qt5Core, Qt5Xml, Qt5Widgets")
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${QTERMWIDGET_QT_LIBRARIES})
