@@ -607,12 +607,12 @@ void Session::done(int exitStatus)
         }
     }
 
-    if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit )
+    if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit ) {
         message.sprintf("Session '%s' exited unexpectedly.",
                         _nameTitle.toUtf8().data());
-    else
-        emit finished();
+    }
 
+    emit finished();
 }
 
 Emulation * Session::emulation() const

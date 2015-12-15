@@ -131,6 +131,15 @@ void KSession::startShellProgram()
     m_session->run();
 }
 
+bool KSession::sendSignal(int signal)
+{
+    if ( !m_session->isRunning() ) {
+        return false;
+    }
+
+    return m_session->sendSignal(signal);
+}
+
 int KSession::getShellPID()
 {
     return m_session->processId();

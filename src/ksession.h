@@ -121,6 +121,8 @@ public slots:
 
     void startShellProgram();
 
+    bool sendSignal(int signal);
+
     //  Shell program, default is /bin/bash
     void setShellProgram(const QString & progname);
 
