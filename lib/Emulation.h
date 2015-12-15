@@ -171,7 +171,17 @@ public:
    * @param endLine Index of last line to copy
    */
   virtual void writeToStream(TerminalCharacterDecoder* decoder,int startLine,int endLine);
-  
+
+  /**
+   * Copies the complete output history into @p stream, using @p decoder to convert
+   * the terminal characters into text.
+   *
+   * @param decoder A decoder which converts lines of terminal characters with
+   * appearance attributes into output text.  PlainTextDecoder is the most commonly
+   * used decoder.
+   */
+  virtual void writeToStream(TerminalCharacterDecoder* decoder);
+
   /** Returns the codec used to decode incoming characters.  See setCodec() */
   const QTextCodec* codec() const { return _codec; }
   /** Sets the codec used to decode incoming characters.  */

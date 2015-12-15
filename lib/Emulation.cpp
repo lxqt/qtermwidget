@@ -296,6 +296,11 @@ void Emulation::writeToStream( TerminalCharacterDecoder* _decoder ,
   _currentScreen->writeLinesToStream(_decoder,startLine,endLine);
 }
 
+void Emulation::writeToStream( TerminalCharacterDecoder* _decoder)
+{
+  _currentScreen->writeLinesToStream(_decoder, 0, _currentScreen->getHistLines());
+}
+
 int Emulation::lineCount() const
 {
     // sum number of lines currently on _screen plus number of lines in history
