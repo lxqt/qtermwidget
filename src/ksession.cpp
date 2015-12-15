@@ -168,7 +168,7 @@ void KSession::setShellProgram(const QString &progname)
 
 void KSession::setInitialWorkingDirectory(const QString &dir)
 {
-    if ( _initialWorkingDirectory == dir ) {
+    if ( _initialWorkingDirectory != dir ) {
         _initialWorkingDirectory = dir;
         m_session->setInitialWorkingDirectory(dir);
         emit initialWorkingDirectoryChanged();
