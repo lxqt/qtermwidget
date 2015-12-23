@@ -312,6 +312,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_terminalSizeHint(false)
 ,_terminalSizeStartup(true)
 ,_bidiEnabled(false)
+,_mouseMarks(false)
 ,_actSel(0)
 ,_wordSelectionMode(false)
 ,_lineSelectionMode(false)
@@ -1800,7 +1801,7 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
   }
   else if ( ev->button() == Qt::MidButton )
   {
-    if ( _mouseMarks || (!_mouseMarks && (ev->modifiers() & Qt::ShiftModifier)) )
+    if ( _mouseMarks || (ev->modifiers() & Qt::ShiftModifier) )
       emitSelection(true,ev->modifiers() & Qt::ControlModifier);
     else
       emit mouseSignal( 1, charColumn +1, charLine +1 +_scrollBar->value() -_scrollBar->maximum() , 0);
