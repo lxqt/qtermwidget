@@ -1494,8 +1494,6 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
             bool save__fixedFont = _fixedFont;
          if (lineDraw)
             _fixedFont = false;
-         if (doubleWidth)
-            _fixedFont = false;
          unistr.resize(p);
 
          // Create a text scaling matrix for double width and double height lines.
