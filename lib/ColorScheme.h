@@ -348,8 +348,6 @@ private:
     bool _haveLoadedAll;
 
     static const ColorScheme _defaultColorScheme;
-
-    static ColorSchemeManager * theColorSchemeManager;
 };
 
 }

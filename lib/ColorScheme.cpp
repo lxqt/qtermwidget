@@ -777,12 +777,8 @@ const ColorScheme* ColorSchemeManager::findColorScheme(const QString& name)
         return 0;
     }
 }
-
-ColorSchemeManager* ColorSchemeManager::theColorSchemeManager = 0;
-//K_GLOBAL_STATIC( ColorSchemeManager , theColorSchemeManager )
+Q_GLOBAL_STATIC(ColorSchemeManager, theColorSchemeManager)
 ColorSchemeManager* ColorSchemeManager::instance()
 {
-    if (! theColorSchemeManager)
-        theColorSchemeManager = new ColorSchemeManager();
     return theColorSchemeManager;
 }
