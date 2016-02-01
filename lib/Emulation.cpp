@@ -55,7 +55,8 @@ Emulation::Emulation() :
   _codec(0),
   _decoder(0),
   _keyTranslator(0),
-  _usesMouse(false)
+  _usesMouse(false),
+  _bracketedPasteMode(false)
 {
   // create screens with a default size
   _screen[0] = new Screen(40,80);
@@ -66,8 +67,10 @@ Emulation::Emulation() :
   QObject::connect(&_bulkTimer2, SIGNAL(timeout()), this, SLOT(showBulk()) );
 
   // listen for mouse status changes
-  connect( this , SIGNAL(programUsesMouseChanged(bool)) ,
-           SLOT(usesMouseChanged(bool)) );
+  connect(this , SIGNAL(programUsesMouseChanged(bool)) ,
+           SLOT(usesMouseChanged(bool)));
+  connect(this , SIGNAL(programBracketedPasteModeChanged(bool)) ,
+           SLOT(bracketedPasteModeChanged(bool)));
 }
 
 bool Emulation::programUsesMouse() const
@@ -78,6 +81,16 @@ bool Emulation::programUsesMouse() const
 void Emulation::usesMouseChanged(bool usesMouse)
 {
     _usesMouse = usesMouse;
+}
+
+bool Emulation::programBracketedPasteMode() const
+{
+    return _bracketedPasteMode;
+}
+
+void Emulation::bracketedPasteModeChanged(bool bracketedPasteMode)
+{
+    _bracketedPasteMode = bracketedPasteMode;
 }
 
 ScreenWindow* Emulation::createWindow()
