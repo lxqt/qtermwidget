@@ -297,3 +297,8 @@ QString KSession::getTitle()
 {
     return m_session->userTitle();
 }
+
+bool KSession::hasActiveProcess() const
+{
+    return m_session->processId() != m_session->foregroundProcessId();
+}
