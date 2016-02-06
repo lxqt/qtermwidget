@@ -74,6 +74,8 @@ Session::Session(QObject* parent) :
 //   , _zmodemProc(0)
 //   , _zmodemProgress(0)
         , _hasDarkBackground(false)
+        , _foregroundProcessInfo(NULL)
+        , _foregroundPid(0)
 {
     //prepare DBus communication
 //    new SessionAdaptor(this);
