@@ -302,3 +302,8 @@ bool KSession::hasActiveProcess() const
 {
     return m_session->processId() != m_session->foregroundProcessId();
 }
+
+QString KSession::foregroundProcessName()
+{
+    return m_session->foregroundProcessName();
+}

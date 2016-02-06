@@ -30,6 +30,7 @@
 #include <QWidget>
 
 #include "History.h"
+#include "ProcessInfo.h"
 
 class KProcess;
 
@@ -324,6 +325,11 @@ public:
      */
     int foregroundProcessId() const;
 
+    /**
+     * Returns the name of the terminal's foreground process.
+     */
+    QString foregroundProcessName();
+
     /** Returns the terminal session's window size in lines and columns. */
     QSize size();
     /**
@@ -488,6 +494,7 @@ private slots:
 private:
 
     void updateTerminalSize();
+    bool updateForegroundProcessInfo();
     WId windowId() const;
 
     int            _uniqueIdentifier;
@@ -541,8 +548,10 @@ private:
 
     bool _hasDarkBackground;
 
-    static int lastSessionId;
+    ProcessInfo *_foregroundProcessInfo;
+    int _foregroundPid;
 
+    static int lastSessionId;
 };
 
 /**

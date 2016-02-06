@@ -52,7 +52,7 @@ using namespace Konsole;
 
 int Session::lastSessionId = 0;
 
-Session::Session(QObject* parent) : 
+Session::Session(QObject* parent) :
     QObject(parent),
         _shellProcess(0)
         , _emulation(0)
@@ -920,6 +920,41 @@ int Session::foregroundProcessId() const
 {
     return _shellProcess->foregroundProcessGroup();
 }
+
+QString Session::foregroundProcessName()
+{
+    QString name;
+
+    if (updateForegroundProcessInfo()) {
+        bool ok = false;
+        name = _foregroundProcessInfo->name(&ok);
+        if (!ok)
+            name.clear();
+    }
+
+    return name;
+}
+
+bool Session::updateForegroundProcessInfo()
+{
+    Q_ASSERT(_shellProcess);
+
+    const int foregroundPid = _shellProcess->foregroundProcessGroup();
+    if (foregroundPid != _foregroundPid) {
+        delete _foregroundProcessInfo;
+        _foregroundProcessInfo = ProcessInfo::newInstance(foregroundPid);
+        _foregroundPid = foregroundPid;
+    }
+
+    if (_foregroundProcessInfo) {
+        _foregroundProcessInfo->update();
+        return _foregroundProcessInfo->isValid();
+    } else {
+        return false;
+    }
+}
+
+
 int Session::processId() const
 {
     return _shellProcess->pid();

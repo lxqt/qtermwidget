@@ -41,6 +41,7 @@ class KSession : public QObject
     Q_PROPERTY(QStringList  shellProgramArgs WRITE setArgs)
     Q_PROPERTY(QString  history READ getHistory)
     Q_PROPERTY(bool hasActiveProcess READ hasActiveProcess)
+    Q_PROPERTY(QString foregroundProcessName READ foregroundProcessName)
 
 public:
     KSession(QObject *parent = 0);
@@ -98,6 +99,11 @@ public:
      * spawned from the initial shell.
      */
     bool hasActiveProcess() const;
+
+    /**
+     * Returns the name of the terminal's foreground process.
+     */
+    QString foregroundProcessName();
 
 signals:
     void started();

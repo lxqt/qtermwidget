@@ -18,6 +18,7 @@ HEADERS += $$PWD/lib/BlockArray.h \
     $$PWD/lib/kptyprocess.h \
     $$PWD/lib/LineFont.h \
     $$PWD/lib/Pty.h \
+    $$PWD/lib/ProcessInfo.h \
     $$PWD/lib/Screen.h \
     $$PWD/lib/ScreenWindow.h \
     #$$PWD/lib/SearchBar.h \
@@ -41,6 +42,7 @@ SOURCES += $$PWD/lib/BlockArray.cpp \
     $$PWD/lib/kpty.cpp \
     $$PWD/lib/kptydevice.cpp \
     $$PWD/lib/kptyprocess.cpp \
+    $$PWD/lib/ProcessInfo.cpp \
     $$PWD/lib/Pty.cpp \
     #$$PWD/lib/qtermwidget.cpp \
     $$PWD/lib/Screen.cpp \
@@ -54,4 +56,3 @@ SOURCES += $$PWD/lib/BlockArray.cpp \
     $$PWD/lib/Vt102Emulation.cpp
 
 #FORMS = $$PWD/lib/SearchBar.ui
-
