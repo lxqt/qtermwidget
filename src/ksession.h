@@ -40,11 +40,13 @@ class KSession : public QObject
     Q_PROPERTY(QString  shellProgram WRITE setShellProgram)
     Q_PROPERTY(QStringList  shellProgramArgs WRITE setArgs)
     Q_PROPERTY(QString  history READ getHistory)
+    Q_PROPERTY(bool hasActiveProcess READ hasActiveProcess)
+    Q_PROPERTY(QString foregroundProcessName READ foregroundProcessName)
 
 public:
     KSession(QObject *parent = 0);
     ~KSession();
-    
+
 public:
     //bool setup();
     void addView(TerminalDisplay *display);
@@ -91,6 +93,17 @@ public:
     QString keyBindings();
 
     QString getTitle();
+
+    /**
+     * Returns \c true if the session has an active subprocess running in it
+     * spawned from the initial shell.
+     */
+    bool hasActiveProcess() const;
+
+    /**
+     * Returns the name of the terminal's foreground process.
+     */
+    QString foregroundProcessName();
 
 signals:
     void started();
