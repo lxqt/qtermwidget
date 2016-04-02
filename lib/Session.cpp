@@ -236,24 +236,8 @@ void Session::removeView(TerminalDisplay * widget)
 
 void Session::run()
 {
-    //check that everything is in place to run the session
-    if (_program.isEmpty()) {
-        qDebug() << "Session::run() - program to run not set.";
-    }
-    else {
-        qDebug() << "Session::run() - program:" << _program;
-    }
-
-    if (_arguments.isEmpty()) {
-        qDebug() << "Session::run() - no command line arguments specified.";
-    }
-    else {
-        qDebug() << "Session::run() - arguments:" << _arguments;
-    }
-
     // Upon a KPty error, there is no description on what that error was...
     // Check to see if the given program is executable.
-
 
     /* ok iam not exactly sure where _program comes from - however it was set to /bin/bash on my system
      * Thats bad for BSD as its /usr/local/bin/bash there - its also bad for arch as its /usr/bin/bash there too!
@@ -320,7 +304,6 @@ void Session::run()
     }
 
     _shellProcess->setWriteable(false);  // We are reachable via kwrited.
-    qDebug() << "started!";
     emit started();
 }
 
@@ -335,8 +318,6 @@ void Session::runEmptyPTY()
                 _shellProcess, SLOT(sendData(const char *,int)) );
 
     _shellProcess->setEmptyPTYProperties();
-
-    qDebug() << "started!";
     emit started();
 }
 
