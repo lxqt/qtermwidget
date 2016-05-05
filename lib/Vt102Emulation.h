@@ -95,8 +95,8 @@ public slots:
   virtual void sendText(const QString& text);
   virtual void sendKeyEvent(QKeyEvent*);
   virtual void sendMouseEvent(int buttons, int column, int line, int eventType);
-  virtual void focusLost() Q_DECL_OVERRIDE;
-  virtual void focusGained() Q_DECL_OVERRIDE;
+  virtual void focusLost();
+  virtual void focusGained();
 
 protected:
   // reimplemented from Emulation
