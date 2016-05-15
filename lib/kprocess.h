@@ -355,6 +355,9 @@ protected:
         openMode(QIODevice::ReadWrite)
     {
     }
+    virtual ~KProcessPrivate()
+    {
+    }
     void writeAll(const QByteArray &buf, int fd);
     void forwardStd(KProcess::ProcessChannel good, int fd);
     void _k_forwardStdout();
