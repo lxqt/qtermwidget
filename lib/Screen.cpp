@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -1177,7 +1176,7 @@ int Screen::copyLineToStream(int line ,
     static const int MAX_CHARS = 1024;
     static Character characterBuffer[MAX_CHARS];
 
-    assert( count < MAX_CHARS );
+    Q_ASSERT( count < MAX_CHARS );
 
     LineProperty currentLineProperties = 0;
 
@@ -1202,9 +1201,9 @@ int Screen::copyLineToStream(int line ,
         }
 
         // safety checks
-        assert( start >= 0 );
-        assert( count >= 0 );
-        assert( (start+count) <= history->getLineLen(line) );
+        Q_ASSERT( start >= 0 );
+        Q_ASSERT( count >= 0 );
+        Q_ASSERT( (start+count) <= history->getLineLen(line) );
 
         history->getCells(line,start,count,characterBuffer);
 
@@ -1216,7 +1215,7 @@ int Screen::copyLineToStream(int line ,
         if ( count == -1 )
             count = columns - start;
 
-        assert( count >= 0 );
+        Q_ASSERT( count >= 0 );
 
         const int screenLine = line-history->getLines();
 

@@ -26,7 +26,6 @@
 #include "Session.h"
 
 // Standard
-#include <assert.h>
 #include <stdlib.h>
 
 // Qt

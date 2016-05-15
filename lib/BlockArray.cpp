@@ -27,7 +27,6 @@
 #include "BlockArray.h"
 
 // System
-#include <assert.h>
 #include <sys/mman.h>
 #include <sys/param.h>
 #include <unistd.h>
@@ -57,7 +56,7 @@ BlockArray::BlockArray()
 BlockArray::~BlockArray()
 {
     setHistorySize(0);
-    assert(!lastblock);
+    Q_ASSERT(!lastblock);
 }
 
 size_t BlockArray::append(Block * block)
@@ -149,7 +148,7 @@ const Block * BlockArray::at(size_t i)
 
     size_t j = i; // (current - (index - i) + (index/size+1)*size) % size ;
 
-    assert(j < size);
+    Q_ASSERT(j < size);
     unmap();
 
     Block * block = (Block *)mmap(0, blocksize, PROT_READ, MAP_PRIVATE, ion, j * blocksize);
@@ -218,7 +217,7 @@ bool BlockArray::setHistorySize(size_t newsize)
             return false;
         }
 
-        assert(!lastblock);
+        Q_ASSERT(!lastblock);
 
         lastblock = new Block();
         size = newsize;
