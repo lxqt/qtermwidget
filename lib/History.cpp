@@ -118,7 +118,7 @@ void HistoryFile::map()
     {
             readWriteBalance = 0;
             fileMap = 0;
-            qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
+            //qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
     }
 }
 
