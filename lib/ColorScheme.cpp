@@ -558,17 +558,13 @@ ColorSchemeManager::~ColorSchemeManager()
 void ColorSchemeManager::loadAllColorSchemes()
 {
     qDebug() << "loadAllColorSchemes";
-    int success = 0;
     int failed = 0;
 
     QList<QString> nativeColorSchemes = listColorSchemes();
-
     QListIterator<QString> nativeIter(nativeColorSchemes);
     while ( nativeIter.hasNext() )
     {
-        if ( loadColorScheme( nativeIter.next() ) )
-            success++;
-        else
+        if ( !loadColorScheme( nativeIter.next() ) )
             failed++;
     }
 
@@ -576,9 +572,7 @@ void ColorSchemeManager::loadAllColorSchemes()
     QListIterator<QString> kde3Iter(kde3ColorSchemes);
     while ( kde3Iter.hasNext() )
     {
-        if ( loadKDE3ColorScheme( kde3Iter.next() ) )
-            success++;
-        else
+        if ( !loadKDE3ColorScheme( kde3Iter.next() ) )
             failed++;
     }
 
@@ -650,6 +644,11 @@ bool ColorSchemeManager::loadCustomColorScheme(const QString& path)
         return false;
 }
 
+void ColorSchemeManager::addCustomColorSchemeDir(const QString& custom_dir)
+{
+    add_custom_color_scheme_dir(custom_dir);
+}
+
 bool ColorSchemeManager::loadColorScheme(const QString& filePath)
 {
     if ( !filePath.endsWith(QLatin1String(".colorscheme")) || !QFile::exists(filePath) )
@@ -686,15 +685,18 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
 }
 QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
 {
-    QString dname(get_color_schemes_dir());
-    QDir dir(dname);
-    QStringList filters;
-    filters << "*.schema";
-    dir.setNameFilters(filters);
-    QStringList list = dir.entryList(filters);
     QStringList ret;
-    foreach(QString i, list)
-        ret << dname + "/" + i;
+    foreach(const QString &scheme_dir, get_color_schemes_dirs())
+    {
+        QString dname(scheme_dir);
+        QDir dir(dname);
+        QStringList filters;
+        filters << "*.schema";
+        dir.setNameFilters(filters);
+        QStringList list = dir.entryList(filters);
+        foreach(QString i, list)
+            ret << dname + "/" + i;
+    }
     return ret;
     //return KGlobal::dirs()->findAllResources("data",
     //                                         "konsole/*.schema",
@@ -703,15 +705,18 @@ QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
 }
 QList<QString> ColorSchemeManager::listColorSchemes()
 {
-    QString dname(get_color_schemes_dir());
-    QDir dir(dname);
-    QStringList filters;
-    filters << "*.colorscheme";
-    dir.setNameFilters(filters);
-    QStringList list = dir.entryList(filters);
     QStringList ret;
-    foreach(QString i, list)
-        ret << dname + "/" + i;
+    foreach(const QString &scheme_dir, get_color_schemes_dirs())
+    {
+        QString dname(scheme_dir);
+        QDir dir(dname);
+        QStringList filters;
+        filters << "*.colorscheme";
+        dir.setNameFilters(filters);
+        QStringList list = dir.entryList(filters);
+        foreach(QString i, list)
+            ret << dname + "/" + i;
+    }
     return ret;
 //    return KGlobal::dirs()->findAllResources("data",
 //                                             "konsole/*.colorscheme",
@@ -742,12 +747,13 @@ bool ColorSchemeManager::deleteColorScheme(const QString& name)
 QString ColorSchemeManager::findColorSchemePath(const QString& name) const
 {
 //    QString path = KStandardDirs::locate("data","konsole/"+name+".colorscheme");
-    QString path(get_color_schemes_dir() + "/"+ name + ".colorscheme");
+    const QString dir = get_color_schemes_dirs().first();
+    QString path(dir + "/"+ name + ".colorscheme");
     if ( !path.isEmpty() )
-       return path;
+        return path;
 
     //path = KStandardDirs::locate("data","konsole/"+name+".schema");
-    path = get_color_schemes_dir() + "/"+ name + ".schema";
+    path = dir + "/"+ name + ".schema";
 
     return path;
 }
