@@ -452,7 +452,7 @@ void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
 {
     if (!m_impl->m_terminalDisplay)
         return;
-    m_impl->m_terminalDisplay->setScrollBarPosition((TerminalDisplay::ScrollBarPosition)pos);
+    m_impl->m_terminalDisplay->setScrollBarPosition(pos);
 }
 
 void QTermWidget::scrollToEnd()
@@ -647,5 +647,5 @@ void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
 {
     if (!m_impl->m_terminalDisplay)
         return;
-    m_impl->m_terminalDisplay->setKeyboardCursorShape((TerminalDisplay::KeyboardCursorShape)shape);
+    m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
 }

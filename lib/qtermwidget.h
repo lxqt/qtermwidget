@@ -32,28 +32,35 @@ class QTermWidget : public QWidget {
     Q_OBJECT
 public:
 
+    /**
+     * This enum describes the location where the scroll bar is positioned in the display widget.
+     */
     enum ScrollBarPosition {
         /** Do not show the scroll bar. */
-        NoScrollBar=0,
+        NoScrollBar = 0,
         /** Show the scroll bar on the left side of the display. */
-        ScrollBarLeft=1,
+        ScrollBarLeft = 1,
         /** Show the scroll bar on the right side of the display. */
-        ScrollBarRight=2
+        ScrollBarRight = 2
     };
 
+    /**
+     * This enum describes the available shapes for the keyboard cursor.
+     * See setKeyboardCursorShape()
+     */
     enum KeyboardCursorShape {
         /** A rectangular block which covers the entire area of the cursor character. */
-        BlockCursor,
+        BlockCursor = 0,
         /**
          * A single flat line which occupies the space at the bottom of the cursor
          * character's area.
          */
-        UnderlineCursor,
+        UnderlineCursor = 1,
         /**
          * An cursor shaped like the capital letter 'I', similar to the IBeam
          * cursor used in Qt/KDE text editors.
          */
-        IBeamCursor
+        IBeamCursor = 2
     };
 
     //Creation of widget
