@@ -41,6 +41,21 @@ public:
         ScrollBarRight=2
     };
 
+    enum KeyboardCursorShape {
+        /** A rectangular block which covers the entire area of the cursor character. */
+        BlockCursor,
+        /**
+         * A single flat line which occupies the space at the bottom of the cursor
+         * character's area.
+         */
+        UnderlineCursor,
+        /**
+         * An cursor shaped like the capital letter 'I', similar to the IBeam
+         * cursor used in Qt/KDE text editors.
+         */
+        IBeamCursor
+    };
+
     //Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
                 QWidget * parent = 0);
@@ -175,6 +190,12 @@ public:
      * a remote terminal.
      */
     int getPtySlaveFd() const;
+
+    /**
+     * Sets the shape of the keyboard cursor.  This is the cursor drawn
+     * at the position in the terminal where keyboard input will appear.
+     */
+    void setKeyboardCursorShape(KeyboardCursorShape shape);
 
 signals:
     void finished();

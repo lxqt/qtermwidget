@@ -296,6 +296,7 @@ void QTermWidget::init(int startnow)
     m_searchBar->setFont(font);
 
     setScrollBarPosition(NoScrollBar);
+    setKeyboardCursorShape(BlockCursor);
 
     m_impl->m_session->addView(m_impl->m_terminalDisplay);
 
@@ -640,4 +641,11 @@ Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
 int QTermWidget::getPtySlaveFd() const
 {
     return m_impl->m_session->getPtySlaveFd();
+}
+
+void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->setKeyboardCursorShape((TerminalDisplay::KeyboardCursorShape)shape);
 }
