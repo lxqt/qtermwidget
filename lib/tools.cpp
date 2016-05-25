@@ -45,7 +45,9 @@ QString get_kb_layout_dir()
 
 /*! Helper function to add custom location of color schemes.
 */
-QStringList custom_color_schemes_dirs;
+namespace {
+    QStringList custom_color_schemes_dirs;
+}
 void add_custom_color_scheme_dir(const QString& custom_dir)
 {
     custom_color_schemes_dirs << custom_dir;
@@ -55,7 +57,7 @@ void add_custom_color_scheme_dir(const QString& custom_dir)
 By default the COLORSCHEMES_DIR is used (linux/BSD/macports).
 But in some cases (apple bundle) there can be more locations).
 */
-QStringList get_color_schemes_dirs()
+const QStringList get_color_schemes_dirs()
 {
 #ifdef BUNDLE_COLORSCHEMES
     return QLatin1String(":/");
@@ -89,7 +91,7 @@ QStringList get_color_schemes_dirs()
         rval << (QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/");
     }
 #endif
-    foreach (const QString& custom_dir, custom_color_schemes_dirs)
+    for (const QString& custom_dir : custom_color_schemes_dirs)
     {
         d.setPath(custom_dir);
         if (d.exists())
