@@ -29,6 +29,7 @@
 // Konsole
 #include "Filter.h"
 #include "Character.h"
+#include "qtermwidget.h"
 //#include "konsole_export.h"
 #define KONSOLEPRIVATE_EXPORT
 
@@ -103,22 +104,10 @@ public:
     void setOpacity(qreal opacity);
 
     /**
-     * This enum describes the location where the scroll bar is positioned in the display widget.
-     */
-    enum ScrollBarPosition
-    {
-        /** Do not show the scroll bar. */
-        NoScrollBar=0,
-        /** Show the scroll bar on the left side of the display. */
-        ScrollBarLeft=1,
-        /** Show the scroll bar on the right side of the display. */
-        ScrollBarRight=2
-    };
-    /**
      * Specifies whether the terminal display has a vertical scroll bar, and if so whether it
      * is shown on the left or right side of the display.
      */
-    void setScrollBarPosition(ScrollBarPosition position);
+    void setScrollBarPosition(QTermWidget::ScrollBarPosition position);
 
     /**
      * Sets the current position and range of the display's scroll bar.
@@ -201,25 +190,6 @@ public:
     void emitSelection(bool useXselection,bool appendReturn);
 
     /**
-     * This enum describes the available shapes for the keyboard cursor.
-     * See setKeyboardCursorShape()
-     */
-    enum KeyboardCursorShape
-    {
-        /** A rectangular block which covers the entire area of the cursor character. */
-        BlockCursor,
-        /**
-         * A single flat line which occupies the space at the bottom of the cursor
-         * character's area.
-         */
-        UnderlineCursor,
-        /**
-         * An cursor shaped like the capital letter 'I', similar to the IBeam
-         * cursor used in Qt/KDE text editors.
-         */
-        IBeamCursor
-    };
-    /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
      * at the position in the terminal where keyboard input will appear.
      *
@@ -229,11 +199,11 @@ public:
      *
      * Defaults to BlockCursor
      */
-    void setKeyboardCursorShape(KeyboardCursorShape shape);
+    void setKeyboardCursorShape(QTermWidget::KeyboardCursorShape shape);
     /**
      * Returns the shape of the keyboard cursor.  See setKeyboardCursorShape()
      */
-    KeyboardCursorShape keyboardCursorShape() const;
+    QTermWidget::KeyboardCursorShape keyboardCursorShape() const;
 
     /**
      * Sets the color used to draw the keyboard cursor.
@@ -769,7 +739,7 @@ private:
 
     QClipboard*  _clipboard;
     QScrollBar* _scrollBar;
-    ScrollBarPosition _scrollbarLocation;
+    QTermWidget::ScrollBarPosition _scrollbarLocation;
     QString     _wordCharacters;
     int         _bellMode;
 
@@ -814,7 +784,7 @@ private:
     TerminalImageFilterChain* _filterChain;
     QRegion _mouseOverHotspotArea;
 
-    KeyboardCursorShape _cursorShape;
+    QTermWidget::KeyboardCursorShape _cursorShape;
 
     // custom cursor color.  if this is invalid then the foreground
     // color of the character under the cursor is used
