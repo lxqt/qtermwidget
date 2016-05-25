@@ -371,6 +371,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 //  KCursor::setAutoHideCursor( this, true );
 
   setUsesMouse(true);
+  setBracketedPasteMode(false);
   setColorTable(base_color_table);
   setMouseTracking(true);
 
@@ -2487,6 +2488,15 @@ bool TerminalDisplay::usesMouse() const
     return _mouseMarks;
 }
 
+void TerminalDisplay::setBracketedPasteMode(bool on)
+{
+    _bracketedPasteMode = on;
+}
+bool TerminalDisplay::bracketedPasteMode() const
+{
+    return _bracketedPasteMode;
+}
+
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /*                               Clipboard                                   */
@@ -2508,6 +2518,11 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
   if ( ! text.isEmpty() )
   {
     text.replace('\n', '\r');
+    if ( bracketedPasteMode() )
+    {
+      text.prepend("\e[200~");
+      text.append("\e[201~");
+    }
     QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
     emit keyPressedSignal(&e); // expose as a big fat keypress event
 

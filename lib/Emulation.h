@@ -218,6 +218,8 @@ public:
    */
   bool programUsesMouse() const;
 
+  bool programBracketedPasteMode() const;
+
 public slots:
 
   /** Change the size of the emulation's image */
@@ -324,6 +326,8 @@ signals:
    * mouse events or false otherwise.
    */
   void programUsesMouseChanged(bool usesMouse);
+
+  void programBracketedPasteModeChanged(bool bracketedPasteMode);
 
   /**
    * Emitted when the contents of the screen image change.
@@ -471,8 +475,11 @@ private slots:
 
   void usesMouseChanged(bool usesMouse);
 
+  void bracketedPasteModeChanged(bool bracketedPasteMode);
+
 private:
   bool _usesMouse;
+  bool _bracketedPasteMode;
   QTimer _bulkTimer1;
   QTimer _bulkTimer2;
 
