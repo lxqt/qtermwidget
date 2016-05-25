@@ -24,7 +24,6 @@
 // System
 #include <iostream>
 #include <stdlib.h>
-#include <assert.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/mman.h>
@@ -110,7 +109,7 @@ HistoryFile::~HistoryFile()
 //to avoid this.
 void HistoryFile::map()
 {
-    assert( fileMap == 0 );
+    Q_ASSERT( fileMap == 0 );
 
     fileMap = (char*)mmap( 0 , length , PROT_READ , MAP_PRIVATE , ion , 0 );
 
@@ -119,14 +118,14 @@ void HistoryFile::map()
     {
             readWriteBalance = 0;
             fileMap = 0;
-            qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
+            //qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
     }
 }
 
 void HistoryFile::unmap()
 {
     int result = munmap( fileMap , length );
-    assert( result == 0 ); Q_UNUSED( result );
+    Q_ASSERT( result == 0 ); Q_UNUSED( result );
 
     fileMap = 0;
 }
@@ -502,7 +501,7 @@ void HistoryScrollBlockArray::getCells(int lineno, int colno,
     return;
   }
 
-  assert(((colno + count) * sizeof(Character)) < ENTRIES);
+  Q_ASSERT(((colno + count) * sizeof(Character)) < ENTRIES);
   memcpy(res, b->data + (colno * sizeof(Character)), count * sizeof(Character));
 }
 
@@ -513,7 +512,7 @@ void HistoryScrollBlockArray::addCells(const Character a[], int count)
   if (!b) return;
 
   // put cells in block's data
-  assert((count * sizeof(Character)) < ENTRIES);
+  Q_ASSERT((count * sizeof(Character)) < ENTRIES);
 
   memset(b->data, 0, ENTRIES);
 
@@ -521,7 +520,7 @@ void HistoryScrollBlockArray::addCells(const Character a[], int count)
   b->size = count * sizeof(Character);
 
   size_t res = m_blockArray.newBlock();
-  assert (res > 0);
+  Q_ASSERT(res > 0);
   Q_UNUSED( res );
 
   m_lineLengths.insert(m_blockArray.getCurrent(), count);
