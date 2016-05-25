@@ -884,11 +884,8 @@ bool KeyboardTranslatorManager::deleteTranslator(const QString& name)
         return false;
     }
 }
-//K_GLOBAL_STATIC( KeyboardTranslatorManager , theKeyboardTranslatorManager )
-KeyboardTranslatorManager* KeyboardTranslatorManager::theKeyboardTranslatorManager = 0;
+Q_GLOBAL_STATIC( KeyboardTranslatorManager , theKeyboardTranslatorManager )
 KeyboardTranslatorManager* KeyboardTranslatorManager::instance()
 {
-    if (! theKeyboardTranslatorManager)
-        theKeyboardTranslatorManager = new KeyboardTranslatorManager();
     return theKeyboardTranslatorManager;
 }

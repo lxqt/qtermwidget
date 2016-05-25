@@ -456,6 +456,9 @@ public:
     KeyboardTranslatorManager();
     ~KeyboardTranslatorManager();
 
+    KeyboardTranslatorManager(const KeyboardTranslatorManager&) = delete;
+    KeyboardTranslatorManager& operator=(const KeyboardTranslatorManager&) = delete;
+
     /**
      * Adds a new translator.  If a translator with the same name
      * already exists, it will be replaced by the new translator.
@@ -507,8 +510,6 @@ private:
     QHash<QString,KeyboardTranslator*> _translators; // maps translator-name -> KeyboardTranslator
                                                      // instance
     bool _haveLoadedAll;
-
-    static KeyboardTranslatorManager * theKeyboardTranslatorManager;
 };
 
 inline int KeyboardTranslator::Entry::keyCode() const { return _keyCode; }
