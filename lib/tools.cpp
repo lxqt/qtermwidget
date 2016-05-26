@@ -50,7 +50,8 @@ namespace {
 }
 void add_custom_color_scheme_dir(const QString& custom_dir)
 {
-    custom_color_schemes_dirs << custom_dir;
+    if (!custom_color_schemes_dirs.contains(custom_dir))
+        custom_color_schemes_dirs << custom_dir;
 }
 
 /*! Helper function to get possible locations of color schemes.
