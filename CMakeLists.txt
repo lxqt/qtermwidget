@@ -1,11 +1,11 @@
-cmake_minimum_required( VERSION 2.8 )
+cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 
 project(qtermwidget)
 
+include(GNUInstallDirs)
+include(CheckFunctionExists)
+
 option(BUILD_TEST "Build test application. Default OFF." OFF)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
-
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
 set(QTERMWIDGET_VERSION_MINOR "6")
@@ -13,8 +13,23 @@ set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
-include(CheckFunctionExists)
-include(GNUInstallDirs)
+# additional cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+    message(FATAL "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. C++11 support is required")
+endif()
 
 include_directories(
     "${CMAKE_SOURCE_DIR}/lib"
