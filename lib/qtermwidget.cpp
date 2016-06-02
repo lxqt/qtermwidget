@@ -433,6 +433,11 @@ QStringList QTermWidget::availableColorSchemes()
     return ret;
 }
 
+void QTermWidget::addCustomColorSchemeDir(const QString& custom_dir)
+{
+    ColorSchemeManager::instance()->addCustomColorSchemeDir(custom_dir);
+}
+
 void QTermWidget::setSize(const QSize &size)
 {
     if (!m_impl->m_terminalDisplay)

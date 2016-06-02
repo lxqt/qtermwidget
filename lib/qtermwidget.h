@@ -120,6 +120,7 @@ public:
      */
     void setColorScheme(const QString & name);
     static QStringList availableColorSchemes();
+    static void addCustomColorSchemeDir(const QString& custom_dir);
 
     // History size for scrolling
     void setHistorySize(int lines); //infinite if lines < 0
