@@ -21,8 +21,8 @@ Supported platforms:
 Building
 
  1. `mkdir -p build && cd build`
- 2. `cmake `<path/to/source>`
- 3. make
+ 2. `cmake <path/to/source>`
+ 3. `make`
 
 Run `make install` to install.
 
