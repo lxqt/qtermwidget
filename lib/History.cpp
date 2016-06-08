@@ -514,7 +514,7 @@ void HistoryScrollBlockArray::addCells(const Character a[], int count)
   // put cells in block's data
   Q_ASSERT((count * sizeof(Character)) < ENTRIES);
 
-  memset(b->data, 0, ENTRIES);
+  memset(b->data, 0, sizeof(b->data));
 
   memcpy(b->data, a, count * sizeof(Character));
   b->size = count * sizeof(Character);
