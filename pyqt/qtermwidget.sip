@@ -23,10 +23,9 @@ public:
 
     QTermWidget(int startnow = 1, QWidget *parent = 0);
     ~QTermWidget();
-
+	void startTerminalTeletype();
     QSize sizeHint() const;
     void startShellProgram();
-    void startTerminalTeletype();
     int getShellPID();
     void changeDir(const QString & dir);
     void setTerminalFont(QFont &font);
@@ -86,15 +85,16 @@ protected:
     void resizeEvent(QResizeEvent *e);
 protected slots:
     void sessionFinished();
-    void selectionChanged(bool textSelected);    
+    void selectionChanged(bool textSelected);
+private:
+    void *createTermWidget(int startnow, void *parent);
+    void search(bool forwards, bool next);
+    void setZoom(int step);
+	void init(int startnow);
 private slots:
     void find();
     void findNext();
     void findPrevious();
     void matchFound(int startColumn, int startLine, int endColumn, int endLine);
-    void noMatchFound();    
-private:
-    void search(bool forwards, bool next);
-    void setZoom(int step);
-    void init(int startnow);
-
+	void noMatchFound();
+};
