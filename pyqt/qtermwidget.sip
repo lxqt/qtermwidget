@@ -26,6 +26,7 @@ public:
 
     QSize sizeHint() const;
     void startShellProgram();
+    void startTerminalTeletype();
     int getShellPID();
     void changeDir(const QString & dir);
     void setTerminalFont(QFont &font);
@@ -59,6 +60,7 @@ public:
     void setMonitorActivity(bool);
     void setMonitorSilence(bool);
     void setSilenceTimeout(int seconds);
+    int getPtySlaveFd() const;
 signals:
     void finished();
     void copyAvailable(bool);
@@ -69,6 +71,7 @@ signals:
     void bell(const QString& message);
     void activity();
     void silence();
+    void sendData(const char *,int);
 public slots:
     void copyClipboard();
     void pasteClipboard();
@@ -81,6 +84,17 @@ public slots:
     void setSize(const QSize&);
 protected:
     void resizeEvent(QResizeEvent *e);
+protected slots:
+    void sessionFinished();
+    void selectionChanged(bool textSelected);    
+private slots:
+    void find();
+    void findNext();
+    void findPrevious();
+    void matchFound(int startColumn, int startLine, int endColumn, int endLine);
+    void noMatchFound();    
 private:
-    void *createTermWidget(int startnow, void *parent);
-};
+    void search(bool forwards, bool next);
+    void setZoom(int step);
+    void init(int startnow);
+
