@@ -205,8 +205,8 @@ public:
      */
     void setKeyboardCursorShape(KeyboardCursorShape shape);
 
-    QString userTitle();
-    QString iconText();
+    QString userTitle() const;
+    QString iconText() const;
 
 signals:
     void finished();

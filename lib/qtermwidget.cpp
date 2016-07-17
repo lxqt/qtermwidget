@@ -661,12 +661,12 @@ void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
 }
 
-QString QTermWidget::userTitle()
+QString QTermWidget::userTitle() const
 {
     return m_impl->m_session->userTitle();
 }
 
-QString QTermWidget::iconText()
+QString QTermWidget::iconText() const
 {
     return m_impl->m_session->iconText();
 }
