@@ -205,6 +205,9 @@ public:
      */
     void setKeyboardCursorShape(KeyboardCursorShape shape);
 
+    QString userTitle();
+    QString iconText();
+
 signals:
     void finished();
     void copyAvailable(bool);
@@ -227,6 +230,8 @@ signals:
      * control and display the remote terminal.
      */
     void sendData(const char *,int);
+
+    void titleChanged();
 
 public slots:
     // Copy selection to clipboard
@@ -260,6 +265,7 @@ protected:
 
 protected slots:
     void sessionFinished();
+    void sessionTitleChanged();
     void selectionChanged(bool textSelected);
 
 private slots:

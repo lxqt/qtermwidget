@@ -302,6 +302,7 @@ void QTermWidget::init(int startnow)
 
     connect(m_impl->m_session, SIGNAL(resizeRequest(QSize)), this, SLOT(setSize(QSize)));
     connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
+    connect(m_impl->m_session, SIGNAL(titleChanged()), this, SLOT(sessionTitleChanged()));
 }
 
 
@@ -484,6 +485,11 @@ void QTermWidget::sessionFinished()
     emit finished();
 }
 
+void QTermWidget::sessionTitleChanged()
+{
+    emit titleChanged();
+}
+
 
 void QTermWidget::copyClipboard()
 {
@@ -653,4 +659,14 @@ void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
     if (!m_impl->m_terminalDisplay)
         return;
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
+}
+
+QString QTermWidget::userTitle()
+{
+    return m_impl->m_session->userTitle();
+}
+
+QString QTermWidget::iconText()
+{
+    return m_impl->m_session->iconText();
 }
