@@ -25,7 +25,7 @@
 
 #include <QObject>
 
-struct KPtyPrivate;
+class KPtyPrivate;
 struct termios;
 
 /**

@@ -41,7 +41,7 @@ class QSocketNotifier;
 #define Q_DECLARE_PRIVATE_MI(Class, SuperClass) \
     inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(SuperClass::d_ptr); } \
     inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(SuperClass::d_ptr); } \
-    friend class Class##Private;
+    friend struct Class##Private;
 
 /**
  * Encapsulates KPty into a QIODevice, so it can be used with Q*Stream, etc.
