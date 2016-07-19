@@ -302,7 +302,7 @@ void QTermWidget::init(int startnow)
 
     connect(m_impl->m_session, SIGNAL(resizeRequest(QSize)), this, SLOT(setSize(QSize)));
     connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
-    connect(m_impl->m_session, SIGNAL(titleChanged()), this, SLOT(sessionTitleChanged()));
+    connect(m_impl->m_session, &Session::titleChanged, this, &QTermWidget::titleChanged);
 }
 
 
@@ -485,12 +485,6 @@ void QTermWidget::sessionFinished()
     emit finished();
 }
 
-void QTermWidget::sessionTitleChanged()
-{
-    emit titleChanged();
-}
-
-
 void QTermWidget::copyClipboard()
 {
     m_impl->m_terminalDisplay->copyClipboard();
@@ -661,12 +655,23 @@ void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
 }
 
-QString QTermWidget::userTitle() const
+QString QTermWidget::title() const
 {
-    return m_impl->m_session->userTitle();
+    QString title = m_impl->m_session->userTitle();
+    if (title.isEmpty())
+        title = m_impl->m_session->title(Konsole::Session::NameRole);
+    return title;
 }
 
-QString QTermWidget::iconText() const
+QString QTermWidget::icon() const
 {
-    return m_impl->m_session->iconText();
+    QString icon = m_impl->m_session->iconText();
+    if (icon.isEmpty())
+        icon = m_impl->m_session->iconName();
+    return icon;
+}
+
+bool QTermWidget::isTitleChanged() const
+{
+    return m_impl->m_session->isTitleChanged();
 }

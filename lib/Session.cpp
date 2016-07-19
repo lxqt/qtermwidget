@@ -58,6 +58,7 @@ Session::Session(QObject* parent) :
         , _autoClose(true)
         , _wantedClose(false)
         , _silenceSeconds(10)
+        , _isTitleChanged(false)
         , _addToUtmp(false)  // disabled by default because of a bug encountered on certain systems
         // which caused Konsole to hang when closing a tab and then opening a new
         // one.  A 'QProcess destroyed while still running' warning was being
@@ -332,6 +333,7 @@ void Session::setUserTitle( int what, const QString & caption )
 
     // (btw: what=0 changes _userTitle and icon, what=1 only icon, what=2 only _nameTitle
     if ((what == 0) || (what == 2)) {
+        _isTitleChanged = true;
         if ( _userTitle != caption ) {
             _userTitle = caption;
             modified = true;
@@ -339,6 +341,7 @@ void Session::setUserTitle( int what, const QString & caption )
     }
 
     if ((what == 0) || (what == 1)) {
+        _isTitleChanged = true;
         if ( _iconText != caption ) {
             _iconText = caption;
             modified = true;
@@ -364,6 +367,7 @@ void Session::setUserTitle( int what, const QString & caption )
     }
 
     if (what == 30) {
+        _isTitleChanged = true;
         if ( _nameTitle != caption ) {
             setTitle(Session::NameRole,caption);
             return;
@@ -378,6 +382,7 @@ void Session::setUserTitle( int what, const QString & caption )
 
     // change icon via \033]32;Icon\007
     if (what == 32) {
+        _isTitleChanged = true;
         if ( _iconName != caption ) {
             _iconName = caption;
 
@@ -679,6 +684,11 @@ QString Session::iconName() const
 QString Session::iconText() const
 {
     return _iconText;
+}
+
+bool Session::isTitleChanged() const
+{
+    return _isTitleChanged;
 }
 
 void Session::setHistoryType(const HistoryType & hType)

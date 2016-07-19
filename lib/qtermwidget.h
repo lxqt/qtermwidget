@@ -205,8 +205,11 @@ public:
      */
     void setKeyboardCursorShape(KeyboardCursorShape shape);
 
-    QString userTitle() const;
-    QString iconText() const;
+    QString title() const;
+    QString icon() const;
+
+    /** True if the title() or icon() was (ever) changed by the session. */
+    bool isTitleChanged() const;
 
 signals:
     void finished();
@@ -265,7 +268,6 @@ protected:
 
 protected slots:
     void sessionFinished();
-    void sessionTitleChanged();
     void selectionChanged(bool textSelected);
 
 private slots:

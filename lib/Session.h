@@ -282,6 +282,9 @@ public:
     /** Returns the text of the icon associated with this session. */
     QString iconText() const;
 
+    /** Flag if the title/icon was changed by user/shell. */
+    bool isTitleChanged() const;
+
     /** Specifies whether a utmp entry should be created for the pty used by this session. */
     void setAddToUtmp(bool);
 
@@ -529,6 +532,7 @@ private:
 
     QString        _iconName;
     QString        _iconText; // as set by: echo -en '\033]1;IconText\007
+    bool           _isTitleChanged; ///< flag if the title/icon was changed by user
     bool           _addToUtmp;
     bool           _flowControl;
     bool           _fullScripting;
