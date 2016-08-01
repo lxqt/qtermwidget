@@ -263,21 +263,18 @@ void TerminalDisplay::setVTFont(const QFont& f)
       qDebug() << "Using a variable-width font in the terminal.  This may cause performance degradation and display/alignment errors.";
   }
 
-  if ( metrics.height() < height() && metrics.maxWidth() < width() )
-  {
-    // hint that text should be drawn without anti-aliasing.
-    // depending on the user's font configuration, this may not be respected
-    if (!_antialiasText)
-        font.setStyleStrategy( QFont::NoAntialias );
+  // hint that text should be drawn without anti-aliasing.
+  // depending on the user's font configuration, this may not be respected
+  if (!_antialiasText)
+      font.setStyleStrategy( QFont::NoAntialias );
 
-    // experimental optimization.  Konsole assumes that the terminal is using a
-    // mono-spaced font, in which case kerning information should have an effect.
-    // Disabling kerning saves some computation when rendering text.
-    font.setKerning(false);
+  // experimental optimization.  Konsole assumes that the terminal is using a
+  // mono-spaced font, in which case kerning information should have an effect.
+  // Disabling kerning saves some computation when rendering text.
+  font.setKerning(false);
 
-    QWidget::setFont(font);
-    fontChange(font);
-  }
+  QWidget::setFont(font);
+  fontChange(font);
 }
 
 void TerminalDisplay::setFont(const QFont &)
