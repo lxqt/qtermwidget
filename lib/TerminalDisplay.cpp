@@ -142,6 +142,8 @@ void TerminalDisplay::setScreenWindow(ScreenWindow* window)
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateImage()) );
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateFilters()) );
         connect( _screenWindow , SIGNAL(scrolled(int)) , this , SLOT(updateFilters()) );
+        connect( _screenWindow, &ScreenWindow::cursorLocationChanged,
+                 this, &TerminalDisplay::updateIMECursorRectangle);
         window->setWindowLines(_lines);
     }
 }
@@ -2774,12 +2776,27 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
     event->accept();
 }
 
+void TerminalDisplay::updateIMECursorRectangle()
+{
+    qApp->inputMethod()->update(Qt::ImCursorRectangle);
+}
+
 void TerminalDisplay::inputMethodEvent( QInputMethodEvent* event )
 {
     QKeyEvent keyEvent(QEvent::KeyPress,0,Qt::NoModifier,event->commitString());
     emit keyPressedSignal(&keyEvent);
 
     _inputMethodData.preeditString = event->preeditString();
+
+    for (const QInputMethodEvent::Attribute& attr : event->attributes())
+    {
+        if (attr.type == QInputMethodEvent::AttributeType::Cursor)
+        {
+            _inputMethodData.cursorPos = attr.start;
+            updateIMECursorRectangle();
+        }
+    }
+
     update(preeditRect() | _inputMethodData.previousPreeditRect);
 
     event->accept();
@@ -2789,8 +2806,24 @@ QVariant TerminalDisplay::inputMethodQuery( Qt::InputMethodQuery query ) const
     const QPoint cursorPos = _screenWindow ? _screenWindow->cursorPosition() : QPoint(0,0);
     switch ( query )
     {
-        case Qt::ImMicroFocus:
-                return imageToWidget(QRect(cursorPos.x(),cursorPos.y(),1,1));
+        case Qt::ImCursorRectangle:
+            {
+                /*   The real cursor position
+                   = start of preedit string + relative cursor in preedit string
+                 */
+                // TODO: how about RTL languages?
+                int realCursorX = cursorPos.x();
+                // Qt doesn't report a cursor change event after the preedit string
+                // is committed, so we need to check here
+                if (!_inputMethodData.preeditString.isEmpty())
+                {
+                    for (int i = 0; i < _inputMethodData.cursorPos; i++)
+                    {
+                        realCursorX += konsole_wcwidth(_inputMethodData.preeditString[i].unicode());
+                    }
+                }
+                return imageToWidget(QRect(realCursorX, cursorPos.y(),1,1));
+            }
             break;
         case Qt::ImFont:
                 return font();

@@ -68,8 +68,10 @@ class TerminalCharacterDecoder;
     using selectedText().  When getImage() is used to retrieve the visible image,
     characters which are part of the selection have their colours inverted.
 */
-class Screen
+class Screen : public QObject
 {
+    Q_OBJECT
+
 public:
     /** Construct a new screen image of size @p lines by @p columns. */
     Screen(int lines, int columns);
@@ -544,6 +546,12 @@ public:
       * Character style.
       */
     static void fillWithDefaultChar(Character* dest, int count);
+
+signals:
+    /**
+      * Triggered when either cuX or cuY is changed
+      */
+    void cursorLocationChanged();
 
 private:
 
