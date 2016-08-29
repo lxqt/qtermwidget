@@ -806,6 +806,7 @@ private:
     {
         QString preeditString;
         QRect previousPreeditRect;
+        int cursorPos;
     };
     InputMethodData _inputMethodData;
 
