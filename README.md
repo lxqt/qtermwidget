@@ -1,34 +1,28 @@
 # QTermWidget
 
-A terminal emulator widget for Qt 5.
+## Overview
 
-QTermWidget is an opensource project originally based on KDE4 Konsole application,
-but it took its own direction later.
-The main goal of this project is to provide unicode-enabled, embeddable
-Qt widget for using as a built-in console (or terminal emulation widget).
+A terminal emulator widget for Qt 5.   
 
-# Installation
+QTermWidget is an open-source project originally based on KDE4 Konsole application, but it took its own direction later.   
+The main goal of this project is to provide a unicode-enabled, embeddable Qt widget for using as a built-in console (or terminal emulation widget).   
 
-Requirements:
- * Qt >= 5.4
- * cmake >= 3.0
+It is compatible with BSD, Linux and OS X.   
 
-Supported platforms:
- * Linux
- * BSD
- * OS X
+This project is licensed under the terms of the [GPLv2](https://www.gnu.org/licenses/gpl-2.0.en.html) or any later version. See the LICENSE file for the full text of the license.   
 
-Building
+## Installation
 
- 1. `mkdir -p build && cd build`
- 2. `cmake <path/to/source>`
- 3. `make`
+### Compiling sources
 
-Run `make install` to install.
+The only runtime dependency is qtbase ≥ 5.4.   
+In order to build CMake ≥ 3.0 is needed as well as optionally Git to pull latest VCS checkouts.
 
-# License
+Code configuration is handled by CMake. Building out of source is strongly recommended. CMake variable `CMAKE_INSTALL_PREFIX` will normally have to be set to `/usr`, depending on the way library paths are dealt with on 64bit systems variables like `CMAKE_INSTALL_LIBDIR` may have to be set as well.   
 
-This project is licensed under the terms of the
-[GPLv2](https://www.gnu.org/licenses/gpl-2.0.en.html) or any later version.
+To build run `make`, to install `make install` which accepts variable `DESTDIR` as usual.   
 
-See the LICENSE file for the full text of the license.
+### Binary packages
+
+The library is provided by all major Linux distributions like Arch Linux, Debian, Fedora and openSUSE.   
+Just use the distributions' package managers to search for string `qtermwidget`.
