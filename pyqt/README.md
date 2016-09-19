@@ -4,22 +4,22 @@ PyQt5 Bindings for QTermWidget
 
 INSTALL: 
 ------------
-####1. Download QTermWidget -> https://github.com/lxde/qtermwidget	
 	
-####2. Compile and install it:
+####1. Download, compile and install QTermWidget:
+	$ git clone https://github.com/lxde/qtermwidget.git
 	$ mkdir build && cd build
 	$ cmake ..
 	$ make
 	$ sudo make install
 If `make install` command will not work just copy the `qtermwidget.so*` files to /usr/lib directory.
-####3. Install PyQt5 and PyQt5-devel if not yet installed.
-####4. Configure, compile and install bindings. Execute in terminal in the qtermwidget bindings folder:
-
-	$ python config.py
+####2. Install PyQt5 and PyQt5-devel if not yet installed.
+####3. Configure, compile and install bindings. Execute in terminal in the qtermwidget bindings folder:
+	$ cd pyqt/
+	$ QT_SELECT=5 python3 config.py
 	$ make
 	$ sudo make install
 
-####5. You can run ./test.py to test the installed module.
+####4. You can run ./test.py to test the installed module.
 
 
 ABOUT:
