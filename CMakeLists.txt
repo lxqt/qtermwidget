@@ -182,16 +182,3 @@ CONFIGURE_FILE(
 ADD_CUSTOM_TARGET(uninstall
     "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
 )
-
-
-# make dist custom target
-SET(CPACK_PACKAGE_NAME "qtermwidget")
-# TODO/FIXME: versioning from player subdir... I don't know why it's separated...
-SET(CPACK_PACKAGE_VERSION ${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH})
-SET(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
-SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
-SET(CPACK_IGNORE_FILES "/\\\\.git/;\\\\.swp$;\\\\.#;/#;\\\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;\\\\.qm$;/build/;\\\\.diff$;.DS_Store'")
-SET(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
-INCLUDE(CPack)
-# simulate autotools' "make dist"
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
