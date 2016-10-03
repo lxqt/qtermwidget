@@ -117,14 +117,6 @@ public:
         */
        virtual QList<QAction*> actions();
 
-       /**
-        * Returns the text of a tooltip to be shown when the mouse moves over the hotspot, or
-        * an empty string if there is no tooltip associated with this hotspot.
-        *
-        * The default implementation returns an empty string.
-        */
-       virtual QString tooltip() const;
-
     protected:
        /** Sets the type of a hotspot.  This should only be set once */
        void setType(Type type);
@@ -272,7 +264,6 @@ public:
          */
         virtual void activate(const QString& action = QString());
 
-        virtual QString tooltip() const;
     private:
         enum UrlType
         {
