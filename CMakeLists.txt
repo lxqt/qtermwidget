@@ -33,6 +33,7 @@ endif()
 
 include_directories(
     "${CMAKE_SOURCE_DIR}/lib"
+    "${CMAKE_SOURCE_DIR}/third_party"
     "${CMAKE_BINARY_DIR}/lib"
     "${CMAKE_BINARY_DIR}"
 )
@@ -69,6 +70,7 @@ set(SRCS
     lib/TerminalDisplay.cpp
     lib/tools.cpp
     lib/Vt102Emulation.cpp
+    third_party/wcwidth.c
 )
 
 # Only the Headers that need to be moc'd go here
