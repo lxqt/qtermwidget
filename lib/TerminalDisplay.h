@@ -103,6 +103,9 @@ public:
     /** Sets the opacity of the terminal display. */
     void setOpacity(qreal opacity);
 
+    /** Sets the background image of the terminal display. */
+    void setBackgroundImage(QString backgroundImage);
+
     /**
      * Specifies whether the terminal display has a vertical scroll bar, and if so whether it
      * is shown on the left or right side of the display.
@@ -782,6 +785,8 @@ private:
     QSize _size;
 
     QRgb _blendColor;
+
+    QPixmap _backgroundImage;
 
     // list of filters currently applied to the display.  used for links and
     // search highlight
