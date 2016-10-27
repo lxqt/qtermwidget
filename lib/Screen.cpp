@@ -644,7 +644,7 @@ void Screen::checkSelection(int from, int to)
         clearSelection();
 }
 
-void Screen::displayCharacter(unsigned short c)
+void Screen::displayCharacter(wchar_t c)
 {
     // Note that VT100 does wrapping BEFORE putting the character.
     // This has impact on the assumption of valid cursor positions.

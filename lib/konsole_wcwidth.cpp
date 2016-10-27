@@ -33,10 +33,9 @@ int konsole_wcwidth(wchar_t ucs)
 }
 
 // single byte char: +1, multi byte char: +2
-int string_width( const QString & txt )
+int string_width( const std::wstring & wstr )
 {
     int w = 0;
-    std::wstring wstr = txt.toStdWString();
     for ( size_t i = 0; i < wstr.length(); ++i ) {
         w += konsole_wcwidth( wstr[ i ] );
     }

@@ -198,7 +198,7 @@ void Vt102Emulation::addArgument()
   argv[argc] = 0;
 }
 
-void Vt102Emulation::addToCurrentToken(int cc)
+void Vt102Emulation::addToCurrentToken(wchar_t cc)
 {
   tokenBuffer[tokenBufferPos] = cc;
   tokenBufferPos = qMin(tokenBufferPos+1,MAX_TOKEN_LENGTH-1);
@@ -277,7 +277,7 @@ void Vt102Emulation::initTokenizer()
 #define DEL 127
 
 // process an incoming unicode character
-void Vt102Emulation::receiveChar(int cc)
+void Vt102Emulation::receiveChar(wchar_t cc)
 {
   if (cc == DEL)
     return; //VT100: ignore.
@@ -299,7 +299,7 @@ void Vt102Emulation::receiveChar(int cc)
   // advance the state
   addToCurrentToken(cc);
 
-  int* s = tokenBuffer;
+  wchar_t* s = tokenBuffer;
   int  p = tokenBufferPos;
 
   if (getMode(MODE_Ansi))
@@ -441,7 +441,7 @@ void Vt102Emulation::updateTitle()
    about this mapping.
 */
 
-void Vt102Emulation::processToken(int token, int p, int q)
+void Vt102Emulation::processToken(int token, wchar_t p, int q)
 {
   switch (token)
   {
@@ -1125,7 +1125,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
 
 // Apply current character map.
 
-unsigned short Vt102Emulation::applyCharset(unsigned short c)
+wchar_t Vt102Emulation::applyCharset(wchar_t c)
 {
   if (CHARSET.graphic && 0x5f <= c && c <= 0x7e) return vt100_graphics[c-0x5f];
   if (CHARSET.pound && c == '#' ) return 0xa3; //This mode is obsolete
@@ -1336,7 +1336,7 @@ char Vt102Emulation::eraseChar() const
 }
 
 // print contents of the scan buffer
-static void hexdump(int* s, int len)
+static void hexdump(wchar_t* s, int len)
 { int i;
   for (i = 0; i < len; i++)
   {
