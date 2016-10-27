@@ -346,7 +346,7 @@ public:
      * is inserted at the current cursor position, otherwise it will replace the
      * character already at the current cursor position.
      */
-    void displayCharacter(unsigned short c);
+    void displayCharacter(wchar_t c);
 
     // Do composition with last shown character FIXME: Not implemented yet for KDE 4
     void compose(const QString& compose);

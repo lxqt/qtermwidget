@@ -633,7 +633,7 @@ private:
     // draws a section of text, all the text in this section
     // has a common color and style
     void drawTextFragment(QPainter& painter, const QRect& rect,
-                          const QString& text, const Character* style);
+                          const std::wstring& text, const Character* style);
     // draws the background for a text fragment
     // if useOpacitySetting is true then the color's alpha value will be set to
     // the display's transparency (set with setOpacity()), otherwise the background
@@ -644,11 +644,11 @@ private:
     void drawCursor(QPainter& painter, const QRect& rect , const QColor& foregroundColor,
                                        const QColor& backgroundColor , bool& invertColors);
     // draws the characters or line graphics in a text fragment
-    void drawCharacters(QPainter& painter, const QRect& rect,  const QString& text,
+    void drawCharacters(QPainter& painter, const QRect& rect,  const std::wstring& text,
                                            const Character* style, bool invertCharacterColor);
     // draws a string of line graphics
     void drawLineCharString(QPainter& painter, int x, int y,
-                            const QString& str, const Character* attributes);
+                            const std::wstring& str, const Character* attributes);
 
     // draws the preedit string for input methods
     void drawInputMethodPreeditString(QPainter& painter , const QRect& rect);
@@ -811,7 +811,7 @@ private:
 
     struct InputMethodData
     {
-        QString preeditString;
+        std::wstring preeditString;
         QRect previousPreeditRect;
     };
     InputMethodData _inputMethodData;

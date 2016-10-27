@@ -10,11 +10,11 @@
 #ifndef _KONSOLE_WCWIDTH_H_
 #define _KONSOLE_WCWIDTH_H_
 
-// Qt
-class QString;
+// Standard
+#include <string>
 
 int konsole_wcwidth(wchar_t ucs);
 
-int string_width( const QString & txt );
+int string_width( const std::wstring & wstr );
 
 #endif

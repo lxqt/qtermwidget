@@ -102,7 +102,7 @@ protected:
   // reimplemented from Emulation
   virtual void setMode(int mode);
   virtual void resetMode(int mode);
-  virtual void receiveChar(int cc);
+  virtual void receiveChar(wchar_t cc);
 
 private slots:
   //causes changeTitle() to be emitted for each (int,QString) pair in pendingTitleUpdates
@@ -110,7 +110,7 @@ private slots:
   void updateTitle();
 
 private:
-  unsigned short applyCharset(unsigned short c);
+  wchar_t applyCharset(wchar_t c);
   void setCharset(int n, int cs);
   void useCharset(int n);
   void setAndUseCharset(int n, int cs);
@@ -134,8 +134,8 @@ private:
 
   void resetTokenizer();
   #define MAX_TOKEN_LENGTH 256 // Max length of tokens (e.g. window title)
-  void addToCurrentToken(int cc);
-  int tokenBuffer[MAX_TOKEN_LENGTH]; //FIXME: overflow?
+  void addToCurrentToken(wchar_t cc);
+  wchar_t tokenBuffer[MAX_TOKEN_LENGTH]; //FIXME: overflow?
   int tokenBufferPos;
 #define MAXARGS 15
   void addDigit(int dig);
@@ -151,7 +151,7 @@ private:
 
   void reportDecodingError();
 
-  void processToken(int code, int p, int q);
+  void processToken(int code, wchar_t p, int q);
   void processWindowAttributeChange();
   void requestWindowAttribute(int);
 
