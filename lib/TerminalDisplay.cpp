@@ -1791,7 +1791,7 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
 
       Filter::HotSpot *spot = _filterChain->hotSpotAt(charLine, charColumn);
       if (spot && spot->type() == Filter::HotSpot::Link)
-          spot->activate("open-action");
+          spot->activate("click-action");
     }
   }
   else if ( ev->button() == Qt::MidButton )
