@@ -42,6 +42,16 @@ add_definitions(-Wall)
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 include(qtermwidget5_use)
 
+option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
+
+if(USE_UTF8PROC)
+    find_package(Utf8Proc)
+endif()
+
+if (UTF8PROC_FOUND)
+    add_definitions(-DHAVE_UTF8PROC)
+    include_directories("${UTF8PROC_INCLUDE_DIRS}")
+endif()
 
 # main library
 
@@ -129,6 +139,9 @@ set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
                      )
+if (UTF8PROC_FOUND)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${UTF8PROC_LIBRARIES})
+endif()
 if(APPLE)
     set (CMAKE_SKIP_RPATH 1)
     # this is a must to load the lib correctly
