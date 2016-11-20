@@ -675,6 +675,20 @@ void TerminalDisplay::setOpacity(qreal opacity)
     _blendColor = color.rgba();
 }
 
+void TerminalDisplay::setBackgroundImage(QString backgroundImage)
+{
+    if (!backgroundImage.isEmpty())
+    {
+        _backgroundImage.load(backgroundImage);
+        setAttribute(Qt::WA_OpaquePaintEvent, false);
+    }
+    else
+    {
+        _backgroundImage = QPixmap();
+        setAttribute(Qt::WA_OpaquePaintEvent, true);
+    }
+}
+
 void TerminalDisplay::drawBackground(QPainter& painter, const QRect& rect, const QColor& backgroundColor, bool useOpacitySetting )
 {
         // the area of the widget showing the contents of the terminal display is drawn
@@ -693,13 +707,15 @@ void TerminalDisplay::drawBackground(QPainter& painter, const QRect& rect, const
 
         if ( HAVE_TRANSPARENCY && qAlpha(_blendColor) < 0xff && useOpacitySetting )
         {
-            QColor color(backgroundColor);
-            color.setAlpha(qAlpha(_blendColor));
+            if (_backgroundImage.isNull()) {
+                QColor color(backgroundColor);
+                color.setAlpha(qAlpha(_blendColor));
 
-            painter.save();
-            painter.setCompositionMode(QPainter::CompositionMode_Source);
-            painter.fillRect(contentsRect, color);
-            painter.restore();
+                painter.save();
+                painter.setCompositionMode(QPainter::CompositionMode_Source);
+                painter.fillRect(contentsRect, color);
+                painter.restore();
+            }
         }
         else
             painter.fillRect(contentsRect, backgroundColor);
@@ -1307,6 +1323,14 @@ void TerminalDisplay::focusInEvent(QFocusEvent*)
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
 {
   QPainter paint(this);
+
+  if ( !_backgroundImage.isNull() && qAlpha(_blendColor) < 0xff )
+  {
+    paint.drawPixmap(0, 0, _backgroundImage);
+    QColor background = _colorTable[DEFAULT_BACK_COLOR].color;
+    background.setAlpha(qAlpha(_blendColor));
+    paint.fillRect(contentsRect(), background);
+  }
 
   foreach (const QRect &rect, (pe->region() & contentsRect()).rects())
   {

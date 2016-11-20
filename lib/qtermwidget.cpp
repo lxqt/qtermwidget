@@ -335,6 +335,14 @@ void QTermWidget::setTerminalOpacity(qreal level)
     m_impl->m_terminalDisplay->setOpacity(level);
 }
 
+void QTermWidget::setTerminalBackgroundImage(QString backgroundImage)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+
+    m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
+}
+
 void QTermWidget::setShellProgram(const QString &progname)
 {
     if (!m_impl->m_session)
