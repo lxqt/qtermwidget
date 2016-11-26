@@ -30,6 +30,7 @@
 #include <QtDebug>
 #include <QSettings>
 #include <QDir>
+#include <QRegularExpression>
 
 
 // KDE
@@ -329,19 +330,55 @@ QString ColorScheme::translatedColorNameForIndex(int index)
 
 void ColorScheme::readColorEntry(QSettings * s , int index)
 {
-    s->beginGroup(colorNameForIndex(index));
+    QString colorName = colorNameForIndex(index);
+
+    s->beginGroup(colorName);
 
     ColorEntry entry;
 
-    QStringList rgbList = s->value("Color", QStringList()).toStringList();
-    if (rgbList.count() != 3)
-    {
-        Q_ASSERT(0);
-    }
+    QVariant colorValue = s->value("Color");
+    QString colorStr;
     int r, g, b;
-    r = rgbList[0].toInt();
-    g = rgbList[1].toInt();
-    b = rgbList[2].toInt();
+    bool ok = false;
+    // XXX: Undocumented(?) QSettings behavior: values with commas are parsed
+    // as QStringList and others QString
+    if (colorValue.type() == QVariant::StringList)
+    {
+        QStringList rgbList = colorValue.toStringList();
+        colorStr = rgbList.join(",");
+        if (rgbList.count() == 3)
+        {
+            bool parse_ok;
+
+            ok = true;
+            r = rgbList[0].toInt(&parse_ok);
+            ok = ok && parse_ok && (r >= 0 && r <= 0xff);
+            g = rgbList[1].toInt(&parse_ok);
+            ok = ok && parse_ok && (g >= 0 && g <= 0xff);
+            b = rgbList[2].toInt(&parse_ok);
+            ok = ok && parse_ok && (b >= 0 && b <= 0xff);
+        }
+    }
+    else
+    {
+        colorStr = colorValue.toString();
+        QRegularExpression hexColorPattern("^#[0-9a-f]{6}$",
+                                           QRegularExpression::CaseInsensitiveOption);
+        if (hexColorPattern.match(colorStr).hasMatch())
+        {
+            // Parsing is always ok as already matched by the regexp
+            r = colorStr.midRef(1, 2).toInt(nullptr, 16);
+            g = colorStr.midRef(3, 2).toInt(nullptr, 16);
+            b = colorStr.midRef(5, 2).toInt(nullptr, 16);
+            ok = true;
+        }
+    }
+    if (!ok)
+    {
+        qWarning().nospace() << "Invalid color value " << colorStr
+                             << " for " << colorName << ". Fallback to black.";
+        r = g = b = 0;
+    }
     entry.color = QColor(r, g, b);
 
     entry.transparent = s->value("Transparent",false).toBool();
