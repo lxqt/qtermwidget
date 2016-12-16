@@ -7,6 +7,7 @@
     <qresource><file>DarkPastels.colorscheme</file></qresource>
     <qresource><file>GreenOnBlack.colorscheme</file></qresource>
     <qresource><file>WhiteOnBlack.schema</file></qresource>
+    <qresource><file>BreezeModified.schema</file></qresource>
     <qresource><file>historic/vim.schema</file></qresource>
     <qresource><file>historic/Transparent.schema</file></qresource>
     <qresource><file>historic/Transparent_MC.schema</file></qresource>
