@@ -1,7 +1,24 @@
 
-qtermwidget-0.7.0 / 2016-09-24
+qtermwidget-0.7.1 / 2016-12-21
 ==============================
 
+  * Bump patch version (#105)
+  * Added a modified Breeze color scheme (#104)
+  * Accept hex color strings as well (#101)
+  * Remove the stale lib/README (#102)
+  * Implement background images (#95)
+  * Implement other BOX DRAWING characters (#98)
+  * Preparations for context menu actions on URLs (#97)
+  * Drop the ancient wcwidth impl. and use utf8proc if possible (#99)
+  * Remove widget size checks in setVTFont() (#86)
+  * Delete unused tooltip code (#81)
+  * Fix size of the array passed to memset() (#79)
+  * Remove cpack (#93)
+
+0.7.0 / 2016-09-24
+==================
+
+  * Release 0.7.0: Add changelog
   * Bump version to 0.7.0 (#92)
   * Add Solarized Color Schemes
   * Update README.md
