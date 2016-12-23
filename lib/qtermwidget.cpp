@@ -688,3 +688,8 @@ bool QTermWidget::isTitleChanged() const
 {
     return m_impl->m_session->isTitleChanged();
 }
+
+void QTermWidget::setAutoClose(bool autoClose)
+{
+    m_impl->m_session->setAutoClose(autoClose);
+}
