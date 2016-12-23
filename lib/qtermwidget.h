@@ -211,6 +211,13 @@ public:
      */
     void setKeyboardCursorShape(KeyboardCursorShape shape);
 
+
+    /**
+     * Automatically close the terminal session after the shell process exits or
+     * keep it running.
+     */
+    void setAutoClose(bool);
+
     QString title() const;
     QString icon() const;
 
