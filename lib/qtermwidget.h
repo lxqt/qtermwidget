@@ -249,6 +249,12 @@ signals:
 
     void titleChanged();
 
+    /**
+     * Signals that we received new data from the process running in the
+     * terminal emulator
+     */
+    void receivedData(const QString &text);
+
 public slots:
     // Copy selection to clipboard
     void copyClipboard();
