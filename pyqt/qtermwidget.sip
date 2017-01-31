@@ -21,6 +21,13 @@ public:
         ScrollBarRight=2
     };
 
+    enum KeyboardCursorShape
+    {
+        BlockCursor=0,
+        UnderlineCursor=1,
+        IBeamCursor=2
+    };
+
     QTermWidget(int startnow = 1, QWidget *parent = 0);
     ~QTermWidget();
 	void startTerminalTeletype();
@@ -41,6 +48,7 @@ public:
     static QStringList availableColorSchemes();
     void setHistorySize(int lines);
     void setScrollBarPosition(ScrollBarPosition);
+    void setKeyboardCursorShape(KeyboardCursorShape shape);
     void scrollToEnd();
     void sendText(QString &text);
     void setFlowControlEnabled(bool enabled);
