@@ -783,23 +783,30 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
 {
     // don't draw text which is currently blinking
     if ( _blinking && (style->rendition & RE_BLINK) )
+        return;
+
+    // don't draw concealed characters
+    if (style->rendition & RE_CONCEAL)
             return;
 
     // setup bold and underline
-    bool useBold;
-    ColorEntry::FontWeight weight = style->fontWeight(_colorTable);
-    if (weight == ColorEntry::UseCurrentFormat)
-        useBold = ((style->rendition & RE_BOLD) && _boldIntense) || font().bold();
-    else
-        useBold = (weight == ColorEntry::Bold) ? true : false;
-    bool useUnderline = style->rendition & RE_UNDERLINE || font().underline();
+    bool useBold = ((style->rendition & RE_BOLD) && _boldIntense) || font().bold();
+    const bool useUnderline = style->rendition & RE_UNDERLINE || font().underline();
+    const bool useItalic = style->rendition & RE_ITALIC || font().italic();
+    const bool useStrikeOut = style->rendition & RE_STRIKEOUT || font().strikeOut();
+    const bool useOverline = style->rendition & RE_OVERLINE || font().overline();
 
     QFont font = painter.font();
     if (    font.bold() != useBold
-         || font.underline() != useUnderline )
-    {
+         || font.underline() != useUnderline
+         || font.italic() != useItalic
+         || font.strikeOut() != useStrikeOut
+         || font.overline() != useOverline) {
        font.setBold(useBold);
        font.setUnderline(useUnderline);
+       font.setItalic(useItalic);
+       font.setStrikeOut(useStrikeOut);
+       font.setOverline(useOverline);
        painter.setFont(font);
     }
 
@@ -818,16 +825,17 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
         drawLineCharString(painter,rect.x(),rect.y(),text,style);
     else
     {
-        // the drawText(rect,flags,string) overload is used here with null flags
-        // instead of drawText(rect,string) because the (rect,string) overload causes
-        // the application's default layout direction to be used instead of
-        // the widget-specific layout direction, which should always be
-        // Qt::LeftToRight for this widget
-        // This was discussed in: http://lists.kde.org/?t=120552223600002&r=1&w=2
-        if (_bidiEnabled)
-            painter.drawText(rect,0,text);
-        else
-            painter.drawText(rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + text);
+        // Force using LTR as the document layout for the terminal area, because
+        // there is no use cases for RTL emulator and RTL terminal application.
+        //
+        // This still allows RTL characters to be rendered in the RTL way.
+        painter.setLayoutDirection(Qt::LeftToRight);
+
+        if (_bidiEnabled) {
+            painter.drawText(rect.x(), rect.y() + _fontAscent + _lineSpacing, text);
+        } else {
+            painter.drawText(rect.x(), rect.y() + _fontAscent + _lineSpacing, LTR_OVERRIDE_CHAR + text);
+        }
     }
 }
 

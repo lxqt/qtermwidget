@@ -111,8 +111,12 @@ public:
         ScrollLineDownCommand = 16,
         /** Toggles scroll lock mode */
         ScrollLockCommand = 32,
+        /** Scroll the terminal display up to the start of history */
+        ScrollUpToTopCommand = 64,
+        /** Scroll the terminal display down to the end of history */
+        ScrollDownToBottomCommand = 128,
         /** Echos the operating system specific erase character. */
-        EraseCommand = 64
+        EraseCommand = 256
     };
     Q_DECLARE_FLAGS(Commands,Command)
 
