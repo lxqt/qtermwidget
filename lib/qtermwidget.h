@@ -96,6 +96,7 @@ public:
     void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
+    void setTerminalBackgroundImage(QString backgroundImage);
 
     //environment
     void setEnvironment(const QStringList & environment);
@@ -192,6 +193,11 @@ public:
      */
     Filter::HotSpot* getHotSpotAt(int row, int column) const;
 
+    /*
+     * Proxy for TerminalDisplay::filterActions
+     * */
+    QList<QAction*> filterActions(const QPoint& position);
+
     /**
      * Returns a pty slave file descriptor.
      * This can be used for display and control
@@ -204,6 +210,13 @@ public:
      * at the position in the terminal where keyboard input will appear.
      */
     void setKeyboardCursorShape(KeyboardCursorShape shape);
+
+
+    /**
+     * Automatically close the terminal session after the shell process exits or
+     * keep it running.
+     */
+    void setAutoClose(bool);
 
     QString title() const;
     QString icon() const;
@@ -220,7 +233,7 @@ signals:
 
     void termKeyPressed(QKeyEvent *);
 
-    void urlActivated(const QUrl&);
+    void urlActivated(const QUrl&, bool fromContextMenu);
 
     void bell(const QString& message);
 
@@ -235,6 +248,12 @@ signals:
     void sendData(const char *,int);
 
     void titleChanged();
+
+    /**
+     * Signals that we received new data from the process running in the
+     * terminal emulator
+     */
+    void receivedData(const QString &text);
 
 public slots:
     // Copy selection to clipboard

@@ -8,8 +8,8 @@ include(CheckFunctionExists)
 option(BUILD_TEST "Build test application. Default OFF." OFF)
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
-set(QTERMWIDGET_VERSION_MINOR "6")
-set(QTERMWIDGET_VERSION_PATCH "0")
+set(QTERMWIDGET_VERSION_MINOR "7")
+set(QTERMWIDGET_VERSION_PATCH "1")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
@@ -42,6 +42,16 @@ add_definitions(-Wall)
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 include(qtermwidget5_use)
 
+option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
+
+if(USE_UTF8PROC)
+    find_package(Utf8Proc)
+endif()
+
+if (UTF8PROC_FOUND)
+    add_definitions(-DHAVE_UTF8PROC)
+    include_directories("${UTF8PROC_INCLUDE_DIRS}")
+endif()
 
 # main library
 
@@ -129,6 +139,9 @@ set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
                      )
+if (UTF8PROC_FOUND)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${UTF8PROC_LIBRARIES})
+endif()
 if(APPLE)
     set (CMAKE_SKIP_RPATH 1)
     # this is a must to load the lib correctly
@@ -182,16 +195,3 @@ CONFIGURE_FILE(
 ADD_CUSTOM_TARGET(uninstall
     "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
 )
-
-
-# make dist custom target
-SET(CPACK_PACKAGE_NAME "qtermwidget")
-# TODO/FIXME: versioning from player subdir... I don't know why it's separated...
-SET(CPACK_PACKAGE_VERSION ${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH})
-SET(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
-SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
-SET(CPACK_IGNORE_FILES "/\\\\.git/;\\\\.swp$;\\\\.#;/#;\\\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;\\\\.qm$;/build/;\\\\.diff$;.DS_Store'")
-SET(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
-INCLUDE(CPack)
-# simulate autotools' "make dist"
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)

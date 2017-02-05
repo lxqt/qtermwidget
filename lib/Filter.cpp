@@ -287,10 +287,6 @@ Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int end
     , _type(NotSpecified)
 {
 }
-QString Filter::HotSpot::tooltip() const
-{
-    return QString();
-}
 QList<QAction*> Filter::HotSpot::actions()
 {
     return QList<QAction*>();
@@ -407,7 +403,7 @@ RegExpFilter::HotSpot* UrlFilter::newHotSpot(int startLine,int startColumn,int e
 {
     HotSpot *spot = new UrlFilter::HotSpot(startLine,startColumn,
                                                endLine,endColumn);
-    connect(spot->getUrlObject(), SIGNAL(activated(QUrl)), this, SIGNAL(activated(QUrl)));
+    connect(spot->getUrlObject(), &FilterObject::activated, this, &UrlFilter::activated);
     return spot;
 }
 
@@ -418,19 +414,6 @@ UrlFilter::HotSpot::HotSpot(int startLine,int startColumn,int endLine,int endCol
     setType(Link);
 }
 
-QString UrlFilter::HotSpot::tooltip() const
-{
-    QString url = capturedTexts().first();
-
-    const UrlType kind = urlType();
-
-    if ( kind == StandardUrl )
-        return QString();
-    else if ( kind == Email )
-        return QString();
-    else
-        return QString();
-}
 UrlFilter::HotSpot::UrlType UrlFilter::HotSpot::urlType() const
 {
     QString url = capturedTexts().first();
@@ -455,7 +438,7 @@ void UrlFilter::HotSpot::activate(const QString& actionName)
         return;
     }
 
-    if ( actionName.isEmpty() || actionName == "open-action" )
+    if ( actionName.isEmpty() || actionName == "open-action" || actionName == "click-action" )
     {
         if ( kind == StandardUrl )
         {
@@ -471,7 +454,7 @@ void UrlFilter::HotSpot::activate(const QString& actionName)
             url.prepend("mailto:");
         }
 
-        _urlObject->emitActivated(url);
+        _urlObject->emitActivated(url, actionName != "click-action");
     }
 }
 
@@ -502,12 +485,12 @@ UrlFilter::HotSpot::~HotSpot()
     delete _urlObject;
 }
 
-void FilterObject::emitActivated(const QUrl& url)
+void FilterObject::emitActivated(const QUrl& url, bool fromContextMenu)
 {
-    emit activated(url);
+    emit activated(url, fromContextMenu);
 }
 
-void FilterObject::activated()
+void FilterObject::activate()
 {
     _filter->activate(sender()->objectName());
 }
@@ -545,8 +528,8 @@ QList<QAction*> UrlFilter::HotSpot::actions()
     openAction->setObjectName( QLatin1String("open-action" ));
     copyAction->setObjectName( QLatin1String("copy-action" ));
 
-    QObject::connect( openAction , SIGNAL(triggered()) , _urlObject , SLOT(activated()) );
-    QObject::connect( copyAction , SIGNAL(triggered()) , _urlObject , SLOT(activated()) );
+    QObject::connect( openAction , &QAction::triggered , _urlObject , &FilterObject::activate );
+    QObject::connect( copyAction , &QAction::triggered , _urlObject , &FilterObject::activate );
 
     list << openAction;
     list << copyAction;

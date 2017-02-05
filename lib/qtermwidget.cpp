@@ -256,9 +256,11 @@ void QTermWidget::init(int startnow)
     connect(m_impl->m_session, SIGNAL(activity()), this, SIGNAL(activity()));
     connect(m_impl->m_session, SIGNAL(silence()), this, SIGNAL(silence()));
 
+    connect(m_impl->m_session, &Session::receivedData, this, &QTermWidget::receivedData);
+
     // That's OK, FilterChain's dtor takes care of UrlFilter.
     UrlFilter *urlFilter = new UrlFilter();
-    connect(urlFilter, SIGNAL(activated(QUrl)), this, SIGNAL(urlActivated(QUrl)));
+    connect(urlFilter, &UrlFilter::activated, this, &QTermWidget::urlActivated);
     m_impl->m_terminalDisplay->filterChain()->addFilter(urlFilter);
 
     m_searchBar = new SearchBar(this);
@@ -333,6 +335,14 @@ void QTermWidget::setTerminalOpacity(qreal level)
         return;
 
     m_impl->m_terminalDisplay->setOpacity(level);
+}
+
+void QTermWidget::setTerminalBackgroundImage(QString backgroundImage)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+
+    m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
 }
 
 void QTermWidget::setShellProgram(const QString &progname)
@@ -643,6 +653,11 @@ Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
     return m_impl->m_terminalDisplay->filterChain()->hotSpotAt(row, column);
 }
 
+QList<QAction*> QTermWidget::filterActions(const QPoint& position)
+{
+    return m_impl->m_terminalDisplay->filterActions(position);
+}
+
 int QTermWidget::getPtySlaveFd() const
 {
     return m_impl->m_session->getPtySlaveFd();
@@ -674,4 +689,9 @@ QString QTermWidget::icon() const
 bool QTermWidget::isTitleChanged() const
 {
     return m_impl->m_session->isTitleChanged();
+}
+
+void QTermWidget::setAutoClose(bool autoClose)
+{
+    m_impl->m_session->setAutoClose(autoClose);
 }

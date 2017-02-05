@@ -73,6 +73,9 @@ makefile.extra_lib_dirs.append("../lib/")
 makefile.extra_lib_dirs.append("..")
 makefile.extra_libs = ["qtermwidget5"]
 
+#Support for C++11
+makefile.extra_cxxflags.append(' -std=c++11 ')
+
 # Generate the Makefile itself.
 makefile.generate()
 
