@@ -246,6 +246,27 @@ void QTermWidget::init(int startnow)
     m_layout->setMargin(0);
     setLayout(m_layout);
 
+    // translations
+    // First check $XDG_DATA_DIRS. This follows the implementation in libqtxdg
+    QString d = QFile::decodeName(qgetenv("XDG_DATA_DIRS"));
+    QStringList dirs = d.split(QLatin1Char(':'), QString::SkipEmptyParts);
+    if (dirs.isEmpty()) {
+        dirs.append(QString::fromLatin1("/usr/local/share"));
+        dirs.append(QString::fromLatin1("/usr/share"));
+    }
+    dirs.append(QFile::decodeName(TRANSLATIONS_DIR));
+
+    m_translator = new QTranslator(this);
+
+    for (const QString& dir : dirs) {
+        qDebug() << "Trying to load translation file from dir" << dir;
+        if (m_translator->load(QLocale::system(), "qtermwidget", "_", dir)) {
+            qApp->installTranslator(m_translator);
+            qDebug() << "Translations found in" << dir;
+            break;
+        }
+    }
+
     m_impl = new TermWidgetImpl(this);
     m_impl->m_terminalDisplay->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addWidget(m_impl->m_terminalDisplay);

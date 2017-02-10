@@ -20,6 +20,7 @@
 #ifndef _Q_TERM_WIDGET
 #define _Q_TERM_WIDGET
 
+#include <QTranslator>
 #include <QWidget>
 #include "Filter.h"
 
@@ -303,6 +304,7 @@ private:
     TermWidgetImpl * m_impl;
     SearchBar* m_searchBar;
     QVBoxLayout *m_layout;
+    QTranslator *m_translator;
 };
 
 
