@@ -5,6 +5,8 @@ project(qtermwidget)
 include(GNUInstallDirs)
 include(CheckFunctionExists)
 
+set(LXQTBT_MINIMUM_VERSION "0.3.0")
+
 option(BUILD_TEST "Build test application. Default OFF." OFF)
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
@@ -30,6 +32,22 @@ elseif(COMPILER_SUPPORTS_CXX0X)
 else()
     message(FATAL "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. C++11 support is required")
 endif()
+
+find_package(Qt5LinguistTools REQUIRED)
+find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
+include(LXQtTranslateTs)
+
+lxqt_translate_ts(QTERMWIDGET_QM
+    TRANSLATION_DIR "lib/translations"
+    PULL_TRANSLATIONS
+        ${PULL_TRANSLATIONS}
+    CLEAN_TRANSLATIONS
+        ${CLEAN_TRANSLATIONS}
+    TRANSLATIONS_REPO
+        ${TRANSLATIONS_REPO}
+    TRANSLATIONS_REFSPEC
+        ${TRANSLATIONS_REFSPEC}
+)
 
 include_directories(
     "${CMAKE_SOURCE_DIR}/lib"
@@ -117,6 +135,10 @@ set(COLORSCHEMES_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/
 message(STATUS "Color schemes will be installed in: ${COLORSCHEMES_DIR}" )
 add_definitions(-DCOLORSCHEMES_DIR="${COLORSCHEMES_DIR}")
 
+set(TRANSLATIONS_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/translations")
+message(STATUS "Translations will be installed in: ${TRANSLATIONS_DIR}")
+add_definitions(-DTRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\")
+
 set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
 
 #| Defines
@@ -133,7 +155,7 @@ qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
 set(PKG_CONFIG_REQ "Qt5Core, Qt5Xml, Qt5Widgets")
 
-add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS})
+add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${QTERMWIDGET_QT_LIBRARIES})
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
@@ -173,6 +195,7 @@ install(FILES
     "${CMAKE_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}_use.cmake"
     DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
 )
+install(FILES ${QTERMWIDGET_QM} DESTINATION ${TRANSLATIONS_DIR})
 # end of main library
 
 
