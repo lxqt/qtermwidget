@@ -1241,8 +1241,9 @@ void TerminalDisplay::showResizeNotification()
      }
      if (!_resizeWidget)
      {
-        _resizeWidget = new QLabel("Size: XXX x XXX", this);
-        _resizeWidget->setMinimumWidth(_resizeWidget->fontMetrics().width("Size: XXX x XXX"));
+         const QString label = tr("Size: XXX x XXX");
+        _resizeWidget = new QLabel(label, this);
+        _resizeWidget->setMinimumWidth(_resizeWidget->fontMetrics().width(label));
         _resizeWidget->setMinimumHeight(_resizeWidget->sizeHint().height());
         _resizeWidget->setAlignment(Qt::AlignCenter);
 
@@ -1252,8 +1253,7 @@ void TerminalDisplay::showResizeNotification()
         _resizeTimer->setSingleShot(true);
         connect(_resizeTimer, SIGNAL(timeout()), _resizeWidget, SLOT(hide()));
      }
-     QString sizeStr = QString("Size: %1 x %2").arg(_columns).arg(_lines);
-     _resizeWidget->setText(sizeStr);
+     _resizeWidget->setText(tr("Size: %1 x %2").arg(_columns).arg(_lines));
      _resizeWidget->move((width()-_resizeWidget->width())/2,
                          (height()-_resizeWidget->height())/2+20);
      _resizeWidget->show();
