@@ -114,6 +114,9 @@ key Delete        +KeyPad : "\E[3~"
 key PgUp    -Shift+KeyPad : "\E[5~"
 key PgDown  -Shift+KeyPad : "\E[6~"
 
+key Clear -AnyMod+KeyPad+AppKeyPad : "\E[OE"
+key Clear +AnyMod+KeyPad+AppKeyPad : "\E[1;*E"
+
 # other grey PC keys
 
 key Enter+NewLine : "\r\n"
@@ -178,4 +181,3 @@ key PgDown  +Shift-AppScreen : scrollPageDown
 key End     +Shift-AppScreen : scrollDownToBottom
 
 key ScrollLock     : scrollLock
-
