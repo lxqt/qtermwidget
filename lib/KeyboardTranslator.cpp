@@ -632,7 +632,7 @@ bool KeyboardTranslator::Entry::matches(int keyCode ,
         return false;
 
     // if modifiers is non-zero, the 'any modifier' state is implicit
-    if ( modifiers != 0 )
+    if ( (modifiers & ~Qt::KeypadModifier) != 0 )
         testState |= AnyModifierState;
 
     if ( (testState & _stateMask) != (_state & _stateMask) )
