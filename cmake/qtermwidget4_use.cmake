@@ -1,8 +1,0 @@
-
-find_package(Qt4 REQUIRED QUIET)
-include(${QT_USE_FILE})
-
-set(QTERMWIDGET_QT_LIBRARIES ${QT_LIBRARIES})
-
-include_directories(${QTERMWIDGET_INCLUDE_DIRS})
-
