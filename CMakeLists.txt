@@ -24,6 +24,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+find_package(Qt5Widgets REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 include(LXQtTranslateTs)
@@ -48,7 +49,6 @@ include_directories(
 )
 
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
-include(qtermwidget5_use)
 
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
 
@@ -137,7 +137,7 @@ qt5_wrap_ui(UI_SRCS ${UI})
 set(PKG_CONFIG_REQ "Qt5Core, Qt5Xml, Qt5Widgets")
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
-target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${QTERMWIDGET_QT_LIBRARIES})
+target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
@@ -177,6 +177,12 @@ generate_export_header(${QTERMWIDGET_LIBRARY_NAME}
     EXPORT_MACRO_NAME QTERMWIDGET_EXPORT
 )
 
+target_include_directories(${QTERMWIDGET_LIBRARY_NAME}
+    INTERFACE
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
+        "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}>"
+)
+
 write_basic_package_version_file(
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config-version.cmake"
     VERSION ${QTERMWIDGET_VERSION}
@@ -188,7 +194,13 @@ install(FILES
     DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
     COMPONENT Devel
 )
-install(TARGETS ${QTERMWIDGET_LIBRARY_NAME} DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+install(EXPORT
+    "${QTERMWIDGET_LIBRARY_NAME}-targets"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
+    COMPONENT Devel
+)
+
 install(FILES
     ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
@@ -211,11 +223,25 @@ configure_file(
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
     @ONLY
 )
+
 install(FILES
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
-    "${CMAKE_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}_use.cmake"
     DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
 )
+
+install(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    EXPORT "${QTERMWIDGET_LIBRARY_NAME}-targets"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    PUBLIC_HEADER
+    COMPONENT Runtime
+)
+
+export(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
+    FILE "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-targets.cmake"
+    EXPORT_LINK_INTERFACE_LIBRARIES
+)
+
 install(FILES ${QTERMWIDGET_QM} DESTINATION ${TRANSLATIONS_DIR})
 # end of main library
 
