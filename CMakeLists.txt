@@ -134,20 +134,16 @@ set(HDRS_DISTRIB
 # dirs
 set(KB_LAYOUT_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/kb-layouts")
 message(STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}")
-add_definitions(-DKB_LAYOUT_DIR="${KB_LAYOUT_DIR}")
 
 set(COLORSCHEMES_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/color-schemes")
 message(STATUS "Color schemes will be installed in: ${COLORSCHEMES_DIR}" )
-add_definitions(-DCOLORSCHEMES_DIR="${COLORSCHEMES_DIR}")
 
 set(TRANSLATIONS_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${QTERMWIDGET_LIBRARY_NAME}/translations")
 message(STATUS "Translations will be installed in: ${TRANSLATIONS_DIR}")
-add_definitions(-DTRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\")
 
 set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
 
 #| Defines
-add_definitions(-DHAVE_POSIX_OPENPT -DHAVE_SYS_TIME_H)
 if(APPLE)
     add_definitions(-DHAVE_UTMPX -D_UTMPX_COMPAT)
 endif()
@@ -174,6 +170,15 @@ if(APPLE)
     # this is a must to load the lib correctly
     set_target_properties(${QTERMWIDGET_LIBRARY_NAME} PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 endif()
+
+target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+    PRIVATE
+        "KB_LAYOUT_DIR=\"${KB_LAYOUT_DIR}\""
+        "COLORSCHEMES_DIR=\"${COLORSCHEMES_DIR}\""
+        "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
+        "HAVE_POSIX_OPENPT"
+        "HAVE_SYS_TIME_H"
+)
 
 write_basic_package_version_file(
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config-version.cmake"
