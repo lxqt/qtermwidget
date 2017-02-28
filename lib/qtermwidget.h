@@ -23,13 +23,14 @@
 #include <QTranslator>
 #include <QWidget>
 #include "Filter.h"
+#include "qtermwidget_export.h"
 
 class QVBoxLayout;
 struct TermWidgetImpl;
 class SearchBar;
 class QUrl;
 
-class QTermWidget : public QWidget {
+class QTERMWIDGET_EXPORT QTermWidget : public QWidget {
     Q_OBJECT
 public:
 

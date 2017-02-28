@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 project(qtermwidget)
 
 include(GNUInstallDirs)
+include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
 
@@ -164,6 +165,12 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "HAVE_SYS_TIME_H"
 )
 
+
+generate_export_header(${QTERMWIDGET_LIBRARY_NAME}
+    EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
+    EXPORT_MACRO_NAME QTERMWIDGET_EXPORT
+)
+
 write_basic_package_version_file(
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config-version.cmake"
     VERSION ${QTERMWIDGET_VERSION}
@@ -176,7 +183,10 @@ install(FILES
     COMPONENT Devel
 )
 install(TARGETS ${QTERMWIDGET_LIBRARY_NAME} DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-install(FILES ${HDRS_DISTRIB} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
+install(FILES
+    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
+)
 # keyboard layouts
 install(DIRECTORY lib/kb-layouts/ DESTINATION "${KB_LAYOUT_DIR}" FILES_MATCHING PATTERN "*.keytab" )
 # color schemes
