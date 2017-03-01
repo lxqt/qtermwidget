@@ -32,6 +32,7 @@ find_package(Qt5LinguistTools REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 include(LXQtTranslateTs)
 include(LXQtCompilerSettings NO_POLICY_SCOPE)
+include(LXQtCreatePkgConfigFile)
 
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 
@@ -119,7 +120,7 @@ endif()
 
 qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
-set(PKG_CONFIG_REQ "Qt5Core, Qt5Xml, Qt5Widgets")
+set(PKG_CONFIG_REQ "Qt5Widgets")
 
 lxqt_translate_ts(QTERMWIDGET_QM
     TRANSLATION_DIR "lib/translations"
@@ -159,6 +160,7 @@ if (UTF8PROC_FOUND)
     target_link_libraries(${QTERMWIDGET_LIBRARY_NAME}
         ${UTF8PROC_LIBRARIES}
     )
+    string(APPEND PKG_CONFIG_REQ ", libutf8proc")
 endif()
 
 if(APPLE)
@@ -229,12 +231,16 @@ install(DIRECTORY
     FILES_MATCHING PATTERN "*.*schem*"
 )
 
-include(create_pkgconfig_file)
-create_pkgconfig_file(${QTERMWIDGET_LIBRARY_NAME}
-    "QTermWidget library for Qt ${QTERMWIDGET_VERSION_MAJOR}.x"
-    ${PKG_CONFIG_REQ}
-    ${QTERMWIDGET_LIBRARY_NAME}
-    ${QTERMWIDGET_VERSION}
+lxqt_create_pkgconfig_file(
+    PACKAGE_NAME ${QTERMWIDGET_LIBRARY_NAME}
+    DESCRIPTIVE_NAME ${QTERMWIDGET_LIBRARY_NAME}
+    DESCRIPTION "QTermWidget library for Qt ${QTERMWIDGET_VERSION_MAJOR}.x"
+    INCLUDEDIRS ${QTERMWIDGET_LIBRARY_NAME}
+    LIBS ${QTERMWIDGET_LIBRARY_NAME}
+    REQUIRES ${PKG_CONFIG_REQ}
+    VERSION ${QTERMWIDGET_VERSION}
+    INSTALL
+    COMPONENT Devel
 )
 
 configure_file(
