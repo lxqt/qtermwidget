@@ -203,11 +203,22 @@ install(EXPORT
 install(FILES
     ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
+    COMPONENT Devel
 )
 # keyboard layouts
-install(DIRECTORY lib/kb-layouts/ DESTINATION "${KB_LAYOUT_DIR}" FILES_MATCHING PATTERN "*.keytab" )
+install(DIRECTORY
+    lib/kb-layouts/
+    DESTINATION "${KB_LAYOUT_DIR}"
+    COMPONENT Runtime
+    FILES_MATCHING PATTERN "*.keytab"
+)
 # color schemes
-install(DIRECTORY lib/color-schemes/ DESTINATION "${COLORSCHEMES_DIR}" FILES_MATCHING PATTERN "*.*schem*")
+install(DIRECTORY
+    lib/color-schemes/
+    DESTINATION "${COLORSCHEMES_DIR}"
+    COMPONENT Runtime
+    FILES_MATCHING PATTERN "*.*schem*"
+)
 
 include(create_pkgconfig_file)
 create_pkgconfig_file(${QTERMWIDGET_LIBRARY_NAME}
@@ -226,6 +237,7 @@ configure_file(
 install(FILES
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
     DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
+    COMPONENT Devel
 )
 
 install(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
