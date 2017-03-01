@@ -9,6 +9,7 @@ include(CheckFunctionExists)
 
 set(LXQTBT_MINIMUM_VERSION "0.3.0")
 
+option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
@@ -31,18 +32,6 @@ find_package(Qt5LinguistTools REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 include(LXQtTranslateTs)
 include(LXQtCompilerSettings NO_POLICY_SCOPE)
-
-lxqt_translate_ts(QTERMWIDGET_QM
-    TRANSLATION_DIR "lib/translations"
-    PULL_TRANSLATIONS
-        ${PULL_TRANSLATIONS}
-    CLEAN_TRANSLATIONS
-        ${CLEAN_TRANSLATIONS}
-    TRANSLATIONS_REPO
-        ${TRANSLATIONS_REPO}
-    TRANSLATIONS_REFSPEC
-        ${TRANSLATIONS_REFSPEC}
-)
 
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 
@@ -131,6 +120,26 @@ endif()
 qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
 set(PKG_CONFIG_REQ "Qt5Core, Qt5Xml, Qt5Widgets")
+
+lxqt_translate_ts(QTERMWIDGET_QM
+    TRANSLATION_DIR "lib/translations"
+    UPDATE_TRANSLATIONS
+        ${UPDATE_TRANSLATIONS}
+    SOURCES
+        ${SRCS} ${HDRS} ${UI}
+    PULL_TRANSLATIONS
+        ${PULL_TRANSLATIONS}
+    CLEAN_TRANSLATIONS
+        ${CLEAN_TRANSLATIONS}
+    TRANSLATIONS_REPO
+        ${TRANSLATIONS_REPO}
+    TRANSLATIONS_REFSPEC
+        ${TRANSLATIONS_REFSPEC}
+    INSTALL_DIR
+        ${TRANSLATIONS_DIR}
+    COMPONENT
+        Runtime
+)
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
@@ -252,8 +261,6 @@ export(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
     FILE "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-targets.cmake"
     EXPORT_LINK_INTERFACE_LIBRARIES
 )
-
-install(FILES ${QTERMWIDGET_QM} DESTINATION ${TRANSLATIONS_DIR})
 # end of main library
 
 
