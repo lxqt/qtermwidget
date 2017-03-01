@@ -9,7 +9,7 @@ include(CheckFunctionExists)
 
 set(LXQTBT_MINIMUM_VERSION "0.3.0")
 
-option(BUILD_TEST "Build test application. Default OFF." OFF)
+option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
 set(QTERMWIDGET_VERSION_MINOR "7")
@@ -245,15 +245,13 @@ install(FILES ${QTERMWIDGET_QM} DESTINATION ${TRANSLATIONS_DIR})
 # end of main library
 
 
-# test application
-if(BUILD_TEST)
-    set(TEST_SRC src/main.cpp)
-    add_executable(test ${TEST_SRC})
-    add_dependencies(test ${QTERMWIDGET_LIBRARY_NAME})
-    link_directories(${CMAKE_BINARY_DIR})
-    target_link_libraries(test ${QTERMWIDGET_QT_LIBRARIES} ${QTERMWIDGET_LIBRARY_NAME} util)
-endif (BUILD_TEST)
-# end of test application
+# example application
+if(BUILD_EXAMPLE)
+    set(EXAMPLE_SRC example/main.cpp)
+    add_executable(example ${EXAMPLE_SRC})
+    target_link_libraries(example ${QTERMWIDGET_LIBRARY_NAME})
+endif()
+# end of example application
 
 
 CONFIGURE_FILE(
