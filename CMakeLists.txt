@@ -109,14 +109,7 @@ message(STATUS "Translations will be installed in: ${TRANSLATIONS_DIR}")
 
 set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
 
-#| Defines
-if(APPLE)
-    add_definitions(-DHAVE_UTMPX -D_UTMPX_COMPAT)
-endif()
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
-if(HAVE_UPDWTMPX)
-    add_definitions(-DHAVE_UPDWTMPX)
-endif()
 
 qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
@@ -148,6 +141,23 @@ set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
                      )
+
+
+if(APPLE)
+    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "HAVE_UTMPX"
+            "UTMPX_COMPAT"
+    )
+endif()
+
+if(HAVE_UPDWTMPX)
+    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "HAVE_UPDWTMPX"
+    )
+endif()
+
 if (UTF8PROC_FOUND)
     target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         PRIVATE
