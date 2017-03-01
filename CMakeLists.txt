@@ -24,6 +24,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
@@ -40,12 +42,6 @@ lxqt_translate_ts(QTERMWIDGET_QM
         ${TRANSLATIONS_REPO}
     TRANSLATIONS_REFSPEC
         ${TRANSLATIONS_REFSPEC}
-)
-
-include_directories(
-    "${CMAKE_SOURCE_DIR}/lib"
-    "${CMAKE_BINARY_DIR}/lib"
-    "${CMAKE_BINARY_DIR}"
 )
 
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
@@ -178,6 +174,9 @@ generate_export_header(${QTERMWIDGET_LIBRARY_NAME}
 )
 
 target_include_directories(${QTERMWIDGET_LIBRARY_NAME}
+    PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/lib>"
     INTERFACE
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}>"
