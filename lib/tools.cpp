@@ -92,7 +92,7 @@ const QStringList get_color_schemes_dirs()
         rval << (QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/");
     }
 #endif
-    for (const QString& custom_dir : custom_color_schemes_dirs)
+    for (const QString& custom_dir : const_cast<const QStringList&>(custom_color_schemes_dirs))
     {
         d.setPath(custom_dir);
         if (d.exists())
