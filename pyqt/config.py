@@ -5,7 +5,6 @@ import os
 import site
 import pprint
 from distutils import sysconfig
-import pyqtconfig
 from PyQt5 import QtCore
 import PyQt5
 
@@ -16,13 +15,14 @@ class Configuration(sipconfig.Configuration):
 		return os.environ.get(name) or default
 
 	def __init__(self):
-		qtconfig = subprocess.check_output(["/usr/lib64/qt5/bin/qmake", "-query"], universal_newlines=True)
+		qmake_bin = str(subprocess.check_output(["which", "qmake"], universal_newlines=True)).strip(' \t\n\r')
+		qtconfig = subprocess.check_output([qmake_bin, "-query"], universal_newlines=True)
 		qtconfig = dict(x.split(":", 1) for x in qtconfig.splitlines())
 
 		self.pyQtIncludePath = self.getEnv('PYQT_INCLUDE_PATH','/usr/share/sip/PyQt5' )
 
 		pyqtconfig = {
-			"pyqt_config_args":   "--confirm-license -v "+str(self.pyQtIncludePath)+" --qsci-api -q /usr/lib64/qt5/bin/qmake",
+			"pyqt_config_args":   "--confirm-license -v "+str(self.pyQtIncludePath)+" --qsci-api -q " + qmake_bin,
 			"pyqt_version":       QtCore.PYQT_VERSION,
 			"pyqt_version_str":   QtCore.PYQT_VERSION_STR,
 			"pyqt_bin_dir":       PyQt5.__path__[0],
