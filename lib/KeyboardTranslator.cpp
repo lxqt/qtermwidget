@@ -543,27 +543,27 @@ QList<KeyboardTranslatorReader::Token> KeyboardTranslatorReader::tokenize(const 
     if ( title.exactMatch(text) )
     {
         Token titleToken = { Token::TitleKeyword , QString() };
-        Token textToken = { Token::TitleText , title.capturedTexts()[1] };
+        Token textToken = { Token::TitleText , title.capturedTexts().at(1) };
 
         list << titleToken << textToken;
     }
     else if  ( key.exactMatch(text) )
     {
         Token keyToken = { Token::KeyKeyword , QString() };
-        Token sequenceToken = { Token::KeySequence , key.capturedTexts()[1].remove(' ') };
+        Token sequenceToken = { Token::KeySequence , key.capturedTexts().value(1).remove(' ') };
 
         list << keyToken << sequenceToken;
 
-        if ( key.capturedTexts()[3].isEmpty() )
+        if ( key.capturedTexts().at(3).isEmpty() )
         {
             // capturedTexts()[2] is a command
-            Token commandToken = { Token::Command , key.capturedTexts()[2] };
+            Token commandToken = { Token::Command , key.capturedTexts().at(2) };
             list << commandToken;
         }
         else
         {
             // capturedTexts()[3] is the output string
-           Token outputToken = { Token::OutputText , key.capturedTexts()[3] };
+           Token outputToken = { Token::OutputText , key.capturedTexts().at(3) };
            list << outputToken;
         }
     }
