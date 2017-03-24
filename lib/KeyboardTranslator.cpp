@@ -852,10 +852,11 @@ void KeyboardTranslator::removeEntry(const Entry& entry)
 }
 KeyboardTranslator::Entry KeyboardTranslator::findEntry(int keyCode, Qt::KeyboardModifiers modifiers, States state) const
 {
-    foreach(const Entry& entry, _entries.values(keyCode))
+    for (auto it = _entries.cbegin(), end = _entries.cend(); it != end; ++it)
     {
-        if ( entry.matches(keyCode,modifiers,state) )
-            return entry;
+        if (it.key() == keyCode)
+            if ( it.value().matches(keyCode,modifiers,state) )
+                return *it;
     }
     return Entry(); // entry not found
 }
