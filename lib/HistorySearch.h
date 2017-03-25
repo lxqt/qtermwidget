@@ -17,14 +17,14 @@
     02110-1301  USA.
 */
 #ifndef TASK_H
-#define	TASK_H
+#define TASK_H
 
+#include <QMap>
 #include <QObject>
 #include <QPointer>
-#include <QMap>
 
-#include <Session.h>
 #include <ScreenWindow.h>
+#include <Session.h>
 
 #include "Emulation.h"
 #include "TerminalCharacterDecoder.h"
@@ -53,7 +53,6 @@ private:
     bool search(int startColumn, int startLine, int endColumn, int endLine);
     int findLineNumberInString(QList<int> linePositions, int position);
 
-
     EmulationPtr m_emulation;
     QRegExp m_regExp;
     bool m_forwards;
@@ -66,5 +65,4 @@ private:
     int m_foundEndLine;
 };
 
-#endif	/* TASK_H */
-
+#endif /* TASK_H */

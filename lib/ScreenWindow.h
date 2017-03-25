@@ -52,7 +52,7 @@ class Screen;
  */
 class ScreenWindow : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     /**
@@ -118,24 +118,24 @@ public:
      * Sets the start of the selection to the given @p line and @p column within
      * the window.
      */
-    void setSelectionStart( int column , int line , bool columnMode );
+    void setSelectionStart(int column, int line, bool columnMode);
     /**
      * Sets the end of the selection to the given @p line and @p column within
      * the window.
      */
-    void setSelectionEnd( int column , int line );
+    void setSelectionEnd(int column, int line);
     /**
      * Retrieves the start of the selection within the window.
      */
-    void getSelectionStart( int& column , int& line );
+    void getSelectionStart(int& column, int& line);
     /**
      * Retrieves the end of the selection within the window.
      */
-    void getSelectionEnd( int& column , int& line );
+    void getSelectionEnd(int& column, int& line);
     /**
      * Returns true if the character at @p line , @p column is part of the selection.
      */
-    bool isSelected( int column , int line );
+    bool isSelected(int column, int line);
     /**
      * Clears the current selection
      */
@@ -169,11 +169,10 @@ public:
     bool atEndOfOutput() const;
 
     /** Scrolls the window so that @p line is at the top of the window */
-    void scrollTo( int line );
+    void scrollTo(int line);
 
     /** Describes the units which scrollBy() moves the window by. */
-    enum RelativeScrollMode
-    {
+    enum RelativeScrollMode {
         /** Scroll the window down by a given number of lines. */
         ScrollLines,
         /**
@@ -192,7 +191,7 @@ public:
      * this number is positive, the view is scrolled down.  If this number is negative, the view
      * is scrolled up.
      */
-    void scrollBy( RelativeScrollMode mode , int amount );
+    void scrollBy(RelativeScrollMode mode, int amount);
 
     /**
      * Specifies whether the window should automatically move to the bottom
@@ -213,7 +212,7 @@ public:
      *
      * @param preserveLineBreaks See Screen::selectedText()
      */
-    QString selectedText( bool preserveLineBreaks ) const;
+    QString selectedText(bool preserveLineBreaks) const;
 
 public slots:
     /**
@@ -248,12 +247,11 @@ private:
     int _windowBufferSize;
     bool _bufferNeedsUpdate;
 
-    int  _windowLines;
-    int  _currentLine; // see scrollTo() , currentLine()
+    int _windowLines;
+    int _currentLine;  // see scrollTo() , currentLine()
     bool _trackOutput; // see setTrackOutput() , trackOutput()
-    int  _scrollCount; // count of lines which the window has been scrolled by since
+    int _scrollCount;  // count of lines which the window has been scrolled by since
                        // the last call to resetScrollCount()
 };
-
 }
 #endif // SCREENWINDOW_H

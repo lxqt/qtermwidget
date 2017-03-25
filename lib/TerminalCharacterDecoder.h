@@ -60,7 +60,8 @@ public:
      */
     virtual void decodeLine(const Character* const characters,
                             int count,
-                            LineProperty properties) = 0;
+                            LineProperty properties)
+        = 0;
 };
 
 /**
@@ -99,7 +100,6 @@ public:
                             int count,
                             LineProperty properties);
 
-
 private:
     QTextStream* _output;
     bool _includeTrailingWhitespace;
@@ -123,7 +123,7 @@ public:
      * Sets the colour table which the decoder uses to produce the HTML colour codes in its
      * output
      */
-    void setColorTable( const ColorEntry* table );
+    void setColorTable(const ColorEntry* table);
 
     virtual void decodeLine(const Character* const characters,
                             int count,
@@ -133,7 +133,7 @@ public:
     virtual void end();
 
 private:
-    void openSpan(QString& text , const QString& style);
+    void openSpan(QString& text, const QString& style);
     void closeSpan(QString& text);
 
     QTextStream* _output;
@@ -142,9 +142,7 @@ private:
     quint8 _lastRendition;
     CharacterColor _lastForeColor;
     CharacterColor _lastBackColor;
-
 };
-
 }
 
 #endif

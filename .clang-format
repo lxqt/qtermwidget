@@ -1,0 +1,23 @@
+---
+Language:        Cpp
+AlignAfterOpenBracket: Align
+AlignTrailingComments: true
+BasedOnStyle:  WebKit
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterNamespace: true
+  AfterFunction: true
+  BeforeElse: true
+BreakBeforeBraces: Custom
+IncludeCategories:
+  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+    Priority:        2
+  - Regex:           '^(<|"(gtest|isl|json)/)'
+    Priority:        3
+  - Regex:           '.*'
+    Priority:        1
+SpaceAfterCStyleCast: true
+Standard:        Cpp11
+...
+

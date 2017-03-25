@@ -6,7 +6,6 @@
     Rewritten for QT4 by e_k <e_k at users.sourceforge.net>
 */
 
-
 #ifndef _KONSOLE_WCWIDTH_H_
 #define _KONSOLE_WCWIDTH_H_
 
@@ -15,6 +14,6 @@ class QString;
 
 int konsole_wcwidth(wchar_t ucs);
 
-int string_width( const QString & txt );
+int string_width(const QString& txt);
 
 #endif

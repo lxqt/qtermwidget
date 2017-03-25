@@ -33,29 +33,29 @@
 
 #include <QIODevice>
 
-#define KMAXINT ((int)(~0U >> 1))
+#define KMAXINT ((int) (~0U >> 1))
 
 struct KPtyDevicePrivate;
 class QSocketNotifier;
 
-#define Q_DECLARE_PRIVATE_MI(Class, SuperClass) \
-    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(SuperClass::d_ptr); } \
-    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(SuperClass::d_ptr); } \
+#define Q_DECLARE_PRIVATE_MI(Class, SuperClass)                                                                        \
+    inline Class##Private* d_func() { return reinterpret_cast<Class##Private*>(SuperClass::d_ptr); }                   \
+    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private*>(SuperClass::d_ptr); } \
     friend struct Class##Private;
 
 /**
  * Encapsulates KPty into a QIODevice, so it can be used with Q*Stream, etc.
  */
-class KPtyDevice : public QIODevice, public KPty {
+class KPtyDevice : public QIODevice, public KPty
+{
     Q_OBJECT
     Q_DECLARE_PRIVATE_MI(KPtyDevice, KPty)
 
 public:
-
     /**
      * Constructor
      */
-    KPtyDevice(QObject *parent = 0);
+    KPtyDevice(QObject* parent = 0);
 
     /**
      * Destructor:
@@ -144,7 +144,6 @@ public:
     bool waitForBytesWritten(int msecs = -1);
     bool waitForReadyRead(int msecs = -1);
 
-
 Q_SIGNALS:
     /**
      * Emitted when EOF is read from the PTY.
@@ -154,9 +153,9 @@ Q_SIGNALS:
     void readEof();
 
 protected:
-    virtual qint64 readData(char *data, qint64 maxSize);
-    virtual qint64 readLineData(char *data, qint64 maxSize);
-    virtual qint64 writeData(const char *data, qint64 maxSize);
+    virtual qint64 readData(char* data, qint64 maxSize);
+    virtual qint64 readLineData(char* data, qint64 maxSize);
+    virtual qint64 writeData(const char* data, qint64 maxSize);
 
 private:
     Q_PRIVATE_SLOT(d_func(), bool _k_canRead())
@@ -205,7 +204,7 @@ public:
         return (buffers.count() == 1 ? tail : buffers.first().size()) - head;
     }
 
-    inline const char *readPointer() const
+    inline const char* readPointer() const
     {
         Q_ASSERT(totalSize > 0);
         return buffers.first().constData() + head;
@@ -216,12 +215,15 @@ public:
         totalSize -= bytes;
         Q_ASSERT(totalSize >= 0);
 
-        forever {
+        forever
+        {
             int nbs = readSize();
 
-            if (bytes < nbs) {
+            if (bytes < nbs)
+            {
                 head += bytes;
-                if (head == tail && buffers.count() == 1) {
+                if (head == tail && buffers.count() == 1)
+                {
                     buffers.first().resize(CHUNKSIZE);
                     head = tail = 0;
                 }
@@ -229,7 +231,8 @@ public:
             }
 
             bytes -= nbs;
-            if (buffers.count() == 1) {
+            if (buffers.count() == 1)
+            {
                 buffers.first().resize(CHUNKSIZE);
                 head = tail = 0;
                 break;
@@ -240,15 +243,18 @@ public:
         }
     }
 
-    char *reserve(int bytes)
+    char* reserve(int bytes)
     {
         totalSize += bytes;
 
-        char *ptr;
-        if (tail + bytes <= buffers.last().size()) {
+        char* ptr;
+        if (tail + bytes <= buffers.last().size())
+        {
             ptr = buffers.last().data() + tail;
             tail += bytes;
-        } else {
+        }
+        else
+        {
             buffers.last().resize(tail);
             QByteArray tmp;
             tmp.resize(qMax(CHUNKSIZE, bytes));
@@ -266,7 +272,7 @@ public:
         tail -= bytes;
     }
 
-    inline void write(const char *data, int len)
+    inline void write(const char* data, int len)
     {
         memcpy(reserve(len), data, len);
     }
@@ -279,17 +285,18 @@ public:
         int index = 0;
         int start = head;
         QLinkedList<QByteArray>::ConstIterator it = buffers.constBegin();
-        forever {
+        forever
+        {
             if (!maxLength)
                 return index;
             if (index == size())
                 return -1;
-            const QByteArray &buf = *it;
+            const QByteArray& buf = *it;
             ++it;
             int len = qMin((it == buffers.end() ? tail : buf.size()) - start,
                            maxLength);
-            const char *ptr = buf.data() + start;
-            if (const char *rptr = (const char *)memchr(ptr, c, len))
+            const char* ptr = buf.data() + start;
+            if (const char* rptr = (const char*) memchr(ptr, c, len))
                 return index + (rptr - ptr) + 1;
             index += len;
             maxLength -= len;
@@ -307,12 +314,13 @@ public:
         return lineSize() != -1;
     }
 
-    int read(char *data, int maxLength)
+    int read(char* data, int maxLength)
     {
         int bytesToRead = qMin(size(), maxLength);
         int readSoFar = 0;
-        while (readSoFar < bytesToRead) {
-            const char *ptr = readPointer();
+        while (readSoFar < bytesToRead)
+        {
+            const char* ptr = readPointer();
             int bs = qMin(bytesToRead - readSoFar, readSize());
             memcpy(data + readSoFar, ptr, bs);
             readSoFar += bs;
@@ -321,7 +329,7 @@ public:
         return readSoFar;
     }
 
-    int readLine(char *data, int maxLength)
+    int readLine(char* data, int maxLength)
     {
         return read(data, lineSize(qMin(maxLength, size())));
     }
@@ -336,10 +344,12 @@ struct KPtyDevicePrivate : public KPtyPrivate {
 
     Q_DECLARE_PUBLIC(KPtyDevice)
 
-    KPtyDevicePrivate(KPty* parent) :
-        KPtyPrivate(parent),
-        emittedReadyRead(false), emittedBytesWritten(false),
-        readNotifier(0), writeNotifier(0)
+    KPtyDevicePrivate(KPty* parent)
+        : KPtyPrivate(parent)
+        , emittedReadyRead(false)
+        , emittedBytesWritten(false)
+        , readNotifier(0)
+        , writeNotifier(0)
     {
     }
 
@@ -351,11 +361,10 @@ struct KPtyDevicePrivate : public KPtyPrivate {
 
     bool emittedReadyRead;
     bool emittedBytesWritten;
-    QSocketNotifier *readNotifier;
-    QSocketNotifier *writeNotifier;
+    QSocketNotifier* readNotifier;
+    QSocketNotifier* writeNotifier;
     KRingBuffer readBuffer;
     KRingBuffer writeBuffer;
 };
 
 #endif
-

@@ -32,15 +32,16 @@
 #define PTY_H
 
 // Qt
-#include <QStringList>
-#include <QVector>
 #include <QList>
 #include <QSize>
+#include <QStringList>
+#include <QVector>
 
 // KDE
 #include "kptyprocess.h"
 
-namespace Konsole {
+namespace Konsole
+{
 
 /**
  * The Pty class is used to start the terminal process,
@@ -55,12 +56,11 @@ namespace Konsole {
  * To start the terminal process, call the start() method
  * with the program name and appropriate arguments.
  */
-class Pty: public KPtyProcess
+class Pty : public KPtyProcess
 {
-Q_OBJECT
+    Q_OBJECT
 
-  public:
-
+public:
     /**
      * Constructs a new Pty.
      *
@@ -100,12 +100,11 @@ Q_OBJECT
      * @param dbusSession Specifies the value of the KONSOLE_DBUS_SESSION
      * environment variable in the process's environment.
      */
-    int start( const QString& program,
-               const QStringList& arguments,
-               const QStringList& environment,
-               ulong winid,
-               bool addToUtmp
-             );
+    int start(const QString& program,
+              const QStringList& arguments,
+              const QStringList& environment,
+              ulong winid,
+              bool addToUtmp);
 
     /**
      * set properties for "EmptyPTY"
@@ -150,7 +149,7 @@ Q_OBJECT
      */
     int foregroundProcessGroup() const;
 
-  public slots:
+public slots:
 
     /**
      * Put the pty into UTF-8 mode on systems which support it.
@@ -177,7 +176,7 @@ Q_OBJECT
      */
     void sendData(const char* buffer, int length);
 
-  signals:
+signals:
 
     /**
      * Emitted when a new block of data is received from
@@ -188,27 +187,26 @@ Q_OBJECT
      */
     void receivedData(const char* buffer, int length);
 
-  protected:
-      void setupChildProcess();
+protected:
+    void setupChildProcess();
 
-  private slots:
+private slots:
     // called when data is received from the terminal process
     void dataReceived();
 
-  private:
-      void init();
+private:
+    void init();
 
     // takes a list of key=value pairs and adds them
     // to the environment for the process
     void addEnvironmentVariables(const QStringList& environment);
 
-    int  _windowColumns;
-    int  _windowLines;
+    int _windowColumns;
+    int _windowLines;
     char _eraseChar;
     bool _xonXoff;
     bool _utf8;
 };
-
 }
 
 #endif // PTY_H

@@ -24,9 +24,9 @@
 
 // Qt
 #include <QHash>
+#include <QIODevice>
 #include <QList>
 #include <QMetaType>
-#include <QIODevice>
 #include <QSet>
 #include <QSettings>
 
@@ -73,10 +73,10 @@ public:
     /** Writes the color scheme to the specified configuration source */
     void write(KConfig& config) const;
 #endif
-    void read(const QString & filename);
+    void read(const QString& filename);
 
     /** Sets a single entry within the color palette. */
-    void setColorTableEntry(int index , const ColorEntry& entry);
+    void setColorTableEntry(int index, const ColorEntry& entry);
 
     /**
      * Copies the color entries which form the palette for this color scheme
@@ -94,7 +94,7 @@ public:
      *
      * See getColorTable()
      */
-    ColorEntry colorEntry(int index , uint randomSeed = 0) const;
+    ColorEntry colorEntry(int index, uint randomSeed = 0) const;
 
     /**
      * Convenience method.  Returns the
@@ -152,16 +152,21 @@ private:
     class RandomizationRange
     {
     public:
-        RandomizationRange() : hue(0) , saturation(0) , value(0) {}
+        RandomizationRange()
+            : hue(0)
+            , saturation(0)
+            , value(0)
+        {
+        }
 
         bool isNull() const
         {
-            return ( hue == 0 && saturation == 0 && value == 0 );
+            return (hue == 0 && saturation == 0 && value == 0);
         }
 
         quint16 hue;
-        quint8  saturation;
-        quint8  value;
+        quint8 saturation;
+        quint8 value;
     };
 
     // returns the active color table.  if none has been set specifically,
@@ -176,12 +181,12 @@ private:
     // writes a single colour entry to a KConfig source
     void writeColorEntry(KConfig& config , const QString& colorName, const ColorEntry& entry,const RandomizationRange& range) const;
 #endif
-    void readColorEntry(QSettings *s, int index);
+    void readColorEntry(QSettings* s, int index);
 
     // sets the amount of randomization allowed for a particular color
     // in the palette.  creates the randomization table if
     // it does not already exist
-    void setRandomizationRange( int index , quint16 hue , quint8 saturation , quint8 value );
+    void setRandomizationRange(int index, quint16 hue, quint8 saturation, quint8 value);
 
     QString _description;
     QString _name;
@@ -189,12 +194,11 @@ private:
     ColorEntry* _table; // pointer to custom color table or 0 if the default
                         // color scheme is being used
 
-
     static const quint16 MAX_HUE = 340;
 
-    RandomizationRange* _randomTable;   // pointer to randomization table or 0
-                                        // if no colors in the color scheme support
-                                        // randomization
+    RandomizationRange* _randomTable; // pointer to randomization table or 0
+                                      // if no colors in the color scheme support
+                                      // randomization
 
     static const char* const colorNames[TABLE_COLORS];
     static const char* const translatedColorNames[TABLE_COLORS];
@@ -232,7 +236,7 @@ public:
      * Constructs a new reader which reads from the specified device.
      * The device should be open in read-only mode.
      */
-    KDE3ColorSchemeReader( QIODevice* device );
+    KDE3ColorSchemeReader(QIODevice* device);
 
     /**
      * Reads and parses the contents of the .schema file from the input
@@ -246,8 +250,8 @@ public:
 private:
     // reads a line from the file specifying a colour palette entry
     // format is: color [index] [red] [green] [blue] [transparent] [bold]
-    bool readColorLine(const QString& line , ColorScheme* scheme);
-    bool readTitleLine(const QString& line , ColorScheme* scheme);
+    bool readColorLine(const QString& line, ColorScheme* scheme);
+    bool readTitleLine(const QString& line, ColorScheme* scheme);
 
     QIODevice* _device;
 };
@@ -259,7 +263,6 @@ private:
 class ColorSchemeManager
 {
 public:
-
     /**
      * Constructs a new ColorSchemeManager and loads the list
      * of available color schemes.
@@ -350,14 +353,13 @@ private:
     // finds the path of a color scheme
     QString findColorSchemePath(const QString& name) const;
 
-    QHash<QString,const ColorScheme*> _colorSchemes;
+    QHash<QString, const ColorScheme*> _colorSchemes;
     QSet<ColorScheme*> _modifiedSchemes;
 
     bool _haveLoadedAll;
 
     static const ColorScheme _defaultColorScheme;
 };
-
 }
 
 Q_DECLARE_METATYPE(const Konsole::ColorScheme*)

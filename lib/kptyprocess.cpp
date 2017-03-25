@@ -27,7 +27,6 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #include "kptyprocess.h"
 #include "kprocess.h"
 #include "kptydevice.h"
@@ -35,8 +34,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-KPtyProcess::KPtyProcess(QObject *parent) :
-    KProcess(new KPtyProcessPrivate, parent)
+KPtyProcess::KPtyProcess(QObject* parent)
+    : KProcess(new KPtyProcessPrivate, parent)
 {
     Q_D(KPtyProcess);
 
@@ -46,8 +45,8 @@ KPtyProcess::KPtyProcess(QObject *parent) :
             SLOT(_k_onStateChanged(QProcess::ProcessState)));
 }
 
-KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
-    KProcess(new KPtyProcessPrivate, parent)
+KPtyProcess::KPtyProcess(int ptyMasterFd, QObject* parent)
+    : KProcess(new KPtyProcessPrivate, parent)
 {
     Q_D(KPtyProcess);
 
@@ -61,7 +60,8 @@ KPtyProcess::~KPtyProcess()
 {
     Q_D(KPtyProcess);
 
-    if (state() != QProcess::NotRunning && d->addUtmp) {
+    if (state() != QProcess::NotRunning && d->addUtmp)
+    {
         d->pty->logout();
         disconnect(SIGNAL(stateChanged(QProcess::ProcessState)),
                    this, SLOT(_k_onStateChanged(QProcess::ProcessState)));
@@ -97,7 +97,7 @@ bool KPtyProcess::isUseUtmp() const
     return d->addUtmp;
 }
 
-KPtyDevice *KPtyProcess::pty() const
+KPtyDevice* KPtyProcess::pty() const
 {
     Q_D(const KPtyProcess);
 

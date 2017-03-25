@@ -34,32 +34,29 @@
 
 #include <QSocketNotifier>
 
-#include <unistd.h>
 #include <errno.h>
-#include <signal.h>
-#include <termios.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <sys/ioctl.h>
+#include <termios.h>
+#include <unistd.h>
 #ifdef HAVE_SYS_FILIO_H
-# include <sys/filio.h>
+#include <sys/filio.h>
 #endif
 #ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
+#include <sys/time.h>
 #endif
 
 #if defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
-  // "the other end's output queue size" - kinda braindead, huh?
-# define PTY_BYTES_AVAILABLE TIOCOUTQ
+// "the other end's output queue size" - kinda braindead, huh?
+#define PTY_BYTES_AVAILABLE TIOCOUTQ
 #elif defined(TIOCINQ)
-  // "our end's input queue size"
-# define PTY_BYTES_AVAILABLE TIOCINQ
+// "our end's input queue size"
+#define PTY_BYTES_AVAILABLE TIOCINQ
 #else
-  // likewise. more generic ioctl (theoretically)
-# define PTY_BYTES_AVAILABLE FIONREAD
+// likewise. more generic ioctl (theoretically)
+#define PTY_BYTES_AVAILABLE FIONREAD
 #endif
-
-
-
 
 //////////////////
 // private data //
@@ -70,7 +67,8 @@
 static void qt_ignore_sigpipe()
 {
     static QBasicAtomicInt atom = Q_BASIC_ATOMIC_INITIALIZER(0);
-    if (atom.testAndSetRelaxed(0, 1)) {
+    if (atom.testAndSetRelaxed(0, 1))
+    {
         struct sigaction noaction;
         memset(&noaction, 0, sizeof(noaction));
         noaction.sa_handler = SIG_IGN;
@@ -78,7 +76,11 @@ static void qt_ignore_sigpipe()
     }
 }
 
-#define NO_INTR(ret,func) do { ret = func; } while (ret < 0 && errno == EINTR)
+#define NO_INTR(ret, func) \
+    do                     \
+    {                      \
+        ret = func;        \
+    } while (ret < 0 && errno == EINTR)
 
 bool KPtyDevicePrivate::_k_canRead()
 {
@@ -90,7 +92,8 @@ bool KPtyDevicePrivate::_k_canRead()
 #else
     int available;
 #endif
-    if (!::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *) &available)) {
+    if (!::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char*) &available))
+    {
 #ifdef Q_OS_SOLARIS
         // A Pty is a STREAMS module, and those can be activated
         // with 0 bytes available. This happens either when ^C is
@@ -98,12 +101,14 @@ bool KPtyDevicePrivate::_k_canRead()
         // which happens in experiments fairly often. When 0 bytes are
         // available, you must read those 0 bytes to clear the STREAMS
         // module, but we don't want to hit the !readBytes case further down.
-        if (!available) {
+        if (!available)
+        {
             char c;
             // Read the 0-byte STREAMS message
             NO_INTR(readBytes, read(q->masterFd(), &c, 0));
             // Should return 0 bytes read; -1 is error
-            if (readBytes < 0) {
+            if (readBytes < 0)
+            {
                 readNotifier->setEnabled(false);
                 emit q->readEof();
                 return false;
@@ -112,7 +117,7 @@ bool KPtyDevicePrivate::_k_canRead()
         }
 #endif
 
-        char *ptr = readBuffer.reserve(available);
+        char* ptr = readBuffer.reserve(available);
 #ifdef Q_OS_SOLARIS
         // Even if available > 0, it is possible for read()
         // to return 0 on Solaris, due to 0-byte writes in the stream.
@@ -126,9 +131,10 @@ bool KPtyDevicePrivate::_k_canRead()
 #endif
         // Useless block braces except in Solaris
         {
-          NO_INTR(readBytes, read(q->masterFd(), ptr, available));
+            NO_INTR(readBytes, read(q->masterFd(), ptr, available));
         }
-        if (readBytes < 0) {
+        if (readBytes < 0)
+        {
             readBuffer.unreserve(available);
             q->setErrorString("Error reading from PTY");
             return false;
@@ -136,12 +142,16 @@ bool KPtyDevicePrivate::_k_canRead()
         readBuffer.unreserve(available - readBytes); // *should* be a no-op
     }
 
-    if (!readBytes) {
+    if (!readBytes)
+    {
         readNotifier->setEnabled(false);
         emit q->readEof();
         return false;
-    } else {
-        if (!emittedReadyRead) {
+    }
+    else
+    {
+        if (!emittedReadyRead)
+        {
             emittedReadyRead = true;
             emit q->readyRead();
             emittedReadyRead = false;
@@ -163,13 +173,15 @@ bool KPtyDevicePrivate::_k_canWrite()
     NO_INTR(wroteBytes,
             write(q->masterFd(),
                   writeBuffer.readPointer(), writeBuffer.readSize()));
-    if (wroteBytes < 0) {
+    if (wroteBytes < 0)
+    {
         q->setErrorString("Error writing to PTY");
         return false;
     }
     writeBuffer.free(wroteBytes);
 
-    if (!emittedBytesWritten) {
+    if (!emittedBytesWritten)
+    {
         emittedBytesWritten = true;
         emit q->bytesWritten(wroteBytes);
         emittedBytesWritten = false;
@@ -182,23 +194,27 @@ bool KPtyDevicePrivate::_k_canWrite()
 
 #ifndef timeradd
 // Lifted from GLIBC
-# define timeradd(a, b, result) \
-    do { \
-        (result)->tv_sec = (a)->tv_sec + (b)->tv_sec; \
+#define timeradd(a, b, result)                           \
+    do                                                   \
+    {                                                    \
+        (result)->tv_sec = (a)->tv_sec + (b)->tv_sec;    \
         (result)->tv_usec = (a)->tv_usec + (b)->tv_usec; \
-        if ((result)->tv_usec >= 1000000) { \
-            ++(result)->tv_sec; \
-            (result)->tv_usec -= 1000000; \
-        } \
+        if ((result)->tv_usec >= 1000000)                \
+        {                                                \
+            ++(result)->tv_sec;                          \
+            (result)->tv_usec -= 1000000;                \
+        }                                                \
     } while (0)
-# define timersub(a, b, result) \
-    do { \
-        (result)->tv_sec = (a)->tv_sec - (b)->tv_sec; \
+#define timersub(a, b, result)                           \
+    do                                                   \
+    {                                                    \
+        (result)->tv_sec = (a)->tv_sec - (b)->tv_sec;    \
         (result)->tv_usec = (a)->tv_usec - (b)->tv_usec; \
-        if ((result)->tv_usec < 0) { \
-            --(result)->tv_sec; \
-            (result)->tv_usec += 1000000; \
-        } \
+        if ((result)->tv_usec < 0)                       \
+        {                                                \
+            --(result)->tv_sec;                          \
+            (result)->tv_usec += 1000000;                \
+        }                                                \
     } while (0)
 #endif
 
@@ -212,7 +228,8 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
 
     if (msecs < 0)
         tvp = 0;
-    else {
+    else
+    {
         tv.tv_sec = msecs / 1000;
         tv.tv_usec = (msecs % 1000) * 1000;
 #ifndef __linux__
@@ -222,7 +239,8 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
         tvp = &tv;
     }
 
-    while (reading ? readNotifier->isEnabled() : !writeBuffer.isEmpty()) {
+    while (reading ? readNotifier->isEnabled() : !writeBuffer.isEmpty())
+    {
         fd_set rfds;
         fd_set wfds;
 
@@ -235,7 +253,8 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
             FD_SET(q->masterFd(), &wfds);
 
 #ifndef __linux__
-        if (tvp) {
+        if (tvp)
+        {
             gettimeofday(&tv, 0);
             timersub(&etv, &tv, &tv);
             if (tv.tv_sec < 0)
@@ -243,7 +262,8 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
         }
 #endif
 
-        switch (select(q->masterFd() + 1, &rfds, &wfds, 0, tvp)) {
+        switch (select(q->masterFd() + 1, &rfds, &wfds, 0, tvp))
+        {
         case -1:
             if (errno == EINTR)
                 break;
@@ -252,12 +272,14 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
             q->setErrorString("PTY operation timed out");
             return false;
         default:
-            if (FD_ISSET(q->masterFd(), &rfds)) {
+            if (FD_ISSET(q->masterFd(), &rfds))
+            {
                 bool canRead = _k_canRead();
                 if (reading && canRead)
                     return true;
             }
-            if (FD_ISSET(q->masterFd(), &wfds)) {
+            if (FD_ISSET(q->masterFd(), &wfds))
+            {
                 bool canWrite = _k_canWrite();
                 if (!reading)
                     return canWrite;
@@ -286,9 +308,9 @@ void KPtyDevicePrivate::finishOpen(QIODevice::OpenMode mode)
 // public member functions //
 /////////////////////////////
 
-KPtyDevice::KPtyDevice(QObject *parent) :
-    QIODevice(parent),
-    KPty(new KPtyDevicePrivate(this))
+KPtyDevice::KPtyDevice(QObject* parent)
+    : QIODevice(parent)
+    , KPty(new KPtyDevicePrivate(this))
 {
 }
 
@@ -304,7 +326,8 @@ bool KPtyDevice::open(OpenMode mode)
     if (masterFd() >= 0)
         return true;
 
-    if (!KPty::open()) {
+    if (!KPty::open())
+    {
         setErrorString("Error opening PTY");
         return false;
     }
@@ -318,7 +341,8 @@ bool KPtyDevice::open(int fd, OpenMode mode)
 {
     Q_D(KPtyDevice);
 
-    if (!KPty::open(fd)) {
+    if (!KPty::open(fd))
+    {
         setErrorString("Error opening PTY");
         return false;
     }
@@ -397,21 +421,21 @@ bool KPtyDevice::isSuspended() const
 }
 
 // protected
-qint64 KPtyDevice::readData(char *data, qint64 maxlen)
+qint64 KPtyDevice::readData(char* data, qint64 maxlen)
 {
     Q_D(KPtyDevice);
-    return d->readBuffer.read(data, (int)qMin<qint64>(maxlen, KMAXINT));
+    return d->readBuffer.read(data, (int) qMin<qint64>(maxlen, KMAXINT));
 }
 
 // protected
-qint64 KPtyDevice::readLineData(char *data, qint64 maxlen)
+qint64 KPtyDevice::readLineData(char* data, qint64 maxlen)
 {
     Q_D(KPtyDevice);
-    return d->readBuffer.readLine(data, (int)qMin<qint64>(maxlen, KMAXINT));
+    return d->readBuffer.readLine(data, (int) qMin<qint64>(maxlen, KMAXINT));
 }
 
 // protected
-qint64 KPtyDevice::writeData(const char *data, qint64 len)
+qint64 KPtyDevice::writeData(const char* data, qint64 len)
 {
     Q_D(KPtyDevice);
     Q_ASSERT(len <= KMAXINT);

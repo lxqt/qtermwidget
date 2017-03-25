@@ -16,14 +16,15 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301  USA.
 */
-#include <QMenu>
 #include <QAction>
-#include <QRegExp>
 #include <QDebug>
+#include <QMenu>
+#include <QRegExp>
 
 #include "SearchBar.h"
 
-SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
+SearchBar::SearchBar(QWidget* parent)
+    : QWidget(parent)
 {
     widget.setupUi(this);
     connect(widget.closeButton, SIGNAL(clicked()), this, SLOT(hide()));
@@ -33,14 +34,13 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
 
     connect(this, SIGNAL(searchCriteriaChanged()), this, SLOT(clearBackgroundColor()));
 
-    QMenu *optionsMenu = new QMenu(widget.optionsButton);
+    QMenu* optionsMenu = new QMenu(widget.optionsButton);
     widget.optionsButton->setMenu(optionsMenu);
 
     m_matchCaseMenuEntry = optionsMenu->addAction(tr("Match case"));
     m_matchCaseMenuEntry->setCheckable(true);
     m_matchCaseMenuEntry->setChecked(true);
     connect(m_matchCaseMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(searchCriteriaChanged()));
-
 
     m_useRegularExpressionMenuEntry = optionsMenu->addAction(tr("Regular expression"));
     m_useRegularExpressionMenuEntry->setCheckable(true);
@@ -52,14 +52,14 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     connect(m_highlightMatchesMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(highlightMatchesChanged(bool)));
 }
 
-SearchBar::~SearchBar() {
+SearchBar::~SearchBar()
+{
 }
 
 QString SearchBar::searchText()
 {
     return widget.searchTextEdit->text();
 }
-
 
 bool SearchBar::useRegularExpression()
 {
@@ -89,7 +89,6 @@ void SearchBar::noMatchFound()
     widget.searchTextEdit->setPalette(palette);
 }
 
-
 void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
 {
     if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
@@ -114,5 +113,4 @@ void SearchBar::clearBackgroundColor()
     QPalette p;
     p.setColor(QPalette::Base, Qt::white);
     widget.searchTextEdit->setPalette(p);
-
 }

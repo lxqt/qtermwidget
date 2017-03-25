@@ -32,41 +32,46 @@
 #include <qfile.h>
 
 #ifdef Q_OS_WIN
-# include <windows.h>
+#include <windows.h>
 #else
-# include <unistd.h>
-# include <errno.h>
+#include <errno.h>
+#include <unistd.h>
 #endif
 
 #ifndef Q_OS_WIN
-# define STD_OUTPUT_HANDLE 1
-# define STD_ERROR_HANDLE 2
+#define STD_OUTPUT_HANDLE 1
+#define STD_ERROR_HANDLE 2
 #endif
 
 #ifdef _WIN32_WCE
 #include <stdio.h>
 #endif
 
-void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
+void KProcessPrivate::writeAll(const QByteArray& buf, int fd)
 {
 #ifdef Q_OS_WIN
 #ifndef _WIN32_WCE
     HANDLE h = GetStdHandle(fd);
-    if (h) {
+    if (h)
+    {
         DWORD wr;
         WriteFile(h, buf.data(), buf.size(), &wr, 0);
     }
 #else
-    fwrite(buf.data(), 1, buf.size(), (FILE*)fd);
+    fwrite(buf.data(), 1, buf.size(), (FILE*) fd);
 #endif
 #else
     int off = 0;
-    do {
+    do
+    {
         int ret = ::write(fd, buf.data() + off, buf.size() - off);
-        if (ret < 0) {
+        if (ret < 0)
+        {
             if (errno != EINTR)
                 return;
-        } else {
+        }
+        else
+        {
             off += ret;
         }
     } while (off < buf.size());
@@ -88,7 +93,7 @@ void KProcessPrivate::_k_forwardStdout()
 #ifndef _WIN32_WCE
     forwardStd(KProcess::StandardOutput, STD_OUTPUT_HANDLE);
 #else
-    forwardStd(KProcess::StandardOutput, (int)stdout);
+    forwardStd(KProcess::StandardOutput, (int) stdout);
 #endif
 }
 
@@ -97,7 +102,7 @@ void KProcessPrivate::_k_forwardStderr()
 #ifndef _WIN32_WCE
     forwardStd(KProcess::StandardError, STD_ERROR_HANDLE);
 #else
-    forwardStd(KProcess::StandardError, (int)stderr);
+    forwardStd(KProcess::StandardError, (int) stderr);
 #endif
 }
 
@@ -105,17 +110,17 @@ void KProcessPrivate::_k_forwardStderr()
 // public member functions //
 /////////////////////////////
 
-KProcess::KProcess(QObject *parent) :
-    QProcess(parent),
-    d_ptr(new KProcessPrivate)
+KProcess::KProcess(QObject* parent)
+    : QProcess(parent)
+    , d_ptr(new KProcessPrivate)
 {
     d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
 }
 
-KProcess::KProcess(KProcessPrivate *d, QObject *parent) :
-    QProcess(parent),
-    d_ptr(d)
+KProcess::KProcess(KProcessPrivate* d, QObject* parent)
+    : QProcess(parent)
+    , d_ptr(d)
 {
     d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
@@ -133,7 +138,8 @@ void KProcess::setOutputChannelMode(OutputChannelMode mode)
     d->outputChannelMode = mode;
     disconnect(this, SIGNAL(readyReadStandardOutput()));
     disconnect(this, SIGNAL(readyReadStandardError()));
-    switch (mode) {
+    switch (mode)
+    {
     case OnlyStdoutChannel:
         connect(this, SIGNAL(readyReadStandardError()), SLOT(_k_forwardStderr()));
         break;
@@ -141,7 +147,7 @@ void KProcess::setOutputChannelMode(OutputChannelMode mode)
         connect(this, SIGNAL(readyReadStandardOutput()), SLOT(_k_forwardStdout()));
         break;
     default:
-        QProcess::setProcessChannelMode((ProcessChannelMode)mode);
+        QProcess::setProcessChannelMode((ProcessChannelMode) mode);
         return;
     }
     QProcess::setProcessChannelMode(QProcess::SeparateChannels);
@@ -168,18 +174,21 @@ void KProcess::clearEnvironment()
     setEnvironment(QStringList() << QString::fromLatin1(DUMMYENV));
 }
 
-void KProcess::setEnv(const QString &name, const QString &value, bool overwrite)
+void KProcess::setEnv(const QString& name, const QString& value, bool overwrite)
 {
     QStringList env = environment();
-    if (env.isEmpty()) {
+    if (env.isEmpty())
+    {
         env = systemEnvironment();
         env.removeAll(QString::fromLatin1(DUMMYENV));
     }
     QString fname(name);
     fname.append(QLatin1Char('='));
     for (QStringList::Iterator it = env.begin(); it != env.end(); ++it)
-        if ((*it).startsWith(fname)) {
-            if (overwrite) {
+        if ((*it).startsWith(fname))
+        {
+            if (overwrite)
+            {
                 *it = fname.append(value);
                 setEnvironment(env);
             }
@@ -189,17 +198,19 @@ void KProcess::setEnv(const QString &name, const QString &value, bool overwrite)
     setEnvironment(env);
 }
 
-void KProcess::unsetEnv(const QString &name)
+void KProcess::unsetEnv(const QString& name)
 {
     QStringList env = environment();
-    if (env.isEmpty()) {
+    if (env.isEmpty())
+    {
         env = systemEnvironment();
         env.removeAll(QString::fromLatin1(DUMMYENV));
     }
     QString fname(name);
     fname.append(QLatin1Char('='));
     for (QStringList::Iterator it = env.begin(); it != env.end(); ++it)
-        if ((*it).startsWith(fname)) {
+        if ((*it).startsWith(fname))
+        {
             env.erase(it);
             if (env.isEmpty())
                 env.append(QString::fromLatin1(DUMMYENV));
@@ -208,7 +219,7 @@ void KProcess::unsetEnv(const QString &name)
         }
 }
 
-void KProcess::setProgram(const QString &exe, const QStringList &args)
+void KProcess::setProgram(const QString& exe, const QStringList& args)
 {
     Q_D(KProcess);
 
@@ -219,11 +230,11 @@ void KProcess::setProgram(const QString &exe, const QStringList &args)
 #endif
 }
 
-void KProcess::setProgram(const QStringList &argv)
+void KProcess::setProgram(const QStringList& argv)
 {
     Q_D(KProcess);
 
-    Q_ASSERT( !argv.isEmpty() );
+    Q_ASSERT(!argv.isEmpty());
     d->args = argv;
     d->prog = d->args.takeFirst();
 #ifdef Q_OS_WIN
@@ -231,7 +242,7 @@ void KProcess::setProgram(const QStringList &argv)
 #endif
 }
 
-KProcess &KProcess::operator<<(const QString &arg)
+KProcess& KProcess::operator<<(const QString& arg)
 {
     Q_D(KProcess);
 
@@ -242,7 +253,7 @@ KProcess &KProcess::operator<<(const QString &arg)
     return *this;
 }
 
-KProcess &KProcess::operator<<(const QStringList &args)
+KProcess& KProcess::operator<<(const QStringList& args)
 {
     Q_D(KProcess);
 
@@ -287,7 +298,7 @@ void KProcess::setShellCommand(const QString &cmd)
 
 #ifdef Q_OS_UNIX
 // #ifdef NON_FREE // ... as they ship non-POSIX /bin/sh
-# if !defined(__linux__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(__DragonFly__) && !defined(__GNU__)
+#if !defined(__linux__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(__DragonFly__) && !defined(__GNU__)
     // If /bin/sh is a symlink, we can be pretty sure that it points to a
     // POSIX shell - the original bourne shell is about the only non-POSIX
     // shell still in use and it is always installed natively as /bin/sh.
@@ -308,9 +319,9 @@ void KProcess::setShellCommand(const QString &cmd)
             }
         }
     }
-# else
+#else
     d->prog = QString::fromLatin1("/bin/sh");
-# endif
+#endif
 
     d->args << QString::fromLatin1("-c") << cmd;
 #else // Q_OS_UNIX
@@ -350,7 +361,8 @@ void KProcess::start()
 int KProcess::execute(int msecs)
 {
     start();
-    if (!waitForFinished(msecs)) {
+    if (!waitForFinished(msecs))
+    {
         kill();
         waitForFinished(-1);
         return -2;
@@ -359,7 +371,7 @@ int KProcess::execute(int msecs)
 }
 
 // static
-int KProcess::execute(const QString &exe, const QStringList &args, int msecs)
+int KProcess::execute(const QString& exe, const QStringList& args, int msecs)
 {
     KProcess p;
     p.setProgram(exe, args);
@@ -367,7 +379,7 @@ int KProcess::execute(const QString &exe, const QStringList &args, int msecs)
 }
 
 // static
-int KProcess::execute(const QStringList &argv, int msecs)
+int KProcess::execute(const QStringList& argv, int msecs)
 {
     KProcess p;
     p.setProgram(argv);
@@ -385,7 +397,7 @@ int KProcess::startDetached()
 }
 
 // static
-int KProcess::startDetached(const QString &exe, const QStringList &args)
+int KProcess::startDetached(const QString& exe, const QStringList& args)
 {
     qint64 pid;
     if (!QProcess::startDetached(exe, args, QString(), &pid))
@@ -394,7 +406,7 @@ int KProcess::startDetached(const QString &exe, const QStringList &args)
 }
 
 // static
-int KProcess::startDetached(const QStringList &argv)
+int KProcess::startDetached(const QStringList& argv)
 {
     QStringList args = argv;
     QString prog = args.takeFirst();
@@ -409,4 +421,3 @@ int KProcess::pid() const
     return QProcess::pid() ? QProcess::pid()->dwProcessId : 0;
 #endif
 }
-

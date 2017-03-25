@@ -112,7 +112,7 @@ public:
      * @param topLine The top line of the new scrolling margin.
      * @param bottomLine The bottom line of the new scrolling margin.
      */
-    void setMargins(int topLine , int bottomLine);
+    void setMargins(int topLine, int bottomLine);
     /** Returns the top line of the scrolling region. */
     int topMargin() const;
     /** Returns the bottom line of the scrolling region. */
@@ -300,9 +300,9 @@ public:
     void setDefaultRendition();
 
     /** Returns the column which the cursor is positioned at. */
-    int  getCursorX() const;
+    int getCursorX() const;
     /** Returns the line which the cursor is positioned on. */
-    int  getCursorY() const;
+    int getCursorY() const;
 
     /** Clear the entire screen and move the cursor to the home position.
      * Equivalent to calling clearEntireScreen() followed by home().
@@ -370,7 +370,7 @@ public:
      * @param startLine Index of first line to copy
      * @param endLine Index of last line to copy
      */
-    void getImage( Character* dest , int size , int startLine , int endLine ) const;
+    void getImage(Character* dest, int size, int startLine, int endLine) const;
 
     /**
      * Returns the additional attributes associated with lines in the image.
@@ -378,15 +378,18 @@ public:
      * line is wrapped,
      * other attributes control the size of characters in the line.
      */
-    QVector<LineProperty> getLineProperties( int startLine , int endLine ) const;
-
+    QVector<LineProperty> getLineProperties(int startLine, int endLine) const;
 
     /** Return the number of lines. */
     int getLines() const
-    { return lines; }
+    {
+        return lines;
+    }
     /** Return the number of columns. */
     int getColumns() const
-    { return columns; }
+    {
+        return columns;
+    }
     /** Return the number of lines in the history buffer. */
     int getHistLines() const;
     /**
@@ -394,7 +397,7 @@ public:
      * If @p copyPreviousScroll is true then the contents of the previous
      * history buffer are copied into the new scroll.
      */
-    void setScroll(const HistoryType& , bool copyPreviousScroll = true);
+    void setScroll(const HistoryType&, bool copyPreviousScroll = true);
     /** Returns the type of storage used to keep lines in the history. */
     const HistoryType& getScroll() const;
     /**
@@ -424,13 +427,13 @@ public:
      * Retrieves the start of the selection or the cursor position if there
      * is no selection.
      */
-    void getSelectionStart(int& column , int& line) const;
+    void getSelectionStart(int& column, int& line) const;
 
     /**
      * Retrieves the end of the selection or the cursor position if there
      * is no selection.
      */
-    void getSelectionEnd(int& column , int& line) const;
+    void getSelectionEnd(int& column, int& line) const;
 
     /** Clears the current selection */
     void clearSelection();
@@ -439,7 +442,7 @@ public:
       *  Returns true if the character at (@p column, @p line) is part of the
       *  current selection.
       */
-    bool isSelected(const int column,const int line) const;
+    bool isSelected(const int column, const int line) const;
 
     /**
      * Convenience method.  Returns the currently selected text.
@@ -467,8 +470,9 @@ public:
      * @param preserveLineBreaks Specifies whether new line characters should
      * be inserted into the returned text at the end of each terminal line.
      */
-    void writeSelectionToStream(TerminalCharacterDecoder* decoder , bool
-                                preserveLineBreaks = true) const;
+    void writeSelectionToStream(TerminalCharacterDecoder* decoder, bool
+                                                                       preserveLineBreaks
+                                = true) const;
 
     /**
      * Checks if the text between from and to is inside the current
@@ -499,7 +503,7 @@ public:
      *
      * @param enable true to apply the attribute to the current line or false to remove it
      */
-    void setLineProperty(LineProperty property , bool enable);
+    void setLineProperty(LineProperty property, bool enable);
 
     /**
      * Returns the number of lines that the image has been scrolled up or down by,
@@ -548,7 +552,6 @@ public:
     static void fillWithDefaultChar(Character* dest, int count);
 
 private:
-
     //copies a line of text from the screen or history into a stream using a
     //specified character decoder.  Returns the number of lines actually copied,
     //which may be less than 'count' if (start+count) is more than the number of characters on
@@ -560,12 +563,12 @@ private:
     //count - the number of characters on the line to copy
     //decoder - a decoder which converts terminal characters (an Character array) into text
     //appendNewLine - if true a new line character (\n) is appended to the end of the line
-    int  copyLineToStream(int line,
-                          int start,
-                          int count,
-                          TerminalCharacterDecoder* decoder,
-                          bool appendNewLine,
-                          bool preserveLineBreaks) const;
+    int copyLineToStream(int line,
+                         int start,
+                         int count,
+                         TerminalCharacterDecoder* decoder,
+                         bool appendNewLine,
+                         bool preserveLineBreaks) const;
 
     //fills a section of the screen image with the character 'c'
     //the parameters are specified as offsets from the start of the screen image.
@@ -602,20 +605,19 @@ private:
     // starting from 'startLine', where 0 is the first line in the history
     void copyFromHistory(Character* dest, int startLine, int count) const;
 
-
     // screen image ----------------
     int lines;
     int columns;
 
-    typedef QVector<Character> ImageLine;      // [0..columns]
-    ImageLine*          screenLines;    // [lines]
+    typedef QVector<Character> ImageLine; // [0..columns]
+    ImageLine* screenLines;               // [lines]
 
     int _scrolledLines;
     QRect _lastScrolledRegion;
 
     int _droppedLines;
 
-    QVarLengthArray<LineProperty,64> lineProperties;
+    QVarLengthArray<LineProperty, 64> lineProperties;
 
     // history buffer ---------------
     HistoryScroll* history;
@@ -642,10 +644,10 @@ private:
     QBitArray tabStops;
 
     // selection -------------------
-    int selBegin; // The first location selected.
-    int selTopLeft;    // TopLeft Location.
-    int selBottomRight;    // Bottom Right Location.
-    bool blockSelectionMode;  // Column selection mode
+    int selBegin;            // The first location selected.
+    int selTopLeft;          // TopLeft Location.
+    int selBottomRight;      // Bottom Right Location.
+    bool blockSelectionMode; // Column selection mode
 
     // effective colors and rendition ------------
     CharacterColor effectiveForeground; // These are derived from
@@ -656,7 +658,11 @@ private:
     {
     public:
         SavedState()
-        : cursorColumn(0),cursorLine(0),rendition(0) {}
+            : cursorColumn(0)
+            , cursorLine(0)
+            , rendition(0)
+        {
+        }
 
         int cursorColumn;
         int cursorLine;
@@ -671,7 +677,6 @@ private:
 
     static Character defaultChar;
 };
-
 }
 
 #endif // SCREEN_H

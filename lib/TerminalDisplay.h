@@ -27,8 +27,8 @@
 #include <QWidget>
 
 // Konsole
-#include "Filter.h"
 #include "Character.h"
+#include "Filter.h"
 #include "qtermwidget.h"
 //#include "konsole_export.h"
 #define KONSOLEPRIVATE_EXPORT
@@ -52,16 +52,14 @@ class QWidget;
 namespace Konsole
 {
 
-    enum MotionAfterPasting
-    {
-        // No move screenwindow after pasting
-        NoMoveScreenWindow = 0,
-        // Move start of screenwindow after pasting
-        MoveStartScreenWindow = 1,
-        // Move end of screenwindow after pasting
-        MoveEndScreenWindow = 2
-    };
-
+enum MotionAfterPasting {
+    // No move screenwindow after pasting
+    NoMoveScreenWindow = 0,
+    // Move start of screenwindow after pasting
+    MoveStartScreenWindow = 1,
+    // Move end of screenwindow after pasting
+    MoveEndScreenWindow = 2
+};
 
 extern unsigned short vt100_graphics[32];
 
@@ -78,11 +76,11 @@ class ScreenWindow;
  */
 class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QWidget
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
     /** Constructs a new terminal display widget with the specified parent. */
-    TerminalDisplay(QWidget *parent=0);
+    TerminalDisplay(QWidget* parent = 0);
     virtual ~TerminalDisplay();
 
     /** Returns the terminal color palette used by the display. */
@@ -168,15 +166,14 @@ public:
     /** Specifies whether or not text can blink. */
     void setBlinkingTextEnabled(bool blink);
 
-    void setCtrlDrag(bool enable) { _ctrlDrag=enable; }
+    void setCtrlDrag(bool enable) { _ctrlDrag = enable; }
     bool ctrlDrag() { return _ctrlDrag; }
 
     /**
      *  This enum describes the methods for selecting text when
       *  the user triple-clicks within the display.
       */
-    enum TripleClickMode
-    {
+    enum TripleClickMode {
         /** Select the whole line underneath the cursor. */
         SelectWholeLine,
         /** Select from the current cursor position to the end of the line. */
@@ -190,7 +187,7 @@ public:
     void setLineSpacing(uint);
     uint lineSpacing() const;
 
-    void emitSelection(bool useXselection,bool appendReturn);
+    void emitSelection(bool useXselection, bool appendReturn);
 
     /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
@@ -221,7 +218,7 @@ public:
      * @param color The color to use to draw the cursor.  This is only taken into
      * account if @p useForegroundColor is false.
      */
-    void setKeyboardCursorColor(bool useForegroundColor , const QColor& color);
+    void setKeyboardCursorColor(bool useForegroundColor, const QColor& color);
 
     /**
      * Returns the color of the keyboard cursor, or an invalid color if the keyboard
@@ -236,7 +233,7 @@ public:
      * This will depend upon the height of the widget and the current font.
      * See fontHeight()
      */
-    int  lines()   { return _lines;   }
+    int lines() { return _lines; }
     /**
      * Returns the number of characters of text which can be displayed on
      * each line in the widget.
@@ -244,17 +241,17 @@ public:
      * This will depend upon the width of the widget and the current font.
      * See fontWidth()
      */
-    int  columns() { return _columns; }
+    int columns() { return _columns; }
 
     /**
      * Returns the height of the characters in the font used to draw the text in the display.
      */
-    int  fontHeight()   { return _fontHeight;   }
+    int fontHeight() { return _fontHeight; }
     /**
      * Returns the width of the characters in the display.
      * This assumes the use of a fixed-width font.
      */
-    int  fontWidth()    { return _fontWidth; }
+    int fontWidth() { return _fontWidth; }
 
     void setSize(int cols, int lins);
     void setFixedSize(int cols, int lins);
@@ -303,28 +300,27 @@ public:
      * can be used to alert the user when a 'bell' occurs in the terminal
      * session.
      */
-    enum BellMode
-    {
+    enum BellMode {
         /** A system beep. */
-        SystemBeepBell=0,
+        SystemBeepBell = 0,
         /**
          * KDE notification.  This may play a sound, show a passive popup
          * or perform some other action depending on the user's settings.
          */
-        NotifyBell=1,
+        NotifyBell = 1,
         /** A silent, visual bell (eg. inverting the display's colors briefly) */
-        VisualBell=2,
+        VisualBell = 2,
         /** No bell effects */
-        NoBell=3
+        NoBell = 3
     };
 
-    void setSelection(const QString &t);
+    void setSelection(const QString& t);
 
     /**
      * Reimplemented.  Has no effect.  Use setVTFont() to change the font
      * used to draw characters in the display.
      */
-    virtual void setFont(const QFont &);
+    virtual void setFont(const QFont&);
 
     /** Returns the font used to draw characters in the display */
     QFont getVTFont() { return font(); }
@@ -339,11 +335,11 @@ public:
      * Specified whether anti-aliasing of text in the terminal display
      * is enabled or not.  Defaults to enabled.
      */
-    static void setAntialias( bool antialias ) { _antialiasText = antialias; }
+    static void setAntialias(bool antialias) { _antialiasText = antialias; }
     /**
      * Returns true if anti-aliasing of text in the terminal is enabled.
      */
-    static bool antialias()                 { return _antialiasText;   }
+    static bool antialias() { return _antialiasText; }
 
     /**
      * Specifies whether characters with intense colors should be rendered
@@ -360,7 +356,7 @@ public:
      * terminal in lines and columns is displayed whilst the widget
      * is being resized.
      */
-    void setTerminalSizeHint(bool on) { _terminalSizeHint=on; }
+    void setTerminalSizeHint(bool on) { _terminalSizeHint = on; }
     /**
      * Returns whether or not the current height and width of
      * the terminal in lines and columns is displayed whilst the widget
@@ -373,13 +369,13 @@ public:
      *
      * See setTerminalSizeHint() , isTerminalSizeHint()
      */
-    void setTerminalSizeStartup(bool on) { _terminalSizeStartup=on; }
+    void setTerminalSizeStartup(bool on) { _terminalSizeStartup = on; }
 
     /**
      * Sets the status of the BiDi rendering inside the terminal display.
      * Defaults to disabled.
      */
-    void setBidiEnabled(bool set) { _bidiEnabled=set; }
+    void setBidiEnabled(bool set) { _bidiEnabled = set; }
     /**
      * Returns the status of the BiDi rendering in this widget.
      */
@@ -393,7 +389,7 @@ public:
      * In terms of the model-view paradigm, the ScreenWindow is the model which is rendered
      * by the TerminalDisplay.
      */
-    void setScreenWindow( ScreenWindow* window );
+    void setScreenWindow(ScreenWindow* window);
     /** Returns the terminal screen section which is displayed in this widget.  See setScreenWindow() */
     ScreenWindow* screenWindow() const;
 
@@ -404,7 +400,7 @@ public:
 
     // maps a point on the widget to the position ( ie. line and column )
     // of the character at that point.
-    void getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const;
+    void getCharacterPosition(const QPoint& widgetPoint, int& line, int& column) const;
 
 public slots:
 
@@ -447,7 +443,9 @@ public slots:
      * See outputSuspended() and setFlowControlWarningEnabled()
      */
     bool flowControlWarningEnabled() const
-    { return _flowControlWarningEnabled; }
+    {
+        return _flowControlWarningEnabled;
+    }
 
     /**
      * Causes the widget to display or hide a message informing the user that terminal
@@ -506,7 +504,7 @@ signals:
     /**
      * Emitted when the user presses a key whilst the terminal widget has focus.
      */
-    void keyPressedSignal(QKeyEvent *e);
+    void keyPressedSignal(QKeyEvent* e);
 
     /**
      * A mouse event occurred.
@@ -536,51 +534,53 @@ signals:
      *
      * @p override is set to false by default and the shortcut will be triggered as normal.
      */
-    void overrideShortcutCheck(QKeyEvent* keyEvent,bool& override);
+    void overrideShortcutCheck(QKeyEvent* keyEvent, bool& override);
 
-   void isBusySelecting(bool);
-   void sendStringToEmu(const char*);
+    void isBusySelecting(bool);
+    void sendStringToEmu(const char*);
 
-   // qtermwidget signals
-	void copyAvailable(bool);
-	void termGetFocus();
-	void termLostFocus();
+    // qtermwidget signals
+    void copyAvailable(bool);
+    void termGetFocus();
+    void termLostFocus();
 
     void notifyBell(const QString&);
     void usesMouseChanged();
 
 protected:
-    virtual bool event( QEvent * );
+    virtual bool event(QEvent*);
 
-    virtual void paintEvent( QPaintEvent * );
+    virtual void paintEvent(QPaintEvent*);
 
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
     virtual void resizeEvent(QResizeEvent*);
 
-    virtual void fontChange(const QFont &font);
+    virtual void fontChange(const QFont& font);
     virtual void focusInEvent(QFocusEvent* event);
     virtual void focusOutEvent(QFocusEvent* event);
     virtual void keyPressEvent(QKeyEvent* event);
     virtual void mouseDoubleClickEvent(QMouseEvent* ev);
-    virtual void mousePressEvent( QMouseEvent* );
-    virtual void mouseReleaseEvent( QMouseEvent* );
-    virtual void mouseMoveEvent( QMouseEvent* );
-    virtual void extendSelection( const QPoint& pos );
-    virtual void wheelEvent( QWheelEvent* );
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void extendSelection(const QPoint& pos);
+    virtual void wheelEvent(QWheelEvent*);
 
-    virtual bool focusNextPrevChild( bool next );
+    virtual bool focusNextPrevChild(bool next);
 
     // drag and drop
     virtual void dragEnterEvent(QDragEnterEvent* event);
     virtual void dropEvent(QDropEvent* event);
     void doDrag();
-    enum DragState { diNone, diPending, diDragging };
+    enum DragState { diNone,
+                     diPending,
+                     diDragging };
 
     struct _dragInfo {
-      DragState       state;
-      QPoint          start;
-      QDrag           *dragObject;
+        DragState state;
+        QPoint start;
+        QDrag* dragObject;
     } dragInfo;
 
     // classifies the 'ch' into one of three categories
@@ -596,8 +596,8 @@ protected:
     void mouseTripleClickEvent(QMouseEvent* ev);
 
     // reimplemented
-    virtual void inputMethodEvent ( QInputMethodEvent* event );
-    virtual QVariant inputMethodQuery( Qt::InputMethodQuery query ) const;
+    virtual void inputMethodEvent(QInputMethodEvent* event);
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
 protected slots:
 
@@ -612,10 +612,9 @@ protected slots:
 private slots:
 
     void swapColorTable();
-    void tripleClickTimeout();  // resets possibleTripleClick
+    void tripleClickTimeout(); // resets possibleTripleClick
 
 private:
-
     // -- Drawing helpers --
 
     // determine the width of this text
@@ -626,7 +625,7 @@ private:
     // divides the part of the display specified by 'rect' into
     // fragments according to their colors and styles and calls
     // drawTextFragment() to draw the fragments
-    void drawContents(QPainter &paint, const QRect &rect);
+    void drawContents(QPainter& paint, const QRect& rect);
     // draws a section of text, all the text in this section
     // has a common color and style
     void drawTextFragment(QPainter& painter, const QRect& rect,
@@ -638,17 +637,17 @@ private:
     void drawBackground(QPainter& painter, const QRect& rect, const QColor& color,
                         bool useOpacitySetting);
     // draws the cursor character
-    void drawCursor(QPainter& painter, const QRect& rect , const QColor& foregroundColor,
-                                       const QColor& backgroundColor , bool& invertColors);
+    void drawCursor(QPainter& painter, const QRect& rect, const QColor& foregroundColor,
+                    const QColor& backgroundColor, bool& invertColors);
     // draws the characters or line graphics in a text fragment
-    void drawCharacters(QPainter& painter, const QRect& rect,  const QString& text,
-                                           const Character* style, bool invertCharacterColor);
+    void drawCharacters(QPainter& painter, const QRect& rect, const QString& text,
+                        const Character* style, bool invertCharacterColor);
     // draws a string of line graphics
     void drawLineCharString(QPainter& painter, int x, int y,
                             const QString& str, const Character* attributes);
 
     // draws the preedit string for input methods
-    void drawInputMethodPreeditString(QPainter& painter , const QRect& rect);
+    void drawInputMethodPreeditString(QPainter& painter, const QRect& rect);
 
     // --
 
@@ -668,7 +667,7 @@ private:
     // 'region' is the part of the image to scroll - currently only
     // the top, bottom and height of 'region' are taken into account,
     // the left and right are ignored.
-    void scrollImage(int lines , const QRect& region);
+    void scrollImage(int lines, const QRect& region);
 
     void calcGeometry();
     void propagateSize();
@@ -697,30 +696,30 @@ private:
 
     QGridLayout* _gridLayout;
 
-    bool _fixedFont; // has fixed pitch
-    int  _fontHeight;     // height
-    int  _fontWidth;     // width
-    int  _fontAscent;     // ascend
-    bool _boldIntense;   // Whether intense colors should be rendered with bold font
+    bool _fixedFont;   // has fixed pitch
+    int _fontHeight;   // height
+    int _fontWidth;    // width
+    int _fontAscent;   // ascend
+    bool _boldIntense; // Whether intense colors should be rendered with bold font
 
-    int _leftMargin;    // offset
-    int _topMargin;    // offset
+    int _leftMargin; // offset
+    int _topMargin;  // offset
 
-    int _lines;      // the number of lines that can be displayed in the widget
-    int _columns;    // the number of columns that can be displayed in the widget
+    int _lines;   // the number of lines that can be displayed in the widget
+    int _columns; // the number of columns that can be displayed in the widget
 
-    int _usedLines;  // the number of lines that are actually being used, this will be less
+    int _usedLines; // the number of lines that are actually being used, this will be less
                     // than 'lines' if the character image provided with setImage() is smaller
                     // than the maximum image size which can be displayed
 
     int _usedColumns; // the number of columns that are actually being used, this will be less
-                     // than 'columns' if the character image provided with setImage() is smaller
-                     // than the maximum image size which can be displayed
+                      // than 'columns' if the character image provided with setImage() is smaller
+                      // than the maximum image size which can be displayed
 
     int _contentHeight;
     int _contentWidth;
     Character* _image; // [lines][columns]
-               // only the area [usedLines][usedColumns] in the image contains valid data
+                       // only the area [usedLines][usedColumns] in the image contains valid data
 
     int _imageSize;
     QVector<LineProperty> _lineProperties;
@@ -735,39 +734,38 @@ private:
     bool _mouseMarks;
     bool _bracketedPasteMode;
 
-    QPoint  _iPntSel; // initial selection point
-    QPoint  _pntSel; // current selection point
-    QPoint  _tripleSelBegin; // help avoid flicker
-    int     _actSel; // selection state
-    bool    _wordSelectionMode;
-    bool    _lineSelectionMode;
-    bool    _preserveLineBreaks;
-    bool    _columnSelectionMode;
+    QPoint _iPntSel;        // initial selection point
+    QPoint _pntSel;         // current selection point
+    QPoint _tripleSelBegin; // help avoid flicker
+    int _actSel;            // selection state
+    bool _wordSelectionMode;
+    bool _lineSelectionMode;
+    bool _preserveLineBreaks;
+    bool _columnSelectionMode;
 
-    QClipboard*  _clipboard;
+    QClipboard* _clipboard;
     QScrollBar* _scrollBar;
     QTermWidget::ScrollBarPosition _scrollbarLocation;
-    QString     _wordCharacters;
-    int         _bellMode;
+    QString _wordCharacters;
+    int _bellMode;
 
-    bool _blinking;   // hide text in paintEvent
-    bool _hasBlinker; // has characters to blink
-    bool _cursorBlinking;     // hide cursor in paintEvent
-    bool _hasBlinkingCursor;  // has blinking cursor enabled
-    bool _allowBlinkingText;  // allow text to blink
-    bool _ctrlDrag;           // require Ctrl key for drag
+    bool _blinking;          // hide text in paintEvent
+    bool _hasBlinker;        // has characters to blink
+    bool _cursorBlinking;    // hide cursor in paintEvent
+    bool _hasBlinkingCursor; // has blinking cursor enabled
+    bool _allowBlinkingText; // allow text to blink
+    bool _ctrlDrag;          // require Ctrl key for drag
     TripleClickMode _tripleClickMode;
-    bool _isFixedSize; //Columns / lines are locked.
-    QTimer* _blinkTimer;  // active when hasBlinker
-    QTimer* _blinkCursorTimer;  // active when hasBlinkingCursor
+    bool _isFixedSize;         //Columns / lines are locked.
+    QTimer* _blinkTimer;       // active when hasBlinker
+    QTimer* _blinkCursorTimer; // active when hasBlinkingCursor
 
     //QMenu* _drop;
     QString _dropText;
     int _dndFileCount;
 
-    bool _possibleTripleClick;  // is set in mouseDoubleClickEvent and deleted
+    bool _possibleTripleClick; // is set in mouseDoubleClickEvent and deleted
                                // after QApplication::doubleClickInterval() delay
-
 
     QLabel* _resizeWidget;
     QTimer* _resizeTimer;
@@ -799,17 +797,15 @@ private:
     // color of the character under the cursor is used
     QColor _cursorColor;
 
-
     MotionAfterPasting mMotionAfterPasting;
 
-    struct InputMethodData
-    {
+    struct InputMethodData {
         QString preeditString;
         QRect previousPreeditRect;
     };
     InputMethodData _inputMethodData;
 
-    static bool _antialiasText;   // do we antialias or not
+    static bool _antialiasText; // do we antialias or not
 
     //the delay in milliseconds between redrawing blinking text
     static const int TEXT_BLINK_DELAY = 500;
@@ -825,18 +821,19 @@ public:
 
 class AutoScrollHandler : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     AutoScrollHandler(QWidget* parent);
+
 protected:
     virtual void timerEvent(QTimerEvent* event);
-    virtual bool eventFilter(QObject* watched,QEvent* event);
+    virtual bool eventFilter(QObject* watched, QEvent* event);
+
 private:
     QWidget* widget() const { return static_cast<QWidget*>(parent()); }
     int _timerId;
 };
-
 }
 
 #endif // TERMINALDISPLAY_H

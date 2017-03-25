@@ -61,12 +61,12 @@ class KPtyProcess : public KProcess
 
 public:
     enum PtyChannelFlag {
-        NoChannels = 0, /**< The PTY is not connected to any channel. */
-        StdinChannel = 1, /**< Connect PTY to stdin. */
-        StdoutChannel = 2, /**< Connect PTY to stdout. */
-        StderrChannel = 4, /**< Connect PTY to stderr. */
+        NoChannels = 0,        /**< The PTY is not connected to any channel. */
+        StdinChannel = 1,      /**< Connect PTY to stdin. */
+        StdoutChannel = 2,     /**< Connect PTY to stdout. */
+        StderrChannel = 4,     /**< Connect PTY to stderr. */
         AllOutputChannels = 6, /**< Connect PTY to all output channels. */
-        AllChannels = 7 /**< Connect PTY to all channels. */
+        AllChannels = 7        /**< Connect PTY to all channels. */
     };
 
     Q_DECLARE_FLAGS(PtyChannels, PtyChannelFlag)
@@ -74,7 +74,7 @@ public:
     /**
      * Constructor
      */
-    explicit KPtyProcess(QObject *parent = 0);
+    explicit KPtyProcess(QObject* parent = 0);
 
     /**
      * Construct a process using an open pty master.
@@ -83,7 +83,7 @@ public:
      *   The process does not take ownership of the descriptor;
      *   it will not be automatically closed at any point.
      */
-    KPtyProcess(int ptyMasterFd, QObject *parent = 0);
+    KPtyProcess(int ptyMasterFd, QObject* parent = 0);
 
     /**
      * Destructor
@@ -102,9 +102,8 @@ public:
     bool isRunning() const
     {
         bool rval;
-        (pid() > 0) ? rval= true : rval= false;
+        (pid() > 0) ? rval = true : rval = false;
         return rval;
-
     }
     /**
      * Query to which channels the PTY is assigned.
@@ -138,7 +137,7 @@ public:
      *
      * @return the PTY device
      */
-    KPtyDevice *pty() const;
+    KPtyDevice* pty() const;
 
 protected:
     /**
@@ -150,16 +149,16 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _k_onStateChanged(QProcess::ProcessState))
 };
 
-
 //////////////////
 // private data //
 //////////////////
 
-class KPtyProcessPrivate : public KProcessPrivate {
+class KPtyProcessPrivate : public KProcessPrivate
+{
 public:
-    KPtyProcessPrivate() :
-        ptyChannels(KPtyProcess::NoChannels),
-        addUtmp(false)
+    KPtyProcessPrivate()
+        : ptyChannels(KPtyProcess::NoChannels)
+        , addUtmp(false)
     {
     }
 
@@ -169,7 +168,7 @@ public:
             pty->logout();
     }
 
-    KPtyDevice *pty;
+    KPtyDevice* pty;
     KPtyProcess::PtyChannels ptyChannels;
     bool addUtmp : 1;
 };

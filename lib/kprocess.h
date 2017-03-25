@@ -55,29 +55,28 @@ class KProcess : public QProcess
     Q_DECLARE_PRIVATE(KProcess)
 
 public:
-
     /**
      * Modes in which the output channels can be opened.
      */
     enum OutputChannelMode {
         SeparateChannels = QProcess::SeparateChannels,
-            /**< Standard output and standard error are handled by KProcess
+        /**< Standard output and standard error are handled by KProcess
                  as separate channels */
         MergedChannels = QProcess::MergedChannels,
-            /**< Standard output and standard error are handled by KProcess
+        /**< Standard output and standard error are handled by KProcess
                  as one channel */
         ForwardedChannels = QProcess::ForwardedChannels,
-            /**< Both standard output and standard error are forwarded
+        /**< Both standard output and standard error are forwarded
                  to the parent process' respective channel */
         OnlyStdoutChannel,
-            /**< Only standard output is handled; standard error is forwarded */
-        OnlyStderrChannel  /**< Only standard error is handled; standard output is forwarded */
+        /**< Only standard output is handled; standard error is forwarded */
+        OnlyStderrChannel /**< Only standard error is handled; standard output is forwarded */
     };
 
     /**
      * Constructor
      */
-    explicit KProcess(QObject *parent = 0);
+    explicit KProcess(QObject* parent = 0);
 
     /**
      * Destructor
@@ -125,7 +124,7 @@ public:
      * @param overwrite if @c false and the environment variable is already
      *   set, the old value will be preserved
      */
-    void setEnv(const QString &name, const QString &value, bool overwrite = true);
+    void setEnv(const QString& name, const QString& value, bool overwrite = true);
 
     /**
      * Removes the variable @p name from the process' environment.
@@ -134,7 +133,7 @@ public:
      *
      * @param name the name of the environment variable
      */
-    void unsetEnv(const QString &name);
+    void unsetEnv(const QString& name);
 
     /**
      * Empties the process' environment.
@@ -155,7 +154,7 @@ public:
      * @param args the command line arguments for the program,
      *   one per list element
      */
-    void setProgram(const QString &exe, const QStringList &args = QStringList());
+    void setProgram(const QString& exe, const QStringList& args = QStringList());
 
     /**
      * @overload
@@ -163,7 +162,7 @@ public:
      * @param argv the program to execute and the command line arguments
      *   for the program, one per list element
      */
-    void setProgram(const QStringList &argv);
+    void setProgram(const QStringList& argv);
 
     /**
      * Append an element to the command line argument list for this process.
@@ -182,7 +181,7 @@ public:
      * @param arg the argument to add
      * @return a reference to this KProcess
      */
-    KProcess &operator<<(const QString& arg);
+    KProcess& operator<<(const QString& arg);
 
     /**
      * @overload
@@ -190,7 +189,7 @@ public:
      * @param args the arguments to add
      * @return a reference to this KProcess
      */
-    KProcess &operator<<(const QStringList& args);
+    KProcess& operator<<(const QStringList& args);
 
     /**
      * Clear the program and command line argument list.
@@ -217,7 +216,7 @@ public:
      *   quoted when passed as argument. Failure to do so often results in
      *   serious security holes. See KShell::quoteArg().
      */
-    void setShellCommand(const QString &cmd);
+    void setShellCommand(const QString& cmd);
 
     /**
      * Obtain the currently set program and arguments.
@@ -263,7 +262,7 @@ public:
      * @return -2 if the process could not be started, -1 if it crashed,
      *  otherwise its exit code
      */
-    static int execute(const QString &exe, const QStringList &args = QStringList(), int msecs = -1);
+    static int execute(const QString& exe, const QStringList& args = QStringList(), int msecs = -1);
 
     /**
      * @overload
@@ -274,7 +273,7 @@ public:
      * @return -2 if the process could not be started, -1 if it crashed,
      *  otherwise its exit code
      */
-    static int execute(const QStringList &argv, int msecs = -1);
+    static int execute(const QStringList& argv, int msecs = -1);
 
     /**
      * Start the process and detach from it. See QProcess::startDetached()
@@ -300,7 +299,7 @@ public:
      *   one per list element
      * @return the PID of the started process or 0 on error
      */
-    static int startDetached(const QString &exe, const QStringList &args = QStringList());
+    static int startDetached(const QString& exe, const QStringList& args = QStringList());
 
     /**
      * @overload
@@ -309,7 +308,7 @@ public:
      *   for the program, one per list element
      * @return the PID of the started process or 0 on error
      */
-    static int startDetached(const QStringList &argv);
+    static int startDetached(const QStringList& argv);
 
     /**
      * Obtain the process' ID as known to the system.
@@ -327,12 +326,12 @@ protected:
     /**
      * @internal
      */
-    KProcess(KProcessPrivate *d, QObject *parent);
+    KProcess(KProcessPrivate* d, QObject* parent);
 
     /**
      * @internal
      */
-    KProcessPrivate * const d_ptr;
+    KProcessPrivate* const d_ptr;
 
 private:
     // hide those
@@ -346,19 +345,20 @@ private:
 };
 
 /* ----------- kprocess_p.h ---------------- */
-class KProcessPrivate {
+class KProcessPrivate
+{
 
     Q_DECLARE_PUBLIC(KProcess)
 
 protected:
-    KProcessPrivate() :
-        openMode(QIODevice::ReadWrite)
+    KProcessPrivate()
+        : openMode(QIODevice::ReadWrite)
     {
     }
     virtual ~KProcessPrivate()
     {
     }
-    void writeAll(const QByteArray &buf, int fd);
+    void writeAll(const QByteArray& buf, int fd);
     void forwardStd(KProcess::ProcessChannel good, int fd);
     void _k_forwardStdout();
     void _k_forwardStderr();
@@ -368,8 +368,7 @@ protected:
     KProcess::OutputChannelMode outputChannelMode;
     QIODevice::OpenMode openMode;
 
-    KProcess *q_ptr;
+    KProcess* q_ptr;
 };
 /* ------------------------------------------- */
 #endif
-

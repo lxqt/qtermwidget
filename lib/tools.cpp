@@ -4,7 +4,6 @@
 #include <QDir>
 #include <QtDebug>
 
-
 /*! Helper function to get possible location of layout files.
 By default the KB_LAYOUT_DIR is used (linux/BSD/macports).
 But in some cases (apple bundle) there can be more locations).
@@ -14,7 +13,7 @@ QString get_kb_layout_dir()
 #ifdef BUNDLE_KEYBOARDLAYOUTS
     return QLatin1String(":/");
 #else
-//    qDebug() << __FILE__ << __FUNCTION__;
+    //    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = "";
     QString k(KB_LAYOUT_DIR);
@@ -45,8 +44,9 @@ QString get_kb_layout_dir()
 
 /*! Helper function to add custom location of color schemes.
 */
-namespace {
-    QStringList custom_color_schemes_dirs;
+namespace
+{
+QStringList custom_color_schemes_dirs;
 }
 void add_custom_color_scheme_dir(const QString& custom_dir)
 {
@@ -63,13 +63,13 @@ const QStringList get_color_schemes_dirs()
 #ifdef BUNDLE_COLORSCHEMES
     return QLatin1String(":/");
 #else
-//    qDebug() << __FILE__ << __FUNCTION__;
+    //    qDebug() << __FILE__ << __FUNCTION__;
 
     QStringList rval;
     QString k(COLORSCHEMES_DIR);
     QDir d(k);
 
-//    qDebug() << "default COLORSCHEMES_DIR: " << k;
+    //    qDebug() << "default COLORSCHEMES_DIR: " << k;
 
     if (d.exists())
         rval << k.append("/");
@@ -99,9 +99,12 @@ const QStringList get_color_schemes_dirs()
             rval << custom_dir;
     }
 #ifdef QT_DEBUG
-    if(!rval.isEmpty()) {
+    if (!rval.isEmpty())
+    {
         qDebug() << "Using color-schemes: " << rval;
-    } else {
+    }
+    else
+    {
         qDebug() << "Cannot find color-schemes in any location!";
     }
 #endif

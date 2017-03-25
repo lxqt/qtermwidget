@@ -17,14 +17,15 @@
     02110-1301  USA.
 */
 #ifndef _SEARCHBAR_H
-#define	_SEARCHBAR_H
+#define _SEARCHBAR_H
 
 #include <QRegExp>
 
-#include "ui_SearchBar.h"
 #include "HistorySearch.h"
+#include "ui_SearchBar.h"
 
-class SearchBar : public QWidget {
+class SearchBar : public QWidget
+{
     Q_OBJECT
 public:
     SearchBar(QWidget* parent = 0);
@@ -52,9 +53,9 @@ private slots:
 
 private:
     Ui::SearchBar widget;
-    QAction *m_matchCaseMenuEntry;
-    QAction *m_useRegularExpressionMenuEntry;
-    QAction *m_highlightMatchesMenuEntry;
+    QAction* m_matchCaseMenuEntry;
+    QAction* m_useRegularExpressionMenuEntry;
+    QAction* m_highlightMatchesMenuEntry;
 };
 
-#endif	/* _SEARCHBAR_H */
+#endif /* _SEARCHBAR_H */
