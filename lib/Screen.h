@@ -32,6 +32,7 @@
 #include "Character.h"
 #include "History.h"
 
+// clang-format off
 #define MODE_Origin    0
 #define MODE_Wrap      1
 #define MODE_Insert    2
@@ -39,6 +40,7 @@
 #define MODE_Cursor    4
 #define MODE_NewLine   5
 #define MODES_SCREEN   6
+// clang-format on
 
 namespace Konsole
 {

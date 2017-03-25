@@ -35,6 +35,7 @@
 #include "Emulation.h"
 #include "Screen.h"
 
+// clang-format off
 #define MODE_AppScreen       (MODES_SCREEN+0)   // Mode #1
 #define MODE_AppCuKeys       (MODES_SCREEN+1)   // Application cursor keys (DECCKM)
 #define MODE_AppKeyPad       (MODES_SCREEN+2)   //
@@ -50,6 +51,7 @@
 #define MODE_Allow132Columns (MODES_SCREEN+12)  // Allow DECCOLM mode
 #define MODE_BracketedPaste  (MODES_SCREEN+13)  // Xterm-style bracketed paste mode
 #define MODE_total           (MODES_SCREEN+14)
+// clang-format on
 
 namespace Konsole
 {

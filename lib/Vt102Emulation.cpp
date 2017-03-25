@@ -152,6 +152,7 @@ void Vt102Emulation::reset()
 
 #define TY_CONSTRUCT(T,A,N) ( ((((int)N) & 0xffff) << 16) | ((((int)A) & 0xff) << 8) | (((int)T) & 0xff) )
 
+// clang-format off
 #define TY_CHR(   )     TY_CONSTRUCT(0,0,0)
 #define TY_CTL(A  )     TY_CONSTRUCT(1,A,0)
 #define TY_ESC(A  )     TY_CONSTRUCT(2,A,0)
@@ -164,6 +165,7 @@ void Vt102Emulation::reset()
 #define TY_VT52(A)    TY_CONSTRUCT(8,A,0)
 #define TY_CSI_PG(A)  TY_CONSTRUCT(9,A,0)
 #define TY_CSI_PE(A)  TY_CONSTRUCT(10,A,0)
+// clang-format on
 
 #define MAX_ARGUMENT 4096
 
@@ -257,6 +259,7 @@ void Vt102Emulation::initTokenizer()
    Note that they need to applied in proper order.
 */
 
+// clang-format off
 #define lec(P,L,C) (p == (P) && s[(L)] == (C))
 #define lun(     ) (p ==  1  && cc >= 32 )
 #define les(P,L,C) (p == (P) && s[L] < 256 && (charClass[s[(L)]] & (C)) == (C))
@@ -269,6 +272,7 @@ void Vt102Emulation::initTokenizer()
 #define Xpe        (tokenBufferPos >= 2 && tokenBuffer[1] == ']')
 #define Xte        (Xpe      && cc ==  7 )
 #define ces(C)     (cc < 256 && (charClass[cc] & (C)) == (C) && !Xte)
+// clang-format on
 
 #define ESC 27
 #define CNTL(c) ((c)-'@')
@@ -301,6 +305,7 @@ void Vt102Emulation::receiveChar(int cc)
 
   if (getMode(MODE_Ansi))
   {
+    // clang-format off
     if (lec(1,0,ESC)) { return; }
     if (lec(1,0,ESC+128)) { s[0] = ESC; receiveChar('['); return; }
     if (les(2,1,GRP)) { return; }
@@ -314,6 +319,7 @@ void Vt102Emulation::receiveChar(int cc)
     if (les(3,1,SCS)) { processToken( TY_ESC_CS(s[1],s[2]), 0, 0);      resetTokenizer(); return; }
     if (lec(3,1,'#')) { processToken( TY_ESC_DE(s[2]), 0, 0);           resetTokenizer(); return; }
     if (eps(    CPN)) { processToken( TY_CSI_PN(cc), argv[0],argv[1]);  resetTokenizer(); return; }
+    // clang-format on
 
     // resize = \e[8;<row>;<col>t
     if (eps(CPS))
@@ -437,6 +443,7 @@ void Vt102Emulation::processToken(int token, int p, int q)
   switch (token)
   {
 
+    // clang-format off
     case TY_CHR(         ) : _currentScreen->displayCharacter     (p         ); break; //UTF16
 
     //             127 DEL    : ignored on input
@@ -809,6 +816,7 @@ void Vt102Emulation::processToken(int token, int p, int q)
     case TY_VT52('>'      ) :        resetMode      (MODE_AppKeyPad); break; //VT52
 
     case TY_CSI_PG('c'      ) :  reportSecondaryAttributes(          ); break; //VT100
+    // clang-format on
 
     default:
         reportDecodingError();

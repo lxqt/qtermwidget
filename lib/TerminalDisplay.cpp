@@ -203,6 +203,7 @@ static inline bool isLineCharString(const QString& string)
 
 // assert for i in [0..31] : vt100extended(vt100_graphics[i]) == i.
 
+// clang-format off
 unsigned short Konsole::vt100_graphics[32] =
 { // 0/8     1/9    2/10    3/11    4/12    5/13    6/14    7/15
   0x0020, 0x25C6, 0x2592, 0x2409, 0x240c, 0x240d, 0x240a, 0x00b0,
@@ -210,6 +211,7 @@ unsigned short Konsole::vt100_graphics[32] =
   0xF800, 0xF801, 0x2500, 0xF803, 0xF804, 0x251c, 0x2524, 0x2534,
   0x252c, 0x2502, 0x2264, 0x2265, 0x03C0, 0x2260, 0x00A3, 0x00b7
 };
+// clang-format on
 
 void TerminalDisplay::fontChange(const QFont&)
 {

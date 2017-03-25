@@ -108,9 +108,11 @@ public:
 
 // Colors
 
+// clang-format off
 #define BASE_COLORS   (2+8)
 #define INTENSITIES   2
 #define TABLE_COLORS  (INTENSITIES*BASE_COLORS)
+// clang-format on
 
 #define DEFAULT_FORE_COLOR 0
 #define DEFAULT_BACK_COLOR 1
@@ -136,11 +138,13 @@ extern const ColorEntry base_color_table[TABLE_COLORS] KDE_NO_EXPORT;
    default foreground and default background colour.
 */
 
+// clang-format off
 #define COLOR_SPACE_UNDEFINED   0
 #define COLOR_SPACE_DEFAULT     1
 #define COLOR_SPACE_SYSTEM      2
 #define COLOR_SPACE_256         3
 #define COLOR_SPACE_RGB         4
+// clang-format on
 
 /**
  * Describes the color of a single character in the terminal.
