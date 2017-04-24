@@ -249,6 +249,8 @@ signals:
      */
     void sendData(const char *,int);
 
+    void profileChanged(const QString & profile);
+
     void titleChanged();
 
     /**
