@@ -7,6 +7,7 @@ include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
 
+set(REQUIRED_QT_VERSION "5.6")
 set(LXQTBT_MINIMUM_VERSION "0.3.0")
 
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
@@ -27,8 +28,8 @@ endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
+find_package(Qt5Widgets "${REQUIRED_QT_VERSION}" REQUIRED)
+find_package(Qt5LinguistTools "${REQUIRED_QT_VERSION}" REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 include(LXQtTranslateTs)
 include(LXQtCompilerSettings NO_POLICY_SCOPE)
