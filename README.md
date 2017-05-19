@@ -15,8 +15,8 @@ This project is licensed under the terms of the [GPLv2](https://www.gnu.org/lice
 
 ### Compiling sources
 
-The only runtime dependency is qtbase ≥ 5.4.   
-In order to build CMake ≥ 3.0 is needed as well as optionally Git to pull latest VCS checkouts.
+The only runtime dependency is qtbase ≥ 5.6.
+In order to build CMake ≥ 3.0.2 and [lxqt-build-tools](https://github.com/lxde/lxqt-build-tools/) >= 0.3 are needed as well as Git to pull translations and optionally latest VCS checkouts.
 
 Code configuration is handled by CMake. Building out of source is strongly recommended. CMake variable `CMAKE_INSTALL_PREFIX` will normally have to be set to `/usr`, depending on the way library paths are dealt with on 64bit systems variables like `CMAKE_INSTALL_LIBDIR` may have to be set as well.   
 
