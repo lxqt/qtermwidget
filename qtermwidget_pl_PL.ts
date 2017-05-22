@@ -33,7 +33,7 @@
         <location filename="../../ColorScheme.cpp" line="278"/>
         <location filename="../../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Nie nazwana paleta</translation>
+        <translation>Nienazwana paleta</translation>
     </message>
     <message>
         <location filename="../../ColorScheme.cpp" line="464"/>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../../Filter.cpp" line="521"/>
         <source>Send Email To...</source>
-        <translation>Wyślij mejl do…</translation>
+        <translation>Wyślij e-mail do…</translation>
     </message>
     <message>
         <location filename="../../Filter.cpp" line="522"/>
         <source>Copy Email Address</source>
-        <translation>Kopiuj adres mejlowy</translation>
+        <translation>Kopiuj adres e-mail</translation>
     </message>
 </context>
 <context>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation>Ta sama wielkość liter</translation>
+        <translation>Rozróżniaj wielkość liter</translation>
     </message>
     <message>
         <location filename="../../SearchBar.cpp" line="45"/>
