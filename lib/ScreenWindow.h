@@ -239,6 +239,11 @@ signals:
     /** Emitted when the selection is changed. */
     void selectionChanged();
 
+    /**
+     * Triggered when the cursor location is changed
+     */
+    void cursorLocationChanged();
+
 private:
     int endWindowLine() const;
     void fillUnusedArea();

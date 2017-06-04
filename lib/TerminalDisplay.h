@@ -609,6 +609,8 @@ protected slots:
     //after emitting the first in a sequence of bell events.
     void enableBell();
 
+    void updateIMECursorRectangle();
+
 private slots:
 
     void swapColorTable();
@@ -806,6 +808,7 @@ private:
     {
         QString preeditString;
         QRect previousPreeditRect;
+        int cursorPos;
     };
     InputMethodData _inputMethodData;
 

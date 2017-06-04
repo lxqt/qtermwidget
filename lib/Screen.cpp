@@ -108,6 +108,7 @@ void Screen::cursorUp(int n)
     int stop = cuY < _topMargin ? 0 : _topMargin;
     cuX = qMin(columns-1,cuX); // nowrap!
     cuY = qMax(stop,cuY-n);
+    emit cursorLocationChanged();
 }
 
 void Screen::cursorDown(int n)
@@ -117,6 +118,7 @@ void Screen::cursorDown(int n)
     int stop = cuY > _bottomMargin ? lines-1 : _bottomMargin;
     cuX = qMin(columns-1,cuX); // nowrap!
     cuY = qMin(stop,cuY+n);
+    emit cursorLocationChanged();
 }
 
 void Screen::cursorLeft(int n)
@@ -125,6 +127,7 @@ void Screen::cursorLeft(int n)
     if (n == 0) n = 1; // Default
     cuX = qMin(columns-1,cuX); // nowrap!
     cuX = qMax(0,cuX-n);
+    emit cursorLocationChanged();
 }
 
 void Screen::cursorRight(int n)
@@ -132,6 +135,7 @@ void Screen::cursorRight(int n)
 {
     if (n == 0) n = 1; // Default
     cuX = qMin(columns-1,cuX+n);
+    emit cursorLocationChanged();
 }
 
 void Screen::setMargins(int top, int bot)
@@ -149,6 +153,7 @@ void Screen::setMargins(int top, int bot)
     _bottomMargin = bot;
     cuX = 0;
     cuY = getMode(MODE_Origin) ? top : 0;
+    emit cursorLocationChanged();
 
 }
 
@@ -168,6 +173,7 @@ void Screen::index()
         scrollUp(1);
     else if (cuY < lines-1)
         cuY += 1;
+    emit cursorLocationChanged();
 }
 
 void Screen::reverseIndex()
@@ -177,6 +183,7 @@ void Screen::reverseIndex()
         scrollDown(_topMargin,1);
     else if (cuY > 0)
         cuY -= 1;
+    emit cursorLocationChanged();
 }
 
 void Screen::nextLine()
@@ -243,7 +250,7 @@ void Screen::setMode(int m)
     currentModes[m] = true;
     switch(m)
     {
-        case MODE_Origin : cuX = 0; cuY = _topMargin; break; //FIXME: home
+        case MODE_Origin : cuX = 0; cuY = _topMargin; emit cursorLocationChanged(); break; //FIXME: home
     }
 }
 
@@ -252,7 +259,7 @@ void Screen::resetMode(int m)
     currentModes[m] = false;
     switch(m)
     {
-        case MODE_Origin : cuX = 0; cuY = 0; break; //FIXME: home
+        case MODE_Origin : cuX = 0; cuY = 0; emit cursorLocationChanged(); break; //FIXME: home
     }
 }
 
@@ -288,6 +295,7 @@ void Screen::restoreCursor()
     currentForeground   = savedState.foreground;
     currentBackground   = savedState.background;
     updateEffectiveRendition();
+    emit cursorLocationChanged();
 }
 
 void Screen::resizeImage(int new_lines, int new_columns)
@@ -324,6 +332,7 @@ void Screen::resizeImage(int new_lines, int new_columns)
     columns = new_columns;
     cuX = qMin(cuX,columns-1);
     cuY = qMin(cuY,lines-1);
+    emit cursorLocationChanged();
 
     // FIXME: try to keep values, evtl.
     _topMargin=0;
@@ -557,6 +566,8 @@ void Screen::backspace()
 
     if (BS_CLEARS)
         screenLines[cuY][cuX].character = ' ';
+
+    emit cursorLocationChanged();
 }
 
 void Screen::tab(int n)
@@ -681,6 +692,7 @@ void Screen::displayCharacter(unsigned short c)
         w--;
     }
     cuX = newCursorX;
+    emit cursorLocationChanged();
 }
 
 void Screen::compose(const QString& /*compose*/)
@@ -768,6 +780,7 @@ void Screen::setCursorX(int x)
     if (x == 0) x = 1; // Default
     x -= 1; // Adjust
     cuX = qMax(0,qMin(columns-1, x));
+    emit cursorLocationChanged();
 }
 
 void Screen::setCursorY(int y)
@@ -775,17 +788,20 @@ void Screen::setCursorY(int y)
     if (y == 0) y = 1; // Default
     y -= 1; // Adjust
     cuY = qMax(0,qMin(lines  -1, y + (getMode(MODE_Origin) ? _topMargin : 0) ));
+    emit cursorLocationChanged();
 }
 
 void Screen::home()
 {
     cuX = 0;
     cuY = 0;
+    emit cursorLocationChanged();
 }
 
 void Screen::toStartOfLine()
 {
     cuX = 0;
+    emit cursorLocationChanged();
 }
 
 int Screen::getCursorX() const

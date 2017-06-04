@@ -48,6 +48,9 @@ void ScreenWindow::setScreen(Screen* screen)
     Q_ASSERT( screen );
 
     _screen = screen;
+
+    connect(_screen, &Screen::cursorLocationChanged,
+            this, &ScreenWindow::cursorLocationChanged);
 }
 
 Screen* ScreenWindow::screen() const

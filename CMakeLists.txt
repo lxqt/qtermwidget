@@ -81,6 +81,7 @@ set(HDRS
     lib/kptyprocess.h
     lib/Pty.h
     lib/qtermwidget.h
+    lib/Screen.h
     lib/ScreenWindow.h
     lib/SearchBar.h
     lib/Session.h
