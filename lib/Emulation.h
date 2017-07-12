@@ -126,6 +126,26 @@ Q_OBJECT
 
 public:
 
+  /**
+   * This enum describes the available shapes for the keyboard cursor.
+   * See setKeyboardCursorShape()
+   */
+  enum class KeyboardCursorShape {
+      /** A rectangular block which covers the entire area of the cursor character. */
+      BlockCursor = 0,
+      /**
+       * A single flat line which occupies the space at the bottom of the cursor
+       * character's area.
+       */
+      UnderlineCursor = 1,
+      /**
+       * An cursor shaped like the capital letter 'I', similar to the IBeam
+       * cursor used in Qt/KDE text editors.
+       */
+      IBeamCursor = 2
+  };
+
+
    /** Constructs a new terminal emulation */
    Emulation();
   ~Emulation();
@@ -414,6 +434,15 @@ signals:
    * resume output.
    */
   void flowControlKeyPressed(bool suspendKeyPressed);
+
+  /**
+   * Emitted when the cursor shape or its blinking state is changed via
+   * DECSCUSR sequences.
+   *
+   * @param cursorShape One of 3 possible values in KeyboardCursorShape enum
+   * @param blinkingCursorEnabled Whether to enable blinking or not
+   */
+  void cursorChanged(KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
 
 protected:
   virtual void setMode(int mode) = 0;

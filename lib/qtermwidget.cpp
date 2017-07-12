@@ -318,13 +318,14 @@ void QTermWidget::init(int startnow)
     m_searchBar->setFont(font);
 
     setScrollBarPosition(NoScrollBar);
-    setKeyboardCursorShape(BlockCursor);
+    setKeyboardCursorShape(Emulation::KeyboardCursorShape::BlockCursor);
 
     m_impl->m_session->addView(m_impl->m_terminalDisplay);
 
     connect(m_impl->m_session, SIGNAL(resizeRequest(QSize)), this, SLOT(setSize(QSize)));
     connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
     connect(m_impl->m_session, &Session::titleChanged, this, &QTermWidget::titleChanged);
+    connect(m_impl->m_session, &Session::cursorChanged, this, &QTermWidget::cursorChanged);
 }
 
 
@@ -690,6 +691,13 @@ void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
 }
 
+void QTermWidget::setBlinkingCursor(bool blink)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->setBlinkingCursor(blink);
+}
+
 QString QTermWidget::title() const
 {
     QString title = m_impl->m_session->userTitle();
@@ -714,4 +722,11 @@ bool QTermWidget::isTitleChanged() const
 void QTermWidget::setAutoClose(bool autoClose)
 {
     m_impl->m_session->setAutoClose(autoClose);
+}
+
+void QTermWidget::cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled)
+{
+    // TODO: A switch to enable/disable DECSCUSR?
+    setKeyboardCursorShape(cursorShape);
+    setBlinkingCursor(blinkingCursorEnabled);
 }

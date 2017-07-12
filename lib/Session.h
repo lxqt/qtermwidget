@@ -28,6 +28,7 @@
 #include <QStringList>
 #include <QWidget>
 
+#include "Emulation.h"
 #include "History.h"
 
 class KProcess;
@@ -476,6 +477,11 @@ signals:
      * @param enabled True if flow control is enabled or false otherwise.
      */
     void flowControlEnabledChanged(bool enabled);
+
+    /**
+     * Broker for Emulation::cursorChanged() signal
+     */
+    void cursorChanged(Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
 
     void silence();
     void activity();

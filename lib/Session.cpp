@@ -99,6 +99,8 @@ Session::Session(QObject* parent) :
             this, SLOT(onEmulationSizeChange(QSize)));
     connect(_emulation, SIGNAL(imageSizeChanged(int, int)),
             this, SLOT(onViewSizeChange(int, int)));
+    connect(_emulation, &Vt102Emulation::cursorChanged,
+            this, &Session::cursorChanged);
 
     //connect teletype to emulation backend
     _shellProcess->setUtf8Mode(_emulation->utf8());
