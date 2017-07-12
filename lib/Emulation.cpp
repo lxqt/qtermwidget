@@ -70,6 +70,11 @@ Emulation::Emulation() :
            SLOT(usesMouseChanged(bool)));
   connect(this , SIGNAL(programBracketedPasteModeChanged(bool)) ,
            SLOT(bracketedPasteModeChanged(bool)));
+
+  connect(this, &Emulation::cursorChanged, [this] (KeyboardCursorShape cursorShape, bool blinkingCursorEnabled) {
+    emit titleChanged( 50, QString("CursorShape=%1;BlinkingCursorEnabled=%2")
+                               .arg(static_cast<int>(cursorShape)).arg(blinkingCursorEnabled) );
+  });
 }
 
 bool Emulation::programUsesMouse() const

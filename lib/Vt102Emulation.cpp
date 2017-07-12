@@ -642,13 +642,13 @@ void Vt102Emulation::processToken(int token, int p, int q)
     case TY_CSI_PS('x',   0) :      reportTerminalParms  (         2); break; //VT100
     case TY_CSI_PS('x',   1) :      reportTerminalParms  (         3); break; //VT100
 
-    case TY_CSI_PS_SP('q',   0) : emit titleChanged( 50, "CursorShape=0;BlinkingCursorEnabled=1" ); break;
-    case TY_CSI_PS_SP('q',   1) : emit titleChanged( 50, "CursorShape=0;BlinkingCursorEnabled=1" ); break;
-    case TY_CSI_PS_SP('q',   2) : emit titleChanged( 50, "CursorShape=0;BlinkingCursorEnabled=0" ); break;
-    case TY_CSI_PS_SP('q',   3) : emit titleChanged( 50, "CursorShape=1;BlinkingCursorEnabled=1" ); break;
-    case TY_CSI_PS_SP('q',   4) : emit titleChanged( 50, "CursorShape=1;BlinkingCursorEnabled=0" ); break;
-    case TY_CSI_PS_SP('q',   5) : emit titleChanged( 50, "CursorShape=2;BlinkingCursorEnabled=1" ); break;
-    case TY_CSI_PS_SP('q',   6) : emit titleChanged( 50, "CursorShape=2;BlinkingCursorEnabled=0" ); break;
+    case TY_CSI_PS_SP('q',   0) : /* fall through */
+    case TY_CSI_PS_SP('q',   1) : emit cursorChanged(KeyboardCursorShape::BlockCursor,     true ); break;
+    case TY_CSI_PS_SP('q',   2) : emit cursorChanged(KeyboardCursorShape::BlockCursor,     false); break;
+    case TY_CSI_PS_SP('q',   3) : emit cursorChanged(KeyboardCursorShape::UnderlineCursor, true ); break;
+    case TY_CSI_PS_SP('q',   4) : emit cursorChanged(KeyboardCursorShape::UnderlineCursor, false); break;
+    case TY_CSI_PS_SP('q',   5) : emit cursorChanged(KeyboardCursorShape::IBeamCursor,     true ); break;
+    case TY_CSI_PS_SP('q',   6) : emit cursorChanged(KeyboardCursorShape::IBeamCursor,     false); break;
 
     case TY_CSI_PN('@'      ) : _currentScreen->insertChars          (p         ); break;
     case TY_CSI_PN('A'      ) : _currentScreen->cursorUp             (p         ); break; //VT100

@@ -95,6 +95,7 @@ set(UI
 # for distribution
 set(HDRS_DISTRIB
     lib/qtermwidget.h
+    lib/Emulation.h
     lib/Filter.h
 )
 

@@ -334,7 +334,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_colorsInverted(false)
 ,_blendColor(qRgba(0,0,0,0xff))
 ,_filterChain(new TerminalImageFilterChain())
-,_cursorShape(QTermWidget::BlockCursor)
+,_cursorShape(Emulation::KeyboardCursorShape::BlockCursor)
 ,mMotionAfterPasting(NoMoveScreenWindow)
 {
   // terminal applications are not designed with Right-To-Left in mind,
@@ -739,7 +739,7 @@ void TerminalDisplay::drawCursor(QPainter& painter,
        else
            painter.setPen(foregroundColor);
 
-       if ( _cursorShape == QTermWidget::BlockCursor )
+       if ( _cursorShape == Emulation::KeyboardCursorShape::BlockCursor )
        {
             // draw the cursor outline, adjusting the area so that
             // it is draw entirely inside 'rect'
@@ -761,12 +761,12 @@ void TerminalDisplay::drawCursor(QPainter& painter,
                 }
             }
        }
-       else if ( _cursorShape == QTermWidget::UnderlineCursor )
+       else if ( _cursorShape == Emulation::KeyboardCursorShape::UnderlineCursor )
             painter.drawLine(cursorRect.left(),
                              cursorRect.bottom(),
                              cursorRect.right(),
                              cursorRect.bottom());
-       else if ( _cursorShape == QTermWidget::IBeamCursor )
+       else if ( _cursorShape == Emulation::KeyboardCursorShape::IBeamCursor )
             painter.drawLine(cursorRect.left(),
                              cursorRect.top(),
                              cursorRect.left(),
