@@ -4,7 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="3121"/>
+        <location filename="../../TerminalDisplay.cpp" line="1252"/>
+        <source>Size: XXX x XXX</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TerminalDisplay.cpp" line="1264"/>
+        <source>Size: %1 x %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../TerminalDisplay.cpp" line="3129"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;La sortie a été &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendue&lt;/a&gt; en pressant Ctrl+S.  Pressez &lt;b&gt;Ctrl+Q&lt;/b&gt; pour reprendre.&lt;/qt&gt;</translation>
     </message>
@@ -12,7 +22,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../../Vt102Emulation.cpp" line="1032"/>
+        <location filename="../../Vt102Emulation.cpp" line="1090"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Aucun traducteur disponible.  L&apos;information nécessaire à la conversion des touches pressées en caractères à envoyer au terminal est absente.</translation>
     </message>
@@ -31,22 +41,22 @@
         <translation>Schéma des couleur accessible</translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="516"/>
+        <location filename="../../Filter.cpp" line="518"/>
         <source>Open Link</source>
         <translation>Ouvrir le lien</translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="517"/>
+        <location filename="../../Filter.cpp" line="519"/>
         <source>Copy Link Address</source>
         <translation>Copier l&apos;adresse du lien</translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="521"/>
+        <location filename="../../Filter.cpp" line="523"/>
         <source>Send Email To...</source>
         <translation>Envoyer un courriel à ...</translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="522"/>
+        <location filename="../../Filter.cpp" line="524"/>
         <source>Copy Email Address</source>
         <translation>Copier l&apos;adresse du courriel</translation>
     </message>
@@ -54,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../../qtermwidget.cpp" line="428"/>
+        <location filename="../../qtermwidget.cpp" line="450"/>
         <source>Color Scheme Error</source>
         <translation>Erreur du schéma des couleurs</translation>
     </message>
     <message>
-        <location filename="../../qtermwidget.cpp" line="429"/>
+        <location filename="../../qtermwidget.cpp" line="451"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Impossible de charger le schéma de couleurs : %1</translation>
     </message>

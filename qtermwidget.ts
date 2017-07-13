@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1244"/>
+        <location filename="../../TerminalDisplay.cpp" line="1252"/>
         <source>Size: XXX x XXX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1256"/>
+        <location filename="../../TerminalDisplay.cpp" line="1264"/>
         <source>Size: %1 x %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="3121"/>
+        <location filename="../../TerminalDisplay.cpp" line="3129"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,7 +22,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../../Vt102Emulation.cpp" line="1032"/>
+        <location filename="../../Vt102Emulation.cpp" line="1090"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -41,22 +41,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="516"/>
+        <location filename="../../Filter.cpp" line="518"/>
         <source>Open Link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="517"/>
+        <location filename="../../Filter.cpp" line="519"/>
         <source>Copy Link Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="521"/>
+        <location filename="../../Filter.cpp" line="523"/>
         <source>Send Email To...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../Filter.cpp" line="522"/>
+        <location filename="../../Filter.cpp" line="524"/>
         <source>Copy Email Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../../qtermwidget.cpp" line="430"/>
+        <location filename="../../qtermwidget.cpp" line="450"/>
         <source>Color Scheme Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../qtermwidget.cpp" line="431"/>
+        <location filename="../../qtermwidget.cpp" line="451"/>
         <source>Cannot load color scheme: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -89,6 +89,36 @@
     <message>
         <location filename="../../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../SearchBar.ui" line="14"/>
+        <source>SearchBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../SearchBar.ui" line="20"/>
+        <source>X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../SearchBar.ui" line="32"/>
+        <source>Find:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../SearchBar.ui" line="42"/>
+        <source>&lt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../SearchBar.ui" line="54"/>
+        <source>&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../SearchBar.ui" line="66"/>
+        <source>...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
