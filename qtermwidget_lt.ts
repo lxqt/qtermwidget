@@ -94,32 +94,32 @@
     <message>
         <location filename="../../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Paieškos juosta</translation>
     </message>
     <message>
         <location filename="../../SearchBar.ui" line="20"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rasti:</translation>
     </message>
     <message>
         <location filename="../../SearchBar.ui" line="42"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../../SearchBar.ui" line="54"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
 </context>
 </TS>
