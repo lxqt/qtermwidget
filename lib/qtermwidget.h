@@ -47,7 +47,6 @@ public:
         ScrollBarRight = 2
     };
 
-    // For backward API compatibility
     using KeyboardCursorShape = Konsole::Emulation::KeyboardCursorShape;
 
     //Creation of widget
