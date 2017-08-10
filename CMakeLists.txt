@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.0.2 FATAL_ERROR)
 project(qtermwidget)
 
 include(GNUInstallDirs)
-include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
 
@@ -191,11 +190,6 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
 )
 
 
-generate_export_header(${QTERMWIDGET_LIBRARY_NAME}
-    EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
-    EXPORT_MACRO_NAME QTERMWIDGET_EXPORT
-)
-
 target_include_directories(${QTERMWIDGET_LIBRARY_NAME}
     PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib>"
@@ -224,8 +218,7 @@ install(EXPORT
 )
 
 install(FILES
-    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
+    ${HDRS_DISTRIB} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
     COMPONENT Devel
 )
 # keyboard layouts

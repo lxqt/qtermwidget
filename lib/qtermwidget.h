@@ -24,14 +24,13 @@
 #include <QWidget>
 #include "Emulation.h"
 #include "Filter.h"
-#include "qtermwidget_export.h"
 
 class QVBoxLayout;
 struct TermWidgetImpl;
 class SearchBar;
 class QUrl;
 
-class QTERMWIDGET_EXPORT QTermWidget : public QWidget {
+class QTermWidget : public QWidget {
     Q_OBJECT
 public:
 
