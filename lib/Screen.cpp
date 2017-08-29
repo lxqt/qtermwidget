@@ -226,6 +226,28 @@ void Screen::insertChars(int n)
         screenLines[cuY].resize(columns);
 }
 
+void Screen::repeatChars(int count)
+    //=REP
+{
+    if (count == 0)
+    {
+        count = 1;
+    }
+    /**
+     * From ECMA-48 version 5, section 8.3.103
+     * If the character preceding REP is a control function or part of a
+     * control function, the effect of REP is not defined by this Standard.
+     *
+     * So, a "normal" program should always use REP immediately after a visible
+     * character (those other than escape sequences). So, lastDrawnChar can be
+     * safely used.
+     */
+    for (int i = 0; i < count; i++)
+    {
+        displayCharacter(lastDrawnChar);
+    }
+}
+
 void Screen::deleteLines(int n)
 {
     if (n == 0) n = 1; // Default
@@ -662,6 +684,8 @@ void Screen::displayCharacter(unsigned short c)
     currentChar.foregroundColor = effectiveForeground;
     currentChar.backgroundColor = effectiveBackground;
     currentChar.rendition = effectiveRendition;
+
+    lastDrawnChar = c;
 
     int i = 0;
     int newCursorX = cuX + w--;
