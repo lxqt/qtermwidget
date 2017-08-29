@@ -34,11 +34,11 @@
 #include <QTimer>
 
 #include "qtermwidget_export.h"
+#include "KeyboardTranslator.h"
 
 namespace Konsole
 {
 
-class KeyboardTranslator;
 class HistoryType;
 class Screen;
 class ScreenWindow;
@@ -441,6 +441,8 @@ signals:
    * @param blinkingCursorEnabled Whether to enable blinking or not
    */
   void cursorChanged(KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
+
+  void handleCommandFromKeyboard(KeyboardTranslator::Command command);
 
 protected:
   virtual void setMode(int mode) = 0;
