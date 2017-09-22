@@ -234,6 +234,8 @@ void TerminalDisplay::fontChange(const QFont&)
     }
   }
 
+  _fixedFont_original = _fixedFont;
+
   if (_fontWidth < 1)
     _fontWidth=1;
 
@@ -1513,7 +1515,20 @@ int TerminalDisplay::textWidth(const int startColumn, const int length, const in
   QFontMetrics fm(font());
   int result = 0;
   for (int column = 0; column < length; column++) {
-    result += fm.width(_image[loc(startColumn + column, line)].character);
+    quint16 c = _image[loc(startColumn + column, line)].character;
+    int char_width = konsole_wcwidth(c);
+    // In some fonts, width of a CJK character is not twice of width of a latin letter
+    // Don't use reported CJK width to avoid broken layout with line drawing characters
+    // Exclude line chars as some of them are ambiguous ('A') [1]
+    // [1] http://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt
+    if (char_width > 1 && !isLineChar(c) && _fixedFont_original)
+    {
+        result += fm.width(REPCHAR[0]) * char_width;
+    }
+    else
+    {
+        result += fm.width(c);
+    }
   }
   return result;
 }
