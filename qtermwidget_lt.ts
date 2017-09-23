@@ -22,7 +22,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../../Vt102Emulation.cpp" line="1090"/>
+        <location filename="../../Vt102Emulation.cpp" line="1091"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Nėra prieinamas joks klaviatūros vertėjas. Informacijos, kurios reikia, norint konvertuoti klavišų paspaudimus į simbolius ir siųsti į terminalą, nėra.</translation>
     </message>
