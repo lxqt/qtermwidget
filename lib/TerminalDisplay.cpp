@@ -1925,14 +1925,14 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
   }
 }
 
-QList<QAction*> TerminalDisplay::filterActions(const QPoint& position)
+QList<QAction*> TerminalDisplay::filterActions(const QPoint& position, QWidget* parent)
 {
   int charLine, charColumn;
   getCharacterPosition(position,charLine,charColumn);
 
   Filter::HotSpot* spot = _filterChain->hotSpotAt(charLine,charColumn);
 
-  return spot ? spot->actions() : QList<QAction*>();
+  return spot ? spot->actions(parent) : QList<QAction*>();
 }
 
 void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
