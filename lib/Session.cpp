@@ -397,6 +397,11 @@ void Session::setUserTitle( int what, const QString & caption )
         return;
     }
 
+    if (what == 112) {
+        qWarning() << "Unhandled OSC command reset-cursor-background-color";
+        return;
+    }
+
     if ( modified ) {
         emit titleChanged();
     }

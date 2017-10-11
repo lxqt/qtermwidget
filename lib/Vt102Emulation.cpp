@@ -279,6 +279,7 @@ void Vt102Emulation::initTokenizer()
 // process an incoming unicode character
 void Vt102Emulation::receiveChar(int cc)
 {
+  // usleep(1000);
   if (cc == DEL)
     return; //VT100: ignore.
 
@@ -396,6 +397,14 @@ void Vt102Emulation::processWindowAttributeChange()
               tokenBuffer[i] <= '9'; i++)
   {
     attributeToChange = 10 * attributeToChange + (tokenBuffer[i]-'0');
+  }
+
+  // Value-less (only OSC attr number) sequences.
+  // 7 or 33 marks the end of an OSC command. See also the definition of Xte.
+  if (tokenBuffer[i] == 7 || tokenBuffer[i] == 33)
+  {
+      _pendingTitleUpdates[attributeToChange] = QString();
+      return;
   }
 
   if (tokenBuffer[i] != ';')
