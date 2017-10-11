@@ -258,8 +258,10 @@ void Session::run()
 
     // here we expect full path. If there is no fullpath let's expect it's
     // a custom shell (eg. python, etc.) available in the PATH.
-    if (exec.startsWith("/"))
+    if (exec.startsWith("/") || exec.isEmpty())
     {
+        const QString defaultShell{"/bin/sh"};
+
         QFile excheck(exec);
         if ( exec.isEmpty() || !excheck.exists() ) {
             exec = getenv("SHELL");
@@ -267,7 +269,8 @@ void Session::run()
         excheck.setFileName(exec);
 
         if ( exec.isEmpty() || !excheck.exists() ) {
-            exec = "/bin/sh";
+            qWarning() << "Neither default shell nor $SHELL is set to a correct path. Fallback to" << defaultShell;
+            exec = defaultShell;
         }
     }
 
