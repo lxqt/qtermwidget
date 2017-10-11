@@ -694,9 +694,9 @@ Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
     return m_impl->m_terminalDisplay->filterChain()->hotSpotAt(row, column);
 }
 
-QList<QAction*> QTermWidget::filterActions(const QPoint& position)
+QList<QAction*> QTermWidget::filterActions(const QPoint& position, QWidget* parent)
 {
-    return m_impl->m_terminalDisplay->filterActions(position);
+    return m_impl->m_terminalDisplay->filterActions(position, parent);
 }
 
 int QTermWidget::getPtySlaveFd() const

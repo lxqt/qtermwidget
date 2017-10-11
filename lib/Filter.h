@@ -115,11 +115,15 @@ public:
         * Returns a list of actions associated with the hotspot which can be used in a
         * menu or toolbar
         */
-       virtual QList<QAction*> actions();
+       virtual QList<QAction*> actions(QWidget* parent);
+
+       bool hasAnotherParent() const { return _hasAnotherParent; }
 
     protected:
        /** Sets the type of a hotspot.  This should only be set once */
        void setType(Type type);
+
+       bool   _hasAnotherParent;
 
     private:
        int    _startLine;
@@ -127,7 +131,6 @@ public:
        int    _endLine;
        int    _endColumn;
        Type _type;
-
     };
 
     /** Constructs a new filter. */
@@ -256,7 +259,7 @@ public:
 
         FilterObject* getUrlObject() const;
 
-        virtual QList<QAction*> actions();
+        virtual QList<QAction*> actions(QWidget* parent);
 
         /**
          * Open a web browser at the current URL.  The url itself can be determined using

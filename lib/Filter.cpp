@@ -22,6 +22,7 @@
 
 // System
 #include <iostream>
+#include <memory>
 
 // Qt
 #include <QAction>
@@ -195,7 +196,15 @@ Filter::~Filter()
 }
 void Filter::reset()
 {
-    qDeleteAll(_hotspotList);
+    QListIterator<HotSpot*> iter(_hotspotList);
+    while (iter.hasNext())
+    {
+        HotSpot* currentHotSpot = iter.next();
+        if (currentHotSpot->hasAnotherParent()) {
+            continue;
+        }
+        delete currentHotSpot;
+    }
     _hotspots.clear();
     _hotspotList.clear();
 }
@@ -287,10 +296,13 @@ Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int end
     , _endLine(endLine)
     , _endColumn(endColumn)
     , _type(NotSpecified)
+    , _hasAnotherParent(false)
 {
 }
-QList<QAction*> Filter::HotSpot::actions()
+QList<QAction*> Filter::HotSpot::actions(QWidget* parent)
 {
+    Q_UNUSED(parent);
+
     return QList<QAction*>();
 }
 int Filter::HotSpot::startLine() const
@@ -502,14 +514,28 @@ FilterObject* UrlFilter::HotSpot::getUrlObject() const
     return _urlObject;
 }
 
-QList<QAction*> UrlFilter::HotSpot::actions()
+class UrlAction : public QAction {
+public:
+    UrlAction(QWidget* parent, std::shared_ptr<UrlFilter::HotSpot> hotspotPtr)
+        : QAction(parent)
+        , _hotspotPtr(hotspotPtr)
+    {
+    }
+
+private:
+    std::shared_ptr<UrlFilter::HotSpot> _hotspotPtr;
+};
+
+QList<QAction*> UrlFilter::HotSpot::actions(QWidget* parent)
 {
+    this->_hasAnotherParent = true;
     QList<QAction*> list;
 
     const UrlType kind = urlType();
 
-    QAction* openAction = new QAction(_urlObject);
-    QAction* copyAction = new QAction(_urlObject);;
+    std::shared_ptr<UrlFilter::HotSpot> hotspotPtr(this);
+    UrlAction* openAction = new UrlAction(parent, hotspotPtr);
+    UrlAction* copyAction = new UrlAction(parent, hotspotPtr);
 
     Q_ASSERT( kind == StandardUrl || kind == Email );
 
