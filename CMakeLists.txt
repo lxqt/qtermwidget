@@ -8,14 +8,14 @@ include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
 
 set(REQUIRED_QT_VERSION "5.6")
-set(LXQTBT_MINIMUM_VERSION "0.3.0")
+set(LXQTBT_MINIMUM_VERSION "0.4.0")
 
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
-set(QTERMWIDGET_VERSION_MINOR "7")
-set(QTERMWIDGET_VERSION_PATCH "1")
+set(QTERMWIDGET_VERSION_MINOR "8")
+set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
