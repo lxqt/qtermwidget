@@ -677,6 +677,8 @@ private:
 
     void paintFilters(QPainter& painter);
 
+    void calDrawTextAdditionHeight(QPainter& painter);
+
     // returns a region covering all of the areas of the widget which contain
     // a hotspot
     QRegion hotSpotRegion() const;
@@ -702,6 +704,8 @@ private:
     int  _fontWidth;     // width
     int  _fontAscent;     // ascend
     bool _boldIntense;   // Whether intense colors should be rendered with bold font
+    int  _drawTextAdditionHeight;   // additional height to prevent font trancation
+    bool _drawTextTestFlag;         // indicate it is a testing or not
 
     int _leftMargin;    // offset
     int _topMargin;    // offset
