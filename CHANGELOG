@@ -1,7 +1,53 @@
 
-qtermwidget-0.7.1 / 2016-12-21
+qtermwidget-0.8.0 / 2017-10-21
 ==============================
 
+  * FIX: #46 fix vertical font truncation
+  * bump versions
+  * Really fallback to /bin/sh when $SHELL is missing or invalid
+  * README: don't recommend building from source
+  * Improve README
+  * Don't export github templates
+  * Support REP escape sequence defined in ECMA-48, section 8.3.103
+  * Fix build issue related to utmpx in Mac OSX Sierra
+  * Remove the deprecation notice
+  * Handle DECSCUSR signals
+  * Copied issue template
+  * Update building instructions
+  * Require Qt 5.6+
+  * This commit allows the consumer of qtermwidget to capture the (#111)
+  * Allow the terminal display to be smaller than the size hint (#123)
+  * Backport Vt102 emulation fixes (#113)
+  * Backport the default.keytab from Konsole
+  * Fixes (#122)
+  * Updated README, Added support for PyQT 5.7
+  * Fix memory leak in hotspot (URLs & emails) detection
+  * Adds superbuild support
+  * Use target_compile_definitions() instead of add_definitions()
+  * Update find_package() documentation
+  * Use the lxqt_create_pkgconfig_file
+  * Improve lxqt_translate_ts() use
+  * Adds COMPONENT to the install files
+  * Renames test app to example. Make it work
+  * Drop include_directories() for in tree dirs
+  * Use the CMake Targets way
+  * Pack Utf8Proc stuff
+  * Adds export header
+  * Use LXQtCompilerSettings
+  * Packs compile definitions
+  * Adds package version file
+  * Removes Qt4 stuff
+  * Add translation mechanism
+  * Use const iterators when possible.
+  * Enable strict iterators for debug builds
+  * TerminalDisplay: Make resizing "Size" translatable
+  * Exposes receivedData signal to users of QTermWidget
+  * Exposes sessions autoClose property to QTermWidget
+
+0.7.1 / 2016-12-21
+==================
+
+  * Release 0.7.1: Update changelog
   * Bump patch version (#105)
   * Added a modified Breeze color scheme (#104)
   * Accept hex color strings as well (#101)
