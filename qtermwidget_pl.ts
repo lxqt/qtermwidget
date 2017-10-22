@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1252"/>
+        <location filename="../../TerminalDisplay.cpp" line="1283"/>
         <source>Size: XXX x XXX</source>
         <translation>Rozmiar: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1264"/>
+        <location filename="../../TerminalDisplay.cpp" line="1295"/>
         <source>Size: %1 x %2</source>
         <translation>Rozmiar: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="3129"/>
+        <location filename="../../TerminalDisplay.cpp" line="3167"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Wyjście zostało &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;wstrzymane&lt;/a&gt; skrótem Ctrl+S. Wciśnij &lt;b&gt;Ctrl+Q&lt;/b&gt; aby wznowić.&lt;/qt&gt;</translation>
     </message>
