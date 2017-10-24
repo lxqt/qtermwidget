@@ -6,6 +6,7 @@ include(GNUInstallDirs)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
+include(CheckIncludeFile)
 
 set(REQUIRED_QT_VERSION "5.6")
 set(LXQTBT_MINIMUM_VERSION "0.4.0")
@@ -112,6 +113,7 @@ message(STATUS "Translations will be installed in: ${TRANSLATIONS_DIR}")
 set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
 
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
+CHECK_INCLUDE_FILE(utempter.h HAVE_UTEMPTER)
 
 qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
@@ -158,6 +160,14 @@ if(HAVE_UPDWTMPX)
         PRIVATE
             "HAVE_UPDWTMPX"
     )
+endif()
+
+if(HAVE_UTEMPTER)
+    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "HAVE_UTEMPTER"
+    )
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ulog)
 endif()
 
 if (UTF8PROC_FOUND)
