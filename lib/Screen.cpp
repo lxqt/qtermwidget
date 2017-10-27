@@ -751,13 +751,18 @@ QRect Screen::lastScrolledRegion() const
 
 void Screen::scrollUp(int from, int n)
 {
-    if (n <= 0 || from + n > _bottomMargin) return;
+    if (n <= 0)
+        return;
+    if (from > _bottomMargin)
+        return;
+    if (from + n > _bottomMargin)
+        n = _bottomMargin + 1 - from;
 
     _scrolledLines -= n;
     _lastScrolledRegion = QRect(0,_topMargin,columns-1,(_bottomMargin-_topMargin));
 
     //FIXME: make sure `topMargin', `bottomMargin', `from', `n' is in bounds.
-    moveImage(loc(0,from),loc(0,from+n),loc(columns-1,_bottomMargin));
+    moveImage(loc(0,from),loc(0,from+n),loc(columns,_bottomMargin));
     clearImage(loc(0,_bottomMargin-n+1),loc(columns-1,_bottomMargin),' ');
 }
 
