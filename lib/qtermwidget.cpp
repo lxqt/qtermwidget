@@ -219,6 +219,20 @@ QSize QTermWidget::sizeHint() const
     return size;
 }
 
+void QTermWidget::setTerminalSizeHint(bool on)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->setTerminalSizeHint(on);
+}
+
+bool QTermWidget::terminalSizeHint()
+{
+    if (!m_impl->m_terminalDisplay)
+        return true;
+    return m_impl->m_terminalDisplay->terminalSizeHint();
+}
+
 void QTermWidget::startShellProgram()
 {
     if ( m_impl->m_session->isRunning() ) {

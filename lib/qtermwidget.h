@@ -60,6 +60,10 @@ public:
     //Initial size
     QSize sizeHint() const;
 
+    // expose TerminalDisplay::TerminalSizeHint, setTerminalSizeHint
+    void setTerminalSizeHint(bool on);
+    bool terminalSizeHint();
+
     //start shell program if it was not started in constructor
     void startShellProgram();
 
