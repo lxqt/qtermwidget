@@ -13,6 +13,8 @@ set(LXQTBT_MINIMUM_VERSION "0.4.0")
 
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
+option(QTERMWIDGET_USE_UTEMPTER "Uses the libutempter library. Mainly for FreeBSD" OFF)
+
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
 set(QTERMWIDGET_VERSION_MINOR "8")
@@ -113,7 +115,6 @@ message(STATUS "Translations will be installed in: ${TRANSLATIONS_DIR}")
 set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}")
 
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
-CHECK_INCLUDE_FILE(utempter.h HAVE_UTEMPTER)
 
 qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
@@ -162,12 +163,14 @@ if(HAVE_UPDWTMPX)
     )
 endif()
 
-if(HAVE_UTEMPTER)
-    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
-        PRIVATE
-            "HAVE_UTEMPTER"
-    )
-    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ulog)
+if (QTERMWIDGET_USE_UTEMPTER)
+    CHECK_INCLUDE_FILE(utempter.h HAVE_UTEMPTER)
+    if (HAVE_UTEMPTER)
+        target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME} PRIVATE
+                "HAVE_UTEMPTER"
+        )
+        target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ulog)
+    endif()
 endif()
 
 if (UTF8PROC_FOUND)
