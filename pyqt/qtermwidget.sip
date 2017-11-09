@@ -21,15 +21,14 @@ public:
 
     enum KeyboardCursorShape
     {
-        BlockCursor=0,
-        UnderlineCursor=1,
-        IBeamCursor=2
     };
 
     QTermWidget(int startnow = 1, QWidget *parent = 0);
     ~QTermWidget();
     void startTerminalTeletype();
     QSize sizeHint() const;
+    void setTerminalSizeHint(bool on);
+    bool terminalSizeHint();
     void startShellProgram();
     int getShellPID();
     void changeDir(const QString & dir);
