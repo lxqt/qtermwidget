@@ -698,6 +698,20 @@ void QTermWidget::setBlinkingCursor(bool blink)
     m_impl->m_terminalDisplay->setBlinkingCursor(blink);
 }
 
+void QTermWidget::setBidiEnabled(bool enabled)
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    m_impl->m_terminalDisplay->setBidiEnabled(enabled);
+}
+
+bool QTermWidget::isBidiEnabled()
+{
+    if (!m_impl->m_terminalDisplay)
+        return;
+    return m_impl->m_terminalDisplay->isBidiEnabled();
+}
+
 QString QTermWidget::title() const
 {
     QString title = m_impl->m_session->userTitle();
