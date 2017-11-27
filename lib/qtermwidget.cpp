@@ -708,7 +708,7 @@ void QTermWidget::setBidiEnabled(bool enabled)
 bool QTermWidget::isBidiEnabled()
 {
     if (!m_impl->m_terminalDisplay)
-        return;
+        return false; // Default value
     return m_impl->m_terminalDisplay->isBidiEnabled();
 }
 
