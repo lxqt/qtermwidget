@@ -200,8 +200,8 @@ public:
     void setBlinkingCursor(bool blink);
 
     /** Enables or disables bidi text in the terminal. */
-    void QTermWidget::setBidiEnabled(bool enabled);
-    bool QTermWidget::isBidiEnabled();
+    void setBidiEnabled(bool enabled);
+    bool isBidiEnabled();
 
     /**
      * Automatically close the terminal session after the shell process exits or
