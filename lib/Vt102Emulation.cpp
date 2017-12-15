@@ -86,7 +86,7 @@ void Vt102Emulation::reset()
   _screen[0]->reset();
   resetCharset(1);
   _screen[1]->reset();
-  setCodec(LocaleCodec);
+  resetCodec();
 
   bufferedUpdate();
 }
