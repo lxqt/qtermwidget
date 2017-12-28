@@ -96,7 +96,7 @@ QStringList ShellCommand::expand(const QStringList & items)
 {
     QStringList result;
 
-    foreach(const QString &item, items ) {
+    for(const QString &item : items) {
         result << expand(item);
     }
 
