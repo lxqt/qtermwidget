@@ -474,7 +474,8 @@ void QTermWidget::setColorScheme(const QString& origName)
 QStringList QTermWidget::availableColorSchemes()
 {
     QStringList ret;
-    foreach (const ColorScheme* cs, ColorSchemeManager::instance()->allColorSchemes())
+    const auto allColorSchemes = ColorSchemeManager::instance()->allColorSchemes();
+    for (const ColorScheme* cs : allColorSchemes)
         ret.append(cs->name());
     return ret;
 }

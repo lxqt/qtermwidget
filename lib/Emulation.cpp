@@ -132,7 +132,7 @@ void Emulation::setScreen(int n)
   if (_currentScreen != old)
   {
      // tell all windows onto this emulation to switch to the newly active screen
-     foreach(ScreenWindow* window,_windows)
+     for(ScreenWindow* window : const_cast<const QList<ScreenWindow*>&>(_windows))
          window->setScreen(_currentScreen);
   }
 }

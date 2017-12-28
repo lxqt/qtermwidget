@@ -1028,7 +1028,8 @@ void TerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
 QRegion TerminalDisplay::hotSpotRegion() const
 {
     QRegion region;
-    foreach( Filter::HotSpot* hotSpot , _filterChain->hotSpots() )
+    const auto hotSpots = _filterChain->hotSpots();
+    for( Filter::HotSpot* const hotSpot : hotSpots )
     {
         QRect r;
         if (hotSpot->startLine()==hotSpot->endLine()) {
@@ -1377,7 +1378,8 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
   }
   else
   {
-      foreach (const QRect &rect, (pe->region() & contentsRect()).rects())
+      const auto rects = (pe->region() & contentsRect()).rects();
+      for (const QRect &rect : rects)
       {
         drawBackground(paint,rect,palette().background().color(),
                        true /* use opacity setting */);

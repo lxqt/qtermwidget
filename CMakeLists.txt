@@ -8,8 +8,8 @@ include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
 include(CheckIncludeFile)
 
-set(REQUIRED_QT_VERSION "5.6")
-set(LXQTBT_MINIMUM_VERSION "0.4.0")
+set(REQUIRED_QT_VERSION "5.7.1")
+set(LXQTBT_MINIMUM_VERSION "0.4.1")
 
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
@@ -201,6 +201,7 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
         "HAVE_POSIX_OPENPT"
         "HAVE_SYS_TIME_H"
+        "QT_NO_FOREACH"
 )
 
 
