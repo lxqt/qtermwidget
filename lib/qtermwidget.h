@@ -219,6 +219,8 @@ public:
     /** True if the title() or icon() was (ever) changed by the session. */
     bool isTitleChanged() const;
 
+    /** change and wrap text corresponding to paste mode **/
+    void bracketText(QString& text);
 signals:
     void finished();
     void copyAvailable(bool);

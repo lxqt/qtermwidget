@@ -192,6 +192,9 @@ public:
 
     void emitSelection(bool useXselection,bool appendReturn);
 
+    /** change and wrap text corresponding to paste mode **/
+    void bracketText(QString& text);
+
     /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
      * at the position in the terminal where keyboard input will appear.
