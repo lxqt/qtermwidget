@@ -196,6 +196,8 @@ public:
   const QTextCodec* codec() const { return _codec; }
   /** Sets the codec used to decode incoming characters.  */
   void setCodec(const QTextCodec*);
+  /** reset the inner status of the codec.  */
+  void resetCodec();
 
   /**
    * Convenience method.

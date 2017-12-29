@@ -530,6 +530,11 @@ void QTermWidget::sessionFinished()
     emit finished();
 }
 
+void QTermWidget::bracketText(QString& text)
+{
+    m_impl->m_terminalDisplay->bracketText(text);
+}
+
 void QTermWidget::copyClipboard()
 {
     m_impl->m_terminalDisplay->copyClipboard();

@@ -166,6 +166,13 @@ void Emulation::setCodec(const QTextCodec * qtc)
   emit useUtf8Request(utf8());
 }
 
+void Emulation::resetCodec()
+{
+  // reset decoder state, since codec doesn't contain any state, just ignore it
+  delete _decoder;
+  _decoder = _codec->makeDecoder();
+}
+
 void Emulation::setCodec(EmulationCodec codec)
 {
     if ( codec == Utf8Codec )

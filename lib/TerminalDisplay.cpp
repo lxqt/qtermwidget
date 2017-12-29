@@ -2660,16 +2660,21 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
   if ( ! text.isEmpty() )
   {
     text.replace('\n', '\r');
-    if ( bracketedPasteMode() )
-    {
-      text.prepend("\e[200~");
-      text.append("\e[201~");
-    }
+    bracketText(text);
     QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
     emit keyPressedSignal(&e); // expose as a big fat keypress event
 
     _screenWindow->clearSelection();
   }
+}
+
+void TerminalDisplay::bracketText(QString& text)
+{
+    if (bracketedPasteMode())
+    {
+        text.prepend("\033[200~");
+        text.append("\033[201~");
+    }
 }
 
 void TerminalDisplay::setSelection(const QString& t)
