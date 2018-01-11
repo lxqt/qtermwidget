@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1252"/>
+        <location filename="../../TerminalDisplay.cpp" line="1283"/>
         <source>Size: XXX x XXX</source>
         <translation>Méret: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1264"/>
+        <location filename="../../TerminalDisplay.cpp" line="1295"/>
         <source>Size: %1 x %2</source>
         <translation>Méret: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="3129"/>
+        <location filename="../../TerminalDisplay.cpp" line="3167"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;A kimenet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;el van nyomva&lt;/a&gt; a Ctrl+S megnyomásával.  Nyomj &lt;b&gt;Ctrl+Q -t&lt;/b&gt; a visszatéréshez.&lt;/qt&gt;</translation>
     </message>
@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../../qtermwidget.cpp" line="451"/>
+        <location filename="../../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
         <translation>Színséma hiba</translation>
     </message>
     <message>
-        <location filename="../../qtermwidget.cpp" line="452"/>
+        <location filename="../../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
         <translation>A %1 színséma elérhetetlen</translation>
     </message>

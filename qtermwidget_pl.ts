@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../../qtermwidget.cpp" line="451"/>
+        <location filename="../../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
         <translation>Błąd w palecie</translation>
     </message>
     <message>
-        <location filename="../../qtermwidget.cpp" line="452"/>
+        <location filename="../../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Nie można wczytać palety: %1</translation>
     </message>

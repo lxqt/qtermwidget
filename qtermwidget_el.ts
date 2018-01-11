@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../../qtermwidget.cpp" line="451"/>
+        <location filename="../../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
         <translation>Σφάλμα χρωματικού συνδυασμού</translation>
     </message>
     <message>
-        <location filename="../../qtermwidget.cpp" line="452"/>
+        <location filename="../../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Αδύνατη η φόρτωση του χρωματικού συνδυασμού: %1</translation>
     </message>
