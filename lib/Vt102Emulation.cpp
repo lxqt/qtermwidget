@@ -922,17 +922,22 @@ void Vt102Emulation::reportAnswerBack()
 
 void Vt102Emulation::sendMouseEvent( int cb, int cx, int cy , int eventType )
 {
-  if (cx < 1 || cy < 1)
-    return;
+    if (cx < 1 || cy < 1)
+      return;
 
-  // normal buttons are passed as 0x20 + button,
-  // mouse wheel (buttons 4,5) as 0x5c + button
-  if (cb >= 4)
-    cb += 0x3c;
+    // With the exception of the 1006 mode, button release is encoded in cb.
+    // Note that if multiple extensions are enabled, the 1006 is used, so it's okay to check for only that.
+    if (eventType == 2 && !getMode(MODE_Mouse1006))
+        cb = 3;
 
-  //Mouse motion handling
-  if ((getMode(MODE_Mouse1002) || getMode(MODE_Mouse1003)) && eventType == 1)
-    cb += 0x20; //add 32 to signify motion event
+    // normal buttons are passed as 0x20 + button,
+    // mouse wheel (buttons 4,5) as 0x5c + button
+    if (cb >= 4)
+      cb += 0x3c;
+
+    //Mouse motion handling
+    if ((getMode(MODE_Mouse1002) || getMode(MODE_Mouse1003)) && eventType == 1)
+      cb += 0x20; //add 32 to signify motion event
 
     char command[32];
     command[0] = '\0';
