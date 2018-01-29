@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
    // console->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
     console->setScrollBarPosition(QTermWidget::ScrollBarRight);
 
-    foreach (QString arg, QApplication::arguments())
+    const auto arguments = QApplication::arguments();
+    for (const QString& arg : arguments)
     {
         if (console->availableColorSchemes().contains(arg))
             console->setColorScheme(arg);
