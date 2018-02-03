@@ -239,6 +239,11 @@ void Emulation::receiveData(const char* text, int length)
 
     bufferedUpdate();
 
+    /* XXX: the following code involves encoding & decoding of "UTF-16
+     * surrogate pairs", which does not work with characters higher than
+     * U+10FFFF
+     * https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates
+     */
     QString utf16Text = _decoder->toUnicode(text,length);
     std::wstring unicodeText = utf16Text.toStdWString();
 
