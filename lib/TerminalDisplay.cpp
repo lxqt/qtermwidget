@@ -668,6 +668,8 @@ void TerminalDisplay::drawLineCharString(    QPainter& painter, int x, int y, co
 void TerminalDisplay::setKeyboardCursorShape(QTermWidget::KeyboardCursorShape shape)
 {
     _cursorShape = shape;
+
+    updateCursor();
 }
 QTermWidget::KeyboardCursorShape TerminalDisplay::keyboardCursorShape() const
 {
