@@ -205,13 +205,13 @@ public:
   }
 
   /**
-   * Toggles the value of this color between a normal system color and the corresponding intensive
-   * system color.
+   * Set the value of this color from a normal system color to the corresponding intensive
+   * system color if it's not already an intensive system color.
    *
    * This is only applicable if the color is using the COLOR_SPACE_DEFAULT or COLOR_SPACE_SYSTEM
    * color spaces.
    */
-  void toggleIntensive();
+  void setIntensive();
 
   /**
    * Returns the color within the specified color @p palette
@@ -287,11 +287,11 @@ inline QColor CharacterColor::color(const ColorEntry* base) const
   return QColor();
 }
 
-inline void CharacterColor::toggleIntensive()
+inline void CharacterColor::setIntensive()
 {
   if (_colorSpace == COLOR_SPACE_SYSTEM || _colorSpace == COLOR_SPACE_DEFAULT)
   {
-    _v = !_v;
+    _v = 1;
   }
 }
 
