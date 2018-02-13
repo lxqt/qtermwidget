@@ -9,27 +9,29 @@
 
 #include <QString>
 
-#ifdef HAVE_UTF8PROC
-#include <utf8proc.h>
-#else
 #include <cwchar>
-#endif
+
+#include <unicode/uchar.h>
 
 #include "konsole_wcwidth.h"
 
+static_assert(sizeof(wchar_t) == sizeof(UChar32),
+              "wchar_t and UChar32 have different size");
+
 int konsole_wcwidth(wchar_t ucs)
 {
-#ifdef HAVE_UTF8PROC
-    utf8proc_category_t cat = utf8proc_category( ucs );
-    if (cat == UTF8PROC_CATEGORY_CO) {
-        // Co: Private use area. libutf8proc makes them zero width, while tmux
-        // assumes them to be width 1, and glibc's default width is also 1
-        return 1;
+    switch (u_getIntPropertyValue(ucs, UCHAR_EAST_ASIAN_WIDTH)) {
+        case U_EA_AMBIGUOUS: /*[A]*/
+            return 2;
+        case U_EA_NEUTRAL:   /*[N]*/
+        case U_EA_HALFWIDTH: /*[H]*/
+        case U_EA_FULLWIDTH: /*[F]*/
+        case U_EA_NARROW:    /*[Na]*/
+        case U_EA_WIDE:      /*[W]*/
+            break;
     }
-    return utf8proc_charwidth( ucs );
-#else
+
     return wcwidth( ucs );
-#endif
 }
 
 // single byte char: +1, multi byte char: +2

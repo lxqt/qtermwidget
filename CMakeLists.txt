@@ -56,6 +56,7 @@ endif()
 
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 
+find_package(ICU COMPONENTS uc)
 
 # main library
 
@@ -145,7 +146,7 @@ lxqt_translate_ts(QTERMWIDGET_QM
 )
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
-target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
+target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets ${ICU_UC_LIBRARY})
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
@@ -176,21 +177,6 @@ if (QTERMWIDGET_USE_UTEMPTER)
         find_library(UTEMPTER_LIB NAMES utempter ulog REQUIRED)
         target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${UTEMPTER_LIB})
     endif()
-endif()
-
-if (UTF8PROC_FOUND)
-    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
-        PRIVATE
-            "HAVE_UTF8PROC"
-    )
-    target_include_directories(${QTERMWIDGET_LIBRARY_NAME}
-        INTERFACE
-            ${UTF8PROC_INCLUDE_DIRS}
-    )
-    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME}
-        ${UTF8PROC_LIBRARIES}
-    )
-    string(APPEND PKG_CONFIG_REQ ", libutf8proc")
 endif()
 
 if(APPLE)
