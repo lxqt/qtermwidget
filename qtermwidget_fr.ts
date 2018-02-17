@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1283"/>
+        <location filename="../../TerminalDisplay.cpp" line="1284"/>
         <source>Size: XXX x XXX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1295"/>
+        <location filename="../../TerminalDisplay.cpp" line="1296"/>
         <source>Size: %1 x %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="3167"/>
+        <location filename="../../TerminalDisplay.cpp" line="3174"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;La sortie a été &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendue&lt;/a&gt; en pressant Ctrl+S.  Pressez &lt;b&gt;Ctrl+Q&lt;/b&gt; pour reprendre.&lt;/qt&gt;</translation>
     </message>
@@ -22,7 +22,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../../Vt102Emulation.cpp" line="1091"/>
+        <location filename="../../Vt102Emulation.cpp" line="1096"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Aucun traducteur disponible.  L&apos;information nécessaire à la conversion des touches pressées en caractères à envoyer au terminal est absente.</translation>
     </message>
