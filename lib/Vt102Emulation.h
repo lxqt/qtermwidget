@@ -111,6 +111,8 @@ private:
   void saveCursor();
   void restoreCursor();
   void resetCharset(int scrno);
+  QKeyEvent * remapKeyModifiersForMac(QKeyEvent *event);
+
 
   void setMargins(int top, int bottom);
   //set margins for all screens back to their defaults
