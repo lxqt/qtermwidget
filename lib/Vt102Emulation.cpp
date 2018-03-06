@@ -1011,8 +1011,11 @@ QKeyEvent * Vt102Emulation::remapKeyModifiersForMac(QKeyEvent *event) {
 
 void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
 {
+#if defined(Q_OS_MAC)
     QScopedPointer<QKeyEvent> event(remapKeyModifiersForMac(origEvent));
-
+#else
+    QKeyEvent *event = origEvent;
+#endif
     Qt::KeyboardModifiers modifiers = event->modifiers();
     KeyboardTranslator::States states = KeyboardTranslator::NoState;
 
