@@ -22,6 +22,7 @@
 
 // Own
 #include "Vt102Emulation.h"
+#include "mac-vkcode.h"
 
 // XKB
 //#include <config-konsole.h>
@@ -917,94 +918,123 @@ QKeyEvent * Vt102Emulation::remapKeyModifiersForMac(QKeyEvent *event) {
   }
 
   QString eventText = event->text();
+  int eventKey = event->key();
   // disable dead key
   bool isAscii = true;
-  switch (event->key()) {
-    case Qt::Key_A:
-    eventText = "a";
-    break;
-    case Qt::Key_B:
+  switch (event->nativeVirtualKey()) {
+    case kVK_ANSI_B:
     eventText = "b";
+    eventKey = Qt::Key_B;
     break;
-    case Qt::Key_C:
+    case kVK_ANSI_C:
     eventText = "c";
+    eventKey = Qt::Key_C;
     break;
-    case Qt::Key_D:
+    case kVK_ANSI_D:
     eventText = "d";
+    eventKey = Qt::Key_D;
     break;
-    case Qt::Key_E:
+    case kVK_ANSI_E:
     eventText = "e";
+    eventKey = Qt::Key_E;
     break;
-    case Qt::Key_F:
+    case kVK_ANSI_F:
     eventText = "f";
+    eventKey = Qt::Key_F;
     break;
-    case Qt::Key_G:
+    case kVK_ANSI_G:
     eventText = "g";
+    eventKey = Qt::Key_G;
     break;
-    case Qt::Key_H:
+    case kVK_ANSI_H:
     eventText = "h";
+    eventKey = Qt::Key_H;
     break;
-    case Qt::Key_I:
+    case kVK_ANSI_I:
     eventText = "i";
+    eventKey = Qt::Key_I;
     break;
-    case Qt::Key_J:
+    case kVK_ANSI_J:
     eventText = "j";
+    eventKey = Qt::Key_J;
     break;
-    case Qt::Key_K:
+    case kVK_ANSI_K:
     eventText = "k";
+    eventKey = Qt::Key_K;
     break;
-    case Qt::Key_L:
+    case kVK_ANSI_L:
     eventText = "l";
+    eventKey = Qt::Key_L;
     break;
-    case Qt::Key_M:
+    case kVK_ANSI_M:
     eventText = "m";
+    eventKey = Qt::Key_M;
     break;
-    case Qt::Key_N:
+    case kVK_ANSI_N:
     eventText = "n";
+    eventKey = Qt::Key_N;
     break;
-    case Qt::Key_O:
+    case kVK_ANSI_O:
     eventText = "o";
+    eventKey = Qt::Key_O;
     break;
-    case Qt::Key_P:
+    case kVK_ANSI_P:
     eventText = "p";
+    eventKey = Qt::Key_P;
     break;
-    case Qt::Key_Q:
+    case kVK_ANSI_Q:
     eventText = "q";
+    eventKey = Qt::Key_Q;
     break;
-    case Qt::Key_R:
+    case kVK_ANSI_R:
     eventText = "r";
+    eventKey = Qt::Key_R;
     break;
-    case Qt::Key_S:
+    case kVK_ANSI_S:
     eventText = "s";
+    eventKey = Qt::Key_S;
     break;
-    case Qt::Key_T:
+    case kVK_ANSI_T:
     eventText = "t";
+    eventKey = Qt::Key_T;
     break;
-    case Qt::Key_U:
+    case kVK_ANSI_U:
     eventText = "u";
+    eventKey = Qt::Key_U;
     break;
-    case Qt::Key_V:
+    case kVK_ANSI_V:
     eventText = "v";
+    eventKey = Qt::Key_V;
     break;
-    case Qt::Key_W:
+    case kVK_ANSI_W:
     eventText = "w";
+    eventKey = Qt::Key_W;
     break;
-    case Qt::Key_X:
+    case kVK_ANSI_X:
     eventText = "x";
+    eventKey = Qt::Key_X;
     break;
-    case Qt::Key_Y:
+    case kVK_ANSI_Y:
     eventText = "y";
+    eventKey = Qt::Key_Y;
     break;
-    case Qt::Key_Z:
+    case kVK_ANSI_Z:
     eventText = "z";
+    eventKey = Qt::Key_Z;
     break;
     default:
     isAscii = false;
   }
+  // a's vk code is 0, a special case
+  if (event->nativeVirtualKey() == kVK_ANSI_A && event->key() == Qt::Key_A) {
+    eventText = "a";
+    eventKey = Qt::Key_A;
+    isAscii = true;
+  }
   if (modifiers & Qt::ShiftModifier && isAscii) {
     eventText = eventText.toUpper();
   }
-  return new QKeyEvent(QEvent::None, event->key(), modifiers,
+  return new QKeyEvent(QEvent::None, eventKey, modifiers,
                       event->nativeScanCode(), event->nativeVirtualKey(), event->nativeModifiers(),
                       eventText, event->isAutoRepeat(), event->count());
 }
