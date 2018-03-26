@@ -6,7 +6,7 @@ INSTALL:
 ------------
 	
 ####1. Download, compile and install QTermWidget:
-	$ git clone https://github.com/lxde/qtermwidget.git
+	$ git clone https://github.com/lxqt/qtermwidget.git
 	$ cd qtermwidget && mkdir build && cd build
 	$ cmake ..
 	$ make
