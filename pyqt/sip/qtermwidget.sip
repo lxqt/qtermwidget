@@ -1,5 +1,8 @@
 %Module QTermWidget
 
+%ModuleHeaderCode
+#pragma GCC visibility push(default)
+%End
 
 %Import QtGui/QtGuimod.sip
 %Import QtCore/QtCoremod.sip
@@ -19,7 +22,7 @@ public:
         ScrollBarRight=2
     };
 
-    enum KeyboardCursorShape
+    enum class KeyboardCursorShape
     {
         BlockCursor=0,
         UnderlineCursor=1,

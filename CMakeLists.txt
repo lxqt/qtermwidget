@@ -14,6 +14,7 @@ set(LXQTBT_MINIMUM_VERSION "0.4.1")
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses the libutempter library. Mainly for FreeBSD" OFF)
+option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
@@ -303,6 +304,12 @@ if(BUILD_EXAMPLE)
     target_link_libraries(example ${QTERMWIDGET_LIBRARY_NAME})
 endif()
 # end of example application
+
+# python binding
+if (QTERMWIDGET_BUILD_PYTHON_BINDING)
+    add_subdirectory(pyqt)
+endif()
+# end of python binding
 
 
 CONFIGURE_FILE(
