@@ -28,6 +28,7 @@ HEADERS += $$PWD/lib/BlockArray.h \
     $$PWD/lib/TerminalDisplay.h \
     $$PWD/lib/tools.h \
     $$PWD/lib/Vt102Emulation.h \
+    $$PWD/lib/mac-vkcode.h \
     #$$PWD/lib/qtermwidget.h
 
 SOURCES += $$PWD/lib/BlockArray.cpp \
