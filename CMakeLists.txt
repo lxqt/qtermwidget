@@ -9,7 +9,7 @@ include(CheckFunctionExists)
 include(CheckIncludeFile)
 
 set(REQUIRED_QT_VERSION "5.7.1")
-set(LXQTBT_MINIMUM_VERSION "0.4.1")
+set(LXQTBT_MINIMUM_VERSION "0.5.0")
 
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
@@ -35,6 +35,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5Widgets "${REQUIRED_QT_VERSION}" REQUIRED)
 find_package(Qt5LinguistTools "${REQUIRED_QT_VERSION}" REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
+
+include(LXQtPreventInSourceBuilds)
 include(LXQtTranslateTs)
 include(LXQtCompilerSettings NO_POLICY_SCOPE)
 include(LXQtCreatePkgConfigFile)
