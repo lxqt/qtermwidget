@@ -377,6 +377,10 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
   // create scroll bar for scrolling output up and down
   // set the scroll bar's slider to occupy the whole area of the scroll bar initially
   _scrollBar = new QScrollBar(this);
+  // since the contrast with the terminal background may not be enough,
+  // the scrollbar should be auto-filled if not transient
+  if (!_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
+    _scrollBar->setAutoFillBackground(true);
   setScroll(0,0);
   _scrollBar->setCursor( Qt::ArrowCursor );
   connect(_scrollBar, SIGNAL(valueChanged(int)), this,
@@ -718,20 +722,9 @@ void TerminalDisplay::setBackgroundImage(QString backgroundImage)
 
 void TerminalDisplay::drawBackground(QPainter& painter, const QRect& rect, const QColor& backgroundColor, bool useOpacitySetting )
 {
-        // the area of the widget showing the contents of the terminal display is drawn
-        // using the background color from the color scheme set with setColorTable()
-        //
-        // the area of the widget behind the scroll-bar is drawn using the background
-        // brush from the scroll-bar's palette, to give the effect of the scroll-bar
-        // being outside of the terminal display and visual consistency with other KDE
-        // applications.
-        //
-        QRect scrollBarArea = _scrollBar->isVisible() ?
-                                    rect.intersected(_scrollBar->geometry()) :
-                                    QRect();
-        QRegion contentsRegion = QRegion(rect).subtracted(scrollBarArea);
-        QRect contentsRect = contentsRegion.boundingRect();
-
+        // The whole widget rectangle is filled by the background color from
+        // the color scheme set in setColorTable(), while the scrollbar is
+        // left to the widget style for a consistent look.
         if ( HAVE_TRANSPARENCY && qAlpha(_blendColor) < 0xff && useOpacitySetting )
         {
             if (_backgroundImage.isNull()) {
@@ -740,14 +733,12 @@ void TerminalDisplay::drawBackground(QPainter& painter, const QRect& rect, const
 
                 painter.save();
                 painter.setCompositionMode(QPainter::CompositionMode_Source);
-                painter.fillRect(contentsRect, color);
+                painter.fillRect(rect, color);
                 painter.restore();
             }
         }
         else
-            painter.fillRect(contentsRect, backgroundColor);
-
-        painter.fillRect(scrollBarArea,_scrollBar->palette().background());
+            painter.fillRect(rect, backgroundColor);
 }
 
 void TerminalDisplay::drawCursor(QPainter& painter,
@@ -1442,7 +1433,9 @@ void TerminalDisplay::paintFilters(QPainter& painter)
     QPoint cursorPos = mapFromGlobal(QCursor::pos());
     int cursorLine;
     int cursorColumn;
-    int scrollBarWidth = (_scrollbarLocation == QTermWidget::ScrollBarLeft) ? _scrollBar->width() : 0;
+    int scrollBarWidth = (_scrollbarLocation == QTermWidget::ScrollBarLeft
+                          && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
+                         ? _scrollBar->width() : 0;
 
     getCharacterPosition( cursorPos , cursorLine , cursorColumn );
     Character cursorCharacter = _image[loc(cursorColumn,cursorLine)];
@@ -1978,7 +1971,9 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
 {
   int charLine = 0;
   int charColumn = 0;
-  int scrollBarWidth = (_scrollbarLocation == QTermWidget::ScrollBarLeft) ? _scrollBar->width() : 0;
+  int scrollBarWidth = (_scrollbarLocation == QTermWidget::ScrollBarLeft
+                        && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
+                       ? _scrollBar->width() : 0;
 
   getCharacterPosition(ev->pos(),charLine,charColumn);
 
@@ -3002,6 +2997,8 @@ void TerminalDisplay::clearImage()
 void TerminalDisplay::calcGeometry()
 {
   _scrollBar->resize(_scrollBar->sizeHint().width(), contentsRect().height());
+  int scrollBarWidth = _scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar)
+                       ? 0 : _scrollBar->width();
   switch(_scrollbarLocation)
   {
     case QTermWidget::NoScrollBar :
@@ -3009,14 +3006,14 @@ void TerminalDisplay::calcGeometry()
      _contentWidth = contentsRect().width() - 2 * DEFAULT_LEFT_MARGIN;
      break;
     case QTermWidget::ScrollBarLeft :
-     _leftMargin = DEFAULT_LEFT_MARGIN + _scrollBar->width();
-     _contentWidth = contentsRect().width() - 2 * DEFAULT_LEFT_MARGIN - _scrollBar->width();
+     _leftMargin = DEFAULT_LEFT_MARGIN + scrollBarWidth;
+     _contentWidth = contentsRect().width() - 2 * DEFAULT_LEFT_MARGIN - scrollBarWidth;
      _scrollBar->move(contentsRect().topLeft());
      break;
     case QTermWidget::ScrollBarRight:
      _leftMargin = DEFAULT_LEFT_MARGIN;
-     _contentWidth = contentsRect().width()  - 2 * DEFAULT_LEFT_MARGIN - _scrollBar->width();
-     _scrollBar->move(contentsRect().topRight() - QPoint(_scrollBar->width()-1,0));
+     _contentWidth = contentsRect().width()  - 2 * DEFAULT_LEFT_MARGIN - scrollBarWidth;
+     _scrollBar->move(contentsRect().topRight() - QPoint(_scrollBar->width()-1, 0));
      break;
   }
 
@@ -3056,7 +3053,9 @@ void TerminalDisplay::makeImage()
 // calculate the needed size, this must be synced with calcGeometry()
 void TerminalDisplay::setSize(int columns, int lines)
 {
-  int scrollBarWidth = _scrollBar->isHidden() ? 0 : _scrollBar->sizeHint().width();
+  int scrollBarWidth = (_scrollBar->isHidden()
+                        || _scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
+                       ? 0 : _scrollBar->sizeHint().width();
   int horizontalMargin = 2 * DEFAULT_LEFT_MARGIN;
   int verticalMargin = 2 * DEFAULT_TOP_MARGIN;
 
