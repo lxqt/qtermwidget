@@ -72,13 +72,14 @@ KPtyProcess::~KPtyProcess()
                     this, SLOT(_k_onStateChanged(QProcess::ProcessState)));
         }
 
-        qWarning() << Q_FUNC_INFO << "the terminal process is still running, trying to stop it by SIGHUP";
-        ::kill(pid(), SIGHUP);
-        waitForFinished(300);
-        if (state() != QProcess::NotRunning)
-            qCritical() << Q_FUNC_INFO << "process didn't stop upon SIGHUP and will be SIGKILL-ed";
+        d->pty->close();
+        terminate();
+        if(waitForFinished(300)) {
+            delete d->pty;
+        } else {
+            delete d->pty; //QProcess deleted before process terminated
+        }
     }
-    delete d->pty;
 }
 
 void KPtyProcess::setPtyChannels(PtyChannels channels)
