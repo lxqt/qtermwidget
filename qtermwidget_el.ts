@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1284"/>
+        <location filename="../../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
         <translation>Μέγεθος: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="1296"/>
+        <location filename="../../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
         <translation>Μέγεθος: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../../TerminalDisplay.cpp" line="3174"/>
+        <location filename="../../TerminalDisplay.cpp" line="3172"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Η έξοδος έχει &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;ανασταλή&lt;/a&gt; με τον συνδυασμό πλήκτρων Ctrl+S. Πιέστε &lt;b&gt;Ctrl+Q&lt;/b&gt; για επαναφορά.&lt;/qt&gt;</translation>
     </message>
