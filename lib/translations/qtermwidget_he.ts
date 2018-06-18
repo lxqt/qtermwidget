@@ -6,17 +6,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
-        <translation></translation>
+        <translation>גודל: XXX × XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
-        <translation></translation>
+        <translation>גודל: %1 × %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3172"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;הפלט &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;הושהה&lt;/a&gt; בלחיצה על Ctrl+S.  יש ללחוץ על &lt;b&gt;Ctrl+Q&lt;/b&gt; כדי להמשיך.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1096"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation></translation>
+        <translation>אין מתרגם מקלדת זמין.  המידע שנדרש לצורך המרת לחיצות מקשים לתווים לשליחה למסוף חסר.</translation>
     </message>
 </context>
 <context>
@@ -33,32 +33,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation></translation>
+        <translation>ערכת צבעים ללא שם</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation></translation>
+        <translation>ערכת צבעים נגישה</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="518"/>
         <source>Open Link</source>
-        <translation></translation>
+        <translation>פתיחת קישור</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="519"/>
         <source>Copy Link Address</source>
-        <translation></translation>
+        <translation>העתקת כתובת קישור</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="523"/>
         <source>Send Email To...</source>
-        <translation></translation>
+        <translation>שליחת דוא״ל אל…</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="524"/>
         <source>Copy Email Address</source>
-        <translation></translation>
+        <translation>העתקת כתובת דוא״ל</translation>
     </message>
 </context>
 <context>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation></translation>
+        <translation>שגיאת ערכת צבעים</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation></translation>
+        <translation>לא ניתן לטעון ערכת צבעים: %1</translation>
     </message>
 </context>
 <context>
@@ -79,22 +79,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation></translation>
+        <translation>התאמת רישיות</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation></translation>
+        <translation>ביטוי רגולרי</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation></translation>
+        <translation>הדגשת כל המופעים</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation></translation>
+        <translation>סרגל חיפוש</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation></translation>
+        <translation>חיפוש:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation></translation>
+        <translation>…</translation>
     </message>
 </context>
 </TS>
