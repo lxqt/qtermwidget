@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1096"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Δεν υπάρχει κάποιος μεταφραστής πληκτρολογίου διαθέσιμος. Η απαιτούμενη πληροφορία για την μετατροπή των πατημάτων πλήκτρων σε χαρακτήρες στο τερματικό λείπει. </translation>
+        <translation>Δεν υπάρχει κάποιος μεταφραστής πληκτρολογίου διαθέσιμος. Η απαιτούμενη πληροφορία για την μετατροπή των πατημάτων πλήκτρων σε χαρακτήρες στο τερματικό λείπει.</translation>
     </message>
 </context>
 <context>
