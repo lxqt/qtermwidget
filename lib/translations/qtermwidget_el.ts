@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3172"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Η έξοδος έχει &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;ανασταλή&lt;/a&gt; με τον συνδυασμό πλήκτρων Ctrl+S. Πιέστε &lt;b&gt;Ctrl+Q&lt;/b&gt; για επαναφορά.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Η έξοδος έχει &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;ανασταλεί&lt;/a&gt; με τον συνδυασμό πλήκτρων Ctrl+S. Πιέστε &lt;b&gt;Ctrl+Q&lt;/b&gt; για επαναφορά.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -43,12 +43,12 @@
     <message>
         <location filename="../Filter.cpp" line="518"/>
         <source>Open Link</source>
-        <translation>Άνοιγμα δεσμού</translation>
+        <translation>Άνοιγμα του δεσμού</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="519"/>
         <source>Copy Link Address</source>
-        <translation>Αντιγραφή διεύθυνσης δεσμού</translation>
+        <translation>Αντιγραφή διεύθυνσης του δεσμού</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="523"/>
@@ -58,7 +58,7 @@
     <message>
         <location filename="../Filter.cpp" line="524"/>
         <source>Copy Email Address</source>
-        <translation>Αντιγραφή ηλ. διεύθυνσης</translation>
+        <translation>Αντιγραφή της ηλ. διεύθυνσης</translation>
     </message>
 </context>
 <context>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation>Σφάλμα χρωματικού συνδυασμού</translation>
+        <translation>Σφάλμα του χρωματικού συνδυασμού</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
