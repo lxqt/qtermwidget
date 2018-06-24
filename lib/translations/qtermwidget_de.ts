@@ -6,17 +6,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
-        <translation></translation>
+        <translation>Größe: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
-        <translation></translation>
+        <translation>Größe: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3172"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;Ausgabe wurde &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;ausgesetzt&lt;/a&gt; beim Drücken von Strg+S.  Drücke &lt;b&gt;Strg+Q&lt;/b&gt; um fortzufahren.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1096"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation></translation>
+        <translation>Kein Tastaturinterpretierer verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschließenfd zum Terminal zu schicken, fehlt.</translation>
     </message>
 </context>
 <context>
@@ -33,32 +33,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation></translation>
+        <translation>Unbenanntes Farbschema</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation></translation>
+        <translation>Zugängliches Farbschema</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="518"/>
         <source>Open Link</source>
-        <translation></translation>
+        <translation>Öffne Link</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="519"/>
         <source>Copy Link Address</source>
-        <translation></translation>
+        <translation>Kopiere Verknüpfungsadresse</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="523"/>
         <source>Send Email To...</source>
-        <translation></translation>
+        <translation>Sende Email an...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="524"/>
         <source>Copy Email Address</source>
-        <translation></translation>
+        <translation>Kopiere Emailadresse</translation>
     </message>
 </context>
 <context>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation></translation>
+        <translation>Farbschemafehler</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation></translation>
+        <translation>Kann Farbschema nicht laden: %1</translation>
     </message>
 </context>
 <context>
@@ -79,22 +79,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation></translation>
+        <translation>Groß- / Kleinschreibung berücksichtigen</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation></translation>
+        <translation>Regulärer Ausdruck</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation></translation>
+        <translation>Markiere alle Treffer</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation></translation>
+        <translation>Suchleiste</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation></translation>
+        <translation>Finde:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
