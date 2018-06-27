@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3172"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;La salida ha sido &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendida&lt;/a&gt; al pulsar Ctrl+S.  Pulse &lt;b&gt;Ctrl+Q&lt;/b&gt; para resumirla.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;La salida ha sido &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendida&lt;/a&gt; al pulsar Ctrl+S.  Pulse &lt;b&gt;Ctrl+Q&lt;/b&gt; para reanudarla.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1096"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>No hay traductor de teclado disponible.  La información necesaria para convertir pulsaciones de tecla en caracteres para enviarlos a la terminal está ausente.</translation>
+        <translation>No hay traductor de teclado disponible. La información necesaria para convertir pulsaciones de tecla en caracteres para enviarlos a la terminal está ausente.</translation>
     </message>
 </context>
 <context>
