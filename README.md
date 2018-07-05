@@ -26,3 +26,10 @@ To build run `make`, to install `make install` which accepts variable `DESTDIR` 
 
 The library is provided by all major Linux distributions like Arch Linux, Debian, Fedora and openSUSE.
 Just use the distributions' package managers to search for string `qtermwidget`.
+
+
+### Translation (Weblate)
+
+<a href="https://weblate.lxqt.org/projects/lxqt/qtermwidget/">
+<img src="https://weblate.lxqt.org/widgets/lxqt/-/qtermwidget/multi-auto.svg" alt="Translation status" />
+</a>
