@@ -94,7 +94,7 @@
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra de búsqueda</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
