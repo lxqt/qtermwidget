@@ -363,7 +363,7 @@ void HistoryScrollBuffer::getCells(int lineNumber, int startColumn, int count, C
 
   if (lineNumber >= _usedLines)
   {
-    memset(buffer, 0, count * sizeof(Character));
+    memset(static_cast<void*>(buffer), 0, count * sizeof(Character));
     return;
   }
 
@@ -497,7 +497,7 @@ void HistoryScrollBlockArray::getCells(int lineno, int colno,
   const Block *b = m_blockArray.at(lineno);
 
   if (!b) {
-    memset(res, 0, count * sizeof(Character)); // still better than random data
+    memset(static_cast<void*>(res), 0, count * sizeof(Character)); // still better than random data
     return;
   }
 
