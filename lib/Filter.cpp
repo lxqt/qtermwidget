@@ -291,12 +291,12 @@ Filter::HotSpot* Filter::hotSpotAt(int line , int column) const
 }
 
 Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int endColumn)
-    : _startLine(startLine)
+    : _hasAnotherParent(false)
+    , _startLine(startLine)
     , _startColumn(startColumn)
     , _endLine(endLine)
     , _endColumn(endColumn)
     , _type(NotSpecified)
-    , _hasAnotherParent(false)
 {
 }
 QList<QAction*> Filter::HotSpot::actions(QWidget* parent)

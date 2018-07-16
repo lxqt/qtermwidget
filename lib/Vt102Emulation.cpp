@@ -1148,7 +1148,7 @@ wchar_t Vt102Emulation::applyCharset(wchar_t c)
 void Vt102Emulation::resetCharset(int scrno)
 {
   _charset[scrno].cu_cs = 0;
-  strncpy(_charset[scrno].charset,"BBBB",4);
+  qstrncpy(_charset[scrno].charset,"BBBB",4);
   _charset[scrno].sa_graphic = false;
   _charset[scrno].sa_pound = false;
   _charset[scrno].graphic = false;
