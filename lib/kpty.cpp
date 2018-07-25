@@ -27,9 +27,14 @@
 #include <QtDebug>
 
 
-#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
 #define HAVE_LOGIN
 #define HAVE_LIBUTIL_H
+#endif
+
+#if defined(__OpenBSD__)
+#define HAVE_LOGIN
+#define HAVE_UTIL_H
 #endif
 
 #ifdef __sgi
