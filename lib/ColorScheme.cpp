@@ -273,10 +273,10 @@ qreal ColorScheme::opacity() const { return _opacity; }
 void ColorScheme::read(const QString & fileName)
 {
     QSettings s(fileName, QSettings::IniFormat);
-    s.beginGroup("General");
+    s.beginGroup(QLatin1String("General"));
 
-    _description = s.value("Description", QObject::tr("Un-named Color Scheme")).toString();
-    _opacity = s.value("Opacity",qreal(1.0)).toDouble();
+    _description = s.value(QLatin1String("Description"), QObject::tr("Un-named Color Scheme")).toString();
+    _opacity = s.value(QLatin1String("Opacity"),qreal(1.0)).toDouble();
     s.endGroup();
 
     for (int i=0 ; i < TABLE_COLORS ; i++)
@@ -319,13 +319,13 @@ QString ColorScheme::colorNameForIndex(int index)
 {
     Q_ASSERT( index >= 0 && index < TABLE_COLORS );
 
-    return QString(colorNames[index]);
+    return QString::fromLatin1(colorNames[index]);
 }
 QString ColorScheme::translatedColorNameForIndex(int index)
 {
     Q_ASSERT( index >= 0 && index < TABLE_COLORS );
 
-    return translatedColorNames[index];
+    return QString::fromLatin1(translatedColorNames[index]);
 }
 
 void ColorScheme::readColorEntry(QSettings * s , int index)
@@ -336,7 +336,7 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
 
     ColorEntry entry;
 
-    QVariant colorValue = s->value("Color");
+    QVariant colorValue = s->value(QLatin1String("Color"));
     QString colorStr;
     int r, g, b;
     bool ok = false;
@@ -345,7 +345,7 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
     if (colorValue.type() == QVariant::StringList)
     {
         QStringList rgbList = colorValue.toStringList();
-        colorStr = rgbList.join(",");
+        colorStr = rgbList.join(QLatin1Char(','));
         if (rgbList.count() == 3)
         {
             bool parse_ok;
@@ -362,7 +362,7 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
     else
     {
         colorStr = colorValue.toString();
-        QRegularExpression hexColorPattern("^#[0-9a-f]{6}$",
+        QRegularExpression hexColorPattern(QLatin1String("^#[0-9a-f]{6}$"),
                                            QRegularExpression::CaseInsensitiveOption);
         if (hexColorPattern.match(colorStr).hasMatch())
         {
@@ -381,20 +381,20 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
     }
     entry.color = QColor(r, g, b);
 
-    entry.transparent = s->value("Transparent",false).toBool();
+    entry.transparent = s->value(QLatin1String("Transparent"),false).toBool();
 
     // Deprecated key from KDE 4.0 which set 'Bold' to true to force
     // a color to be bold or false to use the current format
     //
     // TODO - Add a new tri-state key which allows for bold, normal or
     // current format
-    if (s->contains("Bold"))
-        entry.fontWeight = s->value("Bold",false).toBool() ? ColorEntry::Bold :
+    if (s->contains(QLatin1String("Bold")))
+        entry.fontWeight = s->value(QLatin1String("Bold"),false).toBool() ? ColorEntry::Bold :
                                                                  ColorEntry::UseCurrentFormat;
 
-    quint16 hue = s->value("MaxRandomHue",0).toInt();
-    quint8 value = s->value("MaxRandomValue",0).toInt();
-    quint8 saturation = s->value("MaxRandomSaturation",0).toInt();
+    quint16 hue = s->value(QLatin1String("MaxRandomHue"),0).toInt();
+    quint8 value = s->value(QLatin1String("MaxRandomValue"),0).toInt();
+    quint8 saturation = s->value(QLatin1String("MaxRandomSaturation"),0).toInt();
 
     setColorTableEntry( index , entry );
 
@@ -502,10 +502,10 @@ ColorScheme* KDE3ColorSchemeReader::read()
 
     ColorScheme* scheme = new ColorScheme();
 
-    QRegExp comment("#.*$");
+    QRegExp comment(QLatin1String("#.*$"));
     while ( !_device->atEnd() )
     {
-        QString line(_device->readLine());
+        QString line(QString::fromUtf8(_device->readLine()));
         line.remove(comment);
         line = line.simplified();
 
@@ -533,11 +533,11 @@ ColorScheme* KDE3ColorSchemeReader::read()
 }
 bool KDE3ColorSchemeReader::readColorLine(const QString& line,ColorScheme* scheme)
 {
-    QStringList list = line.split(QChar(' '));
+    QStringList list = line.split(QLatin1Char(' '));
 
     if (list.count() != 7)
         return false;
-    if (list.first() != "color")
+    if (list.first() != QLatin1String("color"))
         return false;
 
     int index = list[1].toInt();
@@ -570,13 +570,13 @@ bool KDE3ColorSchemeReader::readTitleLine(const QString& line,ColorScheme* schem
     if( !line.startsWith(QLatin1String("title")) )
         return false;
 
-    int spacePos = line.indexOf(' ');
+    int spacePos = line.indexOf(QLatin1Char(' '));
     if( spacePos == -1 )
         return false;
 
     QString description = line.mid(spacePos+1);
 
-    scheme->setDescription(description.toUtf8());
+    scheme->setDescription(description);
     return true;
 }
 ColorSchemeManager::ColorSchemeManager()
@@ -728,11 +728,11 @@ QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
         const QString dname(scheme_dir);
         QDir dir(dname);
         QStringList filters;
-        filters << "*.schema";
+        filters << QLatin1String("*.schema");
         dir.setNameFilters(filters);
         QStringList list = dir.entryList(filters);
         for (const QString &i : list)
-            ret << dname + "/" + i;
+            ret << dname + QLatin1Char('/') + i;
     }
     return ret;
     //return KGlobal::dirs()->findAllResources("data",
@@ -748,11 +748,11 @@ QList<QString> ColorSchemeManager::listColorSchemes()
         const QString dname(scheme_dir);
         QDir dir(dname);
         QStringList filters;
-        filters << "*.colorscheme";
+        filters << QLatin1String("*.colorscheme");
         dir.setNameFilters(filters);
         QStringList list = dir.entryList(filters);
         for (const QString &i : list)
-            ret << dname + "/" + i;
+            ret << dname + QLatin1Char('/') + i;
     }
     return ret;
 //    return KGlobal::dirs()->findAllResources("data",
@@ -789,12 +789,12 @@ QString ColorSchemeManager::findColorSchemePath(const QString& name) const
         return QString();
 
     const QString dir = dirs.first();
-    QString path(dir + "/"+ name + ".colorscheme");
+    QString path(dir + QLatin1Char('/')+ name + QLatin1String(".colorscheme"));
     if ( !path.isEmpty() )
         return path;
 
     //path = KStandardDirs::locate("data","konsole/"+name+".schema");
-    path = dir + "/"+ name + ".schema";
+    path = dir + QLatin1Char('/')+ name + QLatin1String(".schema");
 
     return path;
 }

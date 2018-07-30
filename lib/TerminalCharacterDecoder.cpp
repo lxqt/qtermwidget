@@ -124,7 +124,7 @@ void HTMLDecoder::begin(QTextStream* output)
     std::wstring text;
 
     //open monospace span
-    openSpan(text,"font-family:monospace");
+    openSpan(text,QLatin1String("font-family:monospace"));
 
     *output << QString::fromStdWString(text);
 }
@@ -180,19 +180,19 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
                 useBold = weight == ColorEntry::Bold;
 
             if (useBold)
-                style.append("font-weight:bold;");
+                style.append(QLatin1String("font-weight:bold;"));
 
             if ( _lastRendition & RE_UNDERLINE )
-                    style.append("font-decoration:underline;");
+                    style.append(QLatin1String("font-decoration:underline;"));
 
             //colours - a colour table must have been defined first
             if ( _colorTable )
             {
-                style.append( QString("color:%1;").arg(_lastForeColor.color(_colorTable).name() ) );
+                style.append( QString::fromLatin1("color:%1;").arg(_lastForeColor.color(_colorTable).name() ) );
 
                 if (!characters[i].isTransparent(_colorTable))
                 {
-                    style.append( QString("background-color:%1;").arg(_lastBackColor.color(_colorTable).name() ) );
+                    style.append( QString::fromLatin1("background-color:%1;").arg(_lastBackColor.color(_colorTable).name() ) );
                 }
             }
 
@@ -237,7 +237,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
 }
 void HTMLDecoder::openSpan(std::wstring& text , const QString& style)
 {
-    text.append( QString("<span style=\"%1\">").arg(style).toStdWString() );
+    text.append( QString(QLatin1String("<span style=\"%1\">")).arg(style).toStdWString() );
 }
 
 void HTMLDecoder::closeSpan(std::wstring& text)

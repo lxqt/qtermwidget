@@ -252,19 +252,19 @@ void Session::run()
      * As far as i know /bin/sh exists on every unix system.. You could also just put some ifdef __FREEBSD__ here but i think these 2 filechecks are worth
      * their computing time on any system - especially with the problem on arch linux beeing there too.
      */
-    QString exec = QFile::encodeName(_program);
+    QString exec = QString::fromLocal8Bit(QFile::encodeName(_program));
     // if 'exec' is not specified, fall back to default shell.  if that
     // is not set then fall back to /bin/sh
 
     // here we expect full path. If there is no fullpath let's expect it's
     // a custom shell (eg. python, etc.) available in the PATH.
-    if (exec.startsWith("/") || exec.isEmpty())
+    if (exec.startsWith(QLatin1Char('/')) || exec.isEmpty())
     {
-        const QString defaultShell{"/bin/sh"};
+        const QString defaultShell{QLatin1String("/bin/sh")};
 
         QFile excheck(exec);
         if ( exec.isEmpty() || !excheck.exists() ) {
-            exec = getenv("SHELL");
+            exec = QString::fromLocal8Bit(qgetenv("SHELL"));
         }
         excheck.setFileName(exec);
 
@@ -276,7 +276,7 @@ void Session::run()
 
     // _arguments sometimes contain ("") so isEmpty()
     // or count() does not work as expected...
-    QString argsTmp(_arguments.join(" ").trimmed());
+    QString argsTmp(_arguments.join(QLatin1Char(' ')).trimmed());
     QStringList arguments;
     arguments << exec;
     if (argsTmp.length())
@@ -296,7 +296,7 @@ void Session::run()
     // tell the terminal exactly which colors are being used, but instead approximates
     // the color scheme as "black on white" or "white on black" depending on whether
     // the background color is deemed dark or not
-    QString backgroundColorHint = _hasDarkBackground ? "COLORFGBG=15;0" : "COLORFGBG=0;15";
+    QString backgroundColorHint = _hasDarkBackground ? QLatin1String("COLORFGBG=15;0") : QLatin1String("COLORFGBG=0;15");
 
     /* if we do all the checking if this shell exists then we use it ;)
      * Dont know about the arguments though.. maybe youll need some more checking im not sure
@@ -354,7 +354,7 @@ void Session::setUserTitle( int what, const QString & caption )
     }
 
     if (what == 11) {
-        QString colorString = caption.section(';',0,0);
+        QString colorString = caption.section(QLatin1Char(';'),0,0);
         //qDebug() << __FILE__ << __LINE__ << ": setting background colour to " << colorString;
         QColor backColor = QColor(colorString);
         if (backColor.isValid()) { // change color via \033]11;Color\007
@@ -381,7 +381,7 @@ void Session::setUserTitle( int what, const QString & caption )
 
     if (what == 31) {
         QString cwd=caption;
-        cwd=cwd.replace( QRegExp("^~"), QDir::homePath() );
+        cwd=cwd.replace( QRegExp(QLatin1String("^~")), QDir::homePath() );
         emit openUrlRequest(cwd);
     }
 
@@ -588,7 +588,7 @@ QString Session::profileKey() const
 void Session::done(int exitStatus)
 {
     if (!_autoClose) {
-        _userTitle = ("This session is done. Finished");
+        _userTitle = QString::fromLatin1("This session is done. Finished");
         emit titleChanged();
         return;
     }
