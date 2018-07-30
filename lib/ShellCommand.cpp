@@ -42,7 +42,7 @@ ShellCommand::ShellCommand(const QString & fullCommand)
         QChar ch = fullCommand[i];
 
         const bool isLastChar = ( i == fullCommand.count() - 1 );
-        const bool isQuote = ( ch == '\'' || ch == '\"' );
+        const bool isQuote = ( ch == QLatin1Char('\'') || ch == QLatin1Char('\"') );
 
         if ( !isLastChar && isQuote ) {
             inQuotes = !inQuotes;
@@ -68,7 +68,7 @@ ShellCommand::ShellCommand(const QString & command , const QStringList & argumen
 }
 QString ShellCommand::fullCommand() const
 {
-    return _arguments.join(QChar(' '));
+    return _arguments.join(QLatin1Char(' '));
 }
 QString ShellCommand::command() const
 {
@@ -153,7 +153,7 @@ static bool expandEnv( QString & text )
                 int len = pos2 - pos;
                 QString key = text.mid( pos+1, len-1);
                 QString value =
-                    QString::fromLocal8Bit( ::getenv(key.toLocal8Bit()) );
+                    QString::fromLocal8Bit( qgetenv(key.toLocal8Bit().constData()) );
 
                 if ( !value.isEmpty() ) {
                     expanded = true;

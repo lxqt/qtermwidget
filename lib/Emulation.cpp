@@ -73,7 +73,7 @@ Emulation::Emulation() :
            SLOT(bracketedPasteModeChanged(bool)));
 
   connect(this, &Emulation::cursorChanged, [this] (KeyboardCursorShape cursorShape, bool blinkingCursorEnabled) {
-    emit titleChanged( 50, QString("CursorShape=%1;BlinkingCursorEnabled=%2")
+    emit titleChanged( 50, QString(QLatin1String("CursorShape=%1;BlinkingCursorEnabled=%2"))
                                .arg(static_cast<int>(cursorShape)).arg(blinkingCursorEnabled) );
   });
 }
@@ -214,7 +214,7 @@ void Emulation::sendKeyEvent( QKeyEvent* ev )
   { // A block of text
     // Note that the text is proper unicode.
     // We should do a conversion here
-    emit sendData(ev->text().toUtf8(),ev->text().length());
+    emit sendData(ev->text().toUtf8().constData(),ev->text().length());
   }
 }
 

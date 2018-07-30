@@ -64,7 +64,7 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
 {
     Session *session = new Session(parent);
 
-    session->setTitle(Session::NameRole, "QTermWidget");
+    session->setTitle(Session::NameRole, QLatin1String("QTermWidget"));
 
     /* Thats a freaking bad idea!!!!
      * /bin/bash is not there on every system
@@ -75,11 +75,11 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
      */
     //session->setProgram("/bin/bash");
 
-    session->setProgram(getenv("SHELL"));
+    session->setProgram(QString::fromLocal8Bit(qgetenv("SHELL")));
 
 
 
-    QStringList args("");
+    QStringList args = QStringList(QString());
     session->setArguments(args);
     session->setAutoClose(true);
 
@@ -90,7 +90,7 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
 
     session->setDarkBackground(true);
 
-    session->setKeyBindings("");
+    session->setKeyBindings(QString());
     return session;
 }
 
@@ -202,12 +202,12 @@ void QTermWidget::changeDir(const QString & dir)
     */
     QString strCmd;
     strCmd.setNum(getShellPID());
-    strCmd.prepend("ps -j ");
-    strCmd.append(" | tail -1 | awk '{ print $5 }' | grep -q \\+");
+    strCmd.prepend(QLatin1String("ps -j "));
+    strCmd.append(QLatin1String(" | tail -1 | awk '{ print $5 }' | grep -q \\+"));
     int retval = system(strCmd.toStdString().c_str());
 
     if (!retval) {
-        QString cmd = "cd " + dir + "\n";
+        QString cmd = QLatin1String("cd ") + dir + QLatin1Char('\n');
         sendText(cmd);
     }
 }
@@ -274,7 +274,7 @@ void QTermWidget::init(int startnow)
 
     for (const QString& dir : dirs) {
         qDebug() << "Trying to load translation file from dir" << dir;
-        if (m_translator->load(QLocale::system(), "qtermwidget", "_", dir)) {
+        if (m_translator->load(QLocale::system(), QLatin1String("qtermwidget"), QLatin1String(QLatin1String("_")), dir)) {
             qApp->installTranslator(m_translator);
             qDebug() << "Translations found in" << dir;
             break;
@@ -325,7 +325,7 @@ void QTermWidget::init(int startnow)
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
-    font.setFamily("Monospace");
+    font.setFamily(QLatin1String("Monospace"));
     font.setPointSize(10);
     font.setStyleHint(QFont::TypeWriter);
     setTerminalFont(font);
@@ -403,7 +403,7 @@ QString QTermWidget::workingDirectory()
     // Christian Surlykke: On linux we could look at /proc/<pid>/cwd which should be a link to current
     // working directory (<pid>: process id of the shell). I don't know about BSD.
     // Maybe we could just offer it when running linux, for a start.
-    QDir d(QString("/proc/%1/cwd").arg(getShellPID()));
+    QDir d(QString::fromLatin1("/proc/%1/cwd").arg(getShellPID()));
     if (!d.exists())
     {
         qDebug() << "Cannot find" << d.dirName();

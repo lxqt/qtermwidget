@@ -220,14 +220,14 @@ void TerminalDisplay::fontChange(const QFont&)
   // "Base character width on widest ASCII character. This prevents too wide
   //  characters in the presence of double wide (e.g. Japanese) characters."
   // Get the width from representative normal width characters
-  _fontWidth = qRound((double)fm.width(REPCHAR)/(double)strlen(REPCHAR));
+  _fontWidth = qRound((double)fm.width(QLatin1String(REPCHAR))/(double)qstrlen(REPCHAR));
 
   _fixedFont = true;
 
-  int fw = fm.width(REPCHAR[0]);
-  for(unsigned int i=1; i< strlen(REPCHAR); i++)
+  int fw = fm.width(QLatin1Char(REPCHAR[0]));
+  for(unsigned int i=1; i< qstrlen(REPCHAR); i++)
   {
-    if (fw != fm.width(REPCHAR[i]))
+    if (fw != fm.width(QLatin1Char(REPCHAR[i])))
     {
       _fixedFont = false;
       break;
@@ -253,7 +253,7 @@ void TerminalDisplay::calDrawTextAdditionHeight(QPainter& painter)
 {
     QRect test_rect, feedback_rect;
 	test_rect.setRect(1, 1, _fontWidth * 4, _fontHeight);
-	painter.drawText(test_rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString("Mq"), &feedback_rect);
+    painter.drawText(test_rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QLatin1String("Mq"), &feedback_rect);
 
 	//qDebug() << "test_rect:" << test_rect << "feeback_rect:" << feedback_rect;
 
@@ -338,7 +338,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_preserveLineBreaks(false)
 ,_columnSelectionMode(false)
 ,_scrollbarLocation(QTermWidget::NoScrollBar)
-,_wordCharacters(":@-./_~")
+,_wordCharacters(QLatin1String(":@-./_~"))
 ,_bellMode(SystemBeepBell)
 ,_blinking(false)
 ,_hasBlinker(false)
@@ -1278,7 +1278,7 @@ void TerminalDisplay::showResizeNotification()
         _resizeWidget->setMinimumHeight(_resizeWidget->sizeHint().height());
         _resizeWidget->setAlignment(Qt::AlignCenter);
 
-        _resizeWidget->setStyleSheet("background-color:palette(window);border-style:solid;border-width:1px;border-color:palette(dark)");
+        _resizeWidget->setStyleSheet(QLatin1String("background-color:palette(window);border-style:solid;border-width:1px;border-color:palette(dark)"));
 
         _resizeTimer = new QTimer(this);
         _resizeTimer->setSingleShot(true);
@@ -1938,7 +1938,7 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
 
       Filter::HotSpot *spot = _filterChain->hotSpotAt(charLine, charColumn);
       if (spot && spot->type() == Filter::HotSpot::Link)
-          spot->activate("click-action");
+          spot->activate(QLatin1String("click-action"));
     }
   }
   else if ( ev->button() == Qt::MidButton )
@@ -2458,7 +2458,7 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
      endSel.setX(x);
 
      // In word selection mode don't select @ (64) if at end of word.
-     if ( ( QChar( _image[i].character ) == '@' ) && ( ( endSel.x() - bgnSel.x() ) > 0 ) )
+     if ( ( QChar( _image[i].character ) == QLatin1Char('@') ) && ( ( endSel.x() - bgnSel.x() ) > 0 ) )
        endSel.setX( x - 1 );
 
 
@@ -2600,10 +2600,10 @@ bool TerminalDisplay::focusNextPrevChild( bool next )
 
 QChar TerminalDisplay::charClass(QChar qch) const
 {
-    if ( qch.isSpace() ) return ' ';
+    if ( qch.isSpace() ) return QLatin1Char(' ');
 
     if ( qch.isLetterOrNumber() || _wordCharacters.contains(qch, Qt::CaseInsensitive ) )
-    return 'a';
+    return QLatin1Char('a');
 
     return qch;
 }
@@ -2652,10 +2652,10 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
   QString text = QApplication::clipboard()->text(useXselection ? QClipboard::Selection :
                                                                  QClipboard::Clipboard);
   if(appendReturn)
-    text.append("\r");
+    text.append(QLatin1Char('\r'));
   if ( ! text.isEmpty() )
   {
-    text.replace('\n', '\r');
+    text.replace(QLatin1Char('\n'), QLatin1Char('\r'));
     bracketText(text);
     QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
     emit keyPressedSignal(&e); // expose as a big fat keypress event
@@ -2668,8 +2668,8 @@ void TerminalDisplay::bracketText(QString& text)
 {
     if (bracketedPasteMode())
     {
-        text.prepend("\033[200~");
-        text.append("\033[201~");
+        text.prepend(QLatin1String("\033[200~"));
+        text.append(QLatin1String("\033[201~"));
     }
 }
 
@@ -3102,7 +3102,7 @@ QSize TerminalDisplay::sizeHint() const
 
 void TerminalDisplay::dragEnterEvent(QDragEnterEvent* event)
 {
-  if (event->mimeData()->hasFormat("text/plain"))
+  if (event->mimeData()->hasFormat(QLatin1String("text/plain")))
       event->acceptProposedAction();
   if (event->mimeData()->urls().count())
       event->acceptProposedAction();
@@ -3137,7 +3137,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
         dropText += urlText;
 
         if ( i != urls.count()-1 )
-            dropText += ' ';
+            dropText += QLatin1Char(' ');
     }
   }
   else
@@ -3145,7 +3145,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
     dropText = event->mimeData()->text();
   }
 
-    emit sendStringToEmu(dropText.toLocal8Bit());
+    emit sendStringToEmu(dropText.toLocal8Bit().constData());
 }
 
 void TerminalDisplay::doDrag()
