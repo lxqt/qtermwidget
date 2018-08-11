@@ -130,7 +130,7 @@ void HistoryFile::unmap()
     fileMap = 0;
 }
 
-bool HistoryFile::isMapped()
+bool HistoryFile::isMapped() const
 {
     return (fileMap != 0);
 }
