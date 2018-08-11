@@ -60,7 +60,7 @@ public:
   //un-mmaps the file
   void unmap();
   //returns true if the file is mmap'ed
-  bool isMapped();
+  bool isMapped() const;
 
 
 private:
@@ -180,7 +180,7 @@ public:
   virtual void addLine(bool previousWrapped=false);
 
   void setMaxNbLines(unsigned int nbLines);
-  unsigned int maxNbLines() { return _maxLineCount; }
+  unsigned int maxNbLines() const { return _maxLineCount; }
 
 
 private:
