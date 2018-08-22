@@ -6,12 +6,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille : XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille : %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3172"/>
