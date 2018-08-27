@@ -188,6 +188,9 @@ public:
     TripleClickMode tripleClickMode() { return _tripleClickMode; }
 
     void setLineSpacing(uint);
+    void setMargin(int);
+
+    int margin() const;
     uint lineSpacing() const;
 
     void emitSelection(bool useXselection,bool appendReturn);
