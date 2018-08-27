@@ -3212,6 +3212,17 @@ void TerminalDisplay::setLineSpacing(uint i)
   setVTFont(font()); // Trigger an update.
 }
 
+int TerminalDisplay::margin() const
+{
+    return _topMargin;
+}
+
+void TerminalDisplay::setMargin(int i)
+{
+    _topMargin = i;
+    _leftMargin = i;
+}
+
 AutoScrollHandler::AutoScrollHandler(QWidget* parent)
 : QObject(parent)
 , _timerId(0)
