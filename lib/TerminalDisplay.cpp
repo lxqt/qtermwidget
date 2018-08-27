@@ -3219,8 +3219,8 @@ int TerminalDisplay::margin() const
 
 void TerminalDisplay::setMargin(int i)
 {
-    _topMargin = i;
-    _leftMargin = i;
+    _topBaseMargin = i;
+    _leftBaseMargin = i;
 }
 
 AutoScrollHandler::AutoScrollHandler(QWidget* parent)

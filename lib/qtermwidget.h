@@ -221,6 +221,12 @@ public:
 
     /** change and wrap text corresponding to paste mode **/
     void bracketText(QString& text);
+
+    /** Set the empty space outside the terminal */
+    void setMargin(int);
+
+    /** Get the empty space outside the terminal */
+    int getMargin() const;
 signals:
     void finished();
     void copyAvailable(bool);
