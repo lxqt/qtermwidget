@@ -3214,7 +3214,7 @@ void TerminalDisplay::setLineSpacing(uint i)
 
 int TerminalDisplay::margin() const
 {
-    return _topMargin;
+    return _topBaseMargin;
 }
 
 void TerminalDisplay::setMargin(int i)
