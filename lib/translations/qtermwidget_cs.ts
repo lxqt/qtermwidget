@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1275"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>Velikost: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1287"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>Velikost: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3172"/>
+        <location filename="../TerminalDisplay.cpp" line="3174"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Výstup byl &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastaven&lt;/a&gt; stisknutím Ctrl+S.  Znovu ho spustíte stisknutím &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
@@ -41,22 +41,22 @@
         <translation>Barevné schéma pro zrakově hendikepované uživatele</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="518"/>
+        <location filename="../Filter.cpp" line="544"/>
         <source>Open Link</source>
         <translation>Otevřít odkaz</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="519"/>
+        <location filename="../Filter.cpp" line="545"/>
         <source>Copy Link Address</source>
         <translation>Zkopírovat adresu odkazu</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="523"/>
+        <location filename="../Filter.cpp" line="549"/>
         <source>Send Email To...</source>
         <translation>Poslat e-mail na…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="524"/>
+        <location filename="../Filter.cpp" line="550"/>
         <source>Copy Email Address</source>
         <translation>Zkopírovat e-mailovou adresu</translation>
     </message>
