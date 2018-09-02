@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1275"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>Rozmiar: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1287"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>Rozmiar: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3172"/>
+        <location filename="../TerminalDisplay.cpp" line="3174"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Wyjście zostało &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;wstrzymane&lt;/a&gt; skrótem Ctrl+S. Wciśnij &lt;b&gt;Ctrl+Q&lt;/b&gt; aby wznowić.&lt;/qt&gt;</translation>
     </message>
@@ -41,22 +41,22 @@
         <translation>Paleta o zwiększonej przystępności</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="518"/>
+        <location filename="../Filter.cpp" line="544"/>
         <source>Open Link</source>
         <translation>Przejdź pod adres</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="519"/>
+        <location filename="../Filter.cpp" line="545"/>
         <source>Copy Link Address</source>
         <translation>Kopiuj adres łącza</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="523"/>
+        <location filename="../Filter.cpp" line="549"/>
         <source>Send Email To...</source>
         <translation>Wyślij e-mail do…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="524"/>
+        <location filename="../Filter.cpp" line="550"/>
         <source>Copy Email Address</source>
         <translation>Kopiuj adres e-mail</translation>
     </message>

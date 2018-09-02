@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1275"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>Méret: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1287"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>Méret: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3172"/>
+        <location filename="../TerminalDisplay.cpp" line="3174"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;A kimenet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;el van nyomva&lt;/a&gt; a Ctrl+S megnyomásával.  Nyomj &lt;b&gt;Ctrl+Q -t&lt;/b&gt; a visszatéréshez.&lt;/qt&gt;</translation>
     </message>
@@ -41,22 +41,22 @@
         <translation>Elérhető színséma</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="518"/>
+        <location filename="../Filter.cpp" line="544"/>
         <source>Open Link</source>
         <translation>Link megnyitás</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="519"/>
+        <location filename="../Filter.cpp" line="545"/>
         <source>Copy Link Address</source>
         <translation>Link cím másolás</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="523"/>
+        <location filename="../Filter.cpp" line="549"/>
         <source>Send Email To...</source>
         <translation>Email küldés ...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="524"/>
+        <location filename="../Filter.cpp" line="550"/>
         <source>Copy Email Address</source>
         <translation>Email cím másolás</translation>
     </message>
