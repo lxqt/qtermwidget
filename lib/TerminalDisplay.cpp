@@ -1528,8 +1528,8 @@ void TerminalDisplay::paintFilters(QPainter& painter)
                 // find the position of the underline below that
                 int underlinePos = baseline + metrics.underlinePos();
                 if ( region.contains( mapFromGlobal(QCursor::pos()) ) ){
-                    painter.drawLine( r.left() , underlinePos ,
-                                      r.right() , underlinePos );
+                    painter.drawLine( r.left() + _leftBaseMargin , underlinePos + _topBaseMargin ,
+                                      r.right() + _leftBaseMargin , underlinePos + _topBaseMargin );
                 }
             }
             // Marker hotspots simply have a transparent rectanglular shape
