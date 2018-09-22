@@ -1459,28 +1459,29 @@ void TerminalDisplay::paintFilters(QPainter& painter)
             if (spot->startLine()==spot->endLine()) {
                 r.setCoords( spot->startColumn()*_fontWidth + 1 + scrollBarWidth + _leftBaseMargin,
                              spot->startLine()*_fontHeight + 1 + _topBaseMargin,
-                             (spot->endColumn()-1)*_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
+                             (spot->endColumn())*_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
                              (spot->endLine()+1)*_fontHeight - 1 + _topBaseMargin );
                 region |= r;
             } else {
                 r.setCoords( spot->startColumn()*_fontWidth + 1 + scrollBarWidth + _leftBaseMargin,
                              spot->startLine()*_fontHeight + 1 + _topBaseMargin,
-                             (_columns-1)*_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
+                             _columns *_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
                              (spot->startLine()+1)*_fontHeight - 1 + _topBaseMargin );
                 region |= r;
                 for ( int line = spot->startLine()+1 ; line < spot->endLine() ; line++ ) {
                     r.setCoords( 0*_fontWidth + 1 + scrollBarWidth + _leftBaseMargin,
                                  line*_fontHeight + 1 + _topBaseMargin,
-                                 (_columns-1)*_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
+                                 _columns *_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
                                  (line+1)*_fontHeight - 1 + _topBaseMargin );
                     region |= r;
                 }
                 r.setCoords( 0*_fontWidth + 1 + scrollBarWidth + _leftBaseMargin,
                              spot->endLine()*_fontHeight + 1 + _topBaseMargin,
-                             (spot->endColumn()-1)*_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
+                             spot->endColumn() *_fontWidth - 1 + scrollBarWidth + _leftBaseMargin,
                              (spot->endLine()+1)*_fontHeight - 1 + _topBaseMargin );
                 region |= r;
             }
+            painter.fillRect(r,QBrush(QColor(0,0,255,120))); //cool blue for link regions regions
         }
 
         for ( int line = spot->startLine() ; line <= spot->endLine() ; line++ )
@@ -1530,7 +1531,10 @@ void TerminalDisplay::paintFilters(QPainter& painter)
                 if ( region.contains( mapFromGlobal(QCursor::pos()) ) ){
                     painter.drawLine( r.left() + _leftBaseMargin , underlinePos + _topBaseMargin ,
                                       r.right() + _leftBaseMargin , underlinePos + _topBaseMargin );
-                }
+                    painter.fillRect(r,QBrush(QColor(0,255,0,120))); //nice green for working if
+                 } else {
+                    painter.fillRect(r,QBrush(QColor(0,255,0,120))); //nice red for working fishy test
+                 }
             }
             // Marker hotspots simply have a transparent rectanglular shape
             // drawn on top of them
