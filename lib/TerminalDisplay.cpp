@@ -1435,9 +1435,10 @@ void TerminalDisplay::paintFilters(QPainter& painter)
     QPoint cursorPos = mapFromGlobal(QCursor::pos());
     int cursorLine;
     int cursorColumn;
-    int scrollBarWidth = (_scrollbarLocation == QTermWidget::ScrollBarLeft
-                          && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
-                         ? _scrollBar->width() : 0;
+    int leftMargin = _leftBaseMargin
+                     + ((_scrollbarLocation == QTermWidget::ScrollBarLeft
+                         && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
+                        ? _scrollBar->width() : 0);
 
     getCharacterPosition( cursorPos , cursorLine , cursorColumn );
     Character cursorCharacter = _image[loc(cursorColumn,cursorLine)];
@@ -1457,28 +1458,28 @@ void TerminalDisplay::paintFilters(QPainter& painter)
         if ( spot->type() == Filter::HotSpot::Link ) {
             QRect r;
             if (spot->startLine()==spot->endLine()) {
-                r.setCoords( spot->startColumn()*_fontWidth + 1 + scrollBarWidth,
-                             spot->startLine()*_fontHeight + 1,
-                             (spot->endColumn()-1)*_fontWidth - 1 + scrollBarWidth,
-                             (spot->endLine()+1)*_fontHeight - 1 );
+                r.setCoords( spot->startColumn()*_fontWidth + 1 + leftMargin,
+                             spot->startLine()*_fontHeight + 1 + _topBaseMargin,
+                             spot->endColumn()*_fontWidth - 1 + leftMargin,
+                             (spot->endLine()+1)*_fontHeight - 1 + _topBaseMargin );
                 region |= r;
             } else {
-                r.setCoords( spot->startColumn()*_fontWidth + 1 + scrollBarWidth,
-                             spot->startLine()*_fontHeight + 1,
-                             (_columns-1)*_fontWidth - 1 + scrollBarWidth,
-                             (spot->startLine()+1)*_fontHeight - 1 );
+                r.setCoords( spot->startColumn()*_fontWidth + 1 + leftMargin,
+                             spot->startLine()*_fontHeight + 1 + _topBaseMargin,
+                             _columns*_fontWidth - 1 + leftMargin,
+                             (spot->startLine()+1)*_fontHeight - 1 + _topBaseMargin );
                 region |= r;
                 for ( int line = spot->startLine()+1 ; line < spot->endLine() ; line++ ) {
-                    r.setCoords( 0*_fontWidth + 1 + scrollBarWidth,
-                                 line*_fontHeight + 1,
-                                 (_columns-1)*_fontWidth - 1 + scrollBarWidth,
-                                 (line+1)*_fontHeight - 1 );
+                    r.setCoords( 0*_fontWidth + 1 + leftMargin,
+                                 line*_fontHeight + 1 + _topBaseMargin,
+                                 _columns*_fontWidth - 1 + leftMargin,
+                                 (line+1)*_fontHeight - 1 + _topBaseMargin );
                     region |= r;
                 }
-                r.setCoords( 0*_fontWidth + 1 + scrollBarWidth,
-                             spot->endLine()*_fontHeight + 1,
-                             (spot->endColumn()-1)*_fontWidth - 1 + scrollBarWidth,
-                             (spot->endLine()+1)*_fontHeight - 1 );
+                r.setCoords( 0*_fontWidth + 1 + leftMargin,
+                             spot->endLine()*_fontHeight + 1 + _topBaseMargin,
+                             spot->endColumn()*_fontWidth - 1 + leftMargin,
+                             (spot->endLine()+1)*_fontHeight - 1 + _topBaseMargin );
                 region |= r;
             }
         }
@@ -1513,10 +1514,10 @@ void TerminalDisplay::paintFilters(QPainter& painter)
             // because the check below for the position of the cursor
             // finds it on the border of the target area
             QRect r;
-            r.setCoords( startColumn*_fontWidth + 1 + scrollBarWidth,
-                         line*_fontHeight + 1,
-                         endColumn*_fontWidth - 1 + scrollBarWidth,
-                         (line+1)*_fontHeight - 1 );
+            r.setCoords( startColumn*_fontWidth + 1 + leftMargin,
+                         line*_fontHeight + 1 + _topBaseMargin,
+                         endColumn*_fontWidth - 1 + leftMargin,
+                         (line+1)*_fontHeight - 1 + _topBaseMargin );
             // Underline link hotspots
             if ( spot->type() == Filter::HotSpot::Link )
             {
@@ -1973,9 +1974,10 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
 {
   int charLine = 0;
   int charColumn = 0;
-  int scrollBarWidth = (_scrollbarLocation == QTermWidget::ScrollBarLeft
-                        && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
-                       ? _scrollBar->width() : 0;
+  int leftMargin = _leftBaseMargin
+                   + ((_scrollbarLocation == QTermWidget::ScrollBarLeft
+                       && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
+                      ? _scrollBar->width() : 0);
 
   getCharacterPosition(ev->pos(),charLine,charColumn);
 
@@ -1988,28 +1990,28 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
     _mouseOverHotspotArea = QRegion();
     QRect r;
     if (spot->startLine()==spot->endLine()) {
-        r.setCoords( spot->startColumn()*_fontWidth + scrollBarWidth,
-                     spot->startLine()*_fontHeight,
-                     spot->endColumn()*_fontWidth + scrollBarWidth,
-                     (spot->endLine()+1)*_fontHeight - 1 );
+        r.setCoords( spot->startColumn()*_fontWidth + leftMargin,
+                     spot->startLine()*_fontHeight + _topBaseMargin,
+                     spot->endColumn()*_fontWidth + leftMargin,
+                     (spot->endLine()+1)*_fontHeight - 1 + _topBaseMargin );
         _mouseOverHotspotArea |= r;
     } else {
-        r.setCoords( spot->startColumn()*_fontWidth + scrollBarWidth,
-                     spot->startLine()*_fontHeight,
-                     _columns*_fontWidth - 1 + scrollBarWidth,
-                     (spot->startLine()+1)*_fontHeight );
+        r.setCoords( spot->startColumn()*_fontWidth + leftMargin,
+                     spot->startLine()*_fontHeight + _topBaseMargin,
+                     _columns*_fontWidth - 1 + leftMargin,
+                     (spot->startLine()+1)*_fontHeight + _topBaseMargin );
         _mouseOverHotspotArea |= r;
         for ( int line = spot->startLine()+1 ; line < spot->endLine() ; line++ ) {
-            r.setCoords( 0*_fontWidth + scrollBarWidth,
-                         line*_fontHeight,
-                         _columns*_fontWidth + scrollBarWidth,
-                         (line+1)*_fontHeight );
+            r.setCoords( 0*_fontWidth + leftMargin,
+                         line*_fontHeight + _topBaseMargin,
+                         _columns*_fontWidth + leftMargin,
+                         (line+1)*_fontHeight + _topBaseMargin );
             _mouseOverHotspotArea |= r;
         }
-        r.setCoords( 0*_fontWidth + scrollBarWidth,
-                     spot->endLine()*_fontHeight,
-                     spot->endColumn()*_fontWidth + scrollBarWidth,
-                     (spot->endLine()+1)*_fontHeight );
+        r.setCoords( 0*_fontWidth + leftMargin,
+                     spot->endLine()*_fontHeight + _topBaseMargin,
+                     spot->endColumn()*_fontWidth + leftMargin,
+                     (spot->endLine()+1)*_fontHeight + _topBaseMargin );
         _mouseOverHotspotArea |= r;
     }
 
