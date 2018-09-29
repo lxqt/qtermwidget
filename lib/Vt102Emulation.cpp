@@ -59,6 +59,7 @@ using namespace Konsole;
 
 Vt102Emulation::Vt102Emulation()
     : Emulation(),
+     prevCC(0),
      _titleUpdateTimer(new QTimer(this)),
      _reportFocusEvents(false)
 {
@@ -184,6 +185,7 @@ void Vt102Emulation::resetTokenizer()
   argc = 0;
   argv[0] = 0;
   argv[1] = 0;
+  prevCC = 0;
 }
 
 void Vt102Emulation::addDigit(int digit)
@@ -269,7 +271,7 @@ void Vt102Emulation::initTokenizer()
 #define egt( )     (p >=  3  && s[2] == '>')
 #define esp( )     (p ==  4  && s[3] == ' ')
 #define Xpe        (tokenBufferPos >= 2 && tokenBuffer[1] == ']')
-#define Xte        (Xpe      && (cc ==  7 || cc == 33))
+#define Xte        (Xpe      && (cc ==  7 || (prevCC == 27 && cc == 92) )) // 27, 92 => "\e\\" (ST, String Terminator)
 #define ces(C)     (cc < 256 && (charClass[cc] & (C)) == (C) && !Xte)
 
 #define CNTL(c) ((c)-'@')
@@ -284,6 +286,13 @@ void Vt102Emulation::receiveChar(wchar_t cc)
 
   if (ces(CTL))
   {
+    // ignore control characters in the text part of Xpe (aka OSC) "ESC]"
+    // escape sequences; this matches what XTERM docs say
+    if (Xpe) {
+        prevCC = cc;
+        return;
+    }
+
     // DEC HACK ALERT! Control Characters are allowed *within* esc sequences in VT100
     // This means, they do neither a resetTokenizer() nor a pushToToken(). Some of them, do
     // of course. Guess this originates from a weakly layered handling of the X-on
@@ -308,7 +317,7 @@ void Vt102Emulation::receiveChar(wchar_t cc)
     if (lec(1,0,ESC+128)) { s[0] = ESC; receiveChar('['); return; }
     if (les(2,1,GRP)) { return; }
     if (Xte         ) { processWindowAttributeChange(); resetTokenizer(); return; }
-    if (Xpe         ) { return; }
+    if (Xpe         ) { prevCC = cc; return; }
     if (lec(3,2,'?')) { return; }
     if (lec(3,2,'>')) { return; }
     if (lec(3,2,'!')) { return; }
