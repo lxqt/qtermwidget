@@ -11,9 +11,6 @@ But in some cases (apple bundle) there can be more locations).
 */
 QString get_kb_layout_dir()
 {
-#ifdef BUNDLE_KEYBOARDLAYOUTS
-    return QLatin1String(":/");
-#else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
     QString rval = QString();
@@ -40,7 +37,6 @@ QString get_kb_layout_dir()
 #endif
     qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
     return QString();
-#endif // BUNDLE_KEYBOARDLAYOUTS
 }
 
 /*! Helper function to add custom location of color schemes.
@@ -60,9 +56,6 @@ But in some cases (apple bundle) there can be more locations).
 */
 const QStringList get_color_schemes_dirs()
 {
-#ifdef BUNDLE_COLORSCHEMES
-    return QLatin1String(":/");
-#else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
     QStringList rval;
@@ -106,5 +99,4 @@ const QStringList get_color_schemes_dirs()
     }
 #endif
     return rval;
-#endif // BUNDLE_COLORSCHEMES
 }
