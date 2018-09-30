@@ -33,8 +33,13 @@ key Return-Shift+NewLine : "\r\n"
 key Return+Shift         : "\EOM"
 
 # Backspace and Delete codes are preserving CTRL-H.
+#
+# Backspace without CTRL sends '^H'; this matches XTerm behaviour
+# BS, hex \x08, \b
+key Backspace -Control : "\b"
 
-key Backspace      : "\x7f"
+# Match xterm behaviour: Backspace sends '^?' when Control is pressed
+key Backspace +Control : "\x7f"
 
 # Arrow keys in VT52 mode
 # shift up/down are reserved for scrolling.
