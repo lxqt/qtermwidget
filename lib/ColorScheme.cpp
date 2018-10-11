@@ -31,7 +31,6 @@
 #include <QSettings>
 #include <QDir>
 #include <QRegularExpression>
-#include <QStringList>
 
 
 // KDE
@@ -723,7 +722,7 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
 }
 QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
 {
-    QStringList ret;
+    QList<QString> ret;
     for (const QString &scheme_dir : get_color_schemes_dirs())
     {
         const QString dname(scheme_dir);
@@ -735,7 +734,7 @@ QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
         for (const QString &i : list)
             ret << dname + QLatin1Char('/') + i;
     }
-    return std::move(ret);
+    return ret;
     //return KGlobal::dirs()->findAllResources("data",
     //                                         "konsole/*.schema",
     //                                          KStandardDirs::NoDuplicates);
@@ -743,7 +742,7 @@ QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
 }
 QList<QString> ColorSchemeManager::listColorSchemes()
 {
-    QStringList ret;
+    QList<QString> ret;
     for (const QString &scheme_dir : get_color_schemes_dirs())
     {
         const QString dname(scheme_dir);
@@ -755,7 +754,7 @@ QList<QString> ColorSchemeManager::listColorSchemes()
         for (const QString &i : list)
             ret << dname + QLatin1Char('/') + i;
     }
-    return std::move(ret);
+    ret;
 //    return KGlobal::dirs()->findAllResources("data",
 //                                             "konsole/*.colorscheme",
 //                                             KStandardDirs::NoDuplicates);
