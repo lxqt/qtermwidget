@@ -754,7 +754,7 @@ QList<QString> ColorSchemeManager::listColorSchemes()
         for (const QString &i : list)
             ret << dname + QLatin1Char('/') + i;
     }
-    ret;
+    return ret;
 //    return KGlobal::dirs()->findAllResources("data",
 //                                             "konsole/*.colorscheme",
 //                                             KStandardDirs::NoDuplicates);
