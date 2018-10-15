@@ -722,7 +722,7 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
 }
 QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
 {
-    QStringList ret;
+    QList<QString> ret;
     for (const QString &scheme_dir : get_color_schemes_dirs())
     {
         const QString dname(scheme_dir);
@@ -742,7 +742,7 @@ QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
 }
 QList<QString> ColorSchemeManager::listColorSchemes()
 {
-    QStringList ret;
+    QList<QString> ret;
     for (const QString &scheme_dir : get_color_schemes_dirs())
     {
         const QString dname(scheme_dir);
