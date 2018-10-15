@@ -66,15 +66,10 @@
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset>
-       <normaloff/>
-      </iconset>
+      <iconset theme="preferences-system"/>
      </property>
      <property name="popupMode">
       <enum>QToolButton::InstantPopup</enum>
-     </property>
-     <property name="arrowType">
-      <enum>Qt::DownArrow</enum>
      </property>
     </widget>
    </item>

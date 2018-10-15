@@ -1,8 +1,8 @@
 /*
     This file is part of Konsole, an X terminal.
-    
+
     Copyright 2006-2008 by Robert Knight <robertknight@gmail.com>
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -82,9 +82,9 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
     //note:  we build up a QString and send it to the text stream rather writing into the text
     //stream a character at a time because it is more efficient.
     //(since QTextStream always deals with QStrings internally anyway)
-    QString plainText;
+    std::wstring plainText;
     plainText.reserve(count);
-   
+
     int outputCount = count;
 
     // if inclusion of trailing whitespace is disabled then find the end of the
@@ -93,19 +93,19 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
     {
         for (int i = count-1 ; i >= 0 ; i--)
         {
-            if ( characters[i].character != ' '  )
+            if ( characters[i].character != L' '  )
                 break;
             else
                 outputCount--;
         }
     }
-    
+
     for (int i=0;i<outputCount;)
     {
-        plainText.append( QChar(characters[i].character) );
+        plainText.push_back( characters[i].character );
         i += qMax(1,konsole_wcwidth(characters[i].character));
     }
-    *_output << plainText;
+    *_output << QString::fromStdWString(plainText);
 }
 
 HTMLDecoder::HTMLDecoder() :
@@ -114,30 +114,30 @@ HTMLDecoder::HTMLDecoder() :
        ,_innerSpanOpen(false)
        ,_lastRendition(DEFAULT_RENDITION)
 {
-    
+
 }
 
 void HTMLDecoder::begin(QTextStream* output)
 {
     _output = output;
 
-    QString text;
+    std::wstring text;
 
     //open monospace span
-    openSpan(text,"font-family:monospace");
+    openSpan(text,QLatin1String("font-family:monospace"));
 
-    *output << text;
+    *output << QString::fromStdWString(text);
 }
 
 void HTMLDecoder::end()
 {
     Q_ASSERT( _output );
 
-    QString text;
+    std::wstring text;
 
     closeSpan(text);
 
-    *_output << text;
+    *_output << QString::fromStdWString(text);
 
     _output = 0;
 
@@ -149,13 +149,13 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
 {
     Q_ASSERT( _output );
 
-    QString text;
+    std::wstring text;
 
     int spaceCount = 0;
-        
+
     for (int i=0;i<count;i++)
     {
-        QChar ch(characters[i].character);
+        wchar_t ch(characters[i].character);
 
         //check if appearance of character is different from previous char
         if ( characters[i].rendition != _lastRendition  ||
@@ -168,7 +168,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
             _lastRendition = characters[i].rendition;
             _lastForeColor = characters[i].foregroundColor;
             _lastBackColor = characters[i].backgroundColor;
-            
+
             //build up style string
             QString style;
 
@@ -178,52 +178,52 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
                 useBold = _lastRendition & RE_BOLD;
             else
                 useBold = weight == ColorEntry::Bold;
-            
+
             if (useBold)
-                style.append("font-weight:bold;");
+                style.append(QLatin1String("font-weight:bold;"));
 
             if ( _lastRendition & RE_UNDERLINE )
-                    style.append("font-decoration:underline;");
-        
+                    style.append(QLatin1String("font-decoration:underline;"));
+
             //colours - a colour table must have been defined first
-            if ( _colorTable )    
+            if ( _colorTable )
             {
-                style.append( QString("color:%1;").arg(_lastForeColor.color(_colorTable).name() ) );
+                style.append( QString::fromLatin1("color:%1;").arg(_lastForeColor.color(_colorTable).name() ) );
 
                 if (!characters[i].isTransparent(_colorTable))
                 {
-                    style.append( QString("background-color:%1;").arg(_lastBackColor.color(_colorTable).name() ) );
+                    style.append( QString::fromLatin1("background-color:%1;").arg(_lastBackColor.color(_colorTable).name() ) );
                 }
             }
-        
-            //open the span with the current style    
+
+            //open the span with the current style
             openSpan(text,style);
             _innerSpanOpen = true;
         }
 
         //handle whitespace
-        if (ch.isSpace())
+        if (std::iswspace(ch))
             spaceCount++;
         else
             spaceCount = 0;
-        
+
 
         //output current character
         if (spaceCount < 2)
         {
             //escape HTML tag characters and just display others as they are
             if ( ch == '<' )
-                text.append("&lt;");
+                text.append(L"&lt;");
             else if (ch == '>')
-                    text.append("&gt;");
-            else    
-                    text.append(ch);
+                    text.append(L"&gt;");
+            else
+                    text.push_back(ch);
         }
         else
         {
-            text.append("&nbsp;"); //HTML truncates multiple spaces, so use a space marker instead
+            text.append(L"&nbsp;"); //HTML truncates multiple spaces, so use a space marker instead
         }
-        
+
     }
 
     //close any remaining open inner spans
@@ -231,18 +231,18 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
         closeSpan(text);
 
     //start new line
-    text.append("<br>");
-    
-    *_output << text;
+    text.append(L"<br>");
+
+    *_output << QString::fromStdWString(text);
 }
-void HTMLDecoder::openSpan(QString& text , const QString& style)
+void HTMLDecoder::openSpan(std::wstring& text , const QString& style)
 {
-    text.append( QString("<span style=\"%1\">").arg(style) );
+    text.append( QString(QLatin1String("<span style=\"%1\">")).arg(style).toStdWString() );
 }
 
-void HTMLDecoder::closeSpan(QString& text)
+void HTMLDecoder::closeSpan(std::wstring& text)
 {
-    text.append("</span>");
+    text.append(L"</span>");
 }
 
 void HTMLDecoder::setColorTable(const ColorEntry* table)

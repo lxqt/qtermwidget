@@ -38,7 +38,7 @@ class KProcessPrivate;
 
 /**
  * \class KProcess kprocess.h <KProcess>
- * 
+ *
  * Child process invocation, monitoring and control.
  *
  * This class extends QProcess by some useful functionality, overrides
@@ -353,6 +353,9 @@ class KProcessPrivate {
 protected:
     KProcessPrivate() :
         openMode(QIODevice::ReadWrite)
+    {
+    }
+    virtual ~KProcessPrivate()
     {
     }
     void writeAll(const QByteArray &buf, int fd);

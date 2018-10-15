@@ -20,7 +20,9 @@
 #ifndef _Q_TERM_WIDGET
 #define _Q_TERM_WIDGET
 
+#include <QTranslator>
 #include <QWidget>
+#include "Emulation.h"
 #include "Filter.h"
 
 class QVBoxLayout;
@@ -32,14 +34,19 @@ class QTermWidget : public QWidget {
     Q_OBJECT
 public:
 
+    /**
+     * This enum describes the location where the scroll bar is positioned in the display widget.
+     */
     enum ScrollBarPosition {
         /** Do not show the scroll bar. */
-        NoScrollBar=0,
+        NoScrollBar = 0,
         /** Show the scroll bar on the left side of the display. */
-        ScrollBarLeft=1,
+        ScrollBarLeft = 1,
         /** Show the scroll bar on the right side of the display. */
-        ScrollBarRight=2
+        ScrollBarRight = 2
     };
+
+    using KeyboardCursorShape = Konsole::Emulation::KeyboardCursorShape;
 
     //Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
@@ -52,8 +59,19 @@ public:
     //Initial size
     QSize sizeHint() const;
 
+    // expose TerminalDisplay::TerminalSizeHint, setTerminalSizeHint
+    void setTerminalSizeHint(bool on);
+    bool terminalSizeHint();
+
     //start shell program if it was not started in constructor
     void startShellProgram();
+
+    /**
+     * Start terminal teletype as is
+     * and redirect data for external recipient.
+     * It can be used for display and control a remote terminal.
+     */
+    void startTerminalTeletype();
 
     int getShellPID();
 
@@ -63,11 +81,11 @@ public:
 
     //  Terminal font
     // Default is application font with family Monospace, size 10
-    // USE ONLY FIXED-PITCH FONT!
-    // otherwise symbols' position could be incorrect
+    // Beware of a performance penalty and display/alignment issues when using a proportional font.
     void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
+    void setTerminalBackgroundImage(QString backgroundImage);
 
     //environment
     void setEnvironment(const QStringList & environment);
@@ -92,9 +110,7 @@ public:
      */
     void setColorScheme(const QString & name);
     static QStringList availableColorSchemes();
-
-    //set size
-    void setSize(int h, int v);
+    static void addCustomColorSchemeDir(const QString& custom_dir);
 
     // History size for scrolling
     void setHistorySize(int lines); //infinite if lines < 0
@@ -126,18 +142,19 @@ public:
 
     //! Return current key bindings
     QString keyBindings();
-    
+
     void setMotionAfterPasting(int);
 
     /** Return the number of lines in the history buffer. */
     int historyLinesCount();
 
     int screenColumnsCount();
+    int screenLinesCount();
 
     void setSelectionStart(int row, int column);
     void setSelectionEnd(int row, int column);
     void getSelectionStart(int& row, int& column);
-    void setSelectionEnd(int& row, int& column);
+    void getSelectionEnd(int& row, int& column);
 
     /**
      * Returns the currently selected text.
@@ -165,6 +182,50 @@ public:
      */
     Filter::HotSpot* getHotSpotAt(int row, int column) const;
 
+    /*
+     * Proxy for TerminalDisplay::filterActions
+     * */
+    QList<QAction*> filterActions(const QPoint& position, QWidget* parent);
+
+    /**
+     * Returns a pty slave file descriptor.
+     * This can be used for display and control
+     * a remote terminal.
+     */
+    int getPtySlaveFd() const;
+
+    /**
+     * Sets the shape of the keyboard cursor.  This is the cursor drawn
+     * at the position in the terminal where keyboard input will appear.
+     */
+    void setKeyboardCursorShape(KeyboardCursorShape shape);
+
+    void setBlinkingCursor(bool blink);
+
+    /** Enables or disables bidi text in the terminal. */
+    void setBidiEnabled(bool enabled);
+    bool isBidiEnabled();
+
+    /**
+     * Automatically close the terminal session after the shell process exits or
+     * keep it running.
+     */
+    void setAutoClose(bool);
+
+    QString title() const;
+    QString icon() const;
+
+    /** True if the title() or icon() was (ever) changed by the session. */
+    bool isTitleChanged() const;
+
+    /** change and wrap text corresponding to paste mode **/
+    void bracketText(QString& text);
+
+    /** Set the empty space outside the terminal */
+    void setMargin(int);
+
+    /** Get the empty space outside the terminal */
+    int getMargin() const;
 signals:
     void finished();
     void copyAvailable(bool);
@@ -174,12 +235,29 @@ signals:
 
     void termKeyPressed(QKeyEvent *);
 
-    void urlActivated(const QUrl&);
+    void urlActivated(const QUrl&, bool fromContextMenu);
 
     void bell(const QString& message);
 
     void activity();
     void silence();
+
+    /**
+     * Emitted when emulator send data to the terminal process
+     * (redirected for external recipient). It can be used for
+     * control and display the remote terminal.
+     */
+    void sendData(const char *,int);
+
+    void profileChanged(const QString & profile);
+
+    void titleChanged();
+
+    /**
+     * Signals that we received new data from the process running in the
+     * terminal emulator
+     */
+    void receivedData(const QString &text);
 
 public slots:
     // Copy selection to clipboard
@@ -188,13 +266,16 @@ public slots:
     // Paste clipboard to terminal
     void pasteClipboard();
 
-    // Paste selection to terminal 
+    // Paste selection to terminal
     void pasteSelection();
 
     // Set zoom
     void zoomIn();
     void zoomOut();
-    
+
+    // Set size
+    void setSize(const QSize &);
+
     /*! Set named key binding for given widget
      */
     void setKeyBindings(const QString & kb);
@@ -218,6 +299,11 @@ private slots:
     void findPrevious();
     void matchFound(int startColumn, int startLine, int endColumn, int endLine);
     void noMatchFound();
+    /**
+     * Emulation::cursorChanged() signal propogates to here and QTermWidget
+     * sends the specified cursor states to the terminal display
+     */
+    void cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
 
 private:
     void search(bool forwards, bool next);
@@ -226,6 +312,7 @@ private:
     TermWidgetImpl * m_impl;
     SearchBar* m_searchBar;
     QVBoxLayout *m_layout;
+    QTranslator *m_translator;
 };
 
 

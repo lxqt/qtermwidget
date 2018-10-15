@@ -22,10 +22,12 @@
 
 // System
 #include <iostream>
+#include <memory>
 
 // Qt
 #include <QAction>
 #include <QApplication>
+#include <QtAlgorithms>
 #include <QClipboard>
 #include <QString>
 #include <QTextStream>
@@ -47,7 +49,7 @@ using namespace Konsole;
 FilterChain::~FilterChain()
 {
     QMutableListIterator<Filter*> iter(*this);
-    
+
     while ( iter.hasNext() )
     {
         Filter* filter = iter.next();
@@ -141,7 +143,7 @@ void TerminalImageFilterChain::setImage(const Character* const image , int lines
 
     PlainTextDecoder decoder;
     decoder.setTrailingWhitespace(false);
-    
+
     // setup new shared buffers for the filters to process on
     QString* newBuffer = new QString();
     QList<int>* newLinePositions = new QList<int>();
@@ -167,13 +169,13 @@ void TerminalImageFilterChain::setImage(const Character* const image , int lines
         // being treated as part of a link that occurs at the start of the next line
         //
         // the downside is that links which are spread over more than one line are not
-        // highlighted.  
+        // highlighted.
         //
         // TODO - Use the "line wrapped" attribute associated with lines in a
         // terminal image to avoid adding this imaginary character for wrapped
         // lines
         if ( !(lineProperties.value(i,LINE_DEFAULT) & LINE_WRAPPED) )
-            lineStream << QChar('\n');
+            lineStream << QLatin1Char('\n');
     }
     decoder.end();
 }
@@ -194,6 +196,15 @@ Filter::~Filter()
 }
 void Filter::reset()
 {
+    QListIterator<HotSpot*> iter(_hotspotList);
+    while (iter.hasNext())
+    {
+        HotSpot* currentHotSpot = iter.next();
+        if (currentHotSpot->hasAnotherParent()) {
+            continue;
+        }
+        delete currentHotSpot;
+    }
     _hotspots.clear();
     _hotspotList.clear();
 }
@@ -219,15 +230,15 @@ void Filter::getLineColumn(int position , int& startLine , int& startColumn)
         else
             nextLine = _linePositions->value(i+1);
 
-        if ( _linePositions->value(i) <= position && position < nextLine ) 
+        if ( _linePositions->value(i) <= position && position < nextLine )
         {
             startLine = i;
-            startColumn = string_width(buffer()->mid(_linePositions->value(i),position - _linePositions->value(i)));
+            startColumn = string_width(buffer()->mid(_linePositions->value(i),position - _linePositions->value(i)).toStdWString());
             return;
         }
     }
 }
-    
+
 
 /*void Filter::addLine(const QString& text)
 {
@@ -249,7 +260,7 @@ void Filter::addHotSpot(HotSpot* spot)
     for (int line = spot->startLine() ; line <= spot->endLine() ; line++)
     {
         _hotspots.insert(line,spot);
-    }    
+    }
 }
 QList<Filter::HotSpot*> Filter::hotSpots() const
 {
@@ -267,12 +278,12 @@ Filter::HotSpot* Filter::hotSpotAt(int line , int column) const
     while (spotIter.hasNext())
     {
         HotSpot* spot = spotIter.next();
-        
+
         if ( spot->startLine() == line && spot->startColumn() > column )
             continue;
         if ( spot->endLine() == line && spot->endColumn() < column )
             continue;
-       
+
         return spot;
     }
 
@@ -280,19 +291,18 @@ Filter::HotSpot* Filter::hotSpotAt(int line , int column) const
 }
 
 Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int endColumn)
-    : _startLine(startLine)
+    : _hasAnotherParent(false)
+    , _startLine(startLine)
     , _startColumn(startColumn)
     , _endLine(endLine)
     , _endColumn(endColumn)
     , _type(NotSpecified)
 {
 }
-QString Filter::HotSpot::tooltip() const
+QList<QAction*> Filter::HotSpot::actions(QWidget* parent)
 {
-    return QString();
-}
-QList<QAction*> Filter::HotSpot::actions()
-{
+    Q_UNUSED(parent);
+
     return QList<QAction*>();
 }
 int Filter::HotSpot::startLine() const
@@ -343,7 +353,7 @@ QStringList RegExpFilter::HotSpot::capturedTexts() const
     return _capturedTexts;
 }
 
-void RegExpFilter::setRegExp(const QRegExp& regExp) 
+void RegExpFilter::setRegExp(const QRegExp& regExp)
 {
     _searchText = regExp;
 }
@@ -364,7 +374,7 @@ void RegExpFilter::process()
 
     // ignore any regular expressions which match an empty string.
     // otherwise the while loop below will run indefinitely
-    static const QString emptyString("");
+    static const QString emptyString;
     if ( _searchText.exactMatch(emptyString) )
         return;
 
@@ -386,14 +396,14 @@ void RegExpFilter::process()
                                            endLine,endColumn);
             spot->setCapturedTexts(_searchText.capturedTexts());
 
-            addHotSpot( spot );  
+            addHotSpot( spot );
             pos += _searchText.matchedLength();
 
             // if matchedLength == 0, the program will get stuck in an infinite loop
             if ( _searchText.matchedLength() == 0 )
                 pos = -1;
         }
-    }    
+    }
 }
 
 RegExpFilter::HotSpot* RegExpFilter::newHotSpot(int startLine,int startColumn,
@@ -407,7 +417,7 @@ RegExpFilter::HotSpot* UrlFilter::newHotSpot(int startLine,int startColumn,int e
 {
     HotSpot *spot = new UrlFilter::HotSpot(startLine,startColumn,
                                                endLine,endColumn);
-    connect(spot->getUrlObject(), SIGNAL(activated(QUrl)), this, SIGNAL(activated(QUrl)));
+    connect(spot->getUrlObject(), &FilterObject::activated, this, &UrlFilter::activated);
     return spot;
 }
 
@@ -418,23 +428,10 @@ UrlFilter::HotSpot::HotSpot(int startLine,int startColumn,int endLine,int endCol
     setType(Link);
 }
 
-QString UrlFilter::HotSpot::tooltip() const
-{
-    QString url = capturedTexts().first();
-
-    const UrlType kind = urlType();
-
-    if ( kind == StandardUrl )
-        return QString(); 
-    else if ( kind == Email )
-        return QString(); 
-    else
-        return QString();
-}
 UrlFilter::HotSpot::UrlType UrlFilter::HotSpot::urlType() const
 {
-    QString url = capturedTexts().first();
-    
+    QString url = capturedTexts().constFirst();
+
     if ( FullUrlRegExp.exactMatch(url) )
         return StandardUrl;
     else if ( EmailAddressRegExp.exactMatch(url) )
@@ -445,52 +442,52 @@ UrlFilter::HotSpot::UrlType UrlFilter::HotSpot::urlType() const
 
 void UrlFilter::HotSpot::activate(const QString& actionName)
 {
-    QString url = capturedTexts().first();
+    QString url = capturedTexts().constFirst();
 
     const UrlType kind = urlType();
 
-    if ( actionName == "copy-action" )
+    if ( actionName == QLatin1String("copy-action") )
     {
         QApplication::clipboard()->setText(url);
         return;
     }
 
-    if ( actionName.isEmpty() || actionName == "open-action" )
+    if ( actionName.isEmpty() || actionName == QLatin1String("open-action") || actionName == QLatin1String("click-action") )
     {
         if ( kind == StandardUrl )
         {
             // if the URL path does not include the protocol ( eg. "www.kde.org" ) then
             // prepend http:// ( eg. "www.kde.org" --> "http://www.kde.org" )
-            if (!url.contains("://"))
+            if (!url.contains(QLatin1String("://")))
             {
-                url.prepend("http://");
+                url.prepend(QLatin1String("http://"));
             }
-        } 
+        }
         else if ( kind == Email )
         {
-            url.prepend("mailto:");
+            url.prepend(QLatin1String("mailto:"));
         }
-    
-        _urlObject->emitActivated(url);
+
+        _urlObject->emitActivated(QUrl(url, QUrl::StrictMode), actionName != QLatin1String("click-action"));
     }
 }
 
-// Note:  Altering these regular expressions can have a major effect on the performance of the filters 
+// Note:  Altering these regular expressions can have a major effect on the performance of the filters
 // used for finding URLs in the text, especially if they are very general and could match very long
 // pieces of text.
 // Please be careful when altering them.
 
 //regexp matches:
-// full url:  
+// full url:
 // protocolname:// or www. followed by anything other than whitespaces, <, >, ' or ", and ends before whitespaces, <, >, ', ", ], !, comma and dot
-const QRegExp UrlFilter::FullUrlRegExp("(www\\.(?!\\.)|[a-z][a-z0-9+.-]*://)[^\\s<>'\"]+[^!,\\.\\s<>'\"\\]]");
+const QRegExp UrlFilter::FullUrlRegExp(QLatin1String("(www\\.(?!\\.)|[a-z][a-z0-9+.-]*://)[^\\s<>'\"]+[^!,\\.\\s<>'\"\\]]"));
 // email address:
 // [word chars, dots or dashes]@[word chars, dots or dashes].[word chars]
-const QRegExp UrlFilter::EmailAddressRegExp("\\b(\\w|\\.|-)+@(\\w|\\.|-)+\\.\\w+\\b");
+const QRegExp UrlFilter::EmailAddressRegExp(QLatin1String("\\b(\\w|\\.|-)+@(\\w|\\.|-)+\\.\\w+\\b"));
 
 // matches full url or email address
-const QRegExp UrlFilter::CompleteUrlRegExp('('+FullUrlRegExp.pattern()+'|'+
-                                            EmailAddressRegExp.pattern()+')');
+const QRegExp UrlFilter::CompleteUrlRegExp(QLatin1Char('(')+FullUrlRegExp.pattern()+QLatin1Char('|')+
+                                            EmailAddressRegExp.pattern()+QLatin1Char(')'));
 
 UrlFilter::UrlFilter()
 {
@@ -502,12 +499,12 @@ UrlFilter::HotSpot::~HotSpot()
     delete _urlObject;
 }
 
-void FilterObject::emitActivated(const QUrl& url)
+void FilterObject::emitActivated(const QUrl& url, bool fromContextMenu)
 {
-    emit activated(url);
+    emit activated(url, fromContextMenu);
 }
 
-void FilterObject::activated()
+void FilterObject::activate()
 {
     _filter->activate(sender()->objectName());
 }
@@ -517,14 +514,28 @@ FilterObject* UrlFilter::HotSpot::getUrlObject() const
     return _urlObject;
 }
 
-QList<QAction*> UrlFilter::HotSpot::actions()
+class UrlAction : public QAction {
+public:
+    UrlAction(QWidget* parent, std::shared_ptr<UrlFilter::HotSpot> hotspotPtr)
+        : QAction(parent)
+        , _hotspotPtr(hotspotPtr)
+    {
+    }
+
+private:
+    std::shared_ptr<UrlFilter::HotSpot> _hotspotPtr;
+};
+
+QList<QAction*> UrlFilter::HotSpot::actions(QWidget* parent)
 {
+    this->_hasAnotherParent = true;
     QList<QAction*> list;
 
     const UrlType kind = urlType();
 
-    QAction* openAction = new QAction(_urlObject);
-    QAction* copyAction = new QAction(_urlObject);;
+    std::shared_ptr<UrlFilter::HotSpot> hotspotPtr(this);
+    UrlAction* openAction = new UrlAction(parent, hotspotPtr);
+    UrlAction* copyAction = new UrlAction(parent, hotspotPtr);
 
     Q_ASSERT( kind == StandardUrl || kind == Email );
 
@@ -545,13 +556,13 @@ QList<QAction*> UrlFilter::HotSpot::actions()
     openAction->setObjectName( QLatin1String("open-action" ));
     copyAction->setObjectName( QLatin1String("copy-action" ));
 
-    QObject::connect( openAction , SIGNAL(triggered()) , _urlObject , SLOT(activated()) );
-    QObject::connect( copyAction , SIGNAL(triggered()) , _urlObject , SLOT(activated()) );
+    QObject::connect( openAction , &QAction::triggered , _urlObject , &FilterObject::activate );
+    QObject::connect( copyAction , &QAction::triggered , _urlObject , &FilterObject::activate );
 
     list << openAction;
     list << copyAction;
 
-    return list; 
+    return list;
 }
 
 //#include "Filter.moc"

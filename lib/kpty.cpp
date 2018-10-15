@@ -37,6 +37,11 @@
 #define HAVE_UTIL_H
 #endif
 
+#if defined(__APPLE__)
+#define HAVE_OPENPTY
+#define HAVE_UTIL_H
+#endif
+
 #ifdef __sgi
 #define __svr4__
 #endif
@@ -122,20 +127,20 @@ extern "C" {
 # define _NEW_TTY_CTRL
 #endif
 
-#if defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__bsdi__) || defined(__APPLE__) || defined (__DragonFly__)
+#if defined (__FreeBSD__) || defined(__FreeBSD_kernel__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__bsdi__) || defined(__APPLE__) || defined (__DragonFly__)
 # define _tcgetattr(fd, ttmode) ioctl(fd, TIOCGETA, (char *)ttmode)
 #else
-# if defined(_HPUX_SOURCE) || defined(__Lynx__) || defined (__CYGWIN__)
+# if defined(_HPUX_SOURCE) || defined(__Lynx__) || defined (__CYGWIN__) || defined(__GNU__)
 #  define _tcgetattr(fd, ttmode) tcgetattr(fd, ttmode)
 # else
 #  define _tcgetattr(fd, ttmode) ioctl(fd, TCGETS, (char *)ttmode)
 # endif
 #endif
 
-#if defined (__FreeBSD__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__bsdi__) || defined(__APPLE__) || defined (__DragonFly__)
+#if defined (__FreeBSD__) || defined(__FreeBSD_kernel__) || defined (__NetBSD__) || defined (__OpenBSD__) || defined (__bsdi__) || defined(__APPLE__) || defined (__DragonFly__)
 # define _tcsetattr(fd, ttmode) ioctl(fd, TIOCSETA, (char *)ttmode)
 #else
-# if defined(_HPUX_SOURCE) || defined(__CYGWIN__)
+# if defined(_HPUX_SOURCE) || defined(__CYGWIN__) || defined(__GNU__)
 #  define _tcsetattr(fd, ttmode) tcsetattr(fd, TCSANOW, ttmode)
 # else
 #  define _tcsetattr(fd, ttmode) ioctl(fd, TCSETS, (char *)ttmode)
@@ -169,12 +174,14 @@ KPtyPrivate::~KPtyPrivate()
 {
 }
 
+#ifndef HAVE_OPENPTY
 bool KPtyPrivate::chownpty(bool)
 {
 //    return !QProcess::execute(KStandardDirs::findExe("kgrantpty"),
 //        QStringList() << (grant?"--grant":"--revoke") << QString::number(masterFd));
     return true;
 }
+#endif
 
 /////////////////////////////
 // public member functions //
@@ -221,7 +228,7 @@ bool KPty::open()
     if (::openpty( &d->masterFd, &d->slaveFd, ptsn, 0, 0)) {
         d->masterFd = -1;
         d->slaveFd = -1;
-        qWarning(175) << "Can't open a pseudo teletype";
+        qWarning() << "Can't open a pseudo teletype";
         return false;
     }
     d->ttyName = ptsn;
@@ -496,7 +503,7 @@ void KPty::login(const char * user, const char * remotehost)
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
-    addToUtmp(d->ttyName, remotehost, d->masterFd);
+    addToUtmp(d->ttyName.constData(), remotehost, d->masterFd);
     Q_UNUSED(user);
 #else
 # ifdef HAVE_UTMPX
@@ -508,7 +515,11 @@ void KPty::login(const char * user, const char * remotehost)
     // note: strncpy without terminators _is_ correct here. man 4 utmp
 
     if (user) {
+# ifdef HAVE_UTMPX
+        strncpy(l_struct.ut_user, user, sizeof(l_struct.ut_user));
+# else
         strncpy(l_struct.ut_name, user, sizeof(l_struct.ut_name));
+# endif
     }
 
     if (remotehost) {
@@ -578,7 +589,7 @@ void KPty::logout()
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
-    removeLineFromUtmp(d->ttyName, d->masterFd);
+    removeLineFromUtmp(d->ttyName.constData(), d->masterFd);
 #else
     Q_D(KPty);
 
@@ -619,7 +630,11 @@ void KPty::logout()
     setutent();
     if ((ut = getutline(&l_struct))) {
 #  endif
+#  ifdef HAVE_UTMPX
+        memset(ut->ut_user, 0, sizeof(*ut->ut_user));
+#  else
         memset(ut->ut_name, 0, sizeof(*ut->ut_name));
+#  endif
         memset(ut->ut_host, 0, sizeof(*ut->ut_host));
 #  ifdef HAVE_STRUCT_UTMP_UT_SYSLEN
         ut->ut_syslen = 0;

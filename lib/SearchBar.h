@@ -33,7 +33,7 @@ public:
     QString searchText();
     bool useRegularExpression();
     bool matchCase();
-    bool highlightAllMatches();    
+    bool highlightAllMatches();
 
 public slots:
     void noMatchFound();

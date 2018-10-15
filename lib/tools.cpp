@@ -11,12 +11,9 @@ But in some cases (apple bundle) there can be more locations).
 */
 QString get_kb_layout_dir()
 {
-#ifdef BUNDLE_KEYBOARDLAYOUTS
-    return QLatin1String(":/");
-#else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
-    QString rval = "";
+    QString rval = QString();
     QString k(qgetenv("KB_LAYOUT_DIR"));
     QDir d(k);
 
@@ -24,15 +21,15 @@ QString get_kb_layout_dir()
 
     if (d.exists())
     {
-        rval = k.append("/");
+        rval = k.append(QLatin1Char('/'));
         return rval;
     }
 
     // subdir in the app location
-    d.setPath(QCoreApplication::applicationDirPath() + "/kb-layouts/");
+    d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/"));
     //qDebug() << d.path();
     if (d.exists())
-        return QCoreApplication::applicationDirPath() + "/kb-layouts/";
+        return QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/");
 #ifdef Q_WS_MAC
     d.setPath(QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/");
     if (d.exists())
@@ -40,39 +37,60 @@ QString get_kb_layout_dir()
 #endif
     qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
     return QString();
-#endif // BUNDLE_KEYBOARDLAYOUTS
 }
 
-/*! Helper function to get possible location of layout files.
+/*! Helper function to add custom location of color schemes.
+*/
+namespace {
+    QStringList custom_color_schemes_dirs;
+}
+void add_custom_color_scheme_dir(const QString& custom_dir)
+{
+    if (!custom_color_schemes_dirs.contains(custom_dir))
+        custom_color_schemes_dirs << custom_dir;
+}
+
+/*! Helper function to get possible locations of color schemes.
 By default the COLORSCHEMES_DIR is used (linux/BSD/macports).
 But in some cases (apple bundle) there can be more locations).
 */
-QString get_color_schemes_dir()
+const QStringList get_color_schemes_dirs()
 {
-#ifdef BUNDLE_COLORSCHEMES
-    return QLatin1String(":/");
-#else
 //    qDebug() << __FILE__ << __FUNCTION__;
 
-    QString rval = "";
+    QStringList rval;
     QString k(qgetenv("COLORSCHEMES_DIR"));
     QDir d(k);
 
 //    qDebug() << "default COLORSCHEMES_DIR: " << k;
 
     if (d.exists())
-        rval =  k.append("/");
+        rval << k.append(QLatin1Char('/'));
 
     // subdir in the app location
-    d.setPath(QCoreApplication::applicationDirPath() + "/color-schemes/");
+    d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/color-schemes/"));
     //qDebug() << d.path();
     if (d.exists())
-        rval = QCoreApplication::applicationDirPath() + "/color-schemes/";
+    {
+        if (!rval.isEmpty())
+            rval.clear();
+        rval << (QCoreApplication::applicationDirPath() + QLatin1String("/color-schemes/"));
+    }
 #ifdef Q_WS_MAC
     d.setPath(QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/");
     if (d.exists())
-        rval = QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/";
+    {
+        if (!rval.isEmpty())
+            rval.clear();
+        rval << (QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/");
+    }
 #endif
+    for (const QString& custom_dir : const_cast<const QStringList&>(custom_color_schemes_dirs))
+    {
+        d.setPath(custom_dir);
+        if (d.exists())
+            rval << custom_dir;
+    }
 #ifdef QT_DEBUG
     if(!rval.isEmpty()) {
         qDebug() << "Using color-schemes: " << rval;
@@ -81,5 +99,4 @@ QString get_color_schemes_dir()
     }
 #endif
     return rval;
-#endif // BUNDLE_COLORSCHEMES
 }

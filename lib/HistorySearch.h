@@ -38,7 +38,7 @@ class HistorySearch : public QObject
     Q_OBJECT
 
 public:
-    explicit HistorySearch(EmulationPtr emulation, QRegExp regExp, bool forwards, 
+    explicit HistorySearch(EmulationPtr emulation, QRegExp regExp, bool forwards,
                            int startColumn, int startLine, QObject* parent);
 
     ~HistorySearch();
@@ -49,11 +49,11 @@ signals:
     void matchFound(int startColumn, int startLine, int endColumn, int endLine);
     void noMatchFound();
 
-private: 
+private:
     bool search(int startColumn, int startLine, int endColumn, int endLine);
     int findLineNumberInString(QList<int> linePositions, int position);
-   
-    
+
+
     EmulationPtr m_emulation;
     QRegExp m_regExp;
     bool m_forwards;

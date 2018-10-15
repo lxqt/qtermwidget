@@ -26,27 +26,28 @@
 SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
 {
     widget.setupUi(this);
+    setAutoFillBackground(true); // make it always opaque, especially inside translucent windows
     connect(widget.closeButton, SIGNAL(clicked()), this, SLOT(hide()));
     connect(widget.searchTextEdit, SIGNAL(textChanged(QString)), this, SIGNAL(searchCriteriaChanged()));
     connect(widget.findPreviousButton, SIGNAL(clicked()), this, SIGNAL(findPrevious()));
     connect(widget.findNextButton, SIGNAL(clicked()), this, SIGNAL(findNext()));
-    
+
     connect(this, SIGNAL(searchCriteriaChanged()), this, SLOT(clearBackgroundColor()));
 
     QMenu *optionsMenu = new QMenu(widget.optionsButton);
     widget.optionsButton->setMenu(optionsMenu);
-    
+
     m_matchCaseMenuEntry = optionsMenu->addAction(tr("Match case"));
     m_matchCaseMenuEntry->setCheckable(true);
     m_matchCaseMenuEntry->setChecked(true);
     connect(m_matchCaseMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(searchCriteriaChanged()));
 
-    
+
     m_useRegularExpressionMenuEntry = optionsMenu->addAction(tr("Regular expression"));
     m_useRegularExpressionMenuEntry->setCheckable(true);
     connect(m_useRegularExpressionMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(searchCriteriaChanged()));
 
-    m_highlightMatchesMenuEntry = optionsMenu->addAction(tr("Higlight all matches"));
+    m_highlightMatchesMenuEntry = optionsMenu->addAction(tr("Highlight all matches"));
     m_highlightMatchesMenuEntry->setCheckable(true);
     m_highlightMatchesMenuEntry->setChecked(true);
     connect(m_highlightMatchesMenuEntry, SIGNAL(toggled(bool)), this, SIGNAL(highlightMatchesChanged(bool)));
@@ -92,20 +93,20 @@ void SearchBar::noMatchFound()
 
 void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
 {
-    if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) 
+    if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
     {
         if (keyEvent->modifiers() == Qt::ShiftModifier)
         {
             findPrevious();
         }
-        else 
+        else
         {
             findNext();
         }
     }
     else if (keyEvent->key() == Qt::Key_Escape)
     {
-        hide(); 
+        hide();
     }
 }
 

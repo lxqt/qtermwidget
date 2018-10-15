@@ -25,10 +25,10 @@
 #ifndef SESSION_H
 #define SESSION_H
 
-
 #include <QStringList>
 #include <QWidget>
 
+#include "Emulation.h"
 #include "History.h"
 #include "ProcessInfo.h"
 
@@ -284,6 +284,9 @@ public:
     /** Returns the text of the icon associated with this session. */
     QString iconText() const;
 
+    /** Flag if the title/icon was changed by user/shell. */
+    bool isTitleChanged() const;
+
     /** Specifies whether a utmp entry should be created for the pty used by this session. */
     void setAddToUtmp(bool);
 
@@ -369,6 +372,13 @@ public:
 //  void cancelZModem();
 //  bool isZModemBusy() { return _zmodemBusy; }
 
+    /**
+     * Returns a pty slave file descriptor.
+     * This can be used for display and control
+     * a remote terminal.
+     */
+    int getPtySlaveFd() const;
+
 public slots:
 
     /**
@@ -377,6 +387,13 @@ public slots:
      * This creates the terminal process and connects the teletype to it.
      */
     void run();
+
+    /**
+     * Starts the terminal session for "as is" PTY
+     * (without the direction a data to internal terminal process).
+     * It can be used for control or display a remote/external terminal.
+     */
+    void runEmptyPTY();
 
     /**
      * Closes the terminal session.  This sends a hangup signal
@@ -467,6 +484,11 @@ signals:
      */
     void flowControlEnabledChanged(bool enabled);
 
+    /**
+     * Broker for Emulation::cursorChanged() signal
+     */
+    void cursorChanged(Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
+
     void silence();
     void activity();
 
@@ -479,7 +501,7 @@ private slots:
     void monitorTimerDone();
 
     void onViewSizeChange(int height, int width);
-    void onEmulationSizeChange(int lines , int columns);
+    void onEmulationSizeChange(QSize);
 
     void activityStateSet(int);
 
@@ -523,6 +545,7 @@ private:
 
     QString        _iconName;
     QString        _iconText; // as set by: echo -en '\033]1;IconText\007
+    bool           _isTitleChanged; ///< flag if the title/icon was changed by user
     bool           _addToUtmp;
     bool           _flowControl;
     bool           _fullScripting;
@@ -550,8 +573,8 @@ private:
 
     ProcessInfo *_foregroundProcessInfo;
     int _foregroundPid;
-
     static int lastSessionId;
+    int ptySlaveFd;
 };
 
 /**
