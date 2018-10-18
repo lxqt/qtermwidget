@@ -1197,7 +1197,6 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
                                                 event->key() ,
                                                 modifiers,
                                                 states );
-      qDebug("%s", entry.text().data());
         // send result to terminal
         QByteArray textToSend;
 
