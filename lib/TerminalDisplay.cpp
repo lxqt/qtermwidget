@@ -749,7 +749,7 @@ void TerminalDisplay::drawCursor(QPainter& painter,
 {
     QRect cursorRect = rect;
 
-    cursorRect.setHeight(_fontHeight - ((m_full_cursor_height) ? 0 : _lineSpacing) - 1);
+    cursorRect.setHeight(_fontHeight - ((m_full_cursor_height) ? 0 : _lineSpacing  - 1));
 
     if (!_cursorBlinking)
     {
