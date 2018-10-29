@@ -188,18 +188,12 @@ _buffer(0)
 
 Filter::~Filter()
 {
-    QListIterator<HotSpot*> iter(_hotspotList);
-    while (iter.hasNext())
-    {
-        delete iter.next();
-    }
+    qDeleteAll(_hotspotList);
+    _hotspotList.clear();
 }
 void Filter::reset()
 {
-    QListIterator<HotSpot*> iter(_hotspotList);
-    while (iter.hasNext())
-    {
-        HotSpot* currentHotSpot = iter.next();
+    for (HotSpot* const currentHotSpot : qAsConst(_hotspotList)) {
         if (currentHotSpot->hasAnotherParent()) {
             continue;
         }
