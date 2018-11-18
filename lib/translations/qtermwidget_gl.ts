@@ -6,17 +6,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
-        <translation></translation>
+        <translation>Tamaño: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
-        <translation></translation>
+        <translation>Tamaño: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3174"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;A saída foi &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendida&lt;/a&gt; ao premer Ctrl+S.  Prema &lt;b&gt;Ctrl+Q&lt;/b&gt; para continuar.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1096"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation></translation>
+        <translation>Non hai dispoñíbel ningún tradutor de teclado. Non está dispoñíbel a información necesaria para converter pulsacións de tecla en caracteres para envialos o terminal.</translation>
     </message>
 </context>
 <context>
@@ -33,32 +33,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation></translation>
+        <translation>Esquema de cor sen nome</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation></translation>
+        <translation>Esquema de cor accesíbel</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="544"/>
         <source>Open Link</source>
-        <translation></translation>
+        <translation>Abrir a ligazón</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="545"/>
         <source>Copy Link Address</source>
-        <translation></translation>
+        <translation>Copiar o enderezo da ligazón</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="549"/>
         <source>Send Email To...</source>
-        <translation></translation>
+        <translation>Enviar correo a...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="550"/>
         <source>Copy Email Address</source>
-        <translation></translation>
+        <translation>Copiar o enderezo de correo</translation>
     </message>
 </context>
 <context>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation></translation>
+        <translation>Produciuse un erro no esquema de cor</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation></translation>
+        <translation>Non é posíbel cargar o esquema de cor: %1</translation>
     </message>
 </context>
 <context>
@@ -79,22 +79,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation></translation>
+        <translation>Distinguir maiúsculas de minúsculas</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation></translation>
+        <translation>Expresión regular</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation></translation>
+        <translation>Resaltar todas as coincidencias</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation></translation>
+        <translation>Barra de buscas</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation></translation>
+        <translation>Atopar:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
