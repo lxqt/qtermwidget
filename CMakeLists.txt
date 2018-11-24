@@ -12,13 +12,12 @@ include(CMakePackageConfigHelpers)
 include(CheckFunctionExists)
 include(CheckIncludeFile)
 
-set(REQUIRED_QT_VERSION "5.7.1")
-set(LXQTBT_MINIMUM_VERSION "0.5.0")
-
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses the libutempter library. Mainly for FreeBSD" OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
+option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
+
 
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
@@ -29,12 +28,19 @@ set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINO
 
 # additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Widgets "${REQUIRED_QT_VERSION}" REQUIRED)
-find_package(Qt5LinguistTools "${REQUIRED_QT_VERSION}" REQUIRED)
+# Minimum Versions
+set(QT_MINIMUM_VERSION "5.7.1")
+set(LXQTBT_MINIMUM_VERSION "0.6.0")
+
+find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
+find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
+
+if(USE_UTF8PROC)
+    find_package(Utf8Proc REQUIRED)
+endif()
 
 include(LXQtPreventInSourceBuilds)
 include(LXQtTranslateTs)
@@ -43,11 +49,6 @@ include(LXQtCreatePkgConfigFile)
 
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 
-option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
-
-if(USE_UTF8PROC)
-    find_package(Utf8Proc REQUIRED)
-endif()
 
 # main library
 
