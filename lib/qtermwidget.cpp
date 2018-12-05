@@ -221,15 +221,11 @@ QSize QTermWidget::sizeHint() const
 
 void QTermWidget::setTerminalSizeHint(bool on)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setTerminalSizeHint(on);
 }
 
 bool QTermWidget::terminalSizeHint()
 {
-    if (!m_impl->m_terminalDisplay)
-        return true;
     return m_impl->m_terminalDisplay->terminalSizeHint();
 }
 
@@ -352,31 +348,21 @@ QTermWidget::~QTermWidget()
 
 void QTermWidget::setTerminalFont(const QFont &font)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
 QFont QTermWidget::getTerminalFont()
 {
-    if (!m_impl->m_terminalDisplay)
-        return QFont();
     return m_impl->m_terminalDisplay->getVTFont();
 }
 
 void QTermWidget::setTerminalOpacity(qreal level)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
-
     m_impl->m_terminalDisplay->setOpacity(level);
 }
 
 void QTermWidget::setTerminalBackgroundImage(QString backgroundImage)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
-
     m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
 }
 
@@ -487,8 +473,6 @@ void QTermWidget::addCustomColorSchemeDir(const QString& custom_dir)
 
 void QTermWidget::setSize(const QSize &size)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setSize(size.width(), size.height());
 }
 
@@ -502,15 +486,11 @@ void QTermWidget::setHistorySize(int lines)
 
 void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setScrollBarPosition(pos);
 }
 
 void QTermWidget::scrollToEnd()
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->scrollToEnd();
 }
 
@@ -553,9 +533,6 @@ void QTermWidget::pasteSelection()
 
 void QTermWidget::setZoom(int step)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
-
     QFont font = m_impl->m_terminalDisplay->getVTFont();
 
     font.setPointSize(font.pointSize() + step);
@@ -706,29 +683,21 @@ int QTermWidget::getPtySlaveFd() const
 
 void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
 }
 
 void QTermWidget::setBlinkingCursor(bool blink)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setBlinkingCursor(blink);
 }
 
 void QTermWidget::setBidiEnabled(bool enabled)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setBidiEnabled(enabled);
 }
 
 bool QTermWidget::isBidiEnabled()
 {
-    if (!m_impl->m_terminalDisplay)
-        return false; // Default value
     return m_impl->m_terminalDisplay->isBidiEnabled();
 }
 
