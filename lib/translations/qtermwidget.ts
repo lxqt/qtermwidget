@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1277"/>
+        <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1289"/>
+        <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3174"/>
+        <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,7 +22,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1096"/>
+        <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -41,22 +41,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="544"/>
+        <location filename="../Filter.cpp" line="538"/>
         <source>Open Link</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="545"/>
+        <location filename="../Filter.cpp" line="539"/>
         <source>Copy Link Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="549"/>
+        <location filename="../Filter.cpp" line="543"/>
         <source>Send Email To...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="550"/>
+        <location filename="../Filter.cpp" line="544"/>
         <source>Copy Email Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="465"/>
+        <location filename="../qtermwidget.cpp" line="451"/>
         <source>Color Scheme Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="466"/>
+        <location filename="../qtermwidget.cpp" line="452"/>
         <source>Cannot load color scheme: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -77,17 +77,17 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../SearchBar.cpp" line="39"/>
+        <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="45"/>
+        <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="49"/>
+        <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
         <translation type="unfinished"></translation>
     </message>
