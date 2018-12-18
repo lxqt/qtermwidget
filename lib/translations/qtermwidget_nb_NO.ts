@@ -6,17 +6,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
-        <translation></translation>
+        <translation>Størrelse: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
-        <translation></translation>
+        <translation>Størrelse: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;Utgangssignalet ble &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;stoppet&lt;/a&gt; da Ctrl+S ble trykket.  Trykk &lt;b&gt;Ctrl+Q&lt;/b&gt; for å fortsette.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation></translation>
+        <translation>Ingen tastaturoversetter er tilgjengelig. Informasjonen som trengs for å gjøre tastetrykk om til tegn å sende til terminalen mangler.</translation>
     </message>
 </context>
 <context>
@@ -33,32 +33,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation></translation>
+        <translation>Fargemønster uten navn</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation></translation>
+        <translation>Fargemønster for funksjonshemmede</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="538"/>
         <source>Open Link</source>
-        <translation></translation>
+        <translation>Åpne lenke</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="539"/>
         <source>Copy Link Address</source>
-        <translation></translation>
+        <translation>Kopier lenkeadresse</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="543"/>
         <source>Send Email To...</source>
-        <translation></translation>
+        <translation>Send epost til...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="544"/>
         <source>Copy Email Address</source>
-        <translation></translation>
+        <translation>Kopier epostadressen</translation>
     </message>
 </context>
 <context>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="451"/>
         <source>Color Scheme Error</source>
-        <translation></translation>
+        <translation>Feil med fargemønster</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="452"/>
         <source>Cannot load color scheme: %1</source>
-        <translation></translation>
+        <translation>Kan ikke åpne fargemønster: %1</translation>
     </message>
 </context>
 <context>
@@ -79,22 +79,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation></translation>
+        <translation>Bruk STORE og små bokstaver</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation></translation>
+        <translation>Bokstavmønstre (regex)</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation></translation>
+        <translation>Lys opp alle søkeresultat</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation></translation>
+        <translation>Søkefelt</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation></translation>
+        <translation>Finn:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
