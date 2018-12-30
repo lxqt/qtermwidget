@@ -20,7 +20,7 @@ qtermwidget-0.14.0 / 2018-12-01
     - ColorScheme: Fixed local variable will be copied despite being returned by name
     - ColorScheme: Fixed error return-std-move 
     - Reworked memory management of filter-related objects
-    - Remove unnecessary checks
+    - Removed unnecessary checks
     - Suppressed compilation warnings 
     - Don't use automatic string conversions
     - Marked some functions const
