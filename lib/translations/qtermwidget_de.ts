@@ -43,22 +43,22 @@
     <message>
         <location filename="../Filter.cpp" line="538"/>
         <source>Open Link</source>
-        <translation>Öffne Link</translation>
+        <translation>Link öffnen</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="539"/>
         <source>Copy Link Address</source>
-        <translation>Kopiere Verknüpfungsadresse</translation>
+        <translation>Linkadresse kopieren</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="543"/>
         <source>Send Email To...</source>
-        <translation>Sende Email an...</translation>
+        <translation>E-Mail senden an...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="544"/>
         <source>Copy Email Address</source>
-        <translation>Kopiere Emailadresse</translation>
+        <translation>E-Mail-Adresse kopieren</translation>
     </message>
 </context>
 <context>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>Groß- / Kleinschreibung berücksichtigen</translation>
+        <translation>Groß-/Kleinschreibung beachten</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation>Markiere alle Treffer</translation>
+        <translation>Alle Treffer hervorheben</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
