@@ -71,7 +71,6 @@ void KeyboardTranslatorManager::findTranslators()
     filters << QLatin1String("*.keytab");
     dir.setNameFilters(filters);
     QStringList list = dir.entryList(filters);
-    list = dir.entryList(filters);
 //    QStringList list = KGlobal::dirs()->findAllResources("data",
 //                                                         "konsole/*.keytab",
 //                                                        KStandardDirs::NoDuplicates);
