@@ -186,7 +186,7 @@ public:
     /*
      * Proxy for TerminalDisplay::filterActions
      * */
-    QList<QAction*> filterActions(const QPoint& position, QWidget* parent);
+    QList<QAction*> filterActions(const QPoint& position);
 
     /**
      * Returns a pty slave file descriptor.
