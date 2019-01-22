@@ -17,6 +17,7 @@ qtermwidget-0.14.0 / 2018-12-01
     - TerminalDisplay: Redraw cursor after cursor type changed
     - Vt102Emulation: Fix handling of ST (String Terminator) for OSC (Operating System Commands)
     - qterminal: Correct deleting of HotSpot list items
+    - qterminal: Removed unnecessary checks
     - ColorScheme: Fixed local variable will be copied despite being returned by name
     - ColorScheme: Fixed error return-std-move 
     - Removed unnecessary checks
