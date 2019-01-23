@@ -1,5 +1,5 @@
 
-qtermwidget-0.14.0 / 2018-12-01
+qtermwidget-0.14.0 / 2019-01-25
 ===============================
 
   * Bumped version to 0.14.0
@@ -66,7 +66,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * Check if utempter.h header exists (mainly for FreeBSD)
   * Need lxqt-build-tools 0.4.0
 
-0.8.0 / 2017-10-21
+qtermwidget-0.8.0 / 2017-10-21
 ==================
 
   * Release 0.8.0: Update changelog
@@ -112,7 +112,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * Exposes receivedData signal to users of QTermWidget
   * Exposes sessions autoClose property to QTermWidget
 
-0.7.1 / 2016-12-21
+qtermwidget-0.7.1 / 2016-12-21
 ==================
 
   * Release 0.7.1: Update changelog
@@ -129,7 +129,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * Fix size of the array passed to memset() (#79)
   * Remove cpack (#93)
 
-0.7.0 / 2016-09-24
+qtermwidget-0.7.0 / 2016-09-24
 ==================
 
   * Release 0.7.0: Add changelog
@@ -195,7 +195,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * Change mouseMarks only when needed. This might be useful if an application wants to be notified of the event.
   * Prevents deleting the last line when resizing.
 
-0.6.0 / 2014-10-21
+qtermwidget-0.6.0 / 2014-10-21
 ==================
 
   * Release 0.6.0
@@ -209,7 +209,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * fixed qterminal #71 qt5 version ignoring page up / down
   * Fixed a typo in CMakeLists.txt.
 
-0.5.1 / 2014-07-14
+qtermwidget-0.5.1 / 2014-07-14
 ==================
 
   * fixed 'make dist'; version bump
@@ -243,7 +243,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * fix #2 update various documentations for debian packaging
   * fix #10 Update FSF address
 
-0.4.0 / 2013-04-16
+qtermwidget-0.4.0 / 2013-04-16
 ==================
 
   * readme updated
