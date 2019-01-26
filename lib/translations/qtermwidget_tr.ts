@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Hiçbir klavye çevirici yok. Tuş takımlarını terminale göndermek için karakterlere dönüştürmek için gereken bilgi eksik.</translation>
+        <translation>Hiçbir klavye çevirici yok. Tuş vuruşlarını karaktere dönüştürüp terminale göndermek için gereken bilgi eksik.</translation>
     </message>
 </context>
 <context>
@@ -33,7 +33,7 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>İsimsiz renk şeması</translation>
+        <translation>İsimsiz Renk Şeması</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
@@ -48,17 +48,17 @@
     <message>
         <location filename="../Filter.cpp" line="539"/>
         <source>Copy Link Address</source>
-        <translation>Bağlantı adresini kopyala</translation>
+        <translation>Bağlantı Adresini Kopyala</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="543"/>
         <source>Send Email To...</source>
-        <translation>Eposta gönder...</translation>
+        <translation>E-posta gönder...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="544"/>
         <source>Copy Email Address</source>
-        <translation>Eposta adresini kopyala</translation>
+        <translation>E-posta Adresini Kopyala</translation>
     </message>
 </context>
 <context>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="452"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Renk şeması yüklenemedi</translation>
+        <translation>Renk şeması yüklenemedi: %1</translation>
     </message>
 </context>
 <context>
