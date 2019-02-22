@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;A saída foi &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt; suspensa&lt;/a&gt; pressionando Ctrl+S.  Pressione&lt;b&gt;Ctrl+Q&lt;/b&gt; para continuar.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;A saída foi &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt; suspendida&lt;/a&gt; com Ctrl+S. Prima &lt;b&gt;Ctrl+Q&lt;/b&gt; para continuar.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Nenhum tradutor de teclado disponível.  As informações necessárias para converter as teclas pressionadas em caracteres para enviar para o terminal estão faltando.</translation>
+        <translation>Não há um tradutor de teclado disponível. A informação necessária para converter a pressão da tecla nos caracteres a enviar ao terminal não existe.</translation>
     </message>
 </context>
 <context>
@@ -33,32 +33,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Esquema de Cores sem nome</translation>
+        <translation>Esquema de cores sem nome</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>Esquema de Cores Acessível</translation>
+        <translation>Esquema de cores acessível</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="538"/>
         <source>Open Link</source>
-        <translation>Abrir Link</translation>
+        <translation>Abrir ligação</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="539"/>
         <source>Copy Link Address</source>
-        <translation>Copiar Endereço do Link</translation>
+        <translation>Copiar endereço da ligação</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="543"/>
         <source>Send Email To...</source>
-        <translation>Enviar E-mail Para...</translation>
+        <translation>Enviar e-mail para...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="544"/>
         <source>Copy Email Address</source>
-        <translation>Copiar Endereço de E-mail</translation>
+        <translation>Copiar endereço de e-mail</translation>
     </message>
 </context>
 <context>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="451"/>
         <source>Color Scheme Error</source>
-        <translation>Erro no Esquema de Cores</translation>
+        <translation>Erro no esquema de cores</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="452"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Não é possível carregar o esquema de cores: %1</translation>
+        <translation>Não foi possível carregar o esquema de cores: %1</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Barra de Pesquisa</translation>
+        <translation>Barra de pesquisa</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
