@@ -35,9 +35,7 @@ public:
     KPtyPrivate(KPty* parent);
     virtual ~KPtyPrivate();
 
-#ifndef HAVE_OPENPTY
     bool chownpty(bool grant);
-#endif
 
     int masterFd;
     int slaveFd;
