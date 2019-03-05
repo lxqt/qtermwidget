@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     mainWindow->setMenuBar(menuBar);
 
     QFont font = QApplication::font();
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MACOS
     font.setFamily("Monaco");
 #elif defined(Q_WS_QWS)
     font.setFamily("fixed");
