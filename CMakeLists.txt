@@ -47,6 +47,13 @@ include(LXQtTranslateTs)
 include(LXQtCompilerSettings NO_POLICY_SCOPE)
 include(LXQtCreatePkgConfigFile)
 
+if(APPLE)
+    if(CMAKE_VERSION VERSION_GREATER 3.9)
+        cmake_policy(SET CMP0068 NEW)
+        set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON)
+    endif()
+endif()
+
 set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
 
 
