@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     QMenuBar *menuBar = new QMenuBar(mainWindow);
     QMenu *actionsMenu = new QMenu("Actions", menuBar);
     menuBar->addMenu(actionsMenu);
-    actionsMenu->addAction("Find..", console, SLOT(toggleShowSearchBar()), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    actionsMenu->addAction("Find...", console, SLOT(toggleShowSearchBar()), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionsMenu->addAction("About Qt", &app, SLOT(aboutQt()));
     mainWindow->setMenuBar(menuBar);
 
