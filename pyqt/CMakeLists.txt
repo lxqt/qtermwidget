@@ -1,7 +1,5 @@
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-# Match what's used in the main macros
-cmake_policy(SET CMP0002 OLD)
 find_package(PythonLibrary)
 
 include(PythonMacros)
