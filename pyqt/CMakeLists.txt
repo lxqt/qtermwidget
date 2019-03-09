@@ -38,6 +38,8 @@ else (PYTHON_VERSION_MAJOR GREATER 2)
     endif()
 endif ()
 
+set(SIP_EXTRA_OPTIONS ${SIP_EXTRA_OPTIONS} ${PYQT5_SIP_FLAGS})
+
 include_directories(
     "${SIP_INCLUDE_DIR}"
 )
