@@ -36,6 +36,7 @@ ELSE(EXISTS PYQT5_VERSION)
     STRING(REGEX REPLACE ".*\npyqt_version_tag:([^\n]+).*$" "\\1" PYQT5_VERSION_TAG ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_sip_dir:([^\n]+).*$" "\\1" PYQT5_SIP_DIR ${pyqt5_config})
     STRING(REGEX REPLACE ".*\npyqt_sip_flags:([^\n]+).*$" "\\1" PYQT5_SIP_FLAGS ${pyqt5_config})
+    SEPARATE_ARGUMENTS(PYQT5_SIP_FLAGS)
 
     SET(PYQT5_FOUND TRUE)
   ENDIF(pyqt5_config)
