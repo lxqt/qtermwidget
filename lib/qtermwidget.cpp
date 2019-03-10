@@ -33,6 +33,12 @@
 #include "SearchBar.h"
 #include "qtermwidget.h"
 
+#ifdef Q_OS_MACOS
+// Qt does not support fontconfig on macOS, so we need to use a "real" font name.
+#define DEFAULT_FONT_FAMILY                   "Menlo"
+#else
+#define DEFAULT_FONT_FAMILY                   "Monospace"
+#endif
 
 #define STEP_ZOOM 1
 
@@ -321,7 +327,7 @@ void QTermWidget::init(int startnow)
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
-    font.setFamily(QLatin1String("Monospace"));
+    font.setFamily(QLatin1String(DEFAULT_FONT_FAMILY));
     font.setPointSize(10);
     font.setStyleHint(QFont::TypeWriter);
     setTerminalFont(font);
