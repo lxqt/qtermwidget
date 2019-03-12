@@ -50,6 +50,13 @@ const QByteArray KeyboardTranslatorManager::defaultTranslatorText(
 "key Tab : \"\\t\""
 );
 
+#ifdef Q_OS_MAC
+// On Mac, Qt::ControlModifier means Cmd, and MetaModifier means Ctrl
+const Qt::KeyboardModifier KeyboardTranslator::CTRL_MOD = Qt::MetaModifier;
+#else
+const Qt::KeyboardModifier KeyboardTranslator::CTRL_MOD = Qt::ControlModifier;
+#endif
+
 KeyboardTranslatorManager::KeyboardTranslatorManager()
     : _haveLoadedAll(false)
 {
@@ -613,6 +620,11 @@ bool KeyboardTranslator::Entry::matches(int keyCode ,
                                         Qt::KeyboardModifiers modifiers,
                                         States testState) const
 {
+#ifdef Q_OS_MAC
+    // On Mac, arrow keys are considered part of keypad. Ignore that.
+    modifiers &= ~Qt::KeypadModifier;
+#endif
+
     if ( _keyCode != keyCode )
         return false;
 

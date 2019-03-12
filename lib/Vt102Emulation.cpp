@@ -1025,7 +1025,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
         states |= KeyboardTranslator::ApplicationKeypadState;
 
     // check flow control state
-    if (modifiers & Qt::ControlModifier)
+    if (modifiers & KeyboardTranslator::CTRL_MOD)
     {
         switch (event->key()) {
         case Qt::Key_S:
@@ -1080,7 +1080,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
         {
             textToSend += _codec->fromUnicode(QString::fromUtf8(entry.text(true,modifiers)));
         }
-        else if((modifiers & Qt::ControlModifier) && event->key() >= 0x40 && event->key() < 0x5f) {
+        else if((modifiers & KeyboardTranslator::CTRL_MOD) && event->key() >= 0x40 && event->key() < 0x5f) {
             textToSend += (event->key() & 0x1f);
         }
         else if(event->key() == Qt::Key_Tab) {
