@@ -751,3 +751,11 @@ int QTermWidget::getMargin() const
 {
     return m_impl->m_terminalDisplay->margin();
 }
+
+void QTermWidget::saveHistory(QIODevice *device)
+{
+    QTextStream stream(device);
+    PlainTextDecoder decoder;
+    decoder.begin(&stream);
+    m_impl->m_session->emulation()->writeToStream(&decoder, 0, m_impl->m_session->emulation()->lineCount());
+}
