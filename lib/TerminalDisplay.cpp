@@ -2346,25 +2346,23 @@ void TerminalDisplay::mouseReleaseEvent(QMouseEvent* ev)
 void TerminalDisplay::getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const
 {
     line = (widgetPoint.y()-contentsRect().top()-_topMargin) / _fontHeight;
+    if (line < 0)
+        line = 0;
+    if (line >= _usedLines)
+        line = _usedLines - 1;
 
+    int x = widgetPoint.x() + _fontWidth / 2 - contentsRect().left() - _leftMargin;
     if ( _fixedFont )
-        column = (widgetPoint.x() + _fontWidth/2 -contentsRect().left()-_leftMargin) / _fontWidth;
+        column = x / _fontWidth;
     else
     {
-        int x = contentsRect().left() + widgetPoint.x() - _fontWidth/2;
         column = 0;
-
-        while(x > textWidth(0, column, line))
+        while(column + 1 < _usedColumns && x > textWidth(0, column + 1, line))
             column++;
     }
 
-    if ( line < 0 )
-        line = 0;
     if ( column < 0 )
         column = 0;
-
-    if ( line >= _usedLines )
-        line = _usedLines-1;
 
     // the column value returned can be equal to _usedColumns, which
     // is the position just after the last character displayed in a line.
