@@ -109,7 +109,7 @@ const KeyboardTranslator* KeyboardTranslatorManager::findTranslator(const QStrin
 
     KeyboardTranslator* translator = loadTranslator(name);
 
-    if ( translator != 0 )
+    if ( translator != nullptr )
         _translators[name] = translator;
     else if ( !name.isEmpty() )
         qDebug() << "Unable to load translator" << name;
@@ -155,7 +155,7 @@ KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(const QString& nam
 
     QFile source(path);
     if (name.isEmpty() || !source.open(QIODevice::ReadOnly | QIODevice::Text))
-        return 0;
+        return nullptr;
 
     return loadTranslator(&source,name);
 }
@@ -192,7 +192,7 @@ KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(QIODevice* source,
     else
     {
         delete translator;
-        return 0;
+        return nullptr;
     }
 }
 

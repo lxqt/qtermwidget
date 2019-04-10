@@ -74,7 +74,7 @@ static void qt_ignore_sigpipe()
         struct sigaction noaction;
         memset(&noaction, 0, sizeof(noaction));
         noaction.sa_handler = SIG_IGN;
-        sigaction(SIGPIPE, &noaction, 0);
+        sigaction(SIGPIPE, &noaction, nullptr);
     }
 }
 
@@ -211,7 +211,7 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
     struct timeval tv, *tvp;
 
     if (msecs < 0)
-        tvp = 0;
+        tvp = nullptr;
     else {
         tv.tv_sec = msecs / 1000;
         tv.tv_usec = (msecs % 1000) * 1000;
@@ -243,7 +243,7 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
         }
 #endif
 
-        switch (select(q->masterFd() + 1, &rfds, &wfds, 0, tvp)) {
+        switch (select(q->masterFd() + 1, &rfds, &wfds, nullptr, tvp)) {
         case -1:
             if (errno == EINTR)
                 break;

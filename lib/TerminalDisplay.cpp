@@ -128,7 +128,7 @@ void TerminalDisplay::setScreenWindow(ScreenWindow* window)
     // disconnect existing screen window if any
     if ( _screenWindow )
     {
-        disconnect( _screenWindow , 0 , this , 0 );
+        disconnect( _screenWindow , nullptr , this , nullptr );
     }
 
     _screenWindow = window;
@@ -312,9 +312,9 @@ void TerminalDisplay::setFont(const QFont &)
 
 TerminalDisplay::TerminalDisplay(QWidget *parent)
 :QWidget(parent)
-,_screenWindow(0)
+,_screenWindow(nullptr)
 ,_allowBell(true)
-,_gridLayout(0)
+,_gridLayout(nullptr)
 ,_fontHeight(1)
 ,_fontWidth(1)
 ,_fontAscent(1)
@@ -325,7 +325,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_usedColumns(1)
 ,_contentHeight(1)
 ,_contentWidth(1)
-,_image(0)
+,_image(nullptr)
 ,_randomSeed(0)
 ,_resizing(false)
 ,_terminalSizeHint(false)
@@ -349,10 +349,10 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_tripleClickMode(SelectWholeLine)
 ,_isFixedSize(false)
 ,_possibleTripleClick(false)
-,_resizeWidget(0)
-,_resizeTimer(0)
+,_resizeWidget(nullptr)
+,_resizeTimer(nullptr)
 ,_flowControlWarningEnabled(false)
-,_outputSuspendedLabel(0)
+,_outputSuspendedLabel(nullptr)
 ,_lineSpacing(0)
 ,_colorsInverted(false)
 ,_blendColor(qRgba(0,0,0,0xff))
@@ -941,7 +941,7 @@ void TerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
 
     // return if there is nothing to do
     if (    lines == 0
-         || _image == 0
+         || _image == nullptr
          || !region.isValid()
          || (region.top() + abs(lines)) >= region.bottom()
          || this->_lines <= region.height() ) return;
