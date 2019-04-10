@@ -32,9 +32,9 @@
 #include "kprocess.h"
 #include "kptydevice.h"
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
-#include <signal.h>
+#include <csignal>
 #include <QDebug>
 
 KPtyProcess::KPtyProcess(QObject *parent) :

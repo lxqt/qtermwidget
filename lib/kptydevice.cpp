@@ -35,8 +35,8 @@
 #include <QSocketNotifier>
 
 #include <unistd.h>
-#include <errno.h>
-#include <signal.h>
+#include <cerrno>
+#include <csignal>
 #include <termios.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>

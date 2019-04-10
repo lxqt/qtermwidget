@@ -24,7 +24,7 @@
 #define VT102EMULATION_H
 
 // Standard Library
-#include <stdio.h>
+#include <cstdio>
 
 // Qt
 #include <QKeyEvent>

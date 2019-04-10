@@ -38,7 +38,7 @@
 #endif
 
 // Standard
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 
 // Qt
