@@ -55,7 +55,7 @@ public:
     /**
      * Constructor
      */
-    KPtyDevice(QObject *parent = 0);
+    KPtyDevice(QObject *parent = nullptr);
 
     /**
      * Destructor:
@@ -339,7 +339,7 @@ struct KPtyDevicePrivate : public KPtyPrivate {
     KPtyDevicePrivate(KPty* parent) :
         KPtyPrivate(parent),
         emittedReadyRead(false), emittedBytesWritten(false),
-        readNotifier(0), writeNotifier(0)
+        readNotifier(nullptr), writeNotifier(nullptr)
     {
     }
 

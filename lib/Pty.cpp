@@ -331,8 +331,8 @@ void Pty::setupChildProcess()
     action.sa_handler = SIG_DFL;
     action.sa_flags = 0;
     for (int signal=1;signal < NSIG; signal++) {
-        sigaction(signal,&action,0L);
+        sigaction(signal,&action,nullptr);
         sigaddset(&sigset, signal);
     }
-    sigprocmask(SIG_UNBLOCK, &sigset, NULL);
+    sigprocmask(SIG_UNBLOCK, &sigset, nullptr);
 }

@@ -51,10 +51,10 @@
 using namespace Konsole;
 
 Emulation::Emulation() :
-  _currentScreen(0),
-  _codec(0),
-  _decoder(0),
-  _keyTranslator(0),
+  _currentScreen(nullptr),
+  _codec(nullptr),
+  _decoder(nullptr),
+  _keyTranslator(nullptr),
   _usesMouse(false),
   _bracketedPasteMode(false)
 {
@@ -398,7 +398,7 @@ bool ExtendedCharTable::extendedCharMatch(ushort hash , ushort* unicodePoints , 
 
     // compare given length with stored sequence length ( given as the first ushort in the
     // stored buffer )
-    if ( entry == 0 || entry[0] != length )
+    if ( entry == nullptr || entry[0] != length )
        return false;
     // if the lengths match, each character must be checked.  the stored buffer starts at
     // entry[1]
@@ -458,7 +458,7 @@ ushort* ExtendedCharTable::lookupExtendedChar(ushort hash , ushort& length) cons
     else
     {
         length = 0;
-        return 0;
+        return nullptr;
     }
 }
 

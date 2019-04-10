@@ -33,7 +33,7 @@
 
 using namespace Konsole;
 PlainTextDecoder::PlainTextDecoder()
- : _output(0)
+ : _output(nullptr)
  , _includeTrailingWhitespace(true)
  , _recordLinePositions(false)
 {
@@ -55,7 +55,7 @@ void PlainTextDecoder::begin(QTextStream* output)
 }
 void PlainTextDecoder::end()
 {
-    _output = 0;
+    _output = nullptr;
 }
 
 void PlainTextDecoder::setRecordLinePositions(bool record)
@@ -109,7 +109,7 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
 }
 
 HTMLDecoder::HTMLDecoder() :
-        _output(0)
+        _output(nullptr)
     ,_colorTable(base_color_table)
        ,_innerSpanOpen(false)
        ,_lastRendition(DEFAULT_RENDITION)
@@ -139,7 +139,7 @@ void HTMLDecoder::end()
 
     *_output << QString::fromStdWString(text);
 
-    _output = 0;
+    _output = nullptr;
 
 }
 

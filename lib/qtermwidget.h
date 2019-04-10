@@ -51,9 +51,9 @@ public:
 
     //Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
-                QWidget * parent = 0);
+                QWidget * parent = nullptr);
     // A dummy constructor for Qt Designer. startnow is 1 by default
-    QTermWidget(QWidget *parent = 0);
+    QTermWidget(QWidget *parent = nullptr);
 
     ~QTermWidget() override;
 

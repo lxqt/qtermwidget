@@ -544,7 +544,7 @@ void KPty::login(const char * user, const char * remotehost)
 # ifdef HAVE_UTMPX
     gettimeofday(&l_struct.ut_tv, 0);
 # else
-    l_struct.ut_time = time(0);
+    l_struct.ut_time = time(nullptr);
 # endif
 
 # ifdef HAVE_LOGIN
@@ -646,7 +646,7 @@ void KPty::logout()
     }
     endutxent();
 #  else
-    ut->ut_time = time(0);
+    ut->ut_time = time(nullptr);
     pututline(ut);
 }
 endutent();
