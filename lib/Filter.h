@@ -132,7 +132,7 @@ public:
 
     /** Constructs a new filter. */
     Filter();
-    virtual ~Filter();
+    ~Filter() override;
 
     /** Causes the filter to process the block of text currently in its internal buffer */
     virtual void process() = 0;
@@ -194,7 +194,7 @@ public:
     {
     public:
         HotSpot(int startLine, int startColumn, int endLine , int endColumn);
-        virtual void activate(const QString& action = QString());
+        void activate(const QString& action = QString()) override;
 
         /** Sets the captured texts associated with this hotspot */
         void setCapturedTexts(const QStringList& texts);
@@ -223,7 +223,7 @@ public:
      * If regexp matches the empty string, then process() will return immediately
      * without finding results.
      */
-    virtual void process();
+    void process() override;
 
 protected:
     /**
@@ -252,17 +252,17 @@ public:
     {
     public:
         HotSpot(int startLine,int startColumn,int endLine,int endColumn);
-        virtual ~HotSpot();
+        ~HotSpot() override;
 
         FilterObject* getUrlObject() const;
 
-        virtual QList<QAction*> actions();
+        QList<QAction*> actions() override;
 
         /**
          * Open a web browser at the current URL.  The url itself can be determined using
          * the capturedTexts() method.
          */
-        virtual void activate(const QString& action = QString());
+        void activate(const QString& action = QString()) override;
 
     private:
         enum UrlType
@@ -279,7 +279,7 @@ public:
     UrlFilter();
 
 protected:
-    virtual RegExpFilter::HotSpot* newHotSpot(int,int,int,int);
+    RegExpFilter::HotSpot* newHotSpot(int,int,int,int) override;
 
 private:
 
@@ -362,7 +362,7 @@ class TerminalImageFilterChain : public FilterChain
 {
 public:
     TerminalImageFilterChain();
-    virtual ~TerminalImageFilterChain();
+    ~TerminalImageFilterChain() override;
 
     /**
      * Set the current terminal image to @p image.
