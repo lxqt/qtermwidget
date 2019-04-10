@@ -23,8 +23,8 @@
 #include "KeyboardTranslator.h"
 
 // System
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
 
 // Qt
 #include <QBuffer>

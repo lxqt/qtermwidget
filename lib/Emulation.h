@@ -24,7 +24,7 @@
 #define EMULATION_H
 
 // System
-#include <stdio.h>
+#include <cstdio>
 
 // Qt
 #include <QKeyEvent>

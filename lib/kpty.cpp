@@ -70,12 +70,12 @@
 #include <sys/stat.h>
 #include <sys/param.h>
 
-#include <errno.h>
+#include <cerrno>
 #include <fcntl.h>
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <ctime>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <grp.h>
 

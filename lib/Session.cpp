@@ -26,7 +26,7 @@
 #include "Session.h"
 
 // Standard
-#include <stdlib.h>
+#include <cstdlib>
 
 // Qt
 #include <QApplication>

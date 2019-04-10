@@ -30,7 +30,7 @@
 #include <sys/mman.h>
 #include <sys/param.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <cstdio>
 
 
 using namespace Konsole;

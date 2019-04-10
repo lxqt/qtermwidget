@@ -33,7 +33,7 @@
 #include "kprocess.h"
 #include "kptydevice.h"
 
-#include <signal.h>
+#include <csignal>
 
 class KPtyDevice;
 

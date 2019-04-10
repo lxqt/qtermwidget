@@ -35,7 +35,7 @@
 # include <windows.h>
 #else
 # include <unistd.h>
-# include <errno.h>
+# include <cerrno>
 #endif
 
 #ifndef Q_OS_WIN
