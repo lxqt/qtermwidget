@@ -55,10 +55,10 @@ public:
     // A dummy constructor for Qt Designer. startnow is 1 by default
     QTermWidget(QWidget *parent = 0);
 
-    virtual ~QTermWidget();
+    ~QTermWidget() override;
 
     //Initial size
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     // expose TerminalDisplay::TerminalSizeHint, setTerminalSizeHint
     void setTerminalSizeHint(bool on);
@@ -288,7 +288,7 @@ public slots:
     void toggleShowSearchBar();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
 protected slots:
     void sessionFinished();
