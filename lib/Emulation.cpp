@@ -380,7 +380,7 @@ void Emulation::setImageSize(int lines, int columns)
 
 QSize Emulation::imageSize() const
 {
-  return QSize(_currentScreen->getColumns(), _currentScreen->getLines());
+  return {_currentScreen->getColumns(), _currentScreen->getLines()};
 }
 
 ushort ExtendedCharTable::extendedCharHash(ushort* unicodePoints , ushort length) const
