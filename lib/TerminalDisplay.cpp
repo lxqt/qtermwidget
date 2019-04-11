@@ -1390,7 +1390,7 @@ QPoint TerminalDisplay::cursorPosition() const
     if (_screenWindow)
         return _screenWindow->cursorPosition();
     else
-        return QPoint(0,0);
+        return {0,0};
 }
 
 QRect TerminalDisplay::preeditRect() const
@@ -1398,7 +1398,7 @@ QRect TerminalDisplay::preeditRect() const
     const int preeditLength = string_width(_inputMethodData.preeditString);
 
     if ( preeditLength == 0 )
-        return QRect();
+        return {};
 
     return QRect(_leftMargin + _fontWidth*cursorPosition().x(),
                  _topMargin + _fontHeight*cursorPosition().y(),
@@ -1560,10 +1560,10 @@ QRect TerminalDisplay::calculateTextArea(int topLeftX, int topLeftY, int startCo
   int left = _fixedFont ? _fontWidth * startColumn : textWidth(0, startColumn, line);
   int top = _fontHeight * line;
   int width = _fixedFont ? _fontWidth * length : textWidth(startColumn, length, line);
-  return QRect(_leftMargin + topLeftX + left,
+  return {_leftMargin + topLeftX + left,
                _topMargin + topLeftY + top,
                width,
-               _fontHeight);
+               _fontHeight};
 }
 
 void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
