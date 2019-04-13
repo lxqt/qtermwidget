@@ -1,0 +1,14 @@
+task:
+  name: FreeBSD
+  freebsd_instance:
+    image: freebsd-12-0-release-amd64
+
+  pkginstall_script:
+    # TODO: use git-master of lxqt-build-tools
+    # Check https://github.com/freebsd/freebsd-ports/blob/master/x11-toolkits/qtermwidget/Makefile for dependencies
+    # qmake is needed as Qt's CMake modules references it...
+    - pkg install -y cmake qmake qt5-widgets qt5-linguisttools lxqt-build-tools
+  configure_script:
+    - mkdir build && cd build && cmake ..
+  compile_script:
+    - cd build && make
