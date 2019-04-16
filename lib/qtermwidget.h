@@ -27,7 +27,7 @@
 #include "qtermwidget_export.h"
 
 class QVBoxLayout;
-struct TermWidgetImpl;
+class TermWidgetImpl;
 class SearchBar;
 class QUrl;
 

@@ -49,7 +49,9 @@ void *createTermWidget(int startnow, void *parent)
     return (void*) new QTermWidget(startnow, (QWidget*)parent);
 }
 
-struct TermWidgetImpl {
+class TermWidgetImpl {
+
+public:
     TermWidgetImpl(QWidget* parent = nullptr);
 
     TerminalDisplay *m_terminalDisplay;
