@@ -960,8 +960,10 @@ void TerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
     // Set the QT_FLUSH_PAINT environment variable to '1' before starting the
     // application to monitor repainting.
     //
-    int scrollBarWidth = _scrollBar->isHidden() ? 0 : _scrollBar->width();
-    const int SCROLLBAR_CONTENT_GAP = 1;
+    int scrollBarWidth = _scrollBar->isHidden() ? 0 :
+                         _scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar) ?
+                         0 : _scrollBar->width();
+    const int SCROLLBAR_CONTENT_GAP = scrollBarWidth == 0 ? 0 : 1;
     QRect scrollRect;
     if ( _scrollbarLocation == QTermWidget::ScrollBarLeft )
     {
