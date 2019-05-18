@@ -759,3 +759,8 @@ void QTermWidget::saveHistory(QIODevice *device)
     decoder.begin(&stream);
     m_impl->m_session->emulation()->writeToStream(&decoder, 0, m_impl->m_session->emulation()->lineCount());
 }
+
+void QTermWidget::setDrawLineChars(bool drawLineChars)
+{
+    m_impl->m_terminalDisplay->setDrawLineChars(drawLineChars);
+}

@@ -227,6 +227,8 @@ public:
 
     /** Get the empty space outside the terminal */
     int getMargin() const;
+
+    void setDrawLineChars(bool drawLineChars);
 signals:
     void finished();
     void copyAvailable(bool);
