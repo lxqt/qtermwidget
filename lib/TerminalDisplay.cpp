@@ -194,10 +194,12 @@ void TerminalDisplay::setColorTable(const ColorEntry table[])
    QCodec.
 */
 
-static inline bool isLineChar(wchar_t c) { return ((c & 0xFF80) == 0x2500);}
-static inline bool isLineCharString(const std::wstring& string)
-{
-        return (string.length() > 0) && (isLineChar(string[0]));
+bool TerminalDisplay::isLineChar(wchar_t c) const {
+    return _drawLineChars && ((c & 0xFF80) == 0x2500);
+}
+
+bool TerminalDisplay::isLineCharString(const std::wstring& string) const {
+    return (string.length() > 0) && (isLineChar(string[0]));
 }
 
 
@@ -361,6 +363,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,mMotionAfterPasting(NoMoveScreenWindow)
 ,_leftBaseMargin(1)
 ,_topBaseMargin(1)
+,_drawLineChars(true)
 {
   // variables for draw text
   _drawTextAdditionHeight = 0;
