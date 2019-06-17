@@ -1230,7 +1230,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
         }
         else if ( !entry.text().isEmpty() )
         {
-            textToSend += _codec->fromUnicode(QString::fromUtf8(entry.text(true,modifiers)));
+            textToSend += entry.text(true,modifiers);
         }
         else if((modifiers & Qt::ControlModifier) && event->key() >= 0x40 && event->key() < 0x5f) {
             textToSend += (event->key() & 0x1f);
