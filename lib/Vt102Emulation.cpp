@@ -958,7 +958,7 @@ void Vt102Emulation::sendMouseEvent( int cb, int cx, int cy , int eventType )
     if ((getMode(MODE_Mouse1002) || getMode(MODE_Mouse1003)) && eventType == 1)
       cb += 0x20; //add 32 to signify motion event
 
-    char command[32];
+    char command[40];
     command[0] = '\0';
     // Check the extensions in decreasing order of preference. Encoding the release event above assumes that 1006 comes first.
     if (getMode(MODE_Mouse1006)) {
