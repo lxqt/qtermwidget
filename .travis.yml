@@ -20,6 +20,4 @@ arch:
     - python-pyqt5
     - python-sip
     - sip
-    # Using the -nostatx variant as Travis builders come with older kernels
-    - qt5-base-nostatx
   script: bash ./.ci/build.sh
