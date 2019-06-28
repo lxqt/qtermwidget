@@ -36,8 +36,13 @@ int main(int argc, char *argv[])
     QMenuBar *menuBar = new QMenuBar(mainWindow);
     QMenu *actionsMenu = new QMenu("Actions", menuBar);
     menuBar->addMenu(actionsMenu);
-    actionsMenu->addAction("Find...", console, SLOT(toggleShowSearchBar()), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-    actionsMenu->addAction("About Qt", &app, SLOT(aboutQt()));
+    actionsMenu->addAction("Find...", console, &QTermWidget::toggleShowSearchBar,
+                           QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+    actionsMenu->addAction("Copy", console, &QTermWidget::copyClipboard,
+                           QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    actionsMenu->addAction("Paste", console, &QTermWidget::pasteClipboard,
+                           QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_V));
+    actionsMenu->addAction("About Qt", &app, &QApplication::aboutQt);
     mainWindow->setMenuBar(menuBar);
 
     QFont font = QApplication::font();
@@ -75,7 +80,7 @@ int main(int argc, char *argv[])
     qDebug() << "* INFO END *********************";
 
     // real startup
-    QObject::connect(console, SIGNAL(finished()), mainWindow, SLOT(close()));
+    QObject::connect(console, &QTermWidget::finished, mainWindow, &QMainWindow::close);
 
     mainWindow->show();
     return app.exec();
