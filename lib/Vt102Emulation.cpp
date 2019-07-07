@@ -343,7 +343,7 @@ void Vt102Emulation::receiveChar(wchar_t cc)
 
     if (epe(   )) { processToken( TY_CSI_PE(cc), 0, 0); resetTokenizer(); return; }
     if (ees(DIG)) { addDigit(cc-'0'); return; }
-    if (eec(';')) { addArgument();    return; }
+    if (eec(';') || eec(':')) { addArgument(); return; }
     for (int i=0;i<=argc;i++)
     {
         if (epp())
