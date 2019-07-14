@@ -751,7 +751,7 @@ void TerminalDisplay::drawCursor(QPainter& painter,
                                  const QColor& /*backgroundColor*/,
                                  bool& invertCharacterColor)
 {
-    QRect cursorRect = rect;
+    QRectF cursorRect = rect;
     cursorRect.setHeight(_fontHeight - _lineSpacing - 1);
 
     if (!_cursorBlinking)
@@ -765,12 +765,12 @@ void TerminalDisplay::drawCursor(QPainter& painter,
        {
             // draw the cursor outline, adjusting the area so that
             // it is draw entirely inside 'rect'
-            int penWidth = qMax(1,painter.pen().width());
+            float penWidth = qMax(1,painter.pen().width());
 
             painter.drawRect(cursorRect.adjusted(penWidth/2,
                                                  penWidth/2,
-                                                 - penWidth/2 - penWidth%2,
-                                                 - penWidth/2 - penWidth%2));
+                                                 - penWidth/2,
+                                                 - penWidth/2));
             if ( hasFocus() )
             {
                 painter.fillRect(cursorRect, _cursorColor.isValid() ? _cursorColor : foregroundColor);
