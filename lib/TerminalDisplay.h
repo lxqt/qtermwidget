@@ -25,6 +25,9 @@
 #include <QColor>
 #include <QPointer>
 #include <QWidget>
+#include <QStaticText>
+#include <QCache>
+#include <QPair>
 
 // Konsole
 #include "Filter.h"
@@ -826,6 +829,8 @@ private:
 
     int _leftBaseMargin;
     int _topBaseMargin;
+
+    QCache<QPair<uint32_t, QString>, QStaticText> _staticTextCache;
 
 public:
     static void setTransparencyEnabled(bool enable)

@@ -239,6 +239,8 @@ void TerminalDisplay::fontChange(const QFont&)
 
   _fontAscent = fm.ascent();
 
+  _staticTextCache.clear();
+
   emit changedFontMetricSignal( _fontHeight, _fontWidth );
   propagateSize();
 
@@ -361,6 +363,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,mMotionAfterPasting(NoMoveScreenWindow)
 ,_leftBaseMargin(1)
 ,_topBaseMargin(1)
+,_staticTextCache(4096)
 {
   // variables for draw text
   _drawTextAdditionHeight = 0;
@@ -856,11 +859,27 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
         if (_bidiEnabled) {
             painter.drawText(rect.x(), rect.y() + _fontAscent + _lineSpacing, QString::fromStdWString(text));
         } else {
-         {
             QRect drawRect(rect.topLeft(), rect.size());
             drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
-            painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
-         }
+
+            QString draw_text_str = LTR_OVERRIDE_CHAR + QString::fromStdWString(text);
+            uint32_t draw_text_flags = 0;
+            if (useBold) draw_text_flags |= (1 << 0);
+            if (useUnderline) draw_text_flags |= (1 << 1);
+            if (useItalic) draw_text_flags |= (1 << 2);
+            if (useStrikeOut) draw_text_flags |= (1 << 3);
+            if (useOverline) draw_text_flags |= (1 << 4);
+
+            QPair<uint32_t, QString> static_text_key(draw_text_flags, draw_text_str);
+
+            QStaticText *staticText = _staticTextCache.object(static_text_key);
+            if (!staticText) {
+                staticText = new QStaticText(draw_text_str);
+                _staticTextCache.insert(static_text_key, staticText);
+            }
+
+            // painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
+            painter.drawStaticText(rect.topLeft(), *staticText);
         }
     }
 }
