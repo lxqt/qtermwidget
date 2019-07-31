@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Ctrl+Sを押して出力を&lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;中断&lt;/a&gt; しました 。再開するには&lt;b&gt;Ctrl+Q&lt;/b&gt;を押します。&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Ctrl+S を押して出力を&lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;中断&lt;/a&gt; しました 。再開するには &lt;b&gt;Ctrl+Q&lt;/b&gt; を押します。&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -33,12 +33,12 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>名前のないカラースキーム</translation>
+        <translation>名前のない配色</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>アクセス可能なカラースキーム</translation>
+        <translation>アクセス可能な配色</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="538"/>
@@ -66,12 +66,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="451"/>
         <source>Color Scheme Error</source>
-        <translation>カラースキームのエラー</translation>
+        <translation>配色のエラー</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="452"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>カラースキームをロードすることができません: %1</translation>
+        <translation>配色をロードできません: %1</translation>
     </message>
 </context>
 <context>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation>一致するものをハイライト</translation>
+        <translation>一致する全ての文字列を強調表示</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>探す:</translation>
+        <translation>検索する文字列:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
