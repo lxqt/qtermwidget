@@ -150,6 +150,14 @@ Q_OBJECT
      */
     int foregroundProcessGroup() const;
 
+    bool isRunning() const
+    {
+        bool rval;
+        (pid() > 0) ? rval= true : rval= false;
+        return rval;
+
+    }
+
   public slots:
 
     /**

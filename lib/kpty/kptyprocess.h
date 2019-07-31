@@ -99,13 +99,6 @@ public:
      */
     void setPtyChannels(PtyChannels channels);
 
-    bool isRunning() const
-    {
-        bool rval;
-        (pid() > 0) ? rval= true : rval= false;
-        return rval;
-
-    }
     /**
      * Query to which channels the PTY is assigned.
      *

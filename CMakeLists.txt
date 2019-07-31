@@ -17,6 +17,7 @@ option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses the libutempter library. Mainly for FreeBSD" OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
+option(USE_BUNDLED_KPTY "Use bundled KPty. Default ON" ON)
 
 
 # just change version for releases
@@ -68,10 +69,6 @@ set(SRCS
     lib/HistorySearch.cpp
     lib/KeyboardTranslator.cpp
     lib/konsole_wcwidth.cpp
-    lib/kprocess.cpp
-    lib/kpty.cpp
-    lib/kptydevice.cpp
-    lib/kptyprocess.cpp
     lib/Pty.cpp
     lib/qtermwidget.cpp
     lib/Screen.cpp
@@ -85,14 +82,20 @@ set(SRCS
     lib/Vt102Emulation.cpp
 )
 
+if(USE_BUNDLED_KPTY)
+    list(APPEND SRCS
+        lib/kpty/kprocess.cpp
+        lib/kpty/kpty.cpp
+        lib/kpty/kptydevice.cpp
+        lib/kpty/kptyprocess.cpp
+    )
+endif()
+
 # Only the Headers that need to be moc'd go here
 set(HDRS
     lib/Emulation.h
     lib/Filter.h
     lib/HistorySearch.h
-    lib/kprocess.h
-    lib/kptydevice.h
-    lib/kptyprocess.h
     lib/Pty.h
     lib/qtermwidget.h
     lib/ScreenWindow.h
@@ -101,6 +104,14 @@ set(HDRS
     lib/TerminalDisplay.h
     lib/Vt102Emulation.h
 )
+
+if(USE_BUNDLED_KPTY)
+    list(APPEND HDRS
+        lib/kpty/kprocess.h
+        lib/kpty/kptydevice.h
+        lib/kpty/kptyprocess.h
+    )
+endif()
 
 set(UI
     lib/SearchBar.ui
@@ -195,6 +206,15 @@ if(APPLE)
     set (CMAKE_SKIP_RPATH 1)
     # this is a must to load the lib correctly
     set_target_properties(${QTERMWIDGET_LIBRARY_NAME} PROPERTIES INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+endif()
+
+if(USE_BUNDLED_KPTY)
+    target_include_directories(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/lib/kpty")
+else()
+    find_package(KF5Pty)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} KF5::Pty)
 endif()
 
 target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}

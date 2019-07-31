@@ -27,6 +27,8 @@
 
 // Standard
 #include <cstdlib>
+#include <sys/types.h>
+#include <signal.h>
 
 // Qt
 #include <QApplication>
@@ -40,6 +42,7 @@
 
 #include "Pty.h"
 //#include "kptyprocess.h"
+#include "kptydevice.h"
 #include "TerminalDisplay.h"
 #include "ShellCommand.h"
 #include "Vt102Emulation.h"
