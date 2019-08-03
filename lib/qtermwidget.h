@@ -125,6 +125,9 @@ public:
     // Send some text to terminal
     void sendText(const QString & text);
 
+    // Send key event to terminal
+    void sendKeyEvent(QKeyEvent* e);
+
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
 

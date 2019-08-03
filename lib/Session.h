@@ -314,6 +314,8 @@ public:
      */
     void sendText(const QString & text) const;
 
+    void sendKeyEvent(QKeyEvent* e) const;
+
     /**
      * Returns the process id of the terminal process.
      * This is the id used by the system API to refer to the process.

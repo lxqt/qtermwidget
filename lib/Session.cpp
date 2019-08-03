@@ -568,6 +568,11 @@ void Session::sendText(const QString & text) const
     _emulation->sendText(text);
 }
 
+void Session::sendKeyEvent(QKeyEvent* e) const
+{
+    _emulation->sendKeyEvent(e);
+}
+
 Session::~Session()
 {
     delete _emulation;
