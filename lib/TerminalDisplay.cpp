@@ -264,9 +264,7 @@ void TerminalDisplay::calDrawTextAdditionHeight(QPainter& painter)
 	  _drawTextAdditionHeight = 0;
 	}
 
-	// update the original content
-    _drawTextTestFlag = false;
-	update();
+  _drawTextTestFlag = false;
 }
 
 void TerminalDisplay::setVTFont(const QFont& f)
@@ -1376,18 +1374,16 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
   {
     calDrawTextAdditionHeight(paint);
   }
-  else
+
+  const auto rects = (pe->region() & contentsRect()).rects();
+  for (const QRect &rect : rects)
   {
-      const auto rects = (pe->region() & contentsRect()).rects();
-      for (const QRect &rect : rects)
-      {
-        drawBackground(paint,rect,palette().background().color(),
-                       true /* use opacity setting */);
-        drawContents(paint, rect);
-      }
-      drawInputMethodPreeditString(paint,preeditRect());
-      paintFilters(paint);
+    drawBackground(paint,rect,palette().background().color(),
+                   true /* use opacity setting */);
+    drawContents(paint, rect);
   }
+  drawInputMethodPreeditString(paint,preeditRect());
+  paintFilters(paint);
 }
 
 QPoint TerminalDisplay::cursorPosition() const
