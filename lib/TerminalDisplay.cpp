@@ -875,6 +875,7 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
             QStaticText *staticText = _staticTextCache.object(static_text_key);
             if (!staticText) {
                 staticText = new QStaticText(draw_text_str);
+                staticText->setTextFormat(Qt::PlainText);
                 _staticTextCache.insert(static_text_key, staticText);
             }
 
