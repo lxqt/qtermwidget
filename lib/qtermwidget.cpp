@@ -507,6 +507,11 @@ void QTermWidget::sendText(const QString &text)
     m_impl->m_session->sendText(text);
 }
 
+void QTermWidget::sendKeyEvent(QKeyEvent *e)
+{
+    m_impl->m_session->sendKeyEvent(e);
+}
+
 void QTermWidget::resizeEvent(QResizeEvent*)
 {
 //qDebug("global window resizing...with %d %d", this->size().width(), this->size().height());
