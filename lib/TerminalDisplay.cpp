@@ -828,10 +828,11 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
          || font.strikeOut() != useStrikeOut
          || font.overline() != useOverline) {
        font.setBold(useBold);
-       font.setUnderline(useUnderline);
+       // FIXME: QStaticText have some problem with underline, strikeline and overline... see below
+       // font.setUnderline(useUnderline);
        font.setItalic(useItalic);
-       font.setStrikeOut(useStrikeOut);
-       font.setOverline(useOverline);
+       // font.setStrikeOut(useStrikeOut);
+       // font.setOverline(useOverline);
        painter.setFont(font);
     }
 
@@ -862,10 +863,10 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
             QString draw_text_str = QString::fromStdWString(text);
             uint32_t draw_text_flags = 0;
             if (useBold) draw_text_flags |= (1 << 0);
-            if (useUnderline) draw_text_flags |= (1 << 1);
+            // if (useUnderline) draw_text_flags |= (1 << 1);
             if (useItalic) draw_text_flags |= (1 << 2);
-            if (useStrikeOut) draw_text_flags |= (1 << 3);
-            if (useOverline) draw_text_flags |= (1 << 4);
+            // if (useStrikeOut) draw_text_flags |= (1 << 3);
+            // if (useOverline) draw_text_flags |= (1 << 4);
 
             QPair<uint32_t, QString> static_text_key(draw_text_flags, draw_text_str);
 
@@ -883,6 +884,14 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
             painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
 #endif
             painter.drawStaticText(rect.topLeft(), *staticText);
+
+            // FIXME: see previous comments
+            if (useUnderline)
+                painter.drawLine(QLineF(rect.left(), rect.bottom() - 0.5, rect.right(), rect.bottom() - 0.5));
+            if (useStrikeOut)
+                painter.drawLine(QLineF(rect.left(), (rect.top() + rect.bottom()) / 2.0, rect.right(), (rect.top() + rect.bottom()) / 2.0));
+            if (useOverline)
+                painter.drawLine(QLineF(rect.left(), rect.top() + 0.5, rect.right(), rect.top() + 0.5));
         }
     }
 }
