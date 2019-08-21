@@ -637,8 +637,8 @@ private:
     int _bottomMargin;
 
     // states ----------------
-    int currentModes[MODES_SCREEN];
-    int savedModes[MODES_SCREEN];
+    bool currentModes[MODES_SCREEN];
+    bool savedModes[MODES_SCREEN];
 
     // ----------------------------
 
