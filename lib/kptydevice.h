@@ -250,9 +250,8 @@ public:
             tail += bytes;
         } else {
             buffers.last().resize(tail);
-            QByteArray tmp;
-            tmp.resize(qMax(CHUNKSIZE, bytes));
-            ptr = tmp.data();
+            char *tmp = new char[qMax(CHUNKSIZE, bytes)];
+            ptr = tmp;
             buffers << tmp;
             tail = bytes;
         }
