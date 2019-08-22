@@ -6,7 +6,7 @@ services:
   - docker
 
 script:
-  - "curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash"
+  - "curl -s https://raw.githubusercontent.com/bartoszek/arch-travis/signle-line-script/arch-travis.sh | bash"
 
 arch:
   repos:
