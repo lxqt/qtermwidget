@@ -30,10 +30,10 @@ QString get_kb_layout_dir()
     //qDebug() << d.path();
     if (d.exists())
         return QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/");
-#ifdef Q_WS_MAC
-    d.setPath(QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/");
+#ifdef Q_OS_MAC
+    d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kb-layouts/"));
     if (d.exists())
-        return QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/";
+        return QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kb-layouts/");
 #endif
     qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
     return QString();
@@ -76,13 +76,13 @@ const QStringList get_color_schemes_dirs()
             rval.clear();
         rval << (QCoreApplication::applicationDirPath() + QLatin1String("/color-schemes/"));
     }
-#ifdef Q_WS_MAC
-    d.setPath(QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/");
+#ifdef Q_OS_MAC
+    d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/color-schemes/"));
     if (d.exists())
     {
         if (!rval.isEmpty())
             rval.clear();
-        rval << (QCoreApplication::applicationDirPath() + "/../Resources/color-schemes/");
+        rval << (QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/color-schemes/"));
     }
 #endif
     for (const QString& custom_dir : const_cast<const QStringList&>(custom_color_schemes_dirs))
