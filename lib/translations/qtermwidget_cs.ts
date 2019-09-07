@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Výstup byl &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastaven&lt;/a&gt; stisknutím Ctrl+S.  Znovu ho spustíte stisknutím &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Výstup byl &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastaven&lt;/a&gt; stisknutím Ctrl+S. Znovu ho spustíte stisknutím &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Není k dispozici žádný překladač klávesnice. Chybí informace pro převod kódů stisknutých kláves na znaky posílané na terminál.</translation>
+        <translation>Není k dispozici žádný překladač klávesnice. Chybí tak informace pro převod kódů stisknutých kláves na znaky posílané na terminál.</translation>
     </message>
 </context>
 <context>
@@ -38,7 +38,7 @@
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>Barevné schéma pro zrakově hendikepované uživatele</translation>
+        <translation>Barevné schéma pro uživatele se zrakovou vadou</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="538"/>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Pruh hledání</translation>
+        <translation>Lišta hledání</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
