@@ -79,7 +79,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>大文字と小文字を区別</translation>
+        <translation>大文字と小文字の区別</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
