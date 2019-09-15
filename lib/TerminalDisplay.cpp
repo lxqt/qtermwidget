@@ -859,10 +859,7 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
         if (_bidiEnabled) {
             painter.drawText(rect.x(), rect.y() + _fontAscent + _lineSpacing, QString::fromStdWString(text));
         } else {
-            QRect drawRect(rect.topLeft(), rect.size());
-            drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
-
-            QString draw_text_str = LTR_OVERRIDE_CHAR + QString::fromStdWString(text);
+            QString draw_text_str = QString::fromStdWString(text);
             uint32_t draw_text_flags = 0;
             if (useBold) draw_text_flags |= (1 << 0);
             if (useUnderline) draw_text_flags |= (1 << 1);
@@ -876,10 +873,15 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
             if (!staticText) {
                 staticText = new QStaticText(draw_text_str);
                 staticText->setTextFormat(Qt::PlainText);
+                staticText->prepare(QTransform(), font);
                 _staticTextCache.insert(static_text_key, staticText);
             }
 
-            // painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
+#if 0
+            QRect drawRect(rect.topLeft(), rect.size());
+            drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
+            painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
+#endif
             painter.drawStaticText(rect.topLeft(), *staticText);
         }
     }
