@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1279"/>
+        <location filename="../TerminalDisplay.cpp" line="1282"/>
         <source>Size: XXX x XXX</source>
         <translation>Størrelse: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1291"/>
+        <location filename="../TerminalDisplay.cpp" line="1294"/>
         <source>Size: %1 x %2</source>
         <translation>Størrelse: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3178"/>
+        <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Output er blevet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspenderet&lt;/a&gt; ved tryk på Ctrl+S. Tryk på &lt;b&gt;Ctrl+Q&lt;/b&gt; for at genoptage.&lt;/qt&gt;</translation>
     </message>
@@ -41,22 +41,22 @@
         <translation>Tilgængeligt farveskema</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="538"/>
+        <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
         <translation>Åbn link</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="539"/>
+        <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
         <translation>Kopiér linkadresse</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="543"/>
+        <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
         <translation>Send e-mail til...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="544"/>
+        <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
         <translation>Kopiér e-mailadresse</translation>
     </message>
@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="451"/>
+        <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
         <translation>Fejl ved farveskema</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="452"/>
+        <location filename="../qtermwidget.cpp" line="460"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Kan ikke indlæse farveskema: %1</translation>
     </message>

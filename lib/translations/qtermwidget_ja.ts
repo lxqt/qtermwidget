@@ -4,17 +4,17 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1279"/>
+        <location filename="../TerminalDisplay.cpp" line="1282"/>
         <source>Size: XXX x XXX</source>
         <translation>サイズ: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1291"/>
+        <location filename="../TerminalDisplay.cpp" line="1294"/>
         <source>Size: %1 x %2</source>
         <translation>サイズ: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3178"/>
+        <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ctrl+S を押して出力を&lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;中断&lt;/a&gt; しました 。再開するには &lt;b&gt;Ctrl+Q&lt;/b&gt; を押します。&lt;/qt&gt;</translation>
     </message>
@@ -41,22 +41,22 @@
         <translation>アクセス可能な配色</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="538"/>
+        <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
         <translation>リンクを開く</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="539"/>
+        <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
         <translation>リンクのアドレスをコピー</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="543"/>
+        <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
         <translation>メールを送信...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="544"/>
+        <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
         <translation>メールアドレスをコピー</translation>
     </message>
@@ -64,12 +64,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="451"/>
+        <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
         <translation>配色のエラー</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="452"/>
+        <location filename="../qtermwidget.cpp" line="460"/>
         <source>Cannot load color scheme: %1</source>
         <translation>配色をロードできません: %1</translation>
     </message>
