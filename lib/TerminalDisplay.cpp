@@ -882,8 +882,14 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
             QRect drawRect(rect.topLeft(), rect.size());
             drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
             painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
+#else
+            // painter.drawStaticText(rect.topLeft(), *staticText);
+            painter.drawStaticText(
+                QPointF(
+                    rect.left(),
+                    rect.top() - (staticText->size().height() - rect.height()) * 4 / 5),  // align baseline for fallback font (80% of height)
+                *staticText);
 #endif
-            painter.drawStaticText(rect.topLeft(), *staticText);
 
             // FIXME: see previous comments
             if (useUnderline)
@@ -1294,7 +1300,6 @@ void TerminalDisplay::updateImage()
   if (!_hasBlinker && _blinkTimer->isActive()) { _blinkTimer->stop(); _blinking = false; }
   delete[] dirtyMask;
   delete[] disstrU;
-
 }
 
 void TerminalDisplay::showResizeNotification()
