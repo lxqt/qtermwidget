@@ -81,6 +81,7 @@ void SearchBar::show()
 {
     QWidget::show();
     widget.searchTextEdit->setFocus();
+    widget.searchTextEdit->selectAll();
 }
 
 void SearchBar::noMatchFound()
