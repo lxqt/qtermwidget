@@ -28,30 +28,30 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QIcon::setThemeName("oxygen");
+    QIcon::setThemeName(QStringLiteral("oxygen"));
     QMainWindow *mainWindow = new QMainWindow();
 
     QTermWidget *console = new QTermWidget();
 
     QMenuBar *menuBar = new QMenuBar(mainWindow);
-    QMenu *actionsMenu = new QMenu("Actions", menuBar);
+    QMenu *actionsMenu = new QMenu(QStringLiteral("Actions"), menuBar);
     menuBar->addMenu(actionsMenu);
-    actionsMenu->addAction("Find...", console, &QTermWidget::toggleShowSearchBar,
+    actionsMenu->addAction(QStringLiteral("Find..."), console, &QTermWidget::toggleShowSearchBar,
                            QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-    actionsMenu->addAction("Copy", console, &QTermWidget::copyClipboard,
+    actionsMenu->addAction(QStringLiteral("Copy"), console, &QTermWidget::copyClipboard,
                            QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
-    actionsMenu->addAction("Paste", console, &QTermWidget::pasteClipboard,
+    actionsMenu->addAction(QStringLiteral("Paste"), console, &QTermWidget::pasteClipboard,
                            QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_V));
-    actionsMenu->addAction("About Qt", &app, &QApplication::aboutQt);
+    actionsMenu->addAction(QStringLiteral("About Qt"), &app, &QApplication::aboutQt);
     mainWindow->setMenuBar(menuBar);
 
     QFont font = QApplication::font();
 #ifdef Q_OS_MACOS
-    font.setFamily("Monaco");
+    font.setFamily(QStringLiteral("Monaco"));
 #elif defined(Q_WS_QWS)
-    font.setFamily("fixed");
+    font.setFamily(QStringLiteral("fixed"));
 #else
-    font.setFamily("Monospace");
+    font.setFamily(QStringLiteral("Monospace"));
 #endif
     font.setPointSize(12);
 
