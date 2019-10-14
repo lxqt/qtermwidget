@@ -2,13 +2,15 @@ language: cpp
 
 sudo: required
 
+dist: bionic
+
 services:
   - docker
 
 script:
   - "curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash"
 
-arch:
+archlinux:
   repos:
     - archlinuxcn=https://cdn.repo.archlinuxcn.org/$arch
   packages:
