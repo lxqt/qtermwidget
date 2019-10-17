@@ -164,8 +164,8 @@ void QTermWidget::search(bool forwards, bool next)
         m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(startColumn, startLine);
     }
 
-    qDebug() << "current selection starts at: " << startColumn << startLine;
-    qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
+    //qDebug() << "current selection starts at: " << startColumn << startLine;
+    //qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
 
     QRegExp regExp(m_searchBar->searchText());
     regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
@@ -183,7 +183,7 @@ void QTermWidget::search(bool forwards, bool next)
 void QTermWidget::matchFound(int startColumn, int startLine, int endColumn, int endLine)
 {
     ScreenWindow* sw = m_impl->m_terminalDisplay->screenWindow();
-    qDebug() << "Scroll to" << startLine;
+    //qDebug() << "Scroll to" << startLine;
     sw->scrollTo(startLine);
     sw->setTrackOutput(false);
     sw->notifyOutputChanged();
@@ -277,10 +277,10 @@ void QTermWidget::init(int startnow)
     m_translator = new QTranslator(this);
 
     for (const QString& dir : dirs) {
-        qDebug() << "Trying to load translation file from dir" << dir;
+        //qDebug() << "Trying to load translation file from dir" << dir;
         if (m_translator->load(QLocale::system(), QLatin1String("qtermwidget"), QLatin1String(QLatin1String("_")), dir)) {
             qApp->installTranslator(m_translator);
-            qDebug() << "Translations found in" << dir;
+            //qDebug() << "Translations found in" << dir;
             break;
         }
     }
