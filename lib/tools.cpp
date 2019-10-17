@@ -17,7 +17,7 @@ QString get_kb_layout_dir()
     QString k(QLatin1String(KB_LAYOUT_DIR));
     QDir d(k);
 
-    qDebug() << "default KB_LAYOUT_DIR: " << k;
+    //qDebug() << "default KB_LAYOUT_DIR: " << k;
 
     if (d.exists())
     {
@@ -35,7 +35,7 @@ QString get_kb_layout_dir()
     if (d.exists())
         return QCoreApplication::applicationDirPath() + "/../Resources/kb-layouts/";
 #endif
-    qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
+    //qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
     return QString();
 }
 

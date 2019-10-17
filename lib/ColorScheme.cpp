@@ -594,7 +594,7 @@ ColorSchemeManager::~ColorSchemeManager()
 }
 void ColorSchemeManager::loadAllColorSchemes()
 {
-    qDebug() << "loadAllColorSchemes";
+    //qDebug() << "loadAllColorSchemes";
     int failed = 0;
 
     QList<QString> nativeColorSchemes = listColorSchemes();
@@ -613,8 +613,8 @@ void ColorSchemeManager::loadAllColorSchemes()
             failed++;
     }
 
-    if ( failed > 0 )
-        qDebug() << "failed to load " << failed << " color schemes.";
+    /*if ( failed > 0 )
+        qDebug() << "failed to load " << failed << " color schemes.";*/
 
     _haveLoadedAll = true;
 }
@@ -640,7 +640,7 @@ bool ColorSchemeManager::loadKDE3ColorScheme(const QString& filePath)
 
     if (scheme->name().isEmpty())
     {
-        qDebug() << "color scheme name is not valid.";
+        //qDebug() << "color scheme name is not valid.";
         delete scheme;
         return false;
     }
@@ -651,8 +651,8 @@ bool ColorSchemeManager::loadKDE3ColorScheme(const QString& filePath)
         _colorSchemes.insert(scheme->name(),scheme);
     else
     {
-        qDebug() << "color scheme with name" << scheme->name() << "has already been" <<
-            "found, ignoring.";
+        /*qDebug() << "color scheme with name" << scheme->name() << "has already been" <<
+            "found, ignoring.";*/
         delete scheme;
     }
 
@@ -701,7 +701,7 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
 
     if (scheme->name().isEmpty())
     {
-        qDebug() << "Color scheme in" << filePath << "does not have a valid name and was not loaded.";
+        //qDebug() << "Color scheme in" << filePath << "does not have a valid name and was not loaded.";
         delete scheme;
         return false;
     }
@@ -712,8 +712,8 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
     }
     else
     {
-        qDebug() << "color scheme with name" << schemeName << "has already been" <<
-            "found, ignoring.";
+        /*qDebug() << "color scheme with name" << schemeName << "has already been" <<
+            "found, ignoring.";*/
 
         delete scheme;
     }
@@ -777,7 +777,7 @@ bool ColorSchemeManager::deleteColorScheme(const QString& name)
     }
     else
     {
-        qDebug() << "Failed to remove color scheme -" << path;
+        //qDebug() << "Failed to remove color scheme -" << path;
         return false;
     }
 }
@@ -819,7 +819,7 @@ const ColorScheme* ColorSchemeManager::findColorScheme(const QString& name)
                 return findColorScheme(name);
         }
 
-        qDebug() << "Could not find color scheme - " << name;
+        //qDebug() << "Could not find color scheme - " << name;
 
         return nullptr;
     }
