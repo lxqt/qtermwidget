@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Ausgabe wurde &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;ausgesetzt&lt;/a&gt; beim Drücken von Strg+S.  Drücke &lt;b&gt;Strg+Q&lt;/b&gt; um fortzufahren.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Druch drücken von Strg+S wurde die Ausgabe &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;unterbrochen&lt;/a&gt;.  &lt;b&gt;Strg+Q&lt;/b&gt; drücken um fortzufahren.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Kein Tastaturinterpretierer verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschließenfd zum Terminal zu schicken, fehlt.</translation>
+        <translation>Kein Tastaturinterpreter verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschließenfd zum Terminal zu senden, fehlt.</translation>
     </message>
 </context>
 <context>
@@ -33,7 +33,7 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Unbenanntes Farbschema</translation>
+        <translation>Nicht benanntes Farbschema</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
@@ -48,7 +48,7 @@
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Linkadresse kopieren</translation>
+        <translation>Link-Adresse kopieren</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
-        <translation>Farbschemafehler</translation>
+        <translation>Fehler im Farbschema</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
