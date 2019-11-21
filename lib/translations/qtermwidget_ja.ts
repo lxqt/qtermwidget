@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>検索する文字列:</translation>
+        <translation>検索:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
