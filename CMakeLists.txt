@@ -204,11 +204,6 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
         "HAVE_POSIX_OPENPT"
         "HAVE_SYS_TIME_H"
-        "QT_USE_QSTRINGBUILDER"
-        "QT_NO_CAST_FROM_ASCII"
-        "QT_NO_CAST_TO_ASCII"
-        "QT_NO_URL_CAST_FROM_STRING"
-        "QT_NO_CAST_FROM_BYTEARRAY"
 )
 
 
