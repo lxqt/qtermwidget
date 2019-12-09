@@ -113,8 +113,6 @@ void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
 
 void SearchBar::clearBackgroundColor()
 {
-    QPalette p;
-    p.setColor(QPalette::Base, Qt::white);
-    widget.searchTextEdit->setPalette(p);
+    widget.searchTextEdit->setPalette(QWidget::window()->palette());
 
 }
