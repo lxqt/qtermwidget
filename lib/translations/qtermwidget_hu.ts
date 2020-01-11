@@ -53,12 +53,12 @@
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>Email küldés ...</translation>
+        <translation>Email küldése ...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>Email cím másolás</translation>
+        <translation>Email cím másolása</translation>
     </message>
 </context>
 <context>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation>Szaabályos kifejezés</translation>
+        <translation>Szabályos kifejezés</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>Keres:</translation>
+        <translation>Keresés:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
