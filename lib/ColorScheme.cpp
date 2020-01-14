@@ -730,7 +730,7 @@ QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
         QStringList filters;
         filters << QLatin1String("*.schema");
         dir.setNameFilters(filters);
-        QStringList list = dir.entryList(filters);
+        const QStringList list = dir.entryList(filters);
         for (const QString &i : list)
             ret << dname + QLatin1Char('/') + i;
     }
@@ -750,7 +750,7 @@ QList<QString> ColorSchemeManager::listColorSchemes()
         QStringList filters;
         filters << QLatin1String("*.colorscheme");
         dir.setNameFilters(filters);
-        QStringList list = dir.entryList(filters);
+        const QStringList list = dir.entryList(filters);
         for (const QString &i : list)
             ret << dname + QLatin1Char('/') + i;
     }

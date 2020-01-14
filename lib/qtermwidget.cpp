@@ -276,7 +276,7 @@ void QTermWidget::init(int startnow)
 
     m_translator = new QTranslator(this);
 
-    for (const QString& dir : dirs) {
+    for (const QString& dir : qAsConst(dirs)) {
         //qDebug() << "Trying to load translation file from dir" << dir;
         if (m_translator->load(QLocale::system(), QLatin1String("qtermwidget"), QLatin1String(QLatin1String("_")), dir)) {
             qApp->installTranslator(m_translator);
