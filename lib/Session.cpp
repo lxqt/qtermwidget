@@ -451,10 +451,7 @@ void Session::monitorTimerDone()
 void Session::activityStateSet(int state)
 {
     if (state==NOTIFYBELL) {
-        QString s;
-        s.sprintf("Bell in session '%s'",_nameTitle.toUtf8().data());
-
-        emit bellRequest( s );
+        emit bellRequest(tr("Bell in session '%1'").arg(_nameTitle));
     } else if (state==NOTIFYACTIVITY) {
         if (_monitorSilence) {
             _monitorTimer->start(_silenceSeconds*1000);
@@ -598,21 +595,22 @@ void Session::done(int exitStatus)
         return;
     }
 
+    // message is not being used. But in the original kpty.cpp file
+    // (https://cgit.kde.org/kpty.git/) it's part of a notification.
+    // So, we make it translatable, hoping that in the future it will
+    // be used in some kind of notification.
     QString message;
     if (!_wantedClose || exitStatus != 0) {
 
         if (_shellProcess->exitStatus() == QProcess::NormalExit) {
-            message.sprintf("Session '%s' exited with status %d.",
-                          _nameTitle.toUtf8().data(), exitStatus);
+            message = tr("Session '%1' exited with status %2.").arg(_nameTitle).arg(exitStatus);
         } else {
-            message.sprintf("Session '%s' crashed.",
-                          _nameTitle.toUtf8().data());
+            message = tr("Session '%1' crashed.").arg(_nameTitle);
         }
     }
 
     if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit )
-        message.sprintf("Session '%s' exited unexpectedly.",
-                        _nameTitle.toUtf8().data());
+        message = tr("Session '%1' exited unexpectedly.").arg(_nameTitle);
     else
         emit finished();
 
