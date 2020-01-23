@@ -393,8 +393,12 @@ bool KPty::open(int fd)
 # else
     int ptyno;
     if (!ioctl(fd, TIOCGPTN, &ptyno)) {
-        char buf[32];
-        sprintf(buf, "/dev/pts/%d", ptyno);
+        const size_t sz = 32;
+        char buf[sz];
+        const size_t r = snprintf(buf, sz, "/dev/pts/%d", ptyno);
+        if (sz <= r) {
+            qWarning("KPty::open: Buffer too small\n");
+        }
         d->ttyName = buf;
 # endif
     } else {
