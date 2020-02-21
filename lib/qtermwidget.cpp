@@ -270,7 +270,7 @@ void QTermWidget::init(int startnow)
     QStringList dirs = d.split(QLatin1Char(':'), QString::SkipEmptyParts);
     if (dirs.isEmpty()) {
         dirs.append(QString::fromLatin1("/usr/local/share"));
-        dirs.append(QString::fromLatin1("/usr/share"));
+        dirs.append(QString::fromLatin1("${PREFIX}/share"));
     }
     dirs.append(QFile::decodeName(TRANSLATIONS_DIR));
 
