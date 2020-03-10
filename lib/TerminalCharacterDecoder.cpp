@@ -31,6 +31,8 @@
 // Konsole
 #include "konsole_wcwidth.h"
 
+#include <cwctype>
+
 using namespace Konsole;
 PlainTextDecoder::PlainTextDecoder()
  : _output(nullptr)
