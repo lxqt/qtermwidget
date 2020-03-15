@@ -27,8 +27,8 @@
 
 //#error Do not use in KDE 2.1
 
-#define QTERMWIDGET_BlockSize (1 << 12)
-#define ENTRIES   ((QTERMWIDGET_BlockSize - sizeof(size_t) ) / sizeof(unsigned char))
+#define QTERMWIDGET_BLOCKSIZE (1 << 12)
+#define ENTRIES   ((QTERMWIDGET_BLOCKSIZE - sizeof(size_t) ) / sizeof(unsigned char))
 
 namespace Konsole {
 
