@@ -240,7 +240,7 @@ install(EXPORT
 )
 
 install(FILES
-    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
+    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h" "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_version.h"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
     COMPONENT Devel
 )
@@ -274,6 +274,12 @@ lxqt_create_pkgconfig_file(
 configure_file(
     "${PROJECT_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}-config.cmake.in"
     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
+    @ONLY
+)
+
+configure_file(
+    "${PROJECT_SOURCE_DIR}/lib/qtermwidget_version.h.in"
+    "${CMAKE_BINARY_DIR}/lib/qtermwidget_version.h"
     @ONLY
 )
 
