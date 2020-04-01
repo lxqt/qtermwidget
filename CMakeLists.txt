@@ -209,7 +209,7 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
 
 generate_export_header(${QTERMWIDGET_LIBRARY_NAME}
     EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h"
-    EXPORT_MACRO_NAME QTERMWIDGET_EXPORT
+    BASE_NAME QTERMWIDGET
 )
 
 target_include_directories(${QTERMWIDGET_LIBRARY_NAME}
