@@ -329,6 +329,7 @@ void Pty::setupChildProcess()
     struct sigaction action;
     sigset_t sigset;
     sigemptyset(&action.sa_mask);
+    sigemptyset(&sigset);
     action.sa_handler = SIG_DFL;
     action.sa_flags = 0;
     for (int signal=1;signal < NSIG; signal++) {
