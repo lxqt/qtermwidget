@@ -413,10 +413,10 @@ void Vt102Emulation::processWindowAttributeChange()
     return;
   }
 
-  QString newValue;
-  newValue.reserve(tokenBufferPos-i-2);
-  for (int j = 0; j < tokenBufferPos-i-2; j++)
-    newValue[j] = tokenBuffer[i+1+j];
+  // copy from the first char after ';', and skipping the ending delimiter
+  // 0x07 or 0x92. Note that as control characters in OSC text parts are
+  // ignored, only the second char in ST ("\e\\") is appended to tokenBuffer.
+  QString newValue = QString::fromWCharArray(tokenBuffer + i + 1, tokenBufferPos-i-2);
 
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
