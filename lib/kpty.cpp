@@ -32,9 +32,15 @@
 #define HAVE_LIBUTIL_H
 #endif
 
-#if defined(__OpenBSD__) || defined(__NetBSD__)
+#if defined(__OpenBSD__)
 #define HAVE_LOGIN
 #define HAVE_UTIL_H
+#endif
+
+#if defined(__NetBSD__)
+#define HAVE_LOGIN
+#define HAVE_UTIL_H
+#define HAVE_OPENPTY
 #endif
 
 #if defined(__APPLE__)
