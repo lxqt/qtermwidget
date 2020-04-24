@@ -1,3 +1,42 @@
+qtermwidget-0.15.0 / 2020-04-24
+===============================
+
+  * Bumped version to 0.15.0.
+  * Replaced Q_WS_MAC with Q_OS_MACOS for Qt5 compatibility.
+  * KPty: Don't conditionalize chownpty existence on HAVE_OPENPTY.
+  * cmake: set CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON for macOS.
+  * Fixed the default font on macOS.
+  * pyqt: Fixes deprecation warning (CMP0002).
+  * Fixed the PyQt5 binding with Qt ≥ 5.11.
+  * Swap Qt's ControlModifier and MetaModifier on macOS.
+  * C++11 code updates.
+  * Use braced initializer list in returns.
+  * Fixed the memory access violation in TerminalDisplay's method `getCharacterPosition`.
+  * Completed the support for transient scrollbars.
+  * Added `saveHistory` to QTermWidget.
+  * Use vanilla Qt instead of patched one.
+  * Don't set the selection clipboard if it's unsupported.
+  * Announce truecolor support via COLORTERM.
+  * Fixed numpad handling and added entries for numpad 5.
+  * Allow to disable drawing line chars.
+  * Use QRectF for cursor drawing and fix artifacts in hidpi.
+  * Fixed compilation on NetBSD.
+  * Added sendKeyEvent() API.
+  * Fixed flickering on font change.
+  * Select all text when opening search bar.
+  * Removed some debug outputs.
+  * Removed (duplicated) string casts definitions.
+  * Removed obsolete qCopy.
+  * Fix SearchBar light text over white background with dark themes.
+  * pyqt: also check for sip 5.x path.
+  * Prevented a c++11 range-loop might detach Qt container.
+  * Dropped the deprecated QString method `sprintf()`.
+  * Avoid buffer overflows exploits.
+  * Fixed build with LLVM/clang.
+  * Explicitly mark exported classes.
+  * Fixed QCharRef's deprecated behavior.
+  * Correctly initialize sigsets.
+
 qtermwidget-0.14.1 / 2019-02-25
 ===============================
 
@@ -16,7 +55,7 @@ qtermwidget-0.14.0 / 2019-01-25
     - kpty: make it work on OpenBSD
     - kptyprocess: ensure .bash_history is correctly written out
     - kb-layouts: Make Backspace behaves the same as xterm
-    - tools: Drop the ability to bundle kb-layouts and colorschemes 
+    - tools: Drop the ability to bundle kb-layouts and colorschemes
     - SearchBar: Fix visual glitches in search-bar
     - TerminalDisplay: Fixed link mouseover after recent changes
     - TerminalDisplay: Redraw cursor after cursor type changed
@@ -24,9 +63,9 @@ qtermwidget-0.14.0 / 2019-01-25
     - qterminal: Correct deleting of HotSpot list items
     - qterminal: Removed unnecessary checks
     - ColorScheme: Fixed local variable will be copied despite being returned by name
-    - ColorScheme: Fixed error return-std-move 
+    - ColorScheme: Fixed error return-std-move
     - Removed unnecessary checks
-    - Suppressed compilation warnings 
+    - Suppressed compilation warnings
     - Don't use automatic string conversions
     - Marked some functions const
     - Implemented terminal margins
