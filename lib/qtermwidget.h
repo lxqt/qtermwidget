@@ -25,6 +25,7 @@
 #include "Emulation.h"
 #include "Filter.h"
 #include "qtermwidget_export.h"
+#include "qtermwidget_version.h"
 
 class QVBoxLayout;
 class TermWidgetImpl;
