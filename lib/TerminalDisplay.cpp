@@ -1302,6 +1302,9 @@ void TerminalDisplay::showResizeNotification()
 
 void TerminalDisplay::setBlinkingCursor(bool blink)
 {
+  if (_hasBlinkingCursor != blink)
+      emit blinkingCursorStateChanged();
+      
   _hasBlinkingCursor=blink;
 
   if (blink && !_blinkCursorTimer->isActive())
@@ -3406,6 +3409,16 @@ void TerminalDisplay::simulateKeyPress(int key, int modifiers, bool pressed, qui
     QEvent::Type type = pressed ? QEvent::KeyPress : QEvent::KeyRelease;
     QKeyEvent event = QKeyEvent(type, key, (Qt::KeyboardModifier) modifiers, text);
     keyPressedSignal(&event);
+}
+
+void TerminalDisplay::simulateKeySequence(const QKeySequence &keySequence)
+{
+    for (int i = 0; i < keySequence.count(); ++i) {
+        const Qt::Key key = Qt::Key(keySequence[i] & ~Qt::KeyboardModifierMask);
+        const Qt::KeyboardModifiers modifiers = Qt::KeyboardModifiers(keySequence[i] & Qt::KeyboardModifierMask);
+        QKeyEvent eventPress = QKeyEvent(QEvent::KeyPress, key, modifiers, "");
+        keyPressedSignal(&eventPress);
+    }
 }
 
 void TerminalDisplay::simulateWheel(int x, int y, int buttons, int modifiers, QPointF angleDelta){

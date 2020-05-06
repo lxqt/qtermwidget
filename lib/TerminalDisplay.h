@@ -99,6 +99,7 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
 
    Q_PROPERTY(bool enableBold           READ getBoldIntense   WRITE setBoldIntense NOTIFY boldIntenseChanged )
    Q_PROPERTY(bool fullCursorHeight     READ fullCursorHeight WRITE setFullCursorHeight NOTIFY fullCursorHeightChanged)
+   Q_PROPERTY(bool blinkingCursor       READ blinkingCursor   WRITE setBlinkingCursor NOTIFY blinkingCursorStateChanged)
    Q_PROPERTY(bool antialiasText        READ antialias       WRITE setAntialias)
    Q_PROPERTY(QStringList availableColorSchemes READ availableColorSchemes NOTIFY availableColorSchemesChanged)
 
@@ -550,6 +551,7 @@ public slots:
     QStringList availableColorSchemes();
 
     void simulateKeyPress(int key, int modifiers, bool pressed, quint32 nativeScanCode, const QString &text);
+    void simulateKeySequence(const QKeySequence &sequence);
     void simulateWheel(int x, int y, int buttons, int modifiers, QPointF angleDelta);
     void simulateMouseMove(int x, int y, int button, int buttons, int modifiers);
     void simulateMousePress(int x, int y, int button, int buttons, int modifiers);
@@ -615,6 +617,7 @@ signals:
     void availableColorSchemesChanged();
     void colorSchemeChanged();
     void fullCursorHeightChanged();
+    void blinkingCursorStateChanged();
     void boldIntenseChanged();
 
 protected:
