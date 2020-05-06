@@ -307,3 +307,8 @@ QString KSession::foregroundProcessName()
 {
     return m_session->foregroundProcessName();
 }
+
+QString KSession::currentDir() 
+{
+    return m_session->currentDir();
+}

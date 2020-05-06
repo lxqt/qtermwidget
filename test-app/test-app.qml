@@ -21,6 +21,13 @@ Rectangle {
         shortcut: "Ctrl+F"
     }
 
+    Action{
+        onTriggered:{
+            console.log('open new terminal window in:'+mainsession.currentDir)
+        }
+        shortcut: "Ctrl+Shift+T"
+    }
+
     QMLTermWidget {
         id: terminal
         anchors.fill: parent

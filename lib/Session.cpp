@@ -943,6 +943,18 @@ QString Session::foregroundProcessName()
     return name;
 }
 
+QString Session::currentDir() 
+{
+    QString path;
+    if (updateForegroundProcessInfo()) {
+        bool ok = false;
+        path= _foregroundProcessInfo->currentDir(&ok);
+        if (!ok)
+            path.clear();
+    }
+    return path;
+}
+
 bool Session::updateForegroundProcessInfo()
 {
     Q_ASSERT(_shellProcess);
