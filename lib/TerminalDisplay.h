@@ -551,6 +551,7 @@ public slots:
     QStringList availableColorSchemes();
 
     void simulateKeyPress(int key, int modifiers, bool pressed, quint32 nativeScanCode, const QString &text);
+    void simulateKeySequence(const QKeySequence &sequence);
     void simulateWheel(int x, int y, int buttons, int modifiers, QPointF angleDelta);
     void simulateMouseMove(int x, int y, int button, int buttons, int modifiers);
     void simulateMousePress(int x, int y, int button, int buttons, int modifiers);

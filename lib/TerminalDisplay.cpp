@@ -3411,6 +3411,16 @@ void TerminalDisplay::simulateKeyPress(int key, int modifiers, bool pressed, qui
     keyPressedSignal(&event);
 }
 
+void TerminalDisplay::simulateKeySequence(const QKeySequence &keySequence)
+{
+    for (int i = 0; i < keySequence.count(); ++i) {
+        const Qt::Key key = Qt::Key(keySequence[i] & ~Qt::KeyboardModifierMask);
+        const Qt::KeyboardModifiers modifiers = Qt::KeyboardModifiers(keySequence[i] & Qt::KeyboardModifierMask);
+        QKeyEvent eventPress = QKeyEvent(QEvent::KeyPress, key, modifiers, "");
+        keyPressedSignal(&eventPress);
+    }
+}
+
 void TerminalDisplay::simulateWheel(int x, int y, int buttons, int modifiers, QPointF angleDelta){
     QWheelEvent event(QPointF(x,y), angleDelta.y(), (Qt::MouseButton) buttons, (Qt::KeyboardModifier) modifiers);
     wheelEvent(&event);
