@@ -1,1 +1,6 @@
-*.user
+*.o
+/Makefile
+/QMLTermWidget/
+moc_*.cpp
+moc_*.h
+/.qmake.stash
