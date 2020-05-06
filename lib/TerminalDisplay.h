@@ -99,6 +99,7 @@ class KONSOLEPRIVATE_EXPORT TerminalDisplay : public QQuickPaintedItem
 
    Q_PROPERTY(bool enableBold           READ getBoldIntense   WRITE setBoldIntense NOTIFY boldIntenseChanged )
    Q_PROPERTY(bool fullCursorHeight     READ fullCursorHeight WRITE setFullCursorHeight NOTIFY fullCursorHeightChanged)
+   Q_PROPERTY(bool blinkingCursor       READ blinkingCursor   WRITE setBlinkingCursor NOTIFY blinkingCursorStateChanged)
    Q_PROPERTY(bool antialiasText        READ antialias       WRITE setAntialias)
    Q_PROPERTY(QStringList availableColorSchemes READ availableColorSchemes NOTIFY availableColorSchemesChanged)
 
@@ -615,6 +616,7 @@ signals:
     void availableColorSchemesChanged();
     void colorSchemeChanged();
     void fullCursorHeightChanged();
+    void blinkingCursorStateChanged();
     void boldIntenseChanged();
 
 protected:

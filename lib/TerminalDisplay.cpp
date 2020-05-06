@@ -1302,6 +1302,9 @@ void TerminalDisplay::showResizeNotification()
 
 void TerminalDisplay::setBlinkingCursor(bool blink)
 {
+  if (_hasBlinkingCursor != blink)
+      emit blinkingCursorStateChanged();
+      
   _hasBlinkingCursor=blink;
 
   if (blink && !_blinkCursorTimer->isActive())
