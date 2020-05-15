@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Çıktı &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; Ctrl+S basınız. &lt;b&gt;Ctrl+Q&lt;/b&gt; bas devam etmek için.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Çıktı, Ctrl+S&apos;ye basılarak &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;durduruldu&lt;/a&gt;. Sürdürmek için &lt;b&gt;Ctrl+Q&lt;/b&gt;&apos;a basınız.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Hiçbir klavye çevirici yok. Tuş vuruşlarını karaktere dönüştürüp terminale göndermek için gereken bilgi eksik.</translation>
+        <translation>Hiçbir klavye çeviricisi yok.  Tuş vuruşlarını karaktere dönüştürüp uçbirime göndermek için gereken bilgi eksik.</translation>
     </message>
 </context>
 <context>
@@ -33,7 +33,7 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>İsimsiz Renk Şeması</translation>
+        <translation>Adsız Renk Şeması</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
@@ -53,7 +53,7 @@
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>E-posta gönder...</translation>
+        <translation>E-posta Gönder...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
-        <translation>Renk Şema Hatası</translation>
+        <translation>Renk Şeması Hatası</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>Tam eşleştir</translation>
+        <translation>Büyük/küçük harf eşleştir</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
