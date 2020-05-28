@@ -349,7 +349,7 @@ protected:
     QStringList args;
     QIODevice::OpenMode openMode;
 
-    KProcess *q_ptr;
+    KProcess *q_ptr = nullptr;
 };
 /* ------------------------------------------- */
 #endif
