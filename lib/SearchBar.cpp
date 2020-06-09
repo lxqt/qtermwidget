@@ -98,11 +98,11 @@ void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
     {
         if (keyEvent->modifiers() == Qt::ShiftModifier)
         {
-            findPrevious();
+            Q_EMIT findPrevious();
         }
         else
         {
-            findNext();
+            Q_EMIT findNext();
         }
     }
     else if (keyEvent->key() == Qt::Key_Escape)

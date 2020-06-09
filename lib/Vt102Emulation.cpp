@@ -1104,7 +1104,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
             textToSend += _codec->fromUnicode(event->text());
         }
 
-        sendData( textToSend.constData() , textToSend.length() );
+        Q_EMIT sendData( textToSend.constData() , textToSend.length() );
     }
     else
     {
