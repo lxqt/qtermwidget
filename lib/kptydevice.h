@@ -168,7 +168,7 @@ private:
 /////////////////////////////////////////////////////
 
 #include <QByteArray>
-#include <QLinkedList>
+#include <list>
 
 #define CHUNKSIZE 4096
 
@@ -185,14 +185,14 @@ public:
         buffers.clear();
         QByteArray tmp;
         tmp.resize(CHUNKSIZE);
-        buffers << tmp;
+        buffers.push_back(tmp);
         head = tail = 0;
         totalSize = 0;
     }
 
     inline bool isEmpty() const
     {
-        return buffers.count() == 1 && !tail;
+        return buffers.size() == 1 && !tail;
     }
 
     inline int size() const
@@ -202,13 +202,13 @@ public:
 
     inline int readSize() const
     {
-        return (buffers.count() == 1 ? tail : buffers.first().size()) - head;
+        return (buffers.size() == 1 ? tail : buffers.front().size()) - head;
     }
 
     inline const char *readPointer() const
     {
         Q_ASSERT(totalSize > 0);
-        return buffers.first().constData() + head;
+        return buffers.front().constData() + head;
     }
 
     void free(int bytes)
@@ -221,21 +221,21 @@ public:
 
             if (bytes < nbs) {
                 head += bytes;
-                if (head == tail && buffers.count() == 1) {
-                    buffers.first().resize(CHUNKSIZE);
+                if (head == tail && buffers.size() == 1) {
+                    buffers.front().resize(CHUNKSIZE);
                     head = tail = 0;
                 }
                 break;
             }
 
             bytes -= nbs;
-            if (buffers.count() == 1) {
-                buffers.first().resize(CHUNKSIZE);
+            if (buffers.size() == 1) {
+                buffers.front().resize(CHUNKSIZE);
                 head = tail = 0;
                 break;
             }
 
-            buffers.removeFirst();
+            buffers.pop_front();
             head = 0;
         }
     }
@@ -245,15 +245,15 @@ public:
         totalSize += bytes;
 
         char *ptr;
-        if (tail + bytes <= buffers.last().size()) {
-            ptr = buffers.last().data() + tail;
+        if (tail + bytes <= buffers.back().size()) {
+            ptr = buffers.back().data() + tail;
             tail += bytes;
         } else {
-            buffers.last().resize(tail);
+            buffers.back().resize(tail);
             QByteArray tmp;
             tmp.resize(qMax(CHUNKSIZE, bytes));
             ptr = tmp.data();
-            buffers << tmp;
+            buffers.push_back(tmp);
             tail = bytes;
         }
         return ptr;
@@ -278,7 +278,7 @@ public:
     {
         int index = 0;
         int start = head;
-        QLinkedList<QByteArray>::ConstIterator it = buffers.constBegin();
+        std::list<QByteArray>::const_iterator it = buffers.cbegin();
         forever {
             if (!maxLength)
                 return index;
@@ -286,7 +286,7 @@ public:
                 return -1;
             const QByteArray &buf = *it;
             ++it;
-            int len = qMin((it == buffers.end() ? tail : buf.size()) - start,
+            int len = qMin((it == buffers.cend() ? tail : buf.size()) - start,
                            maxLength);
             const char *ptr = buf.data() + start;
             if (const char *rptr = (const char *)memchr(ptr, c, len))
@@ -327,7 +327,7 @@ public:
     }
 
 private:
-    QLinkedList<QByteArray> buffers;
+    std::list<QByteArray> buffers;
     int head, tail;
     int totalSize;
 };
