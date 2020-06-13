@@ -22,4 +22,6 @@ archlinux:
     - python-pyqt5
     - python-sip
     - sip
+    # For checking Qt code with clazy
+    - clazy
   script: bash ./.ci/build.sh
