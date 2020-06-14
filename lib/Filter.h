@@ -293,21 +293,6 @@ signals:
     void activated(const QUrl& url, bool fromContextMenu);
 };
 
-class QTERMWIDGET_NO_EXPORT FilterObject : public QObject
-{
-    Q_OBJECT
-public:
-    FilterObject(Filter::HotSpot* filter) : _filter(filter) {}
-
-    void emitActivated(const QUrl& url, bool fromContextMenu);
-public slots:
-    void activate();
-private:
-    Filter::HotSpot* _filter;
-signals:
-    void activated(const QUrl& url, bool fromContextMenu);
-};
-
 /**
  * A chain which allows a group of filters to be processed as one.
  * The chain owns the filters added to it and deletes them when the chain itself is destroyed.
@@ -356,29 +341,6 @@ public:
     /** Returns a list of all hotspots at the given line in all the chain's filters */
     QList<Filter::HotSpot> hotSpotsAtLine(int line) const;
 
-};
-
-/** A filter chain which processes character images from terminal displays */
-class QTERMWIDGET_NO_EXPORT TerminalImageFilterChain : public FilterChain
-{
-public:
-    TerminalImageFilterChain();
-    ~TerminalImageFilterChain() override;
-
-    /**
-     * Set the current terminal image to @p image.
-     *
-     * @param image The terminal image
-     * @param lines The number of lines in the terminal image
-     * @param columns The number of columns in the terminal image
-     * @param lineProperties The line properties to set for image
-     */
-    void setImage(const Character* const image , int lines , int columns,
-                  const QVector<LineProperty>& lineProperties);
-
-private:
-    QString* _buffer;
-    QList<int>* _linePositions;
 };
 
 }

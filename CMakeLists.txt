@@ -89,6 +89,7 @@ set(SRCS
 set(HDRS
     lib/Emulation.h
     lib/Filter.h
+    lib/filter_p.h
     lib/HistorySearch.h
     lib/kprocess.h
     lib/kptydevice.h

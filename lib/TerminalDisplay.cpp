@@ -58,7 +58,7 @@
 
 // Konsole
 //#include <config-apps.h>
-#include "Filter.h"
+#include "filter_p.h"
 #include "konsole_wcwidth.h"
 #include "ScreenWindow.h"
 #include "TerminalCharacterDecoder.h"

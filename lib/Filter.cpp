@@ -18,7 +18,7 @@
 */
 
 // Own
-#include "Filter.h"
+#include "filter_p.h"
 
 // System
 #include <iostream>

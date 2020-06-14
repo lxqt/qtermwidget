@@ -52,6 +52,8 @@ class QWidget;
 namespace Konsole
 {
 
+class TerminalImageFilterChain;
+
     enum MotionAfterPasting
     {
         // No move screenwindow after pasting
