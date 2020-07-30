@@ -16,7 +16,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;A kimenet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;el van nyomva&lt;/a&gt; a Ctrl+S megnyomásával.  Nyomj &lt;b&gt;Ctrl+Q -t&lt;/b&gt; a visszatéréshez.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;A kimenet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;fel van függesztve&lt;/a&gt; a Ctrl+S megnyomásával.  Nyomjon &lt;b&gt;Ctrl+Q-t&lt;/b&gt; a folytatáshoz.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -24,7 +24,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1105"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Nincs billentyűzet átalakító.  Hiányzik az információ, ami a billentyű lenyomásnak a terminálhoz küldendő karakterekké alakításához szükséges.</translation>
+        <translation>Nincs elérhető billentyűzet-átalakító.  Hiányzik az információ, amely a billentyű lenyomások a terminálhoz küldendő karakterekké alakításához szükséges.</translation>
     </message>
 </context>
 <context>
@@ -43,12 +43,12 @@
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation>Link megnyitás</translation>
+        <translation>Link megnyitása</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Link cím másolás</translation>
+        <translation>Link másolása</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>A %1 színséma elérhetetlen</translation>
+        <translation>Nem sikerült betölteni a színsémát. %1</translation>
     </message>
 </context>
 <context>
@@ -79,12 +79,12 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>Nagybetű érzékeny</translation>
+        <translation>Nagybetűérzékeny</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation>Szabályos kifejezés</translation>
+        <translation>Reguláris kifejezés</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
