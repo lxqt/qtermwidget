@@ -551,6 +551,8 @@ public:
     static void fillWithDefaultChar(Character* dest, int count);
 
 private:
+    Screen(const Screen &) = delete;
+    Screen &operator=(const Screen &) = delete;
 
     //copies a line of text from the screen or history into a stream using a
     //specified character decoder.  Returns the number of lines actually copied,
