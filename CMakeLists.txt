@@ -14,7 +14,7 @@ include(CheckIncludeFile)
 
 option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" OFF)
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
-option(QTERMWIDGET_USE_UTEMPTER "Uses the libutempter library. Mainly for FreeBSD" OFF)
+option(QTERMWIDGET_USE_UTEMPTER "Uses the libutempter library." OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
 
@@ -172,7 +172,8 @@ if (QTERMWIDGET_USE_UTEMPTER)
         target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME} PRIVATE
                 "HAVE_UTEMPTER"
         )
-        target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ulog)
+        find_library(UTEMPTER_LIB NAMES utempter ulog REQUIRED)
+        target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${UTEMPTER_LIB})
     endif()
 endif()
 
