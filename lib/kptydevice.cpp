@@ -90,7 +90,7 @@ bool KPtyDevicePrivate::_k_canRead()
 #else
     int available;
 #endif
-    if (!::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *) &available)) {
+    if (::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *) &available) != -1) {
 #ifdef Q_OS_SOLARIS
         // A Pty is a STREAMS module, and those can be activated
         // with 0 bytes available. This happens either when ^C is
