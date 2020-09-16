@@ -5,6 +5,8 @@
 #include <QtDebug>
 
 
+Q_LOGGING_CATEGORY(qtermwidgetLogger, "qtermwidget", QtWarningMsg)
+
 /*! Helper function to get possible location of layout files.
 By default the KB_LAYOUT_DIR is used (linux/BSD/macports).
 But in some cases (apple bundle) there can be more locations).

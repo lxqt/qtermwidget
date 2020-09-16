@@ -22,6 +22,7 @@
 
 // Own
 #include "Vt102Emulation.h"
+#include "tools.h"
 
 // XKB
 //#include <config-konsole.h>
@@ -45,6 +46,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QByteRef>
+#include <QDebug>
 
 // KDE
 //#include <kdebug.h>
@@ -1360,28 +1362,11 @@ char Vt102Emulation::eraseChar() const
       return '\b';
 }
 
-// print contents of the scan buffer
-static void hexdump(wchar_t* s, int len)
-{ int i;
-  for (i = 0; i < len; i++)
-  {
-    if (s[i] == '\\')
-      printf("\\\\");
-    else
-    if ((s[i]) > 32 && s[i] < 127)
-      printf("%c",s[i]);
-    else
-      printf("\\%04x(hex)",s[i]);
-  }
-}
-
 void Vt102Emulation::reportDecodingError()
 {
   if (tokenBufferPos == 0 || ( tokenBufferPos == 1 && (tokenBuffer[0] & 0xff) >= 32) )
     return;
-  printf("Undecodable sequence: ");
-  hexdump(tokenBuffer,tokenBufferPos);
-  printf("\n");
+  qCDebug(qtermwidgetLogger) << "Undecodable sequence:" << QString::fromWCharArray(tokenBuffer, tokenBufferPos);
 }
 
 //#include "Vt102Emulation.moc"
