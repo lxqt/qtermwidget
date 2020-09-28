@@ -47,11 +47,12 @@ find_library(
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(
-    UTF8PROC
+    Utf8Proc
+    FOUND_VAR Utf8Proc_FOUND
     REQUIRED_VARS UTF8PROC_LIBRARY UTF8PROC_INCLUDE_DIR
 )
 
-if(UTF8PROC_FOUND)
+if(Utf8Proc_FOUND)
   set( UTF8PROC_LIBRARIES ${UTF8PROC_LIBRARY} )
   set( UTF8PROC_INCLUDE_DIRS ${UTF8PROC_INCLUDE_DIR} )
 endif()
