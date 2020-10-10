@@ -65,8 +65,11 @@ The library is provided by all major Linux distributions like Arch Linux, Debian
 Just use the distributions' package managers to search for string `qtermwidget`.
 
 
-### Translation (Weblate)
+### Translation
 
-<a href="https://weblate.lxqt.org/projects/lxqt/qtermwidget/">
-<img src="https://weblate.lxqt.org/widgets/lxqt/-/qtermwidget/multi-auto.svg" alt="Translation status" />
+Translations can be done in [LXQt-Weblate](https://translate.lxqt-project.org/projects/lxqt-desktop/qtermwidget/)
+
+<a href="https://translate.lxqt-project.org/projects/lxqt-desktop/qtermwidget/">
+<img src="https://translate.lxqt-project.org/widgets/lxqt-desktop/-/qtermwidget/multi-auto.svg" alt="Translation status" />
 </a>
+
