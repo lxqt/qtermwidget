@@ -104,7 +104,7 @@ public:
     void setOpacity(qreal opacity);
 
     /** Sets the background image of the terminal display. */
-    void setBackgroundImage(QString backgroundImage);
+    void setBackgroundImage(const QString& backgroundImage);
 
     /**
      * Specifies whether the terminal display has a vertical scroll bar, and if so whether it

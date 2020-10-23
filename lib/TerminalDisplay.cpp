@@ -711,7 +711,7 @@ void TerminalDisplay::setOpacity(qreal opacity)
     _blendColor = color.rgba();
 }
 
-void TerminalDisplay::setBackgroundImage(QString backgroundImage)
+void TerminalDisplay::setBackgroundImage(const QString& backgroundImage)
 {
     if (!backgroundImage.isEmpty())
     {
