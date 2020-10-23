@@ -491,94 +491,6 @@ AccessibleColorScheme::AccessibleColorScheme()
 #endif
 }
 
-KDE3ColorSchemeReader::KDE3ColorSchemeReader( QIODevice* device ) :
-    _device(device)
-{
-}
-ColorScheme* KDE3ColorSchemeReader::read()
-{
-    Q_ASSERT( _device->openMode() == QIODevice::ReadOnly ||
-              _device->openMode() == QIODevice::ReadWrite  );
-
-    ColorScheme* scheme = new ColorScheme();
-
-    QRegExp comment(QLatin1String("#.*$"));
-    while ( !_device->atEnd() )
-    {
-        QString line(QString::fromUtf8(_device->readLine()));
-        line.remove(comment);
-        line = line.simplified();
-
-        if ( line.isEmpty() )
-            continue;
-
-        if ( line.startsWith(QLatin1String("color")) )
-        {
-            if (!readColorLine(line,scheme))
-                qDebug() << "Failed to read KDE 3 color scheme line" << line;
-        }
-        else if ( line.startsWith(QLatin1String("title")) )
-        {
-            if (!readTitleLine(line,scheme))
-                qDebug() << "Failed to read KDE 3 color scheme title line" << line;
-        }
-        else
-        {
-            qDebug() << "KDE 3 color scheme contains an unsupported feature, '" <<
-                line << "'";
-        }
-    }
-
-    return scheme;
-}
-bool KDE3ColorSchemeReader::readColorLine(const QString& line,ColorScheme* scheme)
-{
-    QStringList list = line.split(QLatin1Char(' '));
-
-    if (list.count() != 7)
-        return false;
-    if (list.first() != QLatin1String("color"))
-        return false;
-
-    int index = list[1].toInt();
-    int red = list[2].toInt();
-    int green = list[3].toInt();
-    int blue = list[4].toInt();
-    int transparent = list[5].toInt();
-    int bold = list[6].toInt();
-
-    const int MAX_COLOR_VALUE = 255;
-
-    if(     (index < 0 || index >= TABLE_COLORS )
-        ||  (red < 0 || red > MAX_COLOR_VALUE )
-        ||  (blue < 0 || blue > MAX_COLOR_VALUE )
-        ||  (green < 0 || green > MAX_COLOR_VALUE )
-        ||  (transparent != 0 && transparent != 1 )
-        ||  (bold != 0 && bold != 1)    )
-        return false;
-
-    ColorEntry entry;
-    entry.color = QColor(red,green,blue);
-    entry.transparent = ( transparent != 0 );
-    entry.fontWeight = ( bold != 0 ) ? ColorEntry::Bold : ColorEntry::UseCurrentFormat;
-
-    scheme->setColorTableEntry(index,entry);
-    return true;
-}
-bool KDE3ColorSchemeReader::readTitleLine(const QString& line,ColorScheme* scheme)
-{
-    if( !line.startsWith(QLatin1String("title")) )
-        return false;
-
-    int spacePos = line.indexOf(QLatin1Char(' '));
-    if( spacePos == -1 )
-        return false;
-
-    QString description = line.mid(spacePos+1);
-
-    scheme->setDescription(description);
-    return true;
-}
 ColorSchemeManager::ColorSchemeManager()
     : _haveLoadedAll(false)
 {
@@ -605,14 +517,6 @@ void ColorSchemeManager::loadAllColorSchemes()
             failed++;
     }
 
-    QList<QString> kde3ColorSchemes = listKDE3ColorSchemes();
-    QListIterator<QString> kde3Iter(kde3ColorSchemes);
-    while ( kde3Iter.hasNext() )
-    {
-        if ( !loadKDE3ColorScheme( kde3Iter.next() ) )
-            failed++;
-    }
-
     /*if ( failed > 0 )
         qDebug() << "failed to load " << failed << " color schemes.";*/
 
@@ -626,37 +530,6 @@ QList<const ColorScheme*> ColorSchemeManager::allColorSchemes()
     }
 
     return _colorSchemes.values();
-}
-bool ColorSchemeManager::loadKDE3ColorScheme(const QString& filePath)
-{
-    QFile file(filePath);
-    if (!filePath.endsWith(QLatin1String(".schema")) || !file.open(QIODevice::ReadOnly))
-        return false;
-
-    KDE3ColorSchemeReader reader(&file);
-    ColorScheme* scheme = reader.read();
-    scheme->setName(QFileInfo(file).baseName());
-    file.close();
-
-    if (scheme->name().isEmpty())
-    {
-        //qDebug() << "color scheme name is not valid.";
-        delete scheme;
-        return false;
-    }
-
-    QFileInfo info(filePath);
-
-    if ( !_colorSchemes.contains(info.baseName()) )
-        _colorSchemes.insert(scheme->name(),scheme);
-    else
-    {
-        /*qDebug() << "color scheme with name" << scheme->name() << "has already been" <<
-            "found, ignoring.";*/
-        delete scheme;
-    }
-
-    return true;
 }
 #if 0
 void ColorSchemeManager::addColorScheme(ColorScheme* scheme)
@@ -675,10 +548,8 @@ bool ColorSchemeManager::loadCustomColorScheme(const QString& path)
 {
     if (path.endsWith(QLatin1String(".colorscheme")))
         return loadColorScheme(path);
-    else if (path.endsWith(QLatin1String(".schema")))
-        return loadKDE3ColorScheme(path);
-    else
-        return false;
+
+    return false;
 }
 
 void ColorSchemeManager::addCustomColorSchemeDir(const QString& custom_dir)
@@ -719,26 +590,6 @@ bool ColorSchemeManager::loadColorScheme(const QString& filePath)
     }
 
     return true;
-}
-QList<QString> ColorSchemeManager::listKDE3ColorSchemes()
-{
-    QList<QString> ret;
-    for (const QString &scheme_dir : get_color_schemes_dirs())
-    {
-        const QString dname(scheme_dir);
-        QDir dir(dname);
-        QStringList filters;
-        filters << QLatin1String("*.schema");
-        dir.setNameFilters(filters);
-        const QStringList list = dir.entryList(filters);
-        for (const QString &i : list)
-            ret << dname + QLatin1Char('/') + i;
-    }
-    return ret;
-    //return KGlobal::dirs()->findAllResources("data",
-    //                                         "konsole/*.schema",
-    //                                          KStandardDirs::NoDuplicates);
-    //
 }
 QList<QString> ColorSchemeManager::listColorSchemes()
 {
@@ -812,11 +663,6 @@ const ColorScheme* ColorSchemeManager::findColorScheme(const QString& name)
         if ( !path.isEmpty() && loadColorScheme(path) )
         {
             return findColorScheme(name);
-        }
-        else
-        {
-            if (!path.isEmpty() && loadKDE3ColorScheme(path))
-                return findColorScheme(name);
         }
 
         //qDebug() << "Could not find color scheme - " << name;
