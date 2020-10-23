@@ -24,7 +24,7 @@
 #include "Emulation.h"
 #include "HistorySearch.h"
 
-HistorySearch::HistorySearch(EmulationPtr emulation, QRegExp regExp,
+HistorySearch::HistorySearch(EmulationPtr emulation, const QRegExp& regExp,
         bool forwards, int startColumn, int startLine,
         QObject* parent) :
 QObject(parent),

@@ -369,7 +369,7 @@ void QTermWidget::setTerminalOpacity(qreal level)
     m_impl->m_terminalDisplay->setOpacity(level);
 }
 
-void QTermWidget::setTerminalBackgroundImage(QString backgroundImage)
+void QTermWidget::setTerminalBackgroundImage(const QString& backgroundImage)
 {
     m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
 }

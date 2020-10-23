@@ -87,7 +87,7 @@ public:
     void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
-    void setTerminalBackgroundImage(QString backgroundImage);
+    void setTerminalBackgroundImage(const QString& backgroundImage);
 
     //environment
     void setEnvironment(const QStringList & environment);
