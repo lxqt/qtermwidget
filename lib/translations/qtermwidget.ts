@@ -2,6 +2,29 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>Konsole::Session</name>
+    <message>
+        <location filename="../Session.cpp" line="454"/>
+        <source>Bell in session &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="606"/>
+        <source>Session &apos;%1&apos; exited with status %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="608"/>
+        <source>Session &apos;%1&apos; crashed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="613"/>
+        <source>Session &apos;%1&apos; exited unexpectedly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Konsole::TerminalDisplay</name>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1282"/>
@@ -22,7 +45,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1105"/>
+        <location filename="../Vt102Emulation.cpp" line="1113"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation type="unfinished"></translation>
     </message>
