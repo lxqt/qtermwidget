@@ -1079,8 +1079,11 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
 
         if ( entry.command() != KeyboardTranslator::NoCommand )
         {
-            if (entry.command() & KeyboardTranslator::EraseCommand)
+            if (entry.command() & KeyboardTranslator::EraseCommand) {
                 textToSend += eraseChar();
+            } else {
+                Q_EMIT handleCommandFromKeyboard(entry.command());
+            }
 
             // TODO command handling
         }

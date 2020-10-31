@@ -292,4 +292,51 @@ void ScreenWindow::notifyOutputChanged()
     emit outputChanged();
 }
 
+void ScreenWindow::handleCommandFromKeyboard(KeyboardTranslator::Command command)
+{
+    // Keyboard-based navigation
+    bool update = false;
+
+    // EraseCommand is handled in Vt102Emulation
+    if ( command & KeyboardTranslator::ScrollPageUpCommand )
+    {
+        scrollBy( ScreenWindow::ScrollPages , -1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollPageDownCommand )
+    {
+        scrollBy( ScreenWindow::ScrollPages , 1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollLineUpCommand )
+    {
+        scrollBy( ScreenWindow::ScrollLines , -1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollLineDownCommand )
+    {
+        scrollBy( ScreenWindow::ScrollLines , 1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollDownToBottomCommand )
+    {
+        Q_EMIT scrollToEnd();
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollUpToTopCommand)
+    {
+        scrollTo(0);
+        update = true;
+    }
+    // TODO: KeyboardTranslator::ScrollLockCommand
+    // TODO: KeyboardTranslator::SendCommand
+
+    if ( update )
+    {
+        setTrackOutput( atEndOfOutput() );
+
+        Q_EMIT outputChanged();
+    }
+}
+
 //#include "ScreenWindow.moc"
