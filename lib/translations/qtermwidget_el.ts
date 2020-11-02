@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Κουδούνι στην συνεδρία &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνεδρία &apos;%1&apos; τερματίστηκε με την κατάσταση %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνεδρία &apos;%1&apos; κατέρρευσε.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Η συνεδρία &apos;%1&apos; τερματίστηκε απροσδόκητα.</translation>
     </message>
 </context>
 <context>
