@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>La session &apos;%1&apos; s&apos;est terminée avec le statut %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
