@@ -107,17 +107,17 @@
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Espressione regolare</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation type="unfinished"></translation>
+        <translation>Evidenzia tutte le corrispondenze</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra di ricerca</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -127,7 +127,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Trova:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
