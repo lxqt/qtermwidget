@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Glocke in Sitzung &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Session &apos;%1&apos; wurde mit Status %2 beendet.</translation>
+        <translation>SItzung &apos;%1&apos; wurde mit Status %2 beendet.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Session &apos;%1&apos; ist abgestürzt.</translation>
+        <translation>SItzung &apos;%1&apos; ist abgestürzt.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Session &apos;%1&apos; wurde unerwartet beendet.</translation>
+        <translation>Sitzung &apos;%1&apos; wurde unerwartet beendet.</translation>
     </message>
 </context>
 <context>
