@@ -17,6 +17,7 @@ option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses libutempter on Linux or libulog on FreeBSD for login records." OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
+option(USE_QT6 "Build with Qt 6 instead of Qt 5" OFF)
 
 
 # just change version for releases
@@ -35,8 +36,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(QT_MINIMUM_VERSION "5.15.0")
 set(LXQTBT_MINIMUM_VERSION "0.13.0")
 
-find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
-find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
+if(NOT USE_QT6)
+    find_package(Qt5 "${QT_MINIMUM_VERSION}" REQUIRED COMPONENTS Widgets LinguistTools)
+else()
+    find_package(Qt6 "${QT_MINIMUM_VERSION}" REQUIRED COMPONENTS Widgets LinguistTools Core5Compat)
+endif()
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 
 if(USE_UTF8PROC)
@@ -130,9 +134,15 @@ set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBR
 
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
 
-qt5_wrap_cpp(MOCS ${HDRS})
-qt5_wrap_ui(UI_SRCS ${UI})
-set(PKG_CONFIG_REQ "Qt5Widgets")
+if(NOT USE_QT6)
+    qt5_wrap_cpp(MOCS ${HDRS})
+    qt5_wrap_ui(UI_SRCS ${UI})
+    set(PKG_CONFIG_REQ "Qt5Widgets")
+else()
+    qt6_wrap_cpp(MOCS ${HDRS})
+    qt6_wrap_ui(UI_SRCS ${UI})
+    set(PKG_CONFIG_REQ "Qt6Widgets")
+endif()
 
 lxqt_translate_ts(QTERMWIDGET_QM
     TRANSLATION_DIR "lib/translations"
@@ -147,7 +157,11 @@ lxqt_translate_ts(QTERMWIDGET_QM
 )
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
-target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
+if(NOT USE_QT6)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
+else()
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets Qt6::Core5Compat)
+endif()
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}

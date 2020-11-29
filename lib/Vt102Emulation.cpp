@@ -31,7 +31,6 @@
 // Qt
 #include <QEvent>
 #include <QKeyEvent>
-#include <QByteRef>
 #include <QDebug>
 
 // Konsole
