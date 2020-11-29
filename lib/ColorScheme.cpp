@@ -364,9 +364,9 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
         if (hexColorPattern.match(colorStr).hasMatch())
         {
             // Parsing is always ok as already matched by the regexp
-            r = colorStr.midRef(1, 2).toInt(nullptr, 16);
-            g = colorStr.midRef(3, 2).toInt(nullptr, 16);
-            b = colorStr.midRef(5, 2).toInt(nullptr, 16);
+            r = colorStr.mid(1, 2).toInt(nullptr, 16);
+            g = colorStr.mid(3, 2).toInt(nullptr, 16);
+            b = colorStr.mid(5, 2).toInt(nullptr, 16);
             ok = true;
         }
     }
