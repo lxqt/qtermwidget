@@ -112,6 +112,8 @@ ScreenWindow* Emulation::createWindow()
 
     connect(this, &Emulation::handleCommandFromKeyboard,
             window, &ScreenWindow::handleCommandFromKeyboard);
+    connect(this, &Emulation::outputFromKeypressEvent,
+            window, &ScreenWindow::scrollToEnd);
 
     return window;
 }
@@ -210,7 +212,7 @@ void Emulation::receiveChar(wchar_t c)
   };
 }
 
-void Emulation::sendKeyEvent( QKeyEvent* ev )
+void Emulation::sendKeyEvent(QKeyEvent* ev, bool)
 {
   emit stateSet(NOTIFYNORMAL);
 

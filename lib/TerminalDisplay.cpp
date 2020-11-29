@@ -2513,7 +2513,7 @@ void TerminalDisplay::wheelEvent( QWheelEvent* ev )
         QKeyEvent keyScrollEvent(QEvent::KeyPress,key,Qt::NoModifier);
 
         for (int i=0;i<linesToScroll;i++)
-            emit keyPressedSignal(&keyScrollEvent);
+            emit keyPressedSignal(&keyScrollEvent, false);
     }
   }
   else
@@ -2665,9 +2665,26 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
     text.replace(QLatin1Char('\n'), QLatin1Char('\r'));
     bracketText(text);
     QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
-    emit keyPressedSignal(&e); // expose as a big fat keypress event
+    emit keyPressedSignal(&e, true); // expose as a big fat keypress event
 
     _screenWindow->clearSelection();
+
+    switch(mMotionAfterPasting)
+    {
+    case MoveStartScreenWindow:
+        // Temporarily stop tracking output, or pasting contents triggers
+        // ScreenWindow::notifyOutputChanged() and the latter scrolls the
+        // terminal to the last line. It will be re-enabled when needed
+        // (e.g., scrolling to the last line).
+        _screenWindow->setTrackOutput(false);
+        _screenWindow->scrollTo(0);
+        break;
+    case MoveEndScreenWindow:
+        scrollToEnd();
+        break;
+    case NoMoveScreenWindow:
+        break;
+    }
   }
 }
 
@@ -2736,8 +2753,6 @@ int TerminalDisplay::motionAfterPasting()
 
 void TerminalDisplay::keyPressEvent( QKeyEvent* event )
 {
-    bool emitKeyPressSignal = true;
-
     _actSel=0; // Key stroke implies a screen update, so TerminalDisplay won't
               // know where the current selection is.
 
@@ -2750,31 +2765,7 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
         _cursorBlinking = false;
     }
 
-    if ( emitKeyPressSignal )
-    {
-        emit keyPressedSignal(event);
-
-        if(event->modifiers().testFlag(Qt::ShiftModifier)
-             || event->modifiers().testFlag(Qt::ControlModifier)
-             || event->modifiers().testFlag(Qt::AltModifier))
-        {
-            switch(mMotionAfterPasting)
-            {
-            case MoveStartScreenWindow:
-                _screenWindow->scrollTo(0);
-                break;
-            case MoveEndScreenWindow:
-                scrollToEnd();
-                break;
-            case NoMoveScreenWindow:
-                break;
-            }
-        }
-        else
-        {
-            scrollToEnd();
-        }
-    }
+    emit keyPressedSignal(event, false);
 
     event->accept();
 }
@@ -2782,7 +2773,7 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
 void TerminalDisplay::inputMethodEvent( QInputMethodEvent* event )
 {
     QKeyEvent keyEvent(QEvent::KeyPress,0,Qt::NoModifier,event->commitString());
-    emit keyPressedSignal(&keyEvent);
+    emit keyPressedSignal(&keyEvent, false);
 
     _inputMethodData.preeditString = event->preeditString().toStdWString();
     update(preeditRect() | _inputMethodData.previousPreeditRect);

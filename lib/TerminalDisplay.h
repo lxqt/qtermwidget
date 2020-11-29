@@ -521,7 +521,7 @@ signals:
     /**
      * Emitted when the user presses a key whilst the terminal widget has focus.
      */
-    void keyPressedSignal(QKeyEvent *e);
+    void keyPressedSignal(QKeyEvent *e, bool fromPaste);
 
     /**
      * A mouse event occurred.
