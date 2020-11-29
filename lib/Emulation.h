@@ -253,7 +253,7 @@ public slots:
    * Interprets a key press event and emits the sendData() signal with
    * the resulting character stream.
    */
-  virtual void sendKeyEvent(QKeyEvent*);
+  virtual void sendKeyEvent(QKeyEvent*, bool fromPaste);
 
   /**
    * Converts information about a mouse event into an xterm-compatible escape
@@ -443,6 +443,7 @@ signals:
   void cursorChanged(KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
 
   void handleCommandFromKeyboard(KeyboardTranslator::Command command);
+  void outputFromKeypressEvent(void);
 
 protected:
   virtual void setMode(int mode) = 0;

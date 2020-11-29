@@ -1016,10 +1016,10 @@ void Vt102Emulation::sendText( const QString& text )
                     0,
                     Qt::NoModifier,
                     text);
-    sendKeyEvent(&event); // expose as a big fat keypress event
+    sendKeyEvent(&event, false); // expose as a big fat keypress event
   }
 }
-void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
+void Vt102Emulation::sendKeyEvent(QKeyEvent* event, bool fromPaste)
 {
     Qt::KeyboardModifiers modifiers = event->modifiers();
     KeyboardTranslator::States states = KeyboardTranslator::NoState;
@@ -1107,6 +1107,9 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
             textToSend += _codec->fromUnicode(event->text());
         }
 
+        if (!fromPaste && textToSend.length()) {
+            Q_EMIT outputFromKeypressEvent();
+        }
         Q_EMIT sendData( textToSend.constData() , textToSend.length() );
     }
     else
