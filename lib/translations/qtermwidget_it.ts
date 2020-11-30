@@ -6,12 +6,12 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Campanello in sessione &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessione &apos;%1&apos; terminata con stato %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -21,7 +21,7 @@
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessione &apos;%1&apos; terminata inaspettatamente.</translation>
     </message>
 </context>
 <context>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1282"/>
         <source>Size: XXX x XXX</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1294"/>
         <source>Size: %1 x %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;L&apos;output è stato &lt;a href=&quot;https://it.wikipedia.org/wiki/Controllo_di_flusso&quot;&gt;sospeso&lt;/a&gt; premendo Ctrl+S.  Premi &lt;b&gt;Ctrl+Q&lt;/b&gt; per riprendere.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -47,7 +47,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1113"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno traduttore di tastiera disponibile.  L&apos;informazione necessaria per convertire tasti in caratteri da inviare al terminale è mancante.</translation>
     </message>
 </context>
 <context>
@@ -56,32 +56,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema Colore senza nome</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema Colore Accessibile</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri collegamento</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia indirizzo collegamento</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation type="unfinished"></translation>
+        <translation>Invia email a...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia indirizzo email</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
         <source>Cannot load color scheme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricamento schema colore %1 non riuscito</translation>
     </message>
 </context>
 <context>
