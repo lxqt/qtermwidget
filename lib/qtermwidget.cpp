@@ -788,3 +788,11 @@ void QTermWidget::setBoldIntense(bool boldIntense)
 {
     m_impl->m_terminalDisplay->setBoldIntense(boldIntense);
 }
+
+void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
+    m_impl->m_terminalDisplay->setConfirmMultilinePaste(confirmMultilinePaste);
+}
+
+void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
+    m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
+}
