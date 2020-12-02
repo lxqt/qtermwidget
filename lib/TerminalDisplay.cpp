@@ -2658,12 +2658,19 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
   // Paste Clipboard by simulating keypress events
   QString text = QApplication::clipboard()->text(useXselection ? QClipboard::Selection :
                                                                  QClipboard::Clipboard);
-  if(appendReturn)
-    text.append(QLatin1Char('\r'));
   if ( ! text.isEmpty() )
   {
     text.replace(QLatin1Char('\n'), QLatin1Char('\r'));
     bracketText(text);
+
+    // appendReturn is intentionally handled _after_ enclosing texts with brackets as
+    // that feature is used to allow execution of commands immediately after paste.
+    // Ref: https://bugs.kde.org/show_bug.cgi?id=16179
+    // Ref: https://github.com/KDE/konsole/commit/83d365f2ebfe2e659c1e857a2f5f247c556ab571
+    if(appendReturn) {
+        text.append(QLatin1Char('\r'));
+    }
+
     QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
     emit keyPressedSignal(&e, true); // expose as a big fat keypress event
 
