@@ -239,6 +239,9 @@ public:
     void setDrawLineChars(bool drawLineChars);
 
     void setBoldIntense(bool boldIntense);
+
+    void setConfirmMultilinePaste(bool confirmMultilinePaste);
+    void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
 signals:
     void finished();
     void copyAvailable(bool);

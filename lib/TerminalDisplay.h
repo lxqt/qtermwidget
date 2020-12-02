@@ -413,6 +413,8 @@ public:
 
     void setMotionAfterPasting(MotionAfterPasting action);
     int motionAfterPasting();
+    void setConfirmMultilinePaste(bool confirmMultilinePaste);
+    void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
 
     // maps a point on the widget to the position ( ie. line and column )
     // of the character at that point.
@@ -824,6 +826,8 @@ private:
 
 
     MotionAfterPasting mMotionAfterPasting;
+    bool _confirmMultilinePaste;
+    bool _trimPastedTrailingNewlines;
 
     struct InputMethodData
     {

@@ -24,6 +24,7 @@
 #include "TerminalDisplay.h"
 
 // Qt
+#include <QAbstractButton>
 #include <QApplication>
 #include <QBoxLayout>
 #include <QClipboard>
@@ -34,8 +35,10 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLayout>
+#include <QMessageBox>
 #include <QPainter>
 #include <QPixmap>
+#include <QRegularExpression>
 #include <QScrollBar>
 #include <QStyle>
 #include <QTimer>
@@ -2660,7 +2663,34 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
                                                                  QClipboard::Clipboard);
   if ( ! text.isEmpty() )
   {
+    text.replace(QLatin1String("\r\n"), QLatin1String("\n"));
     text.replace(QLatin1Char('\n'), QLatin1Char('\r'));
+
+    if (_trimPastedTrailingNewlines) {
+        text.replace(QRegularExpression(QStringLiteral("\\r+$")), QString());
+    }
+
+    if (_confirmMultilinePaste && text.contains(QLatin1Char('\r'))) {
+        QMessageBox confirmation(this);
+        confirmation.setWindowTitle(tr("Paste multiline text"));
+        confirmation.setText(tr("Are you sure you want to paste this text?"));
+        confirmation.setDetailedText(text);
+        confirmation.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        // Click "Show details..." to show those by default
+        const auto buttons = confirmation.buttons();
+        for( QAbstractButton * btn : buttons ) {
+            if (confirmation.buttonRole(btn) == QMessageBox::ActionRole && btn->text() == QMessageBox::tr("Show Details...")) {
+                Q_EMIT btn->clicked();
+                break;
+            }
+        }
+        confirmation.setDefaultButton(QMessageBox::Yes);
+        confirmation.exec();
+        if (confirmation.standardButton(confirmation.clickedButton()) != QMessageBox::Yes) {
+            return;
+        }
+    }
+
     bracketText(text);
 
     // appendReturn is intentionally handled _after_ enclosing texts with brackets as
@@ -2730,6 +2760,15 @@ void TerminalDisplay::pasteClipboard()
 void TerminalDisplay::pasteSelection()
 {
   emitSelection(true,false);
+}
+
+
+void TerminalDisplay::setConfirmMultilinePaste(bool confirmMultilinePaste) {
+    _confirmMultilinePaste = confirmMultilinePaste;
+}
+
+void TerminalDisplay::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
+    _trimPastedTrailingNewlines = trimPastedTrailingNewlines;
 }
 
 /* ------------------------------------------------------------------------- */
