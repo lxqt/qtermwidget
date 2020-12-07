@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="it">
+<TS version="2.1" language="bg">
 <context>
     <name>Konsole::Session</name>
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Campanello in sessione &apos;%1&apos;</translation>
+        <translation>Звънец в сесия &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Sessione &apos;%1&apos; terminata con stato %2.</translation>
+        <translation>Сесия &apos;%1&apos; завърши със статус %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Sessione &apos;%1&apos; terminata inaspettatamente.</translation>
+        <translation>Сесия &apos;%1&apos; се срина.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Sessione &apos;%1&apos; terminata inaspettatamente.</translation>
+        <translation>Сесия &apos;%1&apos; завърши неочаквано.</translation>
     </message>
 </context>
 <context>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1282"/>
         <source>Size: XXX x XXX</source>
-        <translation>Dimensione: XXX x XXX</translation>
+        <translation>Размер: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1294"/>
         <source>Size: %1 x %2</source>
-        <translation>Dimensione: %1 x %2</translation>
+        <translation>Размер: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;L&apos;output è stato &lt;a href=&quot;https://it.wikipedia.org/wiki/Controllo_di_flusso&quot;&gt;sospeso&lt;/a&gt; premendo Ctrl+S.  Premi &lt;b&gt;Ctrl+Q&lt;/b&gt; per riprendere.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Предаването на данни &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;прекъсна&lt;/a&gt; при натискане на Ctrl+S. Натиснете &lt;b&gt;Ctrl+Q&lt;/b&gt; за възстановяване.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -47,7 +47,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1113"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Nessuno traduttore di tastiera disponibile.  L&apos;informazione necessaria per convertire tasti in caratteri da inviare al terminale è mancante.</translation>
+        <translation>Няма наличен транслатор за клавиатура. Липсва информацията, необходима за преобразуване на клавишите в символи за изпращане до терминала.</translation>
     </message>
 </context>
 <context>
@@ -56,32 +56,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Schema Colore senza nome</translation>
+        <translation>Цветна схема без име</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>Schema Colore Accessibile</translation>
+        <translation>Достъпна цветна схема</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation>Apri collegamento</translation>
+        <translation>Отваряне на Връзка</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Copia indirizzo collegamento</translation>
+        <translation>Копиране адреса на връзката</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>Invia email a...</translation>
+        <translation>Изпращане E-Mail на...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>Copia indirizzo email</translation>
+        <translation>Копиране E-Mail адреса</translation>
     </message>
 </context>
 <context>
@@ -89,12 +89,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
-        <translation>Errore su Schema Colori</translation>
+        <translation>Грешка в цветовата схема</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Caricamento schema colore %1 non riuscito</translation>
+        <translation>Цветна схема %1 не може да се зареди</translation>
     </message>
 </context>
 <context>
@@ -102,22 +102,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation type="unfinished"></translation>
+        <translation>Зачитане на регистъра</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation>Espressione regolare</translation>
+        <translation>Регулярен израз</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation>Evidenzia tutte le corrispondenze</translation>
+        <translation>Маркиране всички съвпадения</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Barra di ricerca</translation>
+        <translation>Лента за търсене</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -127,12 +127,12 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>Trova:</translation>
+        <translation>Търсене:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="54"/>
@@ -142,7 +142,7 @@
     <message>
         <location filename="../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
 </context>
 </TS>
