@@ -16,7 +16,7 @@
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessione &apos;%1&apos; terminata inaspettatamente.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore su Schema Colori</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
@@ -122,7 +122,7 @@
     <message>
         <location filename="../SearchBar.ui" line="20"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="32"/>
@@ -137,7 +137,7 @@
     <message>
         <location filename="../SearchBar.ui" line="54"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="66"/>
