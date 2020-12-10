@@ -337,7 +337,12 @@ gotpty:
             !d->chownpty(true)) {
         qWarning()
         << "chownpty failed for device " << ptyName << "::" << d->ttyName
-        << "\nThis means the communication can be eavesdropped." << endl;
+        << "\nThis means the communication can be eavesdropped."
+#if (QT_VERSION >= QT_VERSION_CHECK(5,15,0))
+        << Qt::endl;
+#else
+        << endl;
+#endif
     }
 
 #if defined (HAVE__GETPTY) || defined (HAVE_GRANTPT)
