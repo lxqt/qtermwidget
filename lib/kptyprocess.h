@@ -102,7 +102,7 @@ public:
     bool isRunning() const
     {
         bool rval;
-        (pid() > 0) ? rval= true : rval= false;
+        (processId() > 0) ? rval= true : rval= false;
         return rval;
 
     }
