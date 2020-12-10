@@ -77,7 +77,7 @@ KPtyProcess::~KPtyProcess()
     if (state() != QProcess::NotRunning)
     {
         qWarning() << Q_FUNC_INFO << "the terminal process is still running, trying to stop it by SIGHUP";
-        ::kill(pid(), SIGHUP);
+        ::kill(static_cast<pid_t>(processId()), SIGHUP);
         waitForFinished(300);
         if (state() != QProcess::NotRunning)
             qCritical() << Q_FUNC_INFO << "process didn't stop upon SIGHUP and will be SIGKILL-ed";

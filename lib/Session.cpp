@@ -539,7 +539,7 @@ void Session::refresh()
 
 bool Session::sendSignal(int signal)
 {
-    int result = ::kill(_shellProcess->pid(),signal);
+    int result = ::kill(static_cast<pid_t>(_shellProcess->processId()),signal);
 
      if ( result == 0 )
      {
@@ -928,7 +928,7 @@ int Session::foregroundProcessId() const
 }
 int Session::processId() const
 {
-    return _shellProcess->pid();
+    return static_cast<int>(_shellProcess->processId());
 }
 int Session::getPtySlaveFd() const
 {

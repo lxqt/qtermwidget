@@ -311,18 +311,6 @@ public:
      */
     static int startDetached(const QStringList &argv);
 
-    /**
-     * Obtain the process' ID as known to the system.
-     *
-     * Unlike with QProcess::pid(), this is a real PID also on Windows.
-     *
-     * This function can be called only while the process is running.
-     * It cannot be applied to detached processes.
-     *
-     * @return the process ID
-     */
-    int pid() const;
-
 protected:
     /**
      * @internal
