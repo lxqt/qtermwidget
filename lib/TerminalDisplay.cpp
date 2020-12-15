@@ -356,7 +356,8 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_outputSuspendedLabel(nullptr)
 ,_lineSpacing(0)
 ,_colorsInverted(false)
-,_blendColor(qRgba(0,0,0,0xff))
+,_opacity(static_cast<qreal>(1))
+,_backgroundMode(None)
 ,_filterChain(new TerminalImageFilterChain())
 ,_cursorShape(Emulation::KeyboardCursorShape::BlockCursor)
 ,mMotionAfterPasting(NoMoveScreenWindow)
@@ -695,21 +696,7 @@ QColor TerminalDisplay::keyboardCursorColor() const
 
 void TerminalDisplay::setOpacity(qreal opacity)
 {
-    QColor color(_blendColor);
-    color.setAlphaF(opacity);
-
-    // enable automatic background filling to prevent the display
-    // flickering if there is no transparency
-    /*if ( color.alpha() == 255 )
-    {
-        setAutoFillBackground(true);
-    }
-    else
-    {
-        setAutoFillBackground(false);
-    }*/
-
-    _blendColor = color.rgba();
+    _opacity = qBound(static_cast<qreal>(0), opacity, static_cast<qreal>(1));
 }
 
 void TerminalDisplay::setBackgroundImage(const QString& backgroundImage)
@@ -726,16 +713,21 @@ void TerminalDisplay::setBackgroundImage(const QString& backgroundImage)
     }
 }
 
+void TerminalDisplay::setBackgroundMode(BackgroundMode mode)
+{
+    _backgroundMode = mode;
+}
+
 void TerminalDisplay::drawBackground(QPainter& painter, const QRect& rect, const QColor& backgroundColor, bool useOpacitySetting )
 {
         // The whole widget rectangle is filled by the background color from
         // the color scheme set in setColorTable(), while the scrollbar is
         // left to the widget style for a consistent look.
-        if ( HAVE_TRANSPARENCY && qAlpha(_blendColor) < 0xff && useOpacitySetting )
+        if ( useOpacitySetting )
         {
             if (_backgroundImage.isNull()) {
                 QColor color(backgroundColor);
-                color.setAlpha(qAlpha(_blendColor));
+                color.setAlphaF(_opacity);
 
                 painter.save();
                 painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -1362,13 +1354,83 @@ void TerminalDisplay::focusInEvent(QFocusEvent*)
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
 {
   QPainter paint(this);
+  QRect cr = contentsRect();
 
-  if ( !_backgroundImage.isNull() && qAlpha(_blendColor) < 0xff )
+  if ( !_backgroundImage.isNull() )
   {
-    paint.drawPixmap(0, 0, _backgroundImage);
     QColor background = _colorTable[DEFAULT_BACK_COLOR].color;
-    background.setAlpha(qAlpha(_blendColor));
-    paint.fillRect(contentsRect(), background);
+    if (_opacity < static_cast<qreal>(1))
+    {
+        background.setAlphaF(_opacity);
+        paint.save();
+        paint.setCompositionMode(QPainter::CompositionMode_Source);
+        paint.fillRect(cr, background);
+        paint.restore();
+    }
+    else
+        paint.fillRect(cr, background);
+
+    paint.save();
+    paint.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+    if (_backgroundMode == Stretch)
+    { // scale the image without keeping its proportions to fill the screen
+        paint.drawPixmap(cr, _backgroundImage, _backgroundImage.rect());
+    }
+    else if (_backgroundMode == Zoom)
+    { // zoom in/out the image to fit it
+        QRect r = _backgroundImage.rect();
+        qreal wRatio = static_cast<qreal>(cr.width()) / r.width();
+        qreal hRatio = static_cast<qreal>(cr.height()) / r.height();
+        if (wRatio > hRatio)
+        {
+            r.setWidth(qRound(r.width() * hRatio));
+            r.setHeight(cr.height());
+        }
+        else
+        {
+            r.setHeight(qRound(r.height() * wRatio));
+            r.setWidth(cr.width());
+        }
+        r.moveCenter(cr.center());
+        paint.drawPixmap(r, _backgroundImage, _backgroundImage.rect());
+    }
+    else if (_backgroundMode == Fit)
+    { // if the image is bigger than the terminal, zoom it out to fit it
+        QRect r = _backgroundImage.rect();
+        qreal wRatio = static_cast<qreal>(cr.width()) / r.width();
+        qreal hRatio = static_cast<qreal>(cr.height()) / r.height();
+        if (r.width() > cr.width())
+        {
+            if (wRatio <= hRatio)
+            {
+                r.setHeight(qRound(r.height() * wRatio));
+                r.setWidth(cr.width());
+            }
+            else
+            {
+                r.setWidth(qRound(r.width() * hRatio));
+                r.setHeight(cr.height());
+            }
+        }
+        else if (r.height() > cr.height())
+        {
+            r.setWidth(qRound(r.width() * hRatio));
+            r.setHeight(cr.height());
+        }
+        r.moveCenter(cr.center());
+        paint.drawPixmap(r, _backgroundImage, _backgroundImage.rect());
+    }
+    else if (_backgroundMode == Center)
+    { // center the image without scaling/zooming
+        QRect r = _backgroundImage.rect();
+        r.moveCenter(cr.center());
+        paint.drawPixmap(r.topLeft(), _backgroundImage);
+    }
+    else//if (_backgroundMode == None)
+        paint.drawPixmap(0, 0, _backgroundImage);
+
+    paint.restore();
   }
 
   if(_drawTextTestFlag)
@@ -1376,7 +1438,7 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     calDrawTextAdditionHeight(paint);
   }
 
-  const auto rects = (pe->region() & contentsRect()).rects();
+  const auto rects = (pe->region() & cr).rects();
   for (const QRect &rect : rects)
   {
     drawBackground(paint,rect,palette().background().color(),
