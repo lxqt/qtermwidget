@@ -418,6 +418,9 @@ public:
     // of the character at that point.
     void getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const;
 
+    void disableBracketedPasteMode(bool disable) { _disabledBracketedPasteMode = disable; }
+    bool bracketedPasteModeIsDisabled() const { return _disabledBracketedPasteMode; }
+
 public slots:
 
     /**
@@ -753,6 +756,7 @@ private:
     bool _bidiEnabled;
     bool _mouseMarks;
     bool _bracketedPasteMode;
+    bool _disabledBracketedPasteMode;
 
     QPoint  _iPntSel; // initial selection point
     QPoint  _pntSel; // current selection point
