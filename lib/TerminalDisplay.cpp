@@ -333,6 +333,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_terminalSizeStartup(true)
 ,_bidiEnabled(false)
 ,_mouseMarks(false)
+,_disabledBracketedPasteMode(false)
 ,_actSel(0)
 ,_wordSelectionMode(false)
 ,_lineSelectionMode(false)
@@ -2672,7 +2673,7 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
 
 void TerminalDisplay::bracketText(QString& text)
 {
-    if (bracketedPasteMode())
+    if (bracketedPasteMode() && !_disabledBracketedPasteMode)
     {
         text.prepend(QLatin1String("\033[200~"));
         text.append(QLatin1String("\033[201~"));

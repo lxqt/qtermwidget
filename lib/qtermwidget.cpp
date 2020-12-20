@@ -533,6 +533,16 @@ void QTermWidget::bracketText(QString& text)
     m_impl->m_terminalDisplay->bracketText(text);
 }
 
+void QTermWidget::disableBracketedPasteMode(bool disable)
+{
+    m_impl->m_terminalDisplay->disableBracketedPasteMode(disable);
+}
+
+bool QTermWidget::bracketedPasteModeIsDisabled() const
+{
+    return m_impl->m_terminalDisplay->bracketedPasteModeIsDisabled();
+}
+
 void QTermWidget::copyClipboard()
 {
     m_impl->m_terminalDisplay->copyClipboard();

@@ -226,6 +226,10 @@ public:
     /** change and wrap text corresponding to paste mode **/
     void bracketText(QString& text);
 
+    /** forcefully disable bracketed paste mode **/
+    void disableBracketedPasteMode(bool disable);
+    bool bracketedPasteModeIsDisabled() const;
+
     /** Set the empty space outside the terminal */
     void setMargin(int);
 
