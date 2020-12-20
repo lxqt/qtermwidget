@@ -308,7 +308,7 @@ export(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
 
 # example application
 if(BUILD_EXAMPLE)
-    set(EXAMPLE_SRC example/main.cpp)
+    set(EXAMPLE_SRC examples/cpp/main.cpp)
     add_executable(example ${EXAMPLE_SRC})
     target_link_libraries(example ${QTERMWIDGET_LIBRARY_NAME})
 endif()
