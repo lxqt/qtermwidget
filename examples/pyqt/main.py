@@ -4,11 +4,12 @@ import QTermWidget
 
 
 class Terminal(QTermWidget.QTermWidget):
-    def __init__(self):
+    def __init__(self, process: str, args: list):
         super().__init__(0)
         self.setTerminalSizeHint(False)
         self.setColorScheme("DarkPastels")
-        self.setShellProgram("vim")
+        self.setShellProgram(process)
+        self.setArgs(args)
         self.startShellProgram()
         self.finished.connect(self.close)
         self.show()
@@ -18,5 +19,6 @@ class Terminal(QTermWidget.QTermWidget):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
-    w = Terminal()
+    args = ["--clean", "--noplugin"]
+    term = Terminal("vim", args)
     app.exec()
