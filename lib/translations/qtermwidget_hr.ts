@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvono u sesiji „%1“</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesija „%1“ je prekinuta sa stanjem %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fatalna greška u sesiji „%1“.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesija „%1“ je nenadano prekinuta.</translation>
     </message>
 </context>
 <context>
