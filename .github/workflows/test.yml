@@ -1,0 +1,13 @@
+name: Testing
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    container: archlinux:base-devel
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v2
+    - name: Build
+      run: bash ./.ci/build.sh
