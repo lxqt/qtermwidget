@@ -106,24 +106,24 @@ void | getSelectionStart(int &_row_, int &_column_)
 void | scrollToEnd()
 void | sendText(QString &_text_)
 void | setArgs(QStringList &_args_)
-void | setAutoClose(bool _autoClose_)
+void | setAutoClose(bool _enabled_)
 void | setColorScheme(const QString &_name_)
 void | setEnvironment(const QStringList &_environment_)
 void | setFlowControlEnabled(bool _enable_)
 void | setFlowControlWarningEnabled(bool _enable_)
 void | setHistorySize(int _lines_)
 void | setKeyboardCursorShape(QTermWidget::KeyboardCursorShape _shape_)
-void | setMonitorActivity(bool _monitor_)
-void | setMonitorSilence(bool _monitor_)
+void | setMonitorActivity(bool _enabled_)
+void | setMonitorSilence(bool _enabled_)
 void | setMotionAfterPasting(int _action_)
 void | setScrollBarPosition(QTermWidget::ScrollBarPosition _pos_)
 void | setSelectionEnd(int _row_, int _column_)
 void | setSelectionStart(int _row_, int _column_)
-void | setShellProgram(const QString &_progname_)
+void | setShellProgram(const QString &_program_)
 void | setSilenceTimeout(int _seconds_)
 void | setTerminalFont(QFont &_font_)
 void | setTerminalOpacity(qreal _level_)
-void | setTerminalSizeHint(bool _on_)
+void | setTerminalSizeHint(bool _enabled_)
 void | setTextCodec(QTextCodec *_codec_)
 void | setWorkingDirectory(const QString &_dir_)
 void | startShellProgram()
@@ -267,7 +267,7 @@ Send text to terminal.
 __void setArgs(QStringList &_args_)__\
 Sets the shell program arguments, default is none.
 
-__void setAutoClose(bool _autoClose_)__\
+__void setAutoClose(bool _enabled_)__\
 Automatically close the terminal session after the shell process exits or keep it running.
 
 __void setColorScheme(const QString &_name_)__\
@@ -291,8 +291,8 @@ Set named key binding for given widget.
 __void setKeyboardCursorShape(QTermWidget::KeyboardCursorShape _shape_)__\
 Sets the shape of the keyboard cursor.  This is the cursor drawn at the position in the terminal where keyboard input will appear.
 
-<!--__void setMonitorActivity(bool _monitor_)__\-->
-<!--__void setMonitorSilence(bool _monitor_)__\-->
+<!--__void setMonitorActivity(bool _enabled_)__\-->
+<!--__void setMonitorSilence(bool _enabled_)__\-->
 <!--__void setMotionAfterPasting(int _action_)__\-->
 
 __void setScrollBarPosition(QTermWidget::ScrollBarPosition _pos_)__\
@@ -301,7 +301,7 @@ Sets presence and position of scrollbar.
 <!--__void setSelectionEnd(int _row_, int _column_)__\-->
 <!--__void setSelectionStart(int _row_, int _column_)__\-->
 
-__void setShellProgram(const QString &_progname_)__\
+__void setShellProgram(const QString &_program_)__\
 Sets the shell program, default is /bin/bash.
 
 <!--__void setSilenceTimeout(int _seconds_)__\-->
@@ -312,7 +312,7 @@ Sets terminal font. Default is application font with family Monospace, size 10. 
 
 <!--__void setTerminalOpacity(qreal _level_)__\-->
 
-__void setTerminalSizeHint(bool _on_)__\
+__void setTerminalSizeHint(bool _enabled_)__\
 Exposes TerminalDisplay::TerminalSizeHint.
 
 __void setTextCodec(QTextCodec *_codec_)__\
