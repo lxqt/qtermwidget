@@ -5,7 +5,7 @@
 A terminal emulator widget for Qt 5.
 
 QTermWidget is an open-source project originally based on the KDE4 Konsole application, but it took its own direction later on.
-The main goal of this project is to provide a unicode-enabled, embeddable Qt widget for using as a built-in console (or terminal emulation widget).
+The main goal of this project is to provide a Unicode-enabled, embeddable Qt widget for using as a built-in console (or terminal emulation widget).
 
 It is compatible with BSD, Linux and OS X.
 
@@ -109,8 +109,8 @@ void | setArgs(QStringList &_args_)
 void | setAutoClose(bool _enabled_)
 void | setColorScheme(const QString &_name_)
 void | setEnvironment(const QStringList &_environment_)
-void | setFlowControlEnabled(bool _enable_)
-void | setFlowControlWarningEnabled(bool _enable_)
+void | setFlowControlEnabled(bool _enabled_)
+void | setFlowControlWarningEnabled(bool _enabled_)
 void | setHistorySize(int _lines_)
 void | setKeyboardCursorShape(QTermWidget::KeyboardCursorShape _shape_)
 void | setMonitorActivity(bool _enabled_)
@@ -276,10 +276,10 @@ Sets the color scheme, default is white on black.
 __void setEnvironment(const QStringList &_environment_)__\
 Sets environment variables.
 
-__void setFlowControlEnabled(bool _enable_)__\
+__void setFlowControlEnabled(bool _enabled_)__\
 Sets whether flow control is enabled.
 
-__void setFlowControlWarningEnabled(bool _enable_)__\
+__void setFlowControlWarningEnabled(bool _enabled_)__\
 Sets whether the flow control warning box should be shown when the flow control stop key (Ctrl+S) is pressed.
 
 __void setHistorySize(int _lines_)__\
