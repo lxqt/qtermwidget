@@ -102,7 +102,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation type="unfinished"></translation>
+        <translation>Rispetta maiuscolo/minuscolo</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
