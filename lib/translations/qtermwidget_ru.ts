@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Звуковой сигнал в сессии &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сессия &apos;%1&apos; завершилась со статусом %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сессия &apos;%1&apos; упала.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сессия ’%1’ завершилась неожиданно.</translation>
     </message>
 </context>
 <context>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1282"/>
         <source>Size: XXX x XXX</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1294"/>
         <source>Size: %1 x %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3180"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Вывод был &lt;a href=&quot;https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C_%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%D0%B0&quot;&gt;приостановлен&lt;/a&gt; нажатием Ctrl+S. Нажмите &lt;b&gt;Ctrl+Q&lt;/b&gt; для продолжения.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -47,7 +47,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1113"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет доступных трансляторов клавиатуры. Информация, необходимая, чтобы преобразовать нажатия клавиш в символы, которые будут отправлены на терминал, не найдена.</translation>
     </message>
 </context>
 <context>
@@ -56,32 +56,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Безымянная цветовая схема</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Упрощённая цветовая схема</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть ссылку</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопировать адрес ссылки</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation type="unfinished"></translation>
+        <translation>Отправить e-mail на...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопировать e-mail адрес</translation>
     </message>
 </context>
 <context>
@@ -89,12 +89,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="459"/>
         <source>Color Scheme Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка цветовой схемы</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="460"/>
         <source>Cannot load color scheme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить цветовую схему: %1</translation>
     </message>
 </context>
 <context>
@@ -102,47 +102,47 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation type="unfinished"></translation>
+        <translation>С учётом регистра</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Регулярное выражение</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation type="unfinished"></translation>
+        <translation>Подсвечивать все совпадения</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation type="unfinished"></translation>
+        <translation>ПанельПоиска</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Найти:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
         <source>&lt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="54"/>
         <source>&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
 </context>
 </TS>
