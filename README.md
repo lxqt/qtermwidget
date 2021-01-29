@@ -52,15 +52,17 @@ License: public-domain
 
 ### Compiling sources
 
-The only runtime dependency is qtbase ≥ 5.7.1.
+The only runtime dependency is qtbase ≥ 5.12.0.
 Build dependencies are as follows:
-- CMake ≥ 3.0.2 serves as the build system and therefore needs to be present to compile.
--  [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) >= 0.4.0 is also needed for compilation.
--  Git is needed to pull translations and optionally pull latest VCS checkouts.
+- CMake ≥ 3.1.0 serves as the build system and therefore needs to be present to compile.
+- The latest [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) is also needed for compilation.
+- Git is needed to optionally pull latest VCS checkouts.
 
 Code configuration is handled by CMake. CMake variable `CMAKE_INSTALL_PREFIX` will normally have to be set to `/usr`, depending on the way library paths are dealt with on 64bit systems. Variables like `CMAKE_INSTALL_LIBDIR` may have to be set as well.
 
 To build, run `make`. To install, run `make install` which accepts variable `DESTDIR` as usual.
+
+To build PyQt bindings, specify an additional CMake option `QTERMWIDGET_BUILD_PYTHON_BINDING=ON` when building this library.
 
 ### Binary packages
 
