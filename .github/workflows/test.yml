@@ -9,5 +9,10 @@ jobs:
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
+    - name: Checkout shared CI repo
+      uses: actions/checkout@v2
+      with:
+        repository: lxqt/ci
+        path: shared-ci
     - name: Build
       run: bash ./.ci/build.sh
