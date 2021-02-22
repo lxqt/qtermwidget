@@ -1368,7 +1368,9 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
         paint.restore();
     }
     else
+    {
         paint.fillRect(cr, background);
+    }
 
     paint.save();
     paint.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -1427,8 +1429,10 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
         r.moveCenter(cr.center());
         paint.drawPixmap(r.topLeft(), _backgroundImage);
     }
-    else//if (_backgroundMode == None)
+    else //if (_backgroundMode == None)
+    {
         paint.drawPixmap(0, 0, _backgroundImage);
+    }
 
     paint.restore();
   }
