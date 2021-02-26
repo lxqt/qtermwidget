@@ -33,19 +33,10 @@ Copyright: Author Adriaan de Groot <groot@kde.org>
            2008, e_k <e_k@users.sourceforge.net>
 License: LGPL-2+
 
-Files: pyqt/cmake/*
-Copyright: 2012, Luca Beltrame <lbeltrame@kde.org>
-           2012, Rolf Eike Beer <eike@sf-mail.de>
-           2007-2014, Simon Edwards <simon@simonzone.com>
-License: BSD-3-clause
-
 Files: cmake/FindUtf8Proc.cmake
 Copyright: 2009-2011, Kitware, Inc
            2009-2011, Philip Lowman <philip@yhbt.com>
 License: BSD-3-clause
-
-Files: pyqt/cmake/PythonCompile.py
-License: public-domain
 ```
 
 ## Installation
@@ -62,7 +53,7 @@ Code configuration is handled by CMake. CMake variable `CMAKE_INSTALL_PREFIX` wi
 
 To build, run `make`. To install, run `make install` which accepts variable `DESTDIR` as usual.
 
-To build PyQt bindings, specify an additional CMake option `QTERMWIDGET_BUILD_PYTHON_BINDING=ON` when building this library.
+To build PyQt bindings, build this library first, and then invoke `sip-wheel` in pyqt/ directory. Environment variables `CXXFLAGS` and `LDFLAGS` can be used to specify non-installed or non-standard directories for headers and shared libraries, and the built Python wheel can be installed by standard tools like `pip`. See [the CI script](.ci/build.sh) for a complete example.
 
 ### Binary packages
 

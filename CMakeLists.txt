@@ -20,6 +20,7 @@ option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OF
 
 
 # just change version for releases
+# keep this in sync with the version in pyqt/pyproject.toml
 set(QTERMWIDGET_VERSION_MAJOR "1")
 set(QTERMWIDGET_VERSION_MINOR "0")
 set(QTERMWIDGET_VERSION_PATCH "0")
@@ -316,7 +317,7 @@ endif()
 
 # python binding
 if (QTERMWIDGET_BUILD_PYTHON_BINDING)
-    add_subdirectory(pyqt)
+    message(SEND_ERROR "QTERMWIDGET_BUILD_PYTHON_BINDING is no longer supported. Check README.md for how to build PyQt bindings.")
 endif()
 # end of python binding
 
