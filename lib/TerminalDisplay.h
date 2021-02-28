@@ -62,6 +62,13 @@ namespace Konsole
         MoveEndScreenWindow = 2
     };
 
+    enum BackgroundMode {
+        None,
+        Stretch,
+        Zoom,
+        Fit,
+        Center
+    };
 
 extern unsigned short vt100_graphics[32];
 
@@ -105,6 +112,9 @@ public:
 
     /** Sets the background image of the terminal display. */
     void setBackgroundImage(const QString& backgroundImage);
+
+    /** Sets the background image mode of the terminal display. */
+    void setBackgroundMode(BackgroundMode mode);
 
     /**
      * Specifies whether the terminal display has a vertical scroll bar, and if so whether it
@@ -809,9 +819,10 @@ private:
 
     QSize _size;
 
-    QRgb _blendColor;
+    qreal _opacity;
 
     QPixmap _backgroundImage;
+    BackgroundMode _backgroundMode;
 
     // list of filters currently applied to the display.  used for links and
     // search highlight

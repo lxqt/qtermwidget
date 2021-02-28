@@ -378,6 +378,11 @@ void QTermWidget::setTerminalBackgroundImage(const QString& backgroundImage)
     m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
 }
 
+void QTermWidget::setTerminalBackgroundMode(int mode)
+{
+    m_impl->m_terminalDisplay->setBackgroundMode((Konsole::BackgroundMode)mode);
+}
+
 void QTermWidget::setShellProgram(const QString &progname)
 {
     if (!m_impl->m_session)
