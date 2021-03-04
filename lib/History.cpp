@@ -612,7 +612,7 @@ CompactHistoryLine::CompactHistoryLine ( const TextLine& line, CompactHistoryBlo
 {
   length=line.size();
 
-  if (line.size() > 0) {
+  if (!line.empty()) {
     formatLength=1;
     int k=1;
 
