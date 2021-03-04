@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla testo multi-righe</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation type="unfinished"></translation>
+        <translation>Si è sicuro di voler incollare questo testo?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra dettagli...</translation>
     </message>
 </context>
 <context>

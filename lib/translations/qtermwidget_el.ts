@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Επικόλληση κειμένου πολλαπλών γραμμών</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιθυμείτε σίγουρα την επικόλληση του κειμένου;</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation type="unfinished"></translation>
+        <translation>Εμφάνιση λεπτομερειών...</translation>
     </message>
 </context>
 <context>

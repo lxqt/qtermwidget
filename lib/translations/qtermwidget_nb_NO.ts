@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Klokke i økt «%1»</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt «%1» avsluttet med status %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt «%1» krasjet.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt «%1» avsluttet uventet.</translation>
     </message>
 </context>
 <context>
@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Lim inn flerlinjerstekst</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation type="unfinished"></translation>
+        <translation>Er du sikker på at du vil lime inn denne teksten?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis detaljer …</translation>
     </message>
 </context>
 <context>
