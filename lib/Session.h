@@ -340,7 +340,7 @@ public:
     void setSize(const QSize & size);
 
     /** Sets the text codec used by this session's terminal emulation. */
-    void setCodec(QTextCodec * codec);
+    void setCodec(QTextCodec * codec) const;
 
     /**
      * Sets whether the session has a dark background or not.  The session
@@ -633,8 +633,8 @@ public:
     int masterMode() const;
 
 private:
-    void connectPair(Session * master , Session * other);
-    void disconnectPair(Session * master , Session * other);
+    void connectPair(Session * master , Session * other) const;
+    void disconnectPair(Session * master , Session * other) const;
     void connectAll(bool connect);
     QList<Session *> masters() const;
 

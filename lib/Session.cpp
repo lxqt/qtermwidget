@@ -143,7 +143,7 @@ bool Session::isRunning() const
     return _shellProcess->state() == QProcess::Running;
 }
 
-void Session::setCodec(QTextCodec * codec)
+void Session::setCodec(QTextCodec * codec) const
 {
     emulation()->setCodec(codec);
 }
@@ -1034,7 +1034,7 @@ void SessionGroup::setMasterStatus(Session * session, bool master)
     }
 }
 
-void SessionGroup::connectPair(Session * master , Session * other)
+void SessionGroup::connectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 
@@ -1045,7 +1045,7 @@ void SessionGroup::connectPair(Session * master , Session * other)
                  SLOT(sendString(const char *,int)) );
     }
 }
-void SessionGroup::disconnectPair(Session * master , Session * other)
+void SessionGroup::disconnectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 

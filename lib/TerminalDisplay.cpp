@@ -649,7 +649,7 @@ static void drawOtherChar(QPainter& paint, int x, int y, int w, int h, uchar cod
 }
 
 void TerminalDisplay::drawLineCharString(    QPainter& painter, int x, int y, const std::wstring& str,
-                                    const Character* attributes)
+                                    const Character* attributes) const
 {
         const QPen& currentPen = painter.pen();
 
@@ -2791,7 +2791,7 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
   }
 }
 
-void TerminalDisplay::bracketText(QString& text)
+void TerminalDisplay::bracketText(QString& text) const
 {
     if (bracketedPasteMode() && !_disabledBracketedPasteMode)
     {
