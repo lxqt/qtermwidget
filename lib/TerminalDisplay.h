@@ -206,7 +206,7 @@ public:
     void emitSelection(bool useXselection,bool appendReturn);
 
     /** change and wrap text corresponding to paste mode **/
-    void bracketText(QString& text);
+    void bracketText(QString& text) const;
 
     /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
@@ -672,7 +672,7 @@ private:
                                            const Character* style, bool invertCharacterColor);
     // draws a string of line graphics
     void drawLineCharString(QPainter& painter, int x, int y,
-                            const std::wstring& str, const Character* attributes);
+                            const std::wstring& str, const Character* attributes) const;
 
     // draws the preedit string for input methods
     void drawInputMethodPreeditString(QPainter& painter , const QRect& rect);

@@ -401,7 +401,7 @@ void HistoryScrollBuffer::setMaxNbLines(unsigned int lineCount)
     dynamic_cast<HistoryTypeBuffer*>(m_histType)->m_nbLines = lineCount;
 }
 
-int HistoryScrollBuffer::bufferIndex(int lineNumber)
+int HistoryScrollBuffer::bufferIndex(int lineNumber) const
 {
     Q_ASSERT( lineNumber >= 0 );
     Q_ASSERT( lineNumber < _maxLineCount );
