@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation type="unfinished"></translation>
+        <translation>Details...</translation>
     </message>
 </context>
 <context>
@@ -74,7 +74,7 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Nicht benanntes Farbschema</translation>
+        <translation>Unbenanntes Farbschema</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
