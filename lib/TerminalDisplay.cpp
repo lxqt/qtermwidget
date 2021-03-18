@@ -3203,10 +3203,10 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
         // without quoting them (this only affects paths with spaces in)
         //urlText = KShell::quoteArg(urlText);
 
+        dropText += QLatin1Char('\'');
         dropText += urlText;
-
-        if ( i != urls.count()-1 )
-            dropText += QLatin1Char(' ');
+        dropText += QLatin1Char('\'');
+        dropText += QLatin1Char(' ');
     }
   }
   else
