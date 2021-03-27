@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>キーボードトランスレータがありません。押されたキーを文字に変換してターミナルへ送信するために必要な情報がありません。</translation>
+        <translation>キーボードトランスレーターがありません。押されたキーを文字に変換してターミナルへ送信するために必要な情報がありません。</translation>
     </message>
 </context>
 <context>
