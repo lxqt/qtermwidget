@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation type="unfinished"></translation>
+        <translation>mehrzeiligen Text einfügen</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie wollen diesen Text einfügen?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
