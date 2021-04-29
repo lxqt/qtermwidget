@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation>Ukázat podrobnosti...</translation>
+        <translation>Zobrazit detaily...</translation>
     </message>
 </context>
 <context>
