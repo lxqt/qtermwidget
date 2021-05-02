@@ -79,6 +79,16 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
         _linePositions << pos;
     }
 
+    // check the real length
+    for (int i = 0 ; i < count ; i++)
+    {
+        if (characters + i == nullptr)
+        {
+            count = i;
+            break;
+        }
+    }
+
     //TODO should we ignore or respect the LINE_WRAPPED line property?
 
     //note:  we build up a QString and send it to the text stream rather writing into the text
