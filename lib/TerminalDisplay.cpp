@@ -367,6 +367,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,mMotionAfterPasting(NoMoveScreenWindow)
 ,_confirmMultilinePaste(false)
 ,_trimPastedTrailingNewlines(false)
+,_quotePastedUrls(false)
 ,_leftBaseMargin(1)
 ,_topBaseMargin(1)
 ,_drawLineChars(true)
@@ -2760,6 +2761,7 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
     }
 
     bracketText(text);
+    quoteUrl(text);
 
     // appendReturn is intentionally handled _after_ enclosing texts with brackets as
     // that feature is used to allow execution of commands immediately after paste.
@@ -2802,6 +2804,54 @@ void TerminalDisplay::bracketText(QString& text)
     }
 }
 
+void TerminalDisplay::quoteUrl(QString& text)
+{
+    if (!_quotePastedUrls)
+        return;
+
+    int i = 0;
+    while (i < text.size()) {
+        if ((i && !text[i - 1].isSpace()) || text[i] != QLatin1Char('h')) {
+            ++i;
+            continue;
+        }
+
+        const QStringRef ref = text.midRef(i, 8);
+        const int urlStart = i;
+        if (ref == QLatin1String("https://")) {
+            i += 6;
+        } else if (ref.startsWith(QLatin1String("http://"))) {
+            i += 5;
+        } else {
+            ++i;
+            continue;
+        }
+
+        bool ok = true;
+        while (++i < text.size() && ok) {
+            switch (text[i].toLatin1())
+            {
+            case ' ':
+            case '\r':
+            case '\n':
+            case '\t':
+                text.insert(i, QLatin1Char('"'));
+                text.insert(urlStart, QLatin1Char('"'));
+                break;
+            case '\'':
+            case '"':
+            case '\\':
+                ok = false;
+                break;
+            }
+        }
+        if (i == text.size()) {
+            text.append(QLatin1Char('"'));
+            text.insert(urlStart, QLatin1Char('"'));
+        }
+    }
+}
+
 void TerminalDisplay::setSelection(const QString& t)
 {
     if (QApplication::clipboard()->supportsSelection())
@@ -2837,6 +2887,10 @@ void TerminalDisplay::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 
 void TerminalDisplay::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     _trimPastedTrailingNewlines = trimPastedTrailingNewlines;
+}
+
+void TerminalDisplay::setQuotePastedUrls(bool quotePastedUrls) {
+    _quotePastedUrls = quotePastedUrls;
 }
 
 /* ------------------------------------------------------------------------- */
