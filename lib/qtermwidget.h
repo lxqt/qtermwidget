@@ -243,6 +243,7 @@ public:
 
     void setConfirmMultilinePaste(bool confirmMultilinePaste);
     void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
+    void setQuotePastedUrls(bool quotePastedUrls);
 signals:
     void finished();
     void copyAvailable(bool);

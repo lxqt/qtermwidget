@@ -207,6 +207,7 @@ public:
 
     /** change and wrap text corresponding to paste mode **/
     void bracketText(QString& text);
+    void quoteUrl(QString& text);
 
     /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
@@ -425,6 +426,7 @@ public:
     int motionAfterPasting();
     void setConfirmMultilinePaste(bool confirmMultilinePaste);
     void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
+    void setQuotePastedUrls(bool quotePastedUrls);
 
     // maps a point on the widget to the position ( ie. line and column )
     // of the character at that point.
@@ -569,9 +571,9 @@ signals:
    void sendStringToEmu(const char*);
 
    // qtermwidget signals
-	void copyAvailable(bool);
-	void termGetFocus();
-	void termLostFocus();
+    void copyAvailable(bool);
+    void termGetFocus();
+    void termLostFocus();
 
     void notifyBell(const QString&);
     void usesMouseChanged();
@@ -839,6 +841,7 @@ private:
     MotionAfterPasting mMotionAfterPasting;
     bool _confirmMultilinePaste;
     bool _trimPastedTrailingNewlines;
+    bool _quotePastedUrls;
 
     struct InputMethodData
     {

@@ -797,3 +797,7 @@ void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
 }
+
+void QTermWidget::setQuotePastedUrls(bool quotePastedUrls) {
+    m_impl->m_terminalDisplay->setQuotePastedUrls(quotePastedUrls);
+}
