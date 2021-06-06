@@ -22,13 +22,14 @@
 #include "History.h"
 
 // System
+#include <algorithm>
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <errno.h>
+#include <cerrno>
 
 #include <QtDebug>
 
@@ -89,7 +90,8 @@ FIXME: There is noticeable decrease in speed, also. Perhaps,
 HistoryFile::HistoryFile()
   : ion(-1),
     length(0),
-    fileMap(0)
+    fileMap(nullptr),
+    readWriteBalance(0)
 {
   if (tmpFile.open())
   {
@@ -109,15 +111,15 @@ HistoryFile::~HistoryFile()
 //to avoid this.
 void HistoryFile::map()
 {
-    Q_ASSERT( fileMap == 0 );
+    Q_ASSERT( fileMap == nullptr );
 
-    fileMap = (char*)mmap( 0 , length , PROT_READ , MAP_PRIVATE , ion , 0 );
+    fileMap = (char*)mmap( nullptr , length , PROT_READ , MAP_PRIVATE , ion , 0 );
 
     //if mmap'ing fails, fall back to the read-lseek combination
     if ( fileMap == MAP_FAILED )
     {
             readWriteBalance = 0;
-            fileMap = 0;
+            fileMap = nullptr;
             //qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
     }
 }
@@ -127,12 +129,12 @@ void HistoryFile::unmap()
     int result = munmap( fileMap , length );
     Q_ASSERT( result == 0 ); Q_UNUSED( result );
 
-    fileMap = 0;
+    fileMap = nullptr;
 }
 
 bool HistoryFile::isMapped() const
 {
-    return (fileMap != 0);
+    return (fileMap != nullptr);
 }
 
 void HistoryFile::add(const unsigned char* bytes, int len)
@@ -313,7 +315,7 @@ void HistoryScrollBuffer::addCellsVector(const QVector<Character>& cells)
 void HistoryScrollBuffer::addCells(const Character a[], int count)
 {
   HistoryLine newLine(count);
-  qCopy(a,a+count,newLine.begin());
+  std::copy(a,a+count,newLine.begin());
 
   addCellsVector(newLine);
 }
@@ -399,7 +401,7 @@ void HistoryScrollBuffer::setMaxNbLines(unsigned int lineCount)
     dynamic_cast<HistoryTypeBuffer*>(m_histType)->m_nbLines = lineCount;
 }
 
-int HistoryScrollBuffer::bufferIndex(int lineNumber)
+int HistoryScrollBuffer::bufferIndex(int lineNumber) const
 {
     Q_ASSERT( lineNumber >= 0 );
     Q_ASSERT( lineNumber < _maxLineCount );
@@ -537,7 +539,7 @@ void* CompactHistoryBlock::allocate ( size_t length )
 {
  Q_ASSERT ( length > 0 );
   if ( tail-blockStart+length > blockLength )
-    return NULL;
+    return nullptr;
 
   void* block = tail;
   tail += length;
@@ -610,7 +612,7 @@ CompactHistoryLine::CompactHistoryLine ( const TextLine& line, CompactHistoryBlo
 {
   length=line.size();
 
-  if (line.size() > 0) {
+  if (!line.empty()) {
     formatLength=1;
     int k=1;
 
@@ -628,9 +630,9 @@ CompactHistoryLine::CompactHistoryLine ( const TextLine& line, CompactHistoryBlo
 
     //kDebug() << "number of different formats in string: " << formatLength;
     formatArray = (CharacterFormat*) blockList.allocate(sizeof(CharacterFormat)*formatLength);
-    Q_ASSERT (formatArray!=NULL);
+    Q_ASSERT (formatArray!=nullptr);
     text = (quint16*) blockList.allocate(sizeof(quint16)*line.size());
-    Q_ASSERT (text!=NULL);
+    Q_ASSERT (text!=nullptr);
 
     length=line.size();
     wrapped=false;
@@ -729,7 +731,7 @@ void CompactHistoryScroll::addCellsVector ( const TextLine& cells )
 void CompactHistoryScroll::addCells ( const Character a[], int count )
 {
   TextLine newLine ( count );
-  qCopy ( a,a+count,newLine.begin() );
+  std::copy ( a,a+count,newLine.begin() );
   addCellsVector ( newLine );
 }
 
@@ -923,7 +925,7 @@ HistoryScroll* HistoryTypeFile::scroll(HistoryScroll *old) const
   HistoryScroll *newScroll = new HistoryScrollFile(m_fileName);
 
   Character line[LINE_SIZE];
-  int lines = (old != 0) ? old->getLines() : 0;
+  int lines = (old != nullptr) ? old->getLines() : 0;
   for(int i = 0; i < lines; i++)
   {
      int size = old->getLineLen(i);

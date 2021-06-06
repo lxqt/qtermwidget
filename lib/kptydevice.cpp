@@ -35,8 +35,8 @@
 #include <QSocketNotifier>
 
 #include <unistd.h>
-#include <errno.h>
-#include <signal.h>
+#include <cerrno>
+#include <csignal>
 #include <termios.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
@@ -74,7 +74,7 @@ static void qt_ignore_sigpipe()
         struct sigaction noaction;
         memset(&noaction, 0, sizeof(noaction));
         noaction.sa_handler = SIG_IGN;
-        sigaction(SIGPIPE, &noaction, 0);
+        sigaction(SIGPIPE, &noaction, nullptr);
     }
 }
 
@@ -90,7 +90,7 @@ bool KPtyDevicePrivate::_k_canRead()
 #else
     int available;
 #endif
-    if (!::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *) &available)) {
+    if (::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *) &available) != -1) {
 #ifdef Q_OS_SOLARIS
         // A Pty is a STREAMS module, and those can be activated
         // with 0 bytes available. This happens either when ^C is
@@ -211,7 +211,7 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
     struct timeval tv, *tvp;
 
     if (msecs < 0)
-        tvp = 0;
+        tvp = nullptr;
     else {
         tv.tv_sec = msecs / 1000;
         tv.tv_usec = (msecs % 1000) * 1000;
@@ -243,7 +243,7 @@ bool KPtyDevicePrivate::doWait(int msecs, bool reading)
         }
 #endif
 
-        switch (select(q->masterFd() + 1, &rfds, &wfds, 0, tvp)) {
+        switch (select(q->masterFd() + 1, &rfds, &wfds, nullptr, tvp)) {
         case -1:
             if (errno == EINTR)
                 break;

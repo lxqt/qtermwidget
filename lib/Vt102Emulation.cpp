@@ -23,6 +23,8 @@
 // Own
 #include "Vt102Emulation.h"
 #include "mac-vkcode.h"
+#include "tools.h"
+
 
 // XKB
 //#include <config-konsole.h>
@@ -39,13 +41,14 @@
 #endif
 
 // Standard
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 
 // Qt
 #include <QEvent>
 #include <QKeyEvent>
 #include <QByteRef>
+#include <QDebug>
 
 // KDE
 //#include <kdebug.h>
@@ -344,7 +347,7 @@ void Vt102Emulation::receiveChar(wchar_t cc)
 
     if (epe(   )) { processToken( TY_CSI_PE(cc), 0, 0); resetTokenizer(); return; }
     if (ees(DIG)) { addDigit(cc-'0'); return; }
-    if (eec(';')) { addArgument();    return; }
+    if (eec(';') || eec(':')) { addArgument(); return; }
     for (int i=0;i<=argc;i++)
     {
         if (epp())
@@ -416,10 +419,10 @@ void Vt102Emulation::processWindowAttributeChange()
     return;
   }
 
-  QString newValue;
-  newValue.reserve(tokenBufferPos-i-2);
-  for (int j = 0; j < tokenBufferPos-i-2; j++)
-    newValue[j] = tokenBuffer[i+1+j];
+  // copy from the first char after ';', and skipping the ending delimiter
+  // 0x07 or 0x92. Note that as control characters in OSC text parts are
+  // ignored, only the second char in ST ("\e\\") is appended to tokenBuffer.
+  QString newValue = QString::fromWCharArray(tokenBuffer + i + 1, tokenBufferPos-i-2);
 
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
@@ -873,8 +876,12 @@ void Vt102Emulation::sendString(const char* s , int length)
 
 void Vt102Emulation::reportCursorPosition()
 {
-  char tmp[20];
-  sprintf(tmp,"\033[%d;%dR",_currentScreen->getCursorY()+1,_currentScreen->getCursorX()+1);
+  const size_t sz = 20;
+  char tmp[sz];
+  const size_t r = snprintf(tmp, sz, "\033[%d;%dR",_currentScreen->getCursorY()+1,_currentScreen->getCursorX()+1);
+  if (sz <= r) {
+    qWarning("Vt102Emulation::reportCursorPosition: Buffer too small\n");
+  }
   sendString(tmp);
 }
 
@@ -904,8 +911,12 @@ void Vt102Emulation::reportSecondaryAttributes()
 void Vt102Emulation::reportTerminalParms(int p)
 // DECREPTPARM
 {
-  char tmp[100];
-  sprintf(tmp,"\033[%d;1;1;112;112;1;0x",p); // not really true.
+  const size_t sz = 100;
+  char tmp[sz];
+  const size_t r = snprintf(tmp, sz, "\033[%d;1;1;112;112;1;0x",p); // not really true.
+  if (sz <= r) {
+    qWarning("Vt102Emulation::reportTerminalParms: Buffer too small\n");
+  }
   sendString(tmp);
 }
 
@@ -1011,9 +1022,10 @@ void Vt102Emulation::sendText( const QString& text )
                     0,
                     Qt::NoModifier,
                     text);
-    sendKeyEvent(&event); // expose as a big fat keypress event
+    sendKeyEvent(&event, false); // expose as a big fat keypress event
   }
 }
+//<<<<<<< HEAD
 
 QKeyEvent * Vt102Emulation::remapKeyModifiersForMac(QKeyEvent *event) {
   Qt::KeyboardModifiers modifiers = event->modifiers();
@@ -1158,7 +1170,7 @@ QKeyEvent * Vt102Emulation::remapKeyModifiersForMac(QKeyEvent *event) {
                       eventText, event->isAutoRepeat(), event->count());
 }
 
-void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
+void Vt102Emulation::sendKeyEvent(QKeyEvent* origEvent, bool fromPaste)
 {
 #if defined(Q_OS_MAC)
     QScopedPointer<QKeyEvent> event(remapKeyModifiersForMac(origEvent));
@@ -1177,7 +1189,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
         states |= KeyboardTranslator::ApplicationKeypadState;
 
     // check flow control state
-    if (modifiers & Qt::ControlModifier)
+    if (modifiers & KeyboardTranslator::CTRL_MOD)
     {
         switch (event->key()) {
         case Qt::Key_S:
@@ -1223,8 +1235,11 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
 
         if ( entry.command() != KeyboardTranslator::NoCommand )
         {
-            if (entry.command() & KeyboardTranslator::EraseCommand)
+            if (entry.command() & KeyboardTranslator::EraseCommand) {
                 textToSend += eraseChar();
+            } else {
+                Q_EMIT handleCommandFromKeyboard(entry.command());
+            }
 
             // TODO command handling
         }
@@ -1232,7 +1247,7 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
         {
             textToSend += entry.text(true,modifiers);
         }
-        else if((modifiers & Qt::ControlModifier) && event->key() >= 0x40 && event->key() < 0x5f) {
+        else if((modifiers & KeyboardTranslator::CTRL_MOD) && event->key() >= 0x40 && event->key() < 0x5f) {
             textToSend += (event->key() & 0x1f);
         }
         else if(event->key() == Qt::Key_Tab) {
@@ -1248,7 +1263,10 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* origEvent )
             textToSend += _codec->fromUnicode(event->text());
         }
 
-        sendData( textToSend.constData() , textToSend.length() );
+        if (!fromPaste && textToSend.length()) {
+            Q_EMIT outputFromKeypressEvent();
+        }
+        Q_EMIT sendData( textToSend.constData() , textToSend.length() );
     }
     else
     {
@@ -1494,36 +1512,19 @@ char Vt102Emulation::eraseChar() const
 {
   KeyboardTranslator::Entry entry = _keyTranslator->findEntry(
                                             Qt::Key_Backspace,
-                                            0,
-                                            0);
+                                            Qt::NoModifier,
+                                            KeyboardTranslator::NoState);
   if ( entry.text().count() > 0 )
       return entry.text().at(0);
   else
       return '\b';
 }
 
-// print contents of the scan buffer
-static void hexdump(wchar_t* s, int len)
-{ int i;
-  for (i = 0; i < len; i++)
-  {
-    if (s[i] == '\\')
-      printf("\\\\");
-    else
-    if ((s[i]) > 32 && s[i] < 127)
-      printf("%c",s[i]);
-    else
-      printf("\\%04x(hex)",s[i]);
-  }
-}
-
 void Vt102Emulation::reportDecodingError()
 {
   if (tokenBufferPos == 0 || ( tokenBufferPos == 1 && (tokenBuffer[0] & 0xff) >= 32) )
     return;
-  printf("Undecodable sequence: ");
-  hexdump(tokenBuffer,tokenBufferPos);
-  printf("\n");
+  qCDebug(qtermwidgetLogger) << "Undecodable sequence:" << QString::fromWCharArray(tokenBuffer, tokenBufferPos);
 }
 
 //#include "Vt102Emulation.moc"

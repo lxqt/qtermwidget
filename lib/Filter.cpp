@@ -22,7 +22,6 @@
 
 // System
 #include <iostream>
-#include <memory>
 
 // Qt
 #include <QAction>
@@ -99,13 +98,13 @@ Filter::HotSpot* FilterChain::hotSpotAt(int line , int column) const
     {
         Filter* filter = iter.next();
         Filter::HotSpot* spot = filter->hotSpotAt(line,column);
-        if ( spot != 0 )
+        if ( spot != nullptr )
         {
             return spot;
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 QList<Filter::HotSpot*> FilterChain::hotSpots() const
@@ -122,8 +121,8 @@ QList<Filter::HotSpot*> FilterChain::hotSpots() const
 //QList<Filter::HotSpot*> FilterChain::hotSpotsAtLine(int line) const;
 
 TerminalImageFilterChain::TerminalImageFilterChain()
-: _buffer(0)
-, _linePositions(0)
+: _buffer(nullptr)
+, _linePositions(nullptr)
 {
 }
 
@@ -181,30 +180,19 @@ void TerminalImageFilterChain::setImage(const Character* const image , int lines
 }
 
 Filter::Filter() :
-_linePositions(0),
-_buffer(0)
+_linePositions(nullptr),
+_buffer(nullptr)
 {
 }
 
 Filter::~Filter()
 {
-    QListIterator<HotSpot*> iter(_hotspotList);
-    while (iter.hasNext())
-    {
-        delete iter.next();
-    }
+    qDeleteAll(_hotspotList);
+    _hotspotList.clear();
 }
 void Filter::reset()
 {
-    QListIterator<HotSpot*> iter(_hotspotList);
-    while (iter.hasNext())
-    {
-        HotSpot* currentHotSpot = iter.next();
-        if (currentHotSpot->hasAnotherParent()) {
-            continue;
-        }
-        delete currentHotSpot;
-    }
+    qDeleteAll(_hotspotList);
     _hotspots.clear();
     _hotspotList.clear();
 }
@@ -287,22 +275,19 @@ Filter::HotSpot* Filter::hotSpotAt(int line , int column) const
         return spot;
     }
 
-    return 0;
+    return nullptr;
 }
 
 Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int endColumn)
-    : _hasAnotherParent(false)
-    , _startLine(startLine)
+    : _startLine(startLine)
     , _startColumn(startColumn)
     , _endLine(endLine)
     , _endColumn(endColumn)
     , _type(NotSpecified)
 {
 }
-QList<QAction*> Filter::HotSpot::actions(QWidget* parent)
+QList<QAction*> Filter::HotSpot::actions()
 {
-    Q_UNUSED(parent);
-
     return QList<QAction*>();
 }
 int Filter::HotSpot::startLine() const
@@ -514,28 +499,14 @@ FilterObject* UrlFilter::HotSpot::getUrlObject() const
     return _urlObject;
 }
 
-class UrlAction : public QAction {
-public:
-    UrlAction(QWidget* parent, std::shared_ptr<UrlFilter::HotSpot> hotspotPtr)
-        : QAction(parent)
-        , _hotspotPtr(hotspotPtr)
-    {
-    }
-
-private:
-    std::shared_ptr<UrlFilter::HotSpot> _hotspotPtr;
-};
-
-QList<QAction*> UrlFilter::HotSpot::actions(QWidget* parent)
+QList<QAction*> UrlFilter::HotSpot::actions()
 {
-    this->_hasAnotherParent = true;
     QList<QAction*> list;
 
     const UrlType kind = urlType();
 
-    std::shared_ptr<UrlFilter::HotSpot> hotspotPtr(this);
-    UrlAction* openAction = new UrlAction(parent, hotspotPtr);
-    UrlAction* copyAction = new UrlAction(parent, hotspotPtr);
+    QAction* openAction = new QAction(_urlObject);
+    QAction* copyAction = new QAction(_urlObject);;
 
     Q_ASSERT( kind == StandardUrl || kind == Email );
 

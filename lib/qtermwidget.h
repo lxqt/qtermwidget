@@ -26,7 +26,7 @@
 #include "Filter.h"
 
 class QVBoxLayout;
-struct TermWidgetImpl;
+class TermWidgetImpl;
 class SearchBar;
 class QUrl;
 
@@ -50,14 +50,14 @@ public:
 
     //Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
-                QWidget * parent = 0);
+                QWidget * parent = nullptr);
     // A dummy constructor for Qt Designer. startnow is 1 by default
-    QTermWidget(QWidget *parent = 0);
+    QTermWidget(QWidget *parent = nullptr);
 
-    virtual ~QTermWidget();
+    ~QTermWidget() override;
 
     //Initial size
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     // expose TerminalDisplay::TerminalSizeHint, setTerminalSizeHint
     void setTerminalSizeHint(bool on);
@@ -85,7 +85,8 @@ public:
     void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
-    void setTerminalBackgroundImage(QString backgroundImage);
+    void setTerminalBackgroundImage(const QString& backgroundImage);
+    void setTerminalBackgroundMode(int mode);
 
     //environment
     void setEnvironment(const QStringList & environment);
@@ -123,6 +124,9 @@ public:
 
     // Send some text to terminal
     void sendText(const QString & text);
+
+    // Send key event to terminal
+    void sendKeyEvent(QKeyEvent* e);
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
@@ -185,7 +189,7 @@ public:
     /*
      * Proxy for TerminalDisplay::filterActions
      * */
-    QList<QAction*> filterActions(const QPoint& position, QWidget* parent);
+    QList<QAction*> filterActions(const QPoint& position);
 
     /**
      * Returns a pty slave file descriptor.
@@ -221,11 +225,22 @@ public:
     /** change and wrap text corresponding to paste mode **/
     void bracketText(QString& text);
 
+    /** forcefully disable bracketed paste mode **/
+    void disableBracketedPasteMode(bool disable);
+    bool bracketedPasteModeIsDisabled() const;
+
     /** Set the empty space outside the terminal */
     void setMargin(int);
 
     /** Get the empty space outside the terminal */
     int getMargin() const;
+
+    void setDrawLineChars(bool drawLineChars);
+
+    void setBoldIntense(bool boldIntense);
+
+    void setConfirmMultilinePaste(bool confirmMultilinePaste);
+    void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
 signals:
     void finished();
     void copyAvailable(bool);
@@ -286,8 +301,9 @@ public slots:
 
     void toggleShowSearchBar();
 
+    void saveHistory(QIODevice *device);
 protected:
-    virtual void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
 protected slots:
     void sessionFinished();

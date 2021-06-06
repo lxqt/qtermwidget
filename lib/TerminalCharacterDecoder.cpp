@@ -34,9 +34,11 @@
 // Konsole
 #include "konsole_wcwidth.h"
 
+#include <cwctype>
+
 using namespace Konsole;
 PlainTextDecoder::PlainTextDecoder()
- : _output(0)
+ : _output(nullptr)
  , _includeTrailingWhitespace(true)
  , _recordLinePositions(false)
 {
@@ -58,7 +60,7 @@ void PlainTextDecoder::begin(QTextStream* output)
 }
 void PlainTextDecoder::end()
 {
-    _output = 0;
+    _output = nullptr;
 }
 
 void PlainTextDecoder::setRecordLinePositions(bool record)
@@ -78,6 +80,16 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
     {
         int pos = _output->string()->count();
         _linePositions << pos;
+    }
+
+    // check the real length
+    for (int i = 0 ; i < count ; i++)
+    {
+        if (characters + i == nullptr)
+        {
+            count = i;
+            break;
+        }
     }
 
     //TODO should we ignore or respect the LINE_WRAPPED line property?
@@ -112,7 +124,7 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
 }
 
 HTMLDecoder::HTMLDecoder() :
-        _output(0)
+        _output(nullptr)
     ,_colorTable(base_color_table)
        ,_innerSpanOpen(false)
        ,_lastRendition(DEFAULT_RENDITION)
@@ -142,7 +154,7 @@ void HTMLDecoder::end()
 
     *_output << QString::fromStdWString(text);
 
-    _output = 0;
+    _output = nullptr;
 
 }
 

@@ -23,8 +23,8 @@
 #include "KeyboardTranslator.h"
 
 // System
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
 
 // Qt
 #include <QBuffer>
@@ -50,6 +50,13 @@ const QByteArray KeyboardTranslatorManager::defaultTranslatorText(
 "key Tab : \"\\t\""
 );
 
+#ifdef Q_OS_MAC
+// On Mac, Qt::ControlModifier means Cmd, and MetaModifier means Ctrl
+const Qt::KeyboardModifier KeyboardTranslator::CTRL_MOD = Qt::MetaModifier;
+#else
+const Qt::KeyboardModifier KeyboardTranslator::CTRL_MOD = Qt::ControlModifier;
+#endif
+
 KeyboardTranslatorManager::KeyboardTranslatorManager()
     : _haveLoadedAll(false)
 {
@@ -71,7 +78,6 @@ void KeyboardTranslatorManager::findTranslators()
     filters << QLatin1String("*.keytab");
     dir.setNameFilters(filters);
     QStringList list = dir.entryList(filters);
-    list = dir.entryList(filters);
 //    QStringList list = KGlobal::dirs()->findAllResources("data",
 //                                                         "konsole/*.keytab",
 //                                                        KStandardDirs::NoDuplicates);
@@ -103,7 +109,7 @@ const KeyboardTranslator* KeyboardTranslatorManager::findTranslator(const QStrin
 
     KeyboardTranslator* translator = loadTranslator(name);
 
-    if ( translator != 0 )
+    if ( translator != nullptr )
         _translators[name] = translator;
     else if ( !name.isEmpty() )
         qDebug() << "Unable to load translator" << name;
@@ -149,7 +155,7 @@ KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(const QString& nam
 
     QFile source(path);
     if (name.isEmpty() || !source.open(QIODevice::ReadOnly | QIODevice::Text))
-        return 0;
+        return nullptr;
 
     return loadTranslator(&source,name);
 }
@@ -186,7 +192,7 @@ KeyboardTranslator* KeyboardTranslatorManager::loadTranslator(QIODevice* source,
     else
     {
         delete translator;
-        return 0;
+        return nullptr;
     }
 }
 
@@ -469,7 +475,7 @@ QString KeyboardTranslatorReader::description() const
 {
     return _description;
 }
-bool KeyboardTranslatorReader::hasNextEntry()
+bool KeyboardTranslatorReader::hasNextEntry() const
 {
     return _hasNext;
 }
@@ -614,6 +620,11 @@ bool KeyboardTranslator::Entry::matches(int keyCode ,
                                         Qt::KeyboardModifiers modifiers,
                                         States testState) const
 {
+#ifdef Q_OS_MAC
+    // On Mac, arrow keys are considered part of keypad. Ignore that.
+    modifiers &= ~Qt::KeypadModifier;
+#endif
+
     if ( _keyCode != keyCode )
         return false;
 
@@ -621,7 +632,7 @@ bool KeyboardTranslator::Entry::matches(int keyCode ,
         return false;
 
     // if modifiers is non-zero, the 'any modifier' state is implicit
-    if ( modifiers != 0 )
+    if ( (modifiers & ~Qt::KeypadModifier) != 0 )
         testState |= AnyModifierState;
 
     if ( (testState & _stateMask) != (_state & _stateMask) )

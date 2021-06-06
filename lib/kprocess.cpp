@@ -35,7 +35,7 @@
 # include <windows.h>
 #else
 # include <unistd.h>
-# include <errno.h>
+# include <cerrno>
 #endif
 
 #ifndef Q_OS_WIN
@@ -400,13 +400,3 @@ int KProcess::startDetached(const QStringList &argv)
     QString prog = args.takeFirst();
     return startDetached(prog, args);
 }
-
-int KProcess::pid() const
-{
-#ifdef Q_OS_UNIX
-    return (int) QProcess::pid();
-#else
-    return QProcess::pid() ? QProcess::pid()->dwProcessId : 0;
-#endif
-}
-

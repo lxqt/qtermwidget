@@ -33,9 +33,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <errno.h>
+#include <cerrno>
 #include <termios.h>
-#include <signal.h>
+#include <csignal>
 
 // Qt
 #include <QStringList>
@@ -56,7 +56,7 @@ void Pty::setWindowSize(int lines, int cols)
 }
 QSize Pty::windowSize() const
 {
-    return QSize(_windowColumns,_windowLines);
+    return {_windowColumns,_windowLines};
 }
 
 void Pty::setFlowControlEnabled(bool enable)
@@ -173,6 +173,7 @@ int Pty::start(const QString& program,
   addEnvironmentVariables(environment);
 
   setEnv(QLatin1String("WINDOWID"), QString::number(winid));
+  setEnv(QLatin1String("COLORTERM"), QLatin1String("truecolor"));
 
   // unless the LANGUAGE environment variable has been set explicitly
   // set it to a null string
@@ -328,11 +329,12 @@ void Pty::setupChildProcess()
     struct sigaction action;
     sigset_t sigset;
     sigemptyset(&action.sa_mask);
+    sigemptyset(&sigset);
     action.sa_handler = SIG_DFL;
     action.sa_flags = 0;
     for (int signal=1;signal < NSIG; signal++) {
-        sigaction(signal,&action,0L);
+        sigaction(signal,&action,nullptr);
         sigaddset(&sigset, signal);
     }
-    sigprocmask(SIG_UNBLOCK, &sigset, NULL);
+    sigprocmask(SIG_UNBLOCK, &sigset, nullptr);
 }

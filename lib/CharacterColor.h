@@ -78,16 +78,6 @@ public:
    */
   ColorEntry() : transparent(false), fontWeight(UseCurrentFormat) {}
 
-  /**
-   * Sets the color, transparency and boldness of this color to those of @p rhs.
-   */
-  void operator=(const ColorEntry& rhs)
-  {
-       color = rhs.color;
-       transparent = rhs.transparent;
-       fontWeight = rhs.fontWeight;
-  }
-
   /** The color value of this entry for display. */
   QColor color;
 
@@ -278,7 +268,7 @@ inline QColor CharacterColor::color(const ColorEntry* base) const
     case COLOR_SPACE_DEFAULT: return base[_u+0+(_v?BASE_COLORS:0)].color;
     case COLOR_SPACE_SYSTEM: return base[_u+2+(_v?BASE_COLORS:0)].color;
     case COLOR_SPACE_256: return color256(_u,base);
-    case COLOR_SPACE_RGB: return QColor(_u,_v,_w);
+    case COLOR_SPACE_RGB: return {_u,_v,_w};
     case COLOR_SPACE_UNDEFINED: return QColor();
   }
 

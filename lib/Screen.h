@@ -551,6 +551,8 @@ public:
     static void fillWithDefaultChar(Character* dest, int count);
 
 private:
+    Screen(const Screen &) = delete;
+    Screen &operator=(const Screen &) = delete;
 
     //copies a line of text from the screen or history into a stream using a
     //specified character decoder.  Returns the number of lines actually copied,
@@ -637,8 +639,8 @@ private:
     int _bottomMargin;
 
     // states ----------------
-    int currentModes[MODES_SCREEN];
-    int savedModes[MODES_SCREEN];
+    bool currentModes[MODES_SCREEN];
+    bool savedModes[MODES_SCREEN];
 
     // ----------------------------
 

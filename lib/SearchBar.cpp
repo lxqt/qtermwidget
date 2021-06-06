@@ -81,6 +81,7 @@ void SearchBar::show()
 {
     QWidget::show();
     widget.searchTextEdit->setFocus();
+    widget.searchTextEdit->selectAll();
 }
 
 void SearchBar::noMatchFound()
@@ -97,11 +98,11 @@ void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
     {
         if (keyEvent->modifiers() == Qt::ShiftModifier)
         {
-            findPrevious();
+            Q_EMIT findPrevious();
         }
         else
         {
-            findNext();
+            Q_EMIT findNext();
         }
     }
     else if (keyEvent->key() == Qt::Key_Escape)
@@ -112,8 +113,6 @@ void SearchBar::keyReleaseEvent(QKeyEvent* keyEvent)
 
 void SearchBar::clearBackgroundColor()
 {
-    QPalette p;
-    p.setColor(QPalette::Base, Qt::white);
-    widget.searchTextEdit->setPalette(p);
+    widget.searchTextEdit->setPalette(QWidget::window()->palette());
 
 }

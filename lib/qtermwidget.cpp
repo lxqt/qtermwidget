@@ -33,6 +33,12 @@
 #include "SearchBar.h"
 #include "qtermwidget.h"
 
+#ifdef Q_OS_MACOS
+// Qt does not support fontconfig on macOS, so we need to use a "real" font name.
+#define DEFAULT_FONT_FAMILY                   "Menlo"
+#else
+#define DEFAULT_FONT_FAMILY                   "Monospace"
+#endif
 
 #define STEP_ZOOM 1
 
@@ -43,8 +49,10 @@ void *createTermWidget(int startnow, void *parent)
     return (void*) new QTermWidget(startnow, (QWidget*)parent);
 }
 
-struct TermWidgetImpl {
-    TermWidgetImpl(QWidget* parent = 0);
+class TermWidgetImpl {
+
+public:
+    TermWidgetImpl(QWidget* parent = nullptr);
 
     TerminalDisplay *m_terminalDisplay;
     Session *m_session;
@@ -156,8 +164,8 @@ void QTermWidget::search(bool forwards, bool next)
         m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(startColumn, startLine);
     }
 
-    qDebug() << "current selection starts at: " << startColumn << startLine;
-    qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
+    //qDebug() << "current selection starts at: " << startColumn << startLine;
+    //qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
 
     QRegExp regExp(m_searchBar->searchText());
     regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
@@ -175,7 +183,7 @@ void QTermWidget::search(bool forwards, bool next)
 void QTermWidget::matchFound(int startColumn, int startLine, int endColumn, int endLine)
 {
     ScreenWindow* sw = m_impl->m_terminalDisplay->screenWindow();
-    qDebug() << "Scroll to" << startLine;
+    //qDebug() << "Scroll to" << startLine;
     sw->scrollTo(startLine);
     sw->setTrackOutput(false);
     sw->notifyOutputChanged();
@@ -221,15 +229,11 @@ QSize QTermWidget::sizeHint() const
 
 void QTermWidget::setTerminalSizeHint(bool on)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setTerminalSizeHint(on);
 }
 
 bool QTermWidget::terminalSizeHint()
 {
-    if (!m_impl->m_terminalDisplay)
-        return true;
     return m_impl->m_terminalDisplay->terminalSizeHint();
 }
 
@@ -263,7 +267,7 @@ void QTermWidget::init(int startnow)
     // translations
     // First check $XDG_DATA_DIRS. This follows the implementation in libqtxdg
     QString d = QFile::decodeName(qgetenv("XDG_DATA_DIRS"));
-    QStringList dirs = d.split(QLatin1Char(':'), QString::SkipEmptyParts);
+    QStringList dirs = d.split(QLatin1Char(':'), Qt::SkipEmptyParts);
     if (dirs.isEmpty()) {
         dirs.append(QString::fromLatin1("/usr/local/share"));
         dirs.append(QString::fromLatin1("/usr/share"));
@@ -272,11 +276,11 @@ void QTermWidget::init(int startnow)
 
     m_translator = new QTranslator(this);
 
-    for (const QString& dir : dirs) {
-        qDebug() << "Trying to load translation file from dir" << dir;
+    for (const QString& dir : qAsConst(dirs)) {
+        //qDebug() << "Trying to load translation file from dir" << dir;
         if (m_translator->load(QLocale::system(), QLatin1String("qtermwidget"), QLatin1String(QLatin1String("_")), dir)) {
             qApp->installTranslator(m_translator);
-            qDebug() << "Translations found in" << dir;
+            //qDebug() << "Translations found in" << dir;
             break;
         }
     }
@@ -320,12 +324,12 @@ void QTermWidget::init(int startnow)
             this, SIGNAL(termGetFocus()));
     connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
             this, SIGNAL(termLostFocus()));
-    connect(m_impl->m_terminalDisplay, SIGNAL(keyPressedSignal(QKeyEvent *)),
-            this, SIGNAL(termKeyPressed(QKeyEvent *)));
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal,
+            [this] (QKeyEvent* e, bool) { Q_EMIT termKeyPressed(e); });
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
-    font.setFamily(QLatin1String("Monospace"));
+    font.setFamily(QLatin1String(DEFAULT_FONT_FAMILY));
     font.setPointSize(10);
     font.setStyleHint(QFont::TypeWriter);
     setTerminalFont(font);
@@ -352,32 +356,27 @@ QTermWidget::~QTermWidget()
 
 void QTermWidget::setTerminalFont(const QFont &font)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setVTFont(font);
 }
 
 QFont QTermWidget::getTerminalFont()
 {
-    if (!m_impl->m_terminalDisplay)
-        return QFont();
     return m_impl->m_terminalDisplay->getVTFont();
 }
 
 void QTermWidget::setTerminalOpacity(qreal level)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
-
     m_impl->m_terminalDisplay->setOpacity(level);
 }
 
-void QTermWidget::setTerminalBackgroundImage(QString backgroundImage)
+void QTermWidget::setTerminalBackgroundImage(const QString& backgroundImage)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
-
     m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
+}
+
+void QTermWidget::setTerminalBackgroundMode(int mode)
+{
+    m_impl->m_terminalDisplay->setBackgroundMode((Konsole::BackgroundMode)mode);
 }
 
 void QTermWidget::setShellProgram(const QString &progname)
@@ -433,7 +432,7 @@ void QTermWidget::setTextCodec(QTextCodec *codec)
 
 void QTermWidget::setColorScheme(const QString& origName)
 {
-    const ColorScheme *cs = 0;
+    const ColorScheme *cs = nullptr;
 
     const bool isFile = QFile::exists(origName);
     const QString& name = isFile ?
@@ -487,8 +486,6 @@ void QTermWidget::addCustomColorSchemeDir(const QString& custom_dir)
 
 void QTermWidget::setSize(const QSize &size)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setSize(size.width(), size.height());
 }
 
@@ -502,21 +499,22 @@ void QTermWidget::setHistorySize(int lines)
 
 void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setScrollBarPosition(pos);
 }
 
 void QTermWidget::scrollToEnd()
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->scrollToEnd();
 }
 
 void QTermWidget::sendText(const QString &text)
 {
     m_impl->m_session->sendText(text);
+}
+
+void QTermWidget::sendKeyEvent(QKeyEvent *e)
+{
+    m_impl->m_session->sendKeyEvent(e);
 }
 
 void QTermWidget::resizeEvent(QResizeEvent*)
@@ -536,6 +534,16 @@ void QTermWidget::bracketText(QString& text)
     m_impl->m_terminalDisplay->bracketText(text);
 }
 
+void QTermWidget::disableBracketedPasteMode(bool disable)
+{
+    m_impl->m_terminalDisplay->disableBracketedPasteMode(disable);
+}
+
+bool QTermWidget::bracketedPasteModeIsDisabled() const
+{
+    return m_impl->m_terminalDisplay->bracketedPasteModeIsDisabled();
+}
+
 void QTermWidget::copyClipboard()
 {
     m_impl->m_terminalDisplay->copyClipboard();
@@ -553,9 +561,6 @@ void QTermWidget::pasteSelection()
 
 void QTermWidget::setZoom(int step)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
-
     QFont font = m_impl->m_terminalDisplay->getVTFont();
 
     font.setPointSize(font.pointSize() + step);
@@ -694,9 +699,9 @@ Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
     return m_impl->m_terminalDisplay->filterChain()->hotSpotAt(row, column);
 }
 
-QList<QAction*> QTermWidget::filterActions(const QPoint& position, QWidget* parent)
+QList<QAction*> QTermWidget::filterActions(const QPoint& position)
 {
-    return m_impl->m_terminalDisplay->filterActions(position, parent);
+    return m_impl->m_terminalDisplay->filterActions(position);
 }
 
 int QTermWidget::getPtySlaveFd() const
@@ -706,29 +711,21 @@ int QTermWidget::getPtySlaveFd() const
 
 void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
 }
 
 void QTermWidget::setBlinkingCursor(bool blink)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setBlinkingCursor(blink);
 }
 
 void QTermWidget::setBidiEnabled(bool enabled)
 {
-    if (!m_impl->m_terminalDisplay)
-        return;
     m_impl->m_terminalDisplay->setBidiEnabled(enabled);
 }
 
 bool QTermWidget::isBidiEnabled()
 {
-    if (!m_impl->m_terminalDisplay)
-        return false; // Default value
     return m_impl->m_terminalDisplay->isBidiEnabled();
 }
 
@@ -773,4 +770,30 @@ void QTermWidget::setMargin(int margin)
 int QTermWidget::getMargin() const
 {
     return m_impl->m_terminalDisplay->margin();
+}
+
+void QTermWidget::saveHistory(QIODevice *device)
+{
+    QTextStream stream(device);
+    PlainTextDecoder decoder;
+    decoder.begin(&stream);
+    m_impl->m_session->emulation()->writeToStream(&decoder, 0, m_impl->m_session->emulation()->lineCount());
+}
+
+void QTermWidget::setDrawLineChars(bool drawLineChars)
+{
+    m_impl->m_terminalDisplay->setDrawLineChars(drawLineChars);
+}
+
+void QTermWidget::setBoldIntense(bool boldIntense)
+{
+    m_impl->m_terminalDisplay->setBoldIntense(boldIntense);
+}
+
+void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
+    m_impl->m_terminalDisplay->setConfirmMultilinePaste(confirmMultilinePaste);
+}
+
+void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
+    m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
 }

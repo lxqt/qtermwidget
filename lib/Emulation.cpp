@@ -23,8 +23,8 @@
 #include "Emulation.h"
 
 // System
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <string>
 
@@ -51,10 +51,10 @@
 using namespace Konsole;
 
 Emulation::Emulation() :
-  _currentScreen(0),
-  _codec(0),
-  _decoder(0),
-  _keyTranslator(0),
+  _currentScreen(nullptr),
+  _codec(nullptr),
+  _decoder(nullptr),
+  _keyTranslator(nullptr),
   _usesMouse(false),
   _bracketedPasteMode(false)
 {
@@ -109,6 +109,12 @@ ScreenWindow* Emulation::createWindow()
 
     connect(this , SIGNAL(outputChanged()),
             window , SLOT(notifyOutputChanged()) );
+
+    connect(this, &Emulation::handleCommandFromKeyboard,
+            window, &ScreenWindow::handleCommandFromKeyboard);
+    connect(this, &Emulation::outputFromKeypressEvent,
+            window, &ScreenWindow::scrollToEnd);
+
     return window;
 }
 
@@ -133,7 +139,7 @@ void Emulation::setScreen(int n)
   if (_currentScreen != old)
   {
      // tell all windows onto this emulation to switch to the newly active screen
-     for(ScreenWindow* window : const_cast<const QList<ScreenWindow*>&>(_windows))
+     for(ScreenWindow* window : qAsConst(_windows))
          window->setScreen(_currentScreen);
   }
 }
@@ -206,7 +212,7 @@ void Emulation::receiveChar(wchar_t c)
   };
 }
 
-void Emulation::sendKeyEvent( QKeyEvent* ev )
+void Emulation::sendKeyEvent(QKeyEvent* ev, bool)
 {
   emit stateSet(NOTIFYNORMAL);
 
@@ -385,7 +391,7 @@ void Emulation::setImageSize(int lines, int columns)
 
 QSize Emulation::imageSize() const
 {
-  return QSize(_currentScreen->getColumns(), _currentScreen->getLines());
+  return {_currentScreen->getColumns(), _currentScreen->getLines()};
 }
 
 ushort ExtendedCharTable::extendedCharHash(ushort* unicodePoints , ushort length) const
@@ -403,7 +409,7 @@ bool ExtendedCharTable::extendedCharMatch(ushort hash , ushort* unicodePoints , 
 
     // compare given length with stored sequence length ( given as the first ushort in the
     // stored buffer )
-    if ( entry == 0 || entry[0] != length )
+    if ( entry == nullptr || entry[0] != length )
        return false;
     // if the lengths match, each character must be checked.  the stored buffer starts at
     // entry[1]
@@ -463,7 +469,7 @@ ushort* ExtendedCharTable::lookupExtendedChar(ushort hash , ushort& length) cons
     else
     {
         length = 0;
-        return 0;
+        return nullptr;
     }
 }
 

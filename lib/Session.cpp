@@ -26,7 +26,7 @@
 #include "Session.h"
 
 // Standard
-#include <stdlib.h>
+#include <cstdlib>
 
 // Qt
 #include <QApplication>
@@ -53,8 +53,8 @@ int Session::lastSessionId = 0;
 
 Session::Session(QObject* parent) :
     QObject(parent),
-        _shellProcess(0)
-        , _emulation(0)
+        _shellProcess(nullptr)
+        , _emulation(nullptr)
         , _monitorActivity(false)
         , _monitorSilence(false)
         , _notifiedActivity(false)
@@ -148,7 +148,7 @@ bool Session::isRunning() const
     return _shellProcess->state() == QProcess::Running;
 }
 
-void Session::setCodec(QTextCodec * codec)
+void Session::setCodec(QTextCodec * codec) const
 {
     emulation()->setCodec(codec);
 }
@@ -177,10 +177,10 @@ void Session::addView(TerminalDisplay * widget)
 
     _views.append(widget);
 
-    if ( _emulation != 0 ) {
+    if ( _emulation != nullptr ) {
         // connect emulation - view signals and slots
-        connect( widget , SIGNAL(keyPressedSignal(QKeyEvent *)) , _emulation ,
-                 SLOT(sendKeyEvent(QKeyEvent *)) );
+        connect( widget , &TerminalDisplay::keyPressedSignal, _emulation ,
+                 &Emulation::sendKeyEvent);
         connect( widget , SIGNAL(mouseSignal(int,int,int,int)) , _emulation ,
                  SLOT(sendMouseEvent(int,int,int,int)) );
         connect( widget , SIGNAL(sendStringToEmu(const char *)) , _emulation ,
@@ -225,19 +225,19 @@ void Session::removeView(TerminalDisplay * widget)
 {
     _views.removeAll(widget);
 
-    disconnect(widget,0,this,0);
+    disconnect(widget,nullptr,this,nullptr);
 
-    if ( _emulation != 0 ) {
+    if ( _emulation != nullptr ) {
         // disconnect
         //  - key presses signals from widget
         //  - mouse activity signals from widget
         //  - string sending signals from widget
         //
         //  ... and any other signals connected in addView()
-        disconnect( widget, 0, _emulation, 0);
+        disconnect( widget, nullptr, _emulation, nullptr);
 
         // disconnect state change signals emitted by emulation
-        disconnect( _emulation , 0 , widget , 0);
+        disconnect( _emulation , nullptr , widget , nullptr);
     }
 
     // close the session automatically when the last view is removed
@@ -456,10 +456,7 @@ void Session::monitorTimerDone()
 void Session::activityStateSet(int state)
 {
     if (state==NOTIFYBELL) {
-        QString s;
-        s.sprintf("Bell in session '%s'",_nameTitle.toUtf8().data());
-
-        emit bellRequest( s );
+        emit bellRequest(tr("Bell in session '%1'").arg(_nameTitle));
     } else if (state==NOTIFYACTIVITY) {
         if (_monitorSilence) {
             _monitorTimer->start(_silenceSeconds*1000);
@@ -547,7 +544,7 @@ void Session::refresh()
 
 bool Session::sendSignal(int signal)
 {
-    int result = ::kill(_shellProcess->pid(),signal);
+    int result = ::kill(static_cast<pid_t>(_shellProcess->processId()),signal);
 
      if ( result == 0 )
      {
@@ -571,6 +568,11 @@ void Session::close()
 void Session::sendText(const QString & text) const
 {
     _emulation->sendText(text);
+}
+
+void Session::sendKeyEvent(QKeyEvent* e) const
+{
+    _emulation->sendKeyEvent(e, false);
 }
 
 Session::~Session()
@@ -598,24 +600,24 @@ void Session::done(int exitStatus)
         return;
     }
 
+    // message is not being used. But in the original kpty.cpp file
+    // (https://cgit.kde.org/kpty.git/) it's part of a notification.
+    // So, we make it translatable, hoping that in the future it will
+    // be used in some kind of notification.
     QString message;
     if (!_wantedClose || exitStatus != 0) {
 
         if (_shellProcess->exitStatus() == QProcess::NormalExit) {
-            message.sprintf("Session '%s' exited with status %d.",
-                          _nameTitle.toUtf8().data(), exitStatus);
+            message = tr("Session '%1' exited with status %2.").arg(_nameTitle).arg(exitStatus);
         } else {
-            message.sprintf("Session '%s' crashed.",
-                          _nameTitle.toUtf8().data());
+            message = tr("Session '%1' crashed.").arg(_nameTitle);
         }
     }
 
-    if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit ) {
-        message.sprintf("Session '%s' exited unexpectedly.",
-                        _nameTitle.toUtf8().data());
-    }
-
-    emit finished();
+    if ( !_wantedClose && _shellProcess->exitStatus() != QProcess::NormalExit )
+        message = tr("Session '%1' exited unexpectedly.").arg(_nameTitle);
+    else
+        emit finished();
 }
 
 Emulation * Session::emulation() const
@@ -977,7 +979,7 @@ bool Session::updateForegroundProcessInfo()
 
 int Session::processId() const
 {
-    return _shellProcess->pid();
+    return static_cast<int>(_shellProcess->processId());
 }
 int Session::getPtySlaveFd() const
 {
@@ -1065,8 +1067,7 @@ void SessionGroup::setMasterStatus(Session * session, bool master)
     bool wasMaster = _sessions[session];
     _sessions[session] = master;
 
-    if ((!wasMaster && !master)
-            || (wasMaster && master)) {
+    if (wasMaster == master) {
         return;
     }
 
@@ -1084,7 +1085,7 @@ void SessionGroup::setMasterStatus(Session * session, bool master)
     }
 }
 
-void SessionGroup::connectPair(Session * master , Session * other)
+void SessionGroup::connectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 
@@ -1095,7 +1096,7 @@ void SessionGroup::connectPair(Session * master , Session * other)
                  SLOT(sendString(const char *,int)) );
     }
 }
-void SessionGroup::disconnectPair(Session * master , Session * other)
+void SessionGroup::disconnectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 

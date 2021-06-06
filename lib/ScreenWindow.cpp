@@ -30,7 +30,8 @@ using namespace Konsole;
 
 ScreenWindow::ScreenWindow(QObject* parent)
     : QObject(parent)
-    , _windowBuffer(0)
+    , _screen(nullptr)
+    , _windowBuffer(nullptr)
     , _windowBufferSize(0)
     , _bufferNeedsUpdate(true)
     , _windowLines(1)
@@ -59,7 +60,7 @@ Character* ScreenWindow::getImage()
 {
     // reallocate internal buffer if the window size has changed
     int size = windowLines() * windowColumns();
-    if (_windowBuffer == 0 || _windowBufferSize != size)
+    if (_windowBuffer == nullptr || _windowBufferSize != size)
     {
         delete[] _windowBuffer;
         _windowBufferSize = size;
@@ -259,7 +260,7 @@ QRect ScreenWindow::scrollRegion() const
     if ( atEndOfOutput() && equalToScreenSize )
         return _screen->lastScrolledRegion();
     else
-        return QRect(0,0,windowColumns(),windowLines());
+        return {0,0,windowColumns(),windowLines()};
 }
 
 void ScreenWindow::notifyOutputChanged()
@@ -289,6 +290,53 @@ void ScreenWindow::notifyOutputChanged()
     _bufferNeedsUpdate = true;
 
     emit outputChanged();
+}
+
+void ScreenWindow::handleCommandFromKeyboard(KeyboardTranslator::Command command)
+{
+    // Keyboard-based navigation
+    bool update = false;
+
+    // EraseCommand is handled in Vt102Emulation
+    if ( command & KeyboardTranslator::ScrollPageUpCommand )
+    {
+        scrollBy( ScreenWindow::ScrollPages , -1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollPageDownCommand )
+    {
+        scrollBy( ScreenWindow::ScrollPages , 1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollLineUpCommand )
+    {
+        scrollBy( ScreenWindow::ScrollLines , -1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollLineDownCommand )
+    {
+        scrollBy( ScreenWindow::ScrollLines , 1 );
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollDownToBottomCommand )
+    {
+        Q_EMIT scrollToEnd();
+        update = true;
+    }
+    if ( command & KeyboardTranslator::ScrollUpToTopCommand)
+    {
+        scrollTo(0);
+        update = true;
+    }
+    // TODO: KeyboardTranslator::ScrollLockCommand
+    // TODO: KeyboardTranslator::SendCommand
+
+    if ( update )
+    {
+        setTrackOutput( atEndOfOutput() );
+
+        Q_EMIT outputChanged();
+    }
 }
 
 //#include "ScreenWindow.moc"

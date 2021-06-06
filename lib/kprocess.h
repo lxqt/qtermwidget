@@ -77,12 +77,12 @@ public:
     /**
      * Constructor
      */
-    explicit KProcess(QObject *parent = 0);
+    explicit KProcess(QObject *parent = nullptr);
 
     /**
      * Destructor
      */
-    virtual ~KProcess();
+    ~KProcess() override;
 
     /**
      * Set how to handle the output channels of the child process.
@@ -310,18 +310,6 @@ public:
      * @return the PID of the started process or 0 on error
      */
     static int startDetached(const QStringList &argv);
-
-    /**
-     * Obtain the process' ID as known to the system.
-     *
-     * Unlike with QProcess::pid(), this is a real PID also on Windows.
-     *
-     * This function can be called only while the process is running.
-     * It cannot be applied to detached processes.
-     *
-     * @return the process ID
-     */
-    int pid() const;
 
 protected:
     /**

@@ -27,6 +27,7 @@
 
 // Konsole
 #include "Character.h"
+#include "KeyboardTranslator.h"
 
 namespace Konsole
 {
@@ -64,8 +65,8 @@ public:
      * to notify the window when the associated screen has changed and synchronize selection updates
      * between all views on a session.
      */
-    ScreenWindow(QObject* parent = 0);
-    virtual ~ScreenWindow();
+    ScreenWindow(QObject* parent = nullptr);
+    ~ScreenWindow() override;
 
     /** Sets the screen which this window looks onto */
     void setScreen(Screen* screen);
@@ -223,6 +224,8 @@ public slots:
      */
     void notifyOutputChanged();
 
+    void handleCommandFromKeyboard(KeyboardTranslator::Command command);
+
 signals:
     /**
      * Emitted when the contents of the associated terminal screen (see screen()) changes.
@@ -238,6 +241,8 @@ signals:
 
     /** Emitted when the selection is changed. */
     void selectionChanged();
+
+    void scrollToEnd();
 
 private:
     int endWindowLine() const;

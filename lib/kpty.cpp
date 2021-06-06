@@ -26,8 +26,7 @@
 
 #include <QtDebug>
 
-
-#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #define HAVE_LOGIN
 #define HAVE_LIBUTIL_H
 #endif
@@ -35,6 +34,12 @@
 #if defined(__OpenBSD__)
 #define HAVE_LOGIN
 #define HAVE_UTIL_H
+#endif
+
+#if defined(__NetBSD__)
+#define HAVE_LOGIN
+#define HAVE_UTIL_H
+#define HAVE_OPENPTY
 #endif
 
 #if defined(__APPLE__)
@@ -70,12 +75,12 @@
 #include <sys/stat.h>
 #include <sys/param.h>
 
-#include <errno.h>
+#include <cerrno>
 #include <fcntl.h>
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <ctime>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <grp.h>
 
@@ -259,7 +264,7 @@ bool KPty::open()
             d->ttyName = ptsn;
 #else
     int ptyno;
-    if (!ioctl(d->masterFd, TIOCGPTN, &ptyno)) {
+    if (ioctl(d->masterFd, TIOCGPTN, &ptyno) != -1) {
         d->ttyName = QByteArray("/dev/pts/") + QByteArray::number(ptyno);
 #endif
 #ifdef HAVE_GRANTPT
@@ -279,8 +284,8 @@ bool KPty::open()
     // Linux device names, FIXME: Trouble on other systems?
     for (const char * s3 = "pqrstuvwxyzabcde"; *s3; s3++) {
         for (const char * s4 = "0123456789abcdef"; *s4; s4++) {
-            ptyName = QString().sprintf("/dev/pty%c%c", *s3, *s4).toUtf8();
-            d->ttyName = QString().sprintf("/dev/tty%c%c", *s3, *s4).toUtf8();
+            ptyName = QByteArrayLiteral("/dev/pty") + *s3 + *s4;
+            d->ttyName = QByteArrayLiteral("/dev/tty") + *s3 + *s4;
 
             d->masterFd = ::open(ptyName.data(), O_RDWR);
             if (d->masterFd >= 0) {
@@ -290,7 +295,7 @@ bool KPty::open()
                  * and we need to get another one.
                  */
                 int pgrp_rtn;
-                if (ioctl(d->masterFd, TIOCGPGRP, &pgrp_rtn) == 0 || errno != EIO) {
+                if (ioctl(d->masterFd, TIOCGPGRP, &pgrp_rtn) != -1 || errno != EIO) {
                     ::close(d->masterFd);
                     d->masterFd = -1;
                     continue;
@@ -331,7 +336,7 @@ gotpty:
             !d->chownpty(true)) {
         qWarning()
         << "chownpty failed for device " << ptyName << "::" << d->ttyName
-        << "\nThis means the communication can be eavesdropped." << endl;
+        << "\nThis means the communication can be eavesdropped.\n";
     }
 
 #if defined (HAVE__GETPTY) || defined (HAVE_GRANTPT)
@@ -392,9 +397,13 @@ bool KPty::open(int fd)
         d->ttyName = ptsn;
 # else
     int ptyno;
-    if (!ioctl(fd, TIOCGPTN, &ptyno)) {
-        char buf[32];
-        sprintf(buf, "/dev/pts/%d", ptyno);
+    if (ioctl(fd, TIOCGPTN, &ptyno) != -1) {
+        const size_t sz = 32;
+        char buf[sz];
+        const size_t r = snprintf(buf, sz, "/dev/pts/%d", ptyno);
+        if (sz <= r) {
+            qWarning("KPty::open: Buffer too small\n");
+        }
         d->ttyName = buf;
 # endif
     } else {
@@ -544,7 +553,7 @@ void KPty::login(const char * user, const char * remotehost)
 # ifdef HAVE_UTMPX
     gettimeofday(&l_struct.ut_tv, 0);
 # else
-    l_struct.ut_time = time(0);
+    l_struct.ut_time = time(nullptr);
 # endif
 
 # ifdef HAVE_LOGIN
@@ -646,7 +655,7 @@ void KPty::logout()
     }
     endutxent();
 #  else
-    ut->ut_time = time(0);
+    ut->ut_time = time(nullptr);
     pututline(ut);
 }
 endutent();
@@ -680,7 +689,7 @@ bool KPty::setWinSize(int lines, int columns)
     memset(&winSize, 0, sizeof(winSize));
     winSize.ws_row = (unsigned short)lines;
     winSize.ws_col = (unsigned short)columns;
-    return ioctl(d->masterFd, TIOCSWINSZ, (char *)&winSize) == 0;
+    return ioctl(d->masterFd, TIOCSWINSZ, (char *)&winSize) != -1;
 }
 
 bool KPty::setEcho(bool echo)

@@ -314,6 +314,9 @@ public:
     /** Returns a list of all entries in the translator. */
     QList<Entry> entries() const;
 
+    /** The modifier code for the actual Ctrl key on this OS. */
+    static const Qt::KeyboardModifier CTRL_MOD;
+
 private:
 
     QMultiHash<int,Entry> _entries; // entries in this keyboard translation,
@@ -366,7 +369,7 @@ public:
     QString description() const;
 
     /** Returns true if there is another entry in the source stream */
-    bool hasNextEntry();
+    bool hasNextEntry() const;
     /** Returns the next entry found in the source stream */
     KeyboardTranslator::Entry nextEntry();
 
@@ -558,8 +561,8 @@ inline QByteArray KeyboardTranslator::Entry::text(bool expandWildCards,Qt::Keybo
     {
         int modifierValue = 1;
         modifierValue += oneOrZero(modifiers & Qt::ShiftModifier);
-        modifierValue += oneOrZero(modifiers & Qt::AltModifier)     << 1;
-        modifierValue += oneOrZero(modifiers & Qt::ControlModifier) << 2;
+        modifierValue += oneOrZero(modifiers & Qt::AltModifier) << 1;
+        modifierValue += oneOrZero(modifiers & KeyboardTranslator::CTRL_MOD) << 2;
 
         for (int i=0;i<_text.length();i++)
         {

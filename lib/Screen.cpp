@@ -24,11 +24,11 @@
 #include "Screen.h"
 
 // Standard
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstring>
+#include <cctype>
 
 // Qt
 #include <QTextStream>
@@ -1359,7 +1359,7 @@ void Screen::setScroll(const HistoryType& t , bool copyPreviousScroll)
     else
     {
         HistoryScroll* oldScroll = history;
-        history = t.scroll(0);
+        history = t.scroll(nullptr);
         delete oldScroll;
     }
 }
