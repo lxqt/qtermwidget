@@ -1,3 +1,15 @@
+qtermwidget-0.17.0 / 2021-04-15
+===============================
+  * Drop support for KDE3 color scheme formats.
+  * Some code cleanup and modernization.
+  * Added a method to disable bracketed paste mode.
+  * Added an example for PyQt5.
+  * Improve "Undecodable sequence" warnings.
+  * Properly implement the "Action after paste" feature.
+  * Fix execution after paste when Ctrl is hold.
+  * Workaround an issue with glibc 2.33 on old Docker engines.
+  * Added modes for background image. How background images are drawn is changed and manual reconfiguration is needed. See docs/configuration.md for more details.
+
 qtermwidget-0.16.1 / 2020-11-14
 ===============================
   * Bumped version to 0.16.1, for a point release of qterminal.

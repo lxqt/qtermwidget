@@ -27,17 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1282"/>
+        <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
         <translation>サイズ: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1294"/>
+        <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
         <translation>サイズ: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3180"/>
+        <location filename="../TerminalDisplay.cpp" line="2741"/>
+        <source>Paste multiline text</source>
+        <translation>複数行テキストの貼り付け</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2742"/>
+        <source>Are you sure you want to paste this text?</source>
+        <translation>このテキストを貼り付けますか？</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="3241"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Ctrl+S を押して出力を&lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;中断&lt;/a&gt; しました 。再開するには &lt;b&gt;Ctrl+Q&lt;/b&gt; を押します。&lt;/qt&gt;</translation>
     </message>
@@ -45,9 +55,17 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1113"/>
+        <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>キーボードトランスレータがありません。押されたキーを文字に変換してターミナルへ送信するために必要な情報がありません。</translation>
+        <translation>キーボードトランスレーターがありません。押されたキーを文字に変換してターミナルへ送信するために必要な情報がありません。</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2748"/>
+        <source>Show Details...</source>
+        <translation>詳細の表示...</translation>
     </message>
 </context>
 <context>
@@ -87,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="459"/>
+        <location filename="../qtermwidget.cpp" line="468"/>
         <source>Color Scheme Error</source>
         <translation>配色のエラー</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="460"/>
+        <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
         <translation>配色をロードできません: %1</translation>
     </message>

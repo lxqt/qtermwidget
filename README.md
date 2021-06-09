@@ -52,16 +52,21 @@ License: public-domain
 
 ### Compiling sources
 
-The only runtime dependency is qtbase ≥ 5.7.1.
-In order to build CMake ≥ 3.0.2 and [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) >= 0.4.0 are needed as well as Git to pull translations and optionally latest VCS checkouts.
+The only runtime dependency is qtbase ≥ 5.12.0.
+Build dependencies are as follows:
+- CMake ≥ 3.1.0 serves as the build system and therefore needs to be present to compile.
+- The latest [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) is also needed for compilation.
+- Git is needed to optionally pull latest VCS checkouts.
 
-Code configuration is handled by CMake. CMake variable `CMAKE_INSTALL_PREFIX` will normally have to be set to `/usr`, depending on the way library paths are dealt with on 64bit systems variables like `CMAKE_INSTALL_LIBDIR` may have to be set as well.
+Code configuration is handled by CMake. CMake variable `CMAKE_INSTALL_PREFIX` will normally have to be set to `/usr`, depending on the way library paths are dealt with on 64bit systems. Variables like `CMAKE_INSTALL_LIBDIR` may have to be set as well.
 
-To build run `make`, to install `make install` which accepts variable `DESTDIR` as usual.
+To build, run `make`. To install, run `make install` which accepts variable `DESTDIR` as usual.
+
+To build PyQt bindings, specify an additional CMake option `QTERMWIDGET_BUILD_PYTHON_BINDING=ON` when building this library.
 
 ### Binary packages
 
-The library is provided by all major Linux distributions like Arch Linux, Debian, Fedora and openSUSE.
+The library is provided by all major Linux distributions. This includes Arch Linux, Debian, Fedora, openSUSE and all of their children, given they use the same package repositories.
 Just use the distributions' package managers to search for string `qtermwidget`.
 
 

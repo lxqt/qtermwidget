@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<TS version="2.1" language="et">
 <context>
     <name>Konsole::Session</name>
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Campainha na sessão &apos;%1&apos;</translation>
+        <translation>Signaal sessioonis „%1“</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>A sessão &apos;%1&apos; terminou com o estado %2.</translation>
+        <translation>Sessioon „%1“ lõpetas töö olekuga %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>A sessão &apos;%1&apos; terminou.</translation>
+        <translation>Sessioon „%1“ jooksis kokku.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>A sessão &apos;%1&apos; terminou inesperadamente.</translation>
+        <translation>Sessioon „%1“ lõpetas ootamatult töö.</translation>
     </message>
 </context>
 <context>
@@ -29,27 +29,27 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
-        <translation>Tamanho: XXX x XXX</translation>
+        <translation>Suurus: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
-        <translation>Tamanho: %1 x %2</translation>
+        <translation>Suurus: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation>Colar texto com várias linhas</translation>
+        <translation>Aseta mitmerealine tekst</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Tem a certeza que deseja colar este texto?</translation>
+        <translation>Kas sa oled kindel, et soovid asetada seda teksti?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;A saída foi &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt; suspendida&lt;/a&gt; com Ctrl+S. Prima &lt;b&gt;Ctrl+Q&lt;/b&gt; para continuar.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Vajutades Ctrl+S jääb väljundi kuvamine &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pausile&lt;/a&gt;.  Jätkamiseks vajuta &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Não há um tradutor de teclado disponível. A informação necessária para converter a pressão da tecla nos caracteres a enviar ao terminal não existe.</translation>
+        <translation>Klaviatuurisisendi tõlgendaja pole saadaval. Hetkel ei leidu teavet kuidas muuta klahvivajutused terminali saadetavateks tähemärkideks.</translation>
     </message>
 </context>
 <context>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation>Mostrar detalhes...</translation>
+        <translation>Näita üksikasju...</translation>
     </message>
 </context>
 <context>
@@ -74,32 +74,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Esquema de cores sem nome</translation>
+        <translation>Nimeta värvikombinatsioon</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>Esquema de cores acessível</translation>
+        <translation>Hõlpsalt kasutatav värvikombinatsioon</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation>Abrir ligação</translation>
+        <translation>Ava link</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Copiar endereço da ligação</translation>
+        <translation>Kopeeri lingi aadress</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>Enviar e-mail para...</translation>
+        <translation>Saada e-kiri aadressile...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>Copiar endereço de e-mail</translation>
+        <translation>Kopeeri e-posti aadress</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="468"/>
         <source>Color Scheme Error</source>
-        <translation>Erro no esquema de cores</translation>
+        <translation>Värvikombinatsiooni viga</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Não foi possível carregar o esquema de cores: %1</translation>
+        <translation>Värvikombinatsiooni laadimine ei õnnestu: %1</translation>
     </message>
 </context>
 <context>
@@ -120,22 +120,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>Diferenciar maiúsculas/minúsculas</translation>
+        <translation>Tõstutundlik</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation>Expressão regular</translation>
+        <translation>Regulaaravaldis</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation>Realçar todas as ocorrências</translation>
+        <translation>Tõsta kõik vasted esile</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Barra de pesquisa</translation>
+        <translation>Otsinguriba</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>Localizar:</translation>
+        <translation>Otsi:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>

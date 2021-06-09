@@ -27,17 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1282"/>
+        <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
         <translation>Μέγεθος: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1294"/>
+        <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
         <translation>Μέγεθος: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3180"/>
+        <location filename="../TerminalDisplay.cpp" line="2741"/>
+        <source>Paste multiline text</source>
+        <translation>Επικόλληση κειμένου πολλαπλών γραμμών</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2742"/>
+        <source>Are you sure you want to paste this text?</source>
+        <translation>Επιθυμείτε σίγουρα την επικόλληση του κειμένου;</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="3241"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Η έξοδος έχει &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;ανασταλεί&lt;/a&gt; με τον συνδυασμό πλήκτρων Ctrl+S. Πιέστε &lt;b&gt;Ctrl+Q&lt;/b&gt; για επαναφορά.&lt;/qt&gt;</translation>
     </message>
@@ -45,9 +55,17 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1113"/>
+        <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Δεν υπάρχει κάποιος μεταφραστής πληκτρολογίου διαθέσιμος. Η απαιτούμενη πληροφορία για την μετατροπή των πατημάτων πλήκτρων σε χαρακτήρες στο τερματικό λείπει.</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2748"/>
+        <source>Show Details...</source>
+        <translation>Εμφάνιση λεπτομερειών...</translation>
     </message>
 </context>
 <context>
@@ -87,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="459"/>
+        <location filename="../qtermwidget.cpp" line="468"/>
         <source>Color Scheme Error</source>
         <translation>Σφάλμα του χρωματικού συνδυασμού</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="460"/>
+        <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Αδύνατη η φόρτωση του χρωματικού συνδυασμού: %1</translation>
     </message>

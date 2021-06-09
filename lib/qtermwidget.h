@@ -88,6 +88,7 @@ public:
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
     void setTerminalBackgroundImage(const QString& backgroundImage);
+    void setTerminalBackgroundMode(int mode);
 
     //environment
     void setEnvironment(const QStringList & environment);
@@ -226,6 +227,10 @@ public:
     /** change and wrap text corresponding to paste mode **/
     void bracketText(QString& text);
 
+    /** forcefully disable bracketed paste mode **/
+    void disableBracketedPasteMode(bool disable);
+    bool bracketedPasteModeIsDisabled() const;
+
     /** Set the empty space outside the terminal */
     void setMargin(int);
 
@@ -235,6 +240,9 @@ public:
     void setDrawLineChars(bool drawLineChars);
 
     void setBoldIntense(bool boldIntense);
+
+    void setConfirmMultilinePaste(bool confirmMultilinePaste);
+    void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
 signals:
     void finished();
     void copyAvailable(bool);

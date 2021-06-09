@@ -143,7 +143,7 @@ bool Session::isRunning() const
     return _shellProcess->state() == QProcess::Running;
 }
 
-void Session::setCodec(QTextCodec * codec)
+void Session::setCodec(QTextCodec * codec) const
 {
     emulation()->setCodec(codec);
 }
@@ -174,8 +174,8 @@ void Session::addView(TerminalDisplay * widget)
 
     if ( _emulation != nullptr ) {
         // connect emulation - view signals and slots
-        connect( widget , SIGNAL(keyPressedSignal(QKeyEvent *)) , _emulation ,
-                 SLOT(sendKeyEvent(QKeyEvent *)) );
+        connect( widget , &TerminalDisplay::keyPressedSignal, _emulation ,
+                 &Emulation::sendKeyEvent);
         connect( widget , SIGNAL(mouseSignal(int,int,int,int)) , _emulation ,
                  SLOT(sendMouseEvent(int,int,int,int)) );
         connect( widget , SIGNAL(sendStringToEmu(const char *)) , _emulation ,
@@ -567,7 +567,7 @@ void Session::sendText(const QString & text) const
 
 void Session::sendKeyEvent(QKeyEvent* e) const
 {
-    _emulation->sendKeyEvent(e);
+    _emulation->sendKeyEvent(e, false);
 }
 
 Session::~Session()
@@ -1034,7 +1034,7 @@ void SessionGroup::setMasterStatus(Session * session, bool master)
     }
 }
 
-void SessionGroup::connectPair(Session * master , Session * other)
+void SessionGroup::connectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 
@@ -1045,7 +1045,7 @@ void SessionGroup::connectPair(Session * master , Session * other)
                  SLOT(sendString(const char *,int)) );
     }
 }
-void SessionGroup::disconnectPair(Session * master , Session * other)
+void SessionGroup::disconnectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 

@@ -21,8 +21,8 @@ option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OF
 
 # just change version for releases
 set(QTERMWIDGET_VERSION_MAJOR "0")
-set(QTERMWIDGET_VERSION_MINOR "16")
-set(QTERMWIDGET_VERSION_PATCH "1")
+set(QTERMWIDGET_VERSION_MINOR "17")
+set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
@@ -31,8 +31,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Minimum Versions
-set(QT_MINIMUM_VERSION "5.12.0")
-set(LXQTBT_MINIMUM_VERSION "0.8.0")
+set(QT_MINIMUM_VERSION "5.15.0")
+set(LXQTBT_MINIMUM_VERSION "0.9.0")
 
 find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
@@ -308,7 +308,7 @@ export(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
 
 # example application
 if(BUILD_EXAMPLE)
-    set(EXAMPLE_SRC example/main.cpp)
+    set(EXAMPLE_SRC examples/cpp/main.cpp)
     add_executable(example ${EXAMPLE_SRC})
     target_link_libraries(example ${QTERMWIDGET_LIBRARY_NAME})
 endif()

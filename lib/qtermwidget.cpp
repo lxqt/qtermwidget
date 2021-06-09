@@ -267,11 +267,7 @@ void QTermWidget::init(int startnow)
     // translations
     // First check $XDG_DATA_DIRS. This follows the implementation in libqtxdg
     QString d = QFile::decodeName(qgetenv("XDG_DATA_DIRS"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5,15,0))
     QStringList dirs = d.split(QLatin1Char(':'), Qt::SkipEmptyParts);
-#else
-    QStringList dirs = d.split(QLatin1Char(':'), QString::SkipEmptyParts);
-#endif
     if (dirs.isEmpty()) {
         dirs.append(QString::fromLatin1("/usr/local/share"));
         dirs.append(QString::fromLatin1("/usr/share"));
@@ -328,8 +324,8 @@ void QTermWidget::init(int startnow)
             this, SIGNAL(termGetFocus()));
     connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
             this, SIGNAL(termLostFocus()));
-    connect(m_impl->m_terminalDisplay, SIGNAL(keyPressedSignal(QKeyEvent *)),
-            this, SIGNAL(termKeyPressed(QKeyEvent *)));
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal,
+            [this] (QKeyEvent* e, bool) { Q_EMIT termKeyPressed(e); });
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
@@ -376,6 +372,11 @@ void QTermWidget::setTerminalOpacity(qreal level)
 void QTermWidget::setTerminalBackgroundImage(const QString& backgroundImage)
 {
     m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
+}
+
+void QTermWidget::setTerminalBackgroundMode(int mode)
+{
+    m_impl->m_terminalDisplay->setBackgroundMode((Konsole::BackgroundMode)mode);
 }
 
 void QTermWidget::setShellProgram(const QString &program)
@@ -531,6 +532,16 @@ void QTermWidget::sessionFinished()
 void QTermWidget::bracketText(QString& text)
 {
     m_impl->m_terminalDisplay->bracketText(text);
+}
+
+void QTermWidget::disableBracketedPasteMode(bool disable)
+{
+    m_impl->m_terminalDisplay->disableBracketedPasteMode(disable);
+}
+
+bool QTermWidget::bracketedPasteModeIsDisabled() const
+{
+    return m_impl->m_terminalDisplay->bracketedPasteModeIsDisabled();
 }
 
 void QTermWidget::copyClipboard()
@@ -777,4 +788,12 @@ void QTermWidget::setDrawLineChars(bool drawLineChars)
 void QTermWidget::setBoldIntense(bool boldIntense)
 {
     m_impl->m_terminalDisplay->setBoldIntense(boldIntense);
+}
+
+void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
+    m_impl->m_terminalDisplay->setConfirmMultilinePaste(confirmMultilinePaste);
+}
+
+void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
+    m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
 }

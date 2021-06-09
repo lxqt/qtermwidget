@@ -184,7 +184,7 @@ public:
 
 
 private:
-  int bufferIndex(int lineNumber);
+  int bufferIndex(int lineNumber) const;
 
   HistoryLine* _historyBuffer;
   QBitArray _wrappedLine;

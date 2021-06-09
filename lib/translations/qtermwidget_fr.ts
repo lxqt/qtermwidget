@@ -6,7 +6,7 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sonnerie dans la session &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
@@ -16,28 +16,38 @@
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>La session &apos;%1&apos; a planté.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>La session &apos;%1&apos; s&apos;est fermée de manière inattendue.</translation>
     </message>
 </context>
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1282"/>
+        <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
         <translation>Taille : XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1294"/>
+        <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
         <translation>Taille : %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3180"/>
+        <location filename="../TerminalDisplay.cpp" line="2741"/>
+        <source>Paste multiline text</source>
+        <translation>Coller des textes multiligne</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2742"/>
+        <source>Are you sure you want to paste this text?</source>
+        <translation>Êtes vous sûr de vouloir coller ce texte ?</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="3241"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;La sortie a été &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendue&lt;/a&gt; en pressant Ctrl+S.  Presser &lt;b&gt;Ctrl+Q&lt;/b&gt; pour reprendre.&lt;/qt&gt;</translation>
     </message>
@@ -45,9 +55,17 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1113"/>
+        <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Aucun traducteur de clavier disponible. Les informations nécessaires pour convertir les touches utilisées en caractères à envoyer au terminal sont manquantes.</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2748"/>
+        <source>Show Details...</source>
+        <translation>Voir les détails...</translation>
     </message>
 </context>
 <context>
@@ -87,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="459"/>
+        <location filename="../qtermwidget.cpp" line="468"/>
         <source>Color Scheme Error</source>
         <translation>Erreur du schéma des couleurs</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="460"/>
+        <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Impossible de charger le schéma de couleurs : %1</translation>
     </message>

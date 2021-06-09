@@ -93,7 +93,7 @@ public slots:
   // reimplemented from Emulation
   void sendString(const char*,int length = -1) override;
   void sendText(const QString& text) override;
-  void sendKeyEvent(QKeyEvent*) override;
+  void sendKeyEvent(QKeyEvent*, bool fromPaste) override;
   void sendMouseEvent(int buttons, int column, int line, int eventType) override;
   virtual void focusLost();
   virtual void focusGained();
