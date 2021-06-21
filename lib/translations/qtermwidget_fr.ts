@@ -6,7 +6,7 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished">Sonnerie dans la session &apos;%1&apos;</translation>
+        <translation>Sonnerie dans la session &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
