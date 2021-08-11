@@ -31,6 +31,7 @@
 #include <QSettings>
 #include <QDir>
 #include <QRegularExpression>
+#include <QRandomGenerator>
 
 
 // KDE
@@ -175,25 +176,21 @@ void ColorScheme::setColorTableEntry(int index , const ColorEntry& entry)
 
     _table[index] = entry;
 }
-ColorEntry ColorScheme::colorEntry(int index , uint randomSeed) const
+ColorEntry ColorScheme::colorEntry(int index) const
 {
     Q_ASSERT( index >= 0 && index < TABLE_COLORS );
 
-    if ( randomSeed != 0 )
-        qsrand(randomSeed);
-
     ColorEntry entry = colorTable()[index];
 
-    if ( randomSeed != 0 &&
-        _randomTable != nullptr &&
+    if ( _randomTable != nullptr &&
         !_randomTable[index].isNull() )
     {
         const RandomizationRange& range = _randomTable[index];
 
 
-        int hueDifference = range.hue ? (qrand() % range.hue) - range.hue/2 : 0;
-        int saturationDifference = range.saturation ? (qrand() % range.saturation) - range.saturation/2 : 0;
-        int  valueDifference = range.value ? (qrand() % range.value) - range.value/2 : 0;
+        int hueDifference = range.hue ? QRandomGenerator::global()->bounded(range.hue) - range.hue/2 : 0;
+        int saturationDifference = range.saturation ? QRandomGenerator::global()->bounded(range.saturation) - range.saturation/2 : 0;
+        int valueDifference = range.value ? QRandomGenerator::global()->bounded(range.value) - range.value/2 : 0;
 
         QColor& color = entry.color;
 
@@ -206,10 +203,10 @@ ColorEntry ColorScheme::colorEntry(int index , uint randomSeed) const
 
     return entry;
 }
-void ColorScheme::getColorTable(ColorEntry* table , uint randomSeed) const
+void ColorScheme::getColorTable(ColorEntry* table) const
 {
     for ( int i = 0 ; i < TABLE_COLORS ; i++ )
-        table[i] = colorEntry(i,randomSeed);
+        table[i] = colorEntry(i);
 }
 bool ColorScheme::randomizedBackgroundColor() const
 {
