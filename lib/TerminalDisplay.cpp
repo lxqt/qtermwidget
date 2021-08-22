@@ -1446,7 +1446,7 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     calDrawTextAdditionHeight(paint);
   }
 
-  const auto rects = (pe->region() & cr).rects();
+  const QVector<QRect> rects((pe->region() & cr).begin(), (pe->region() & cr).end());
   for (const QRect &rect : rects)
   {
     drawBackground(paint,rect,palette().window().color(),
