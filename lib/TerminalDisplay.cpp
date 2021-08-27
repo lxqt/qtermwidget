@@ -1446,12 +1446,12 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     calDrawTextAdditionHeight(paint);
   }
 
-  const QVector<QRect> rects((pe->region() & cr).begin(), (pe->region() & cr).end());
-  for (const QRect &rect : rects)
+  const QRegion temp = pe->region() & cr;
+  for (auto rect = temp.begin(); rect != temp.end(); rect++)
   {
-    drawBackground(paint,rect,palette().window().color(),
+    drawBackground(paint,*rect,palette().window().color(),
                    true /* use opacity setting */);
-    drawContents(paint, rect);
+    drawContents(paint, *rect);
   }
   drawInputMethodPreeditString(paint,preeditRect());
   paintFilters(paint);
