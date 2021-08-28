@@ -1446,8 +1446,8 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     calDrawTextAdditionHeight(paint);
   }
 
-  const QRegion temp = pe->region() & cr;
-  for (auto rect = temp.begin(); rect != temp.end(); rect++)
+  const QRegion regToDraw = pe->region() & cr;
+  for (auto rect = regToDraw.begin(); rect != regToDraw.end(); rect++)
   {
     drawBackground(paint,*rect,palette().window().color(),
                    true /* use opacity setting */);
