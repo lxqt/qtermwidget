@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation type="unfinished"></translation>
+        <translation>Umetni višeredan tekst</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation type="unfinished"></translation>
+        <translation>Stvarno želiš umetnuti ovaj tekst?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation type="unfinished"></translation>
+        <translation>Prikaži detalje …</translation>
     </message>
 </context>
 <context>
