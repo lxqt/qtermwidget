@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Сеанс &apos;%1&apos; закінчився зі статусом %2.</translation>
+        <translation>Сеанс &apos;%1&apos; завершився зі статусом %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -21,7 +21,7 @@
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Сеанс &apos;%1&apos; раптово закінчився.</translation>
+        <translation>Сеанс &apos;%1&apos; раптово завершився.</translation>
     </message>
 </context>
 <context>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>Досяжна колірна схема</translation>
+        <translation>Колірна схема для людей з вадами зору</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>Відправити повідомлення е-пошти...</translation>
+        <translation>Надіслати е-поштою...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Не можливо завантажити колірну схему</translation>
+        <translation>Не вдалося завантажити колірну схему: %1</translation>
     </message>
 </context>
 <context>
