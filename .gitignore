@@ -1,2 +1,5 @@
 build
 .kdev4
+dist
+QTermWidget.egg-info
+__pycache__
