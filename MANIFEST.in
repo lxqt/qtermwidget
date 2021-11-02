@@ -2,3 +2,4 @@ recursive-include lib *
 recursive-include pyqt *
 recursive-include cmake *
 include CMakeLists.txt
+include README.md

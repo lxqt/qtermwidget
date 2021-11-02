@@ -1,7 +1,33 @@
 from setuptools.command.build_ext import build_ext as build_ext_orig
 from setuptools import setup, Extension
+import subprocess
+import tempfile
+import platform
 import pathlib
+import shutil
+import glob
+import sys
 import os
+
+
+if platform.system() == "Windows":
+    print("Windows is not supportet", file=sys.stderr)
+    sys.exit(1)
+
+
+with open("README.md", "r", encoding="utf-8") as f:
+    description = f.read()
+
+
+build_dir = tempfile.mkdtemp()
+
+
+def prepare_build():
+    shutil.copy("QTermWidget/__init__.py", os.path.join(build_dir, "__init__.py"))
+    shutil.copytree("lib/color-schemes", os.path.join(build_dir, "color-schemes"))
+    shutil.copytree("lib/kb-layouts", os.path.join(build_dir, "kb-layouts"))
+    shutil.copytree("lib/translations", os.path.join(build_dir, "translations"))
+    subprocess.run(["lrelease"] + glob.glob(os.path.join(build_dir, "translations", "*.ts")))
 
 
 class CMakeExtension(Extension):
@@ -52,12 +78,50 @@ class build_ext(build_ext_orig):
         os.chdir(str(cwd))
 
 
+prepare_build()
+
 setup(
     name="QTermWidget",
     version='0.1',
+    description=" The terminal widget for QTerminal",
+    long_description=description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/lxqt/qtermwidget",
+    python_requires=">=3.7",
+    install_requires=["PyQt5"],
     packages=["QTermWidget"],
     ext_modules=[CMakeExtension("QTermWidget/*")],
     cmdclass={
         "build_ext": build_ext,
-    }
+    },
+    package_dir={"QTermWidget": build_dir},
+    package_data={
+        "QTermWidget": [
+            "color-schemes/*",
+            "color-schemes/historic/*",
+            "kb-layouts/*",
+            "kb-layouts/historic/*",
+            "translations/*.qm"
+        ]
+    },
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Environment :: Other Environment",
+        "Environment :: X11 Applications :: Qt",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: POSIX",
+        "Operating System :: POSIX :: BSD",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS :: MacOS X",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: Implementation :: CPython"
+      ]
 )
+
+shutil.rmtree(build_dir)
