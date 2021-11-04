@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Zvonek v sezení &apos;%1&apos;</translation>
+        <translation>Zvonek v sezení „%1“</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Sezení &apos;%1&apos; ukončeno se stavem %2.</translation>
+        <translation>Sezení „%1“ ukončeno se stavem %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Sezení &apos;%1&apos; spadlo.</translation>
+        <translation>Sezení „%1“ zhavarovalo.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Sezení &apos;%1&apos; neočekávaně ukončeno.</translation>
+        <translation>Sezení „%1“ neočekávaně ukončeno.</translation>
     </message>
 </context>
 <context>
@@ -44,7 +44,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Opravdu chcete vložit tento text?</translation>
+        <translation>Opravdu chcete tento text vložit?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="468"/>
         <source>Color Scheme Error</source>
-        <translation>Chyba barevného schématu</translation>
+        <translation>Chyba schéma barev</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Nedaří se načíst barevné schéma: %1</translation>
+        <translation>Nedaří se načíst schéma barev: %1</translation>
     </message>
 </context>
 <context>
