@@ -679,7 +679,7 @@ QByteArray KeyboardTranslator::Entry::escapedText(bool expandWildCards,Qt::Keybo
         {
             QByteArray escaped("\\x");
             escaped += QByteArray(1,ch).toHex();
-            result.replace(i, 1, QByteArrayView(escaped));
+            result.replace(i, 1, escaped);
         } else if ( replacement != 0 )
         {
             result.remove(i,1);

@@ -222,6 +222,8 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
         "HAVE_POSIX_OPENPT"
         "HAVE_SYS_TIME_H"
+        # https://www.kdab.com/un-deprecate-qt-project/
+        "QT_DISABLE_DEPRECATED_BEFORE=0x050e00"
 )
 
 
