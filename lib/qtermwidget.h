@@ -115,8 +115,13 @@ public:
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);
 
-    // History size for scrolling
-    void setHistorySize(int lines); //infinite if lines < 0
+    /** Sets the history size (in lines)
+     *
+     * @param lines history size
+     *  lines = 0, no history
+     *  lies < 0, infinite history
+     */
+    void setHistorySize(int lines);
 
     // Presence of scrollbar
     void setScrollBarPosition(ScrollBarPosition);

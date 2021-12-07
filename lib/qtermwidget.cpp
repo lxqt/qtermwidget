@@ -493,6 +493,8 @@ void QTermWidget::setHistorySize(int lines)
 {
     if (lines < 0)
         m_impl->m_session->setHistoryType(HistoryTypeFile());
+    else if (lines == 0)
+        m_impl->m_session->setHistoryType(HistoryTypeNone());
     else
         m_impl->m_session->setHistoryType(HistoryTypeBuffer(lines));
 }
