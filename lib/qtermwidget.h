@@ -123,6 +123,9 @@ public:
      */
     void setHistorySize(int lines);
 
+    // Returns the history size (in lines)
+    int historySize() const;
+
     // Presence of scrollbar
     void setScrollBarPosition(ScrollBarPosition);
 

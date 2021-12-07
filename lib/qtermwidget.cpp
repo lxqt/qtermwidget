@@ -499,6 +499,21 @@ void QTermWidget::setHistorySize(int lines)
         m_impl->m_session->setHistoryType(HistoryTypeBuffer(lines));
 }
 
+int QTermWidget::historySize() const
+{
+    const HistoryType& currentHistory = m_impl->m_session->historyType();
+
+     if (currentHistory.isEnabled()) {
+         if (currentHistory.isUnlimited()) {
+             return -1;
+         } else {
+             return currentHistory.maximumLineCount();
+         }
+     } else {
+         return 0;
+     }
+}
+
 void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
 {
     m_impl->m_terminalDisplay->setScrollBarPosition(pos);
