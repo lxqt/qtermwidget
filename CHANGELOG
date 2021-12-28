@@ -1,3 +1,15 @@
+qtermwidget-1.0.0 / 2021-11-04
+===============================
+ * Bumped minimum required Qt version to 5.15.
+ * Fixed crash under (Plasma) Wayland on opening tab and splitting.
+ * Use "empty()" to check for container emptiness.
+ * Made some member functions const.
+ * Quote drag-and-drop file names.
+ * Backported CNL and CPL support from Konsole.
+ * Use QRandomGenerator instead of qrand().
+ * Silenced some compilation warnings.
+ * Basic EditorConfig definition.
+
 qtermwidget-0.17.0 / 2021-04-15
 ===============================
   * Drop support for KDE3 color scheme formats.

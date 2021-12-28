@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="cs">
+<TS version="2.1" language="sk">
 <context>
     <name>Konsole::Session</name>
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Zvonek v sezení „%1“</translation>
+        <translation>Zvonček v relácií &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Sezení „%1“ ukončeno se stavem %2.</translation>
+        <translation>Relácia &apos;%1&apos; bola ukončená so stavom %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Sezení „%1“ zhavarovalo.</translation>
+        <translation>Relácia &apos;%1&apos; spadla.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Sezení „%1“ neočekávaně ukončeno.</translation>
+        <translation>Relácia &apos;%1&apos; bola neočakávane ukončená.</translation>
     </message>
 </context>
 <context>
@@ -29,27 +29,27 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
-        <translation>Velikost: XXX x XXX</translation>
+        <translation>Veľkosť: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
-        <translation>Velikost: %1 x %2</translation>
+        <translation>Veľkosť: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation>Vložit víceřádkový text</translation>
+        <translation>Prilepiť viacriadkový text</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Opravdu chcete tento text vložit?</translation>
+        <translation>Prajete si prilepiť tento text?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Výstup byl &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastaven&lt;/a&gt; stisknutím Ctrl+S. Znovu ho spustíte stisknutím &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Výstup bol &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastavený&lt;/a&gt; stlačením Ctrl+S.  Stlačte&lt;b&gt;Ctrl+Q&lt;/b&gt; pre opätovné spustenie.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Není k dispozici žádný překladač klávesnice. Chybí tak informace pro převod kódů ze stisknutých kláves na znaky posílané na terminál.</translation>
+        <translation>Prekladač klávesnice nie je dostupný. Chýbajú preto informácie potrebné na prevod kódov stlačených kláves na znaky poslané na terminál.</translation>
     </message>
 </context>
 <context>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation>Zobrazit podrobnosti…</translation>
+        <translation>Zobraziť podrobnosti...</translation>
     </message>
 </context>
 <context>
@@ -74,32 +74,32 @@
         <location filename="../ColorScheme.cpp" line="278"/>
         <location filename="../ColorScheme.cpp" line="293"/>
         <source>Un-named Color Scheme</source>
-        <translation>Nepojmenované schéma barev</translation>
+        <translation>Farebná schéma bez mena</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="464"/>
         <source>Accessible Color Scheme</source>
-        <translation>Schéma barev pro uživatele se zrakovou vadou</translation>
+        <translation>Farebná schéma pre zjednodušený prístup</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation>Otevřít odkaz</translation>
+        <translation>Otvoriť odkaz</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Zkopírovat adresu odkazu</translation>
+        <translation>Kopírovať adresu odkazu</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>Poslat e-mail na…</translation>
+        <translation>Poslať email na adresu...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>Zkopírovat e-mailovou adresu</translation>
+        <translation>Kopírovať e-mailovú adresu</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="468"/>
         <source>Color Scheme Error</source>
-        <translation>Chyba schéma barev</translation>
+        <translation>Chyba vo farebnej schéme</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="469"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Nedaří se načíst schéma barev: %1</translation>
+        <translation>Nepodarilo sa načítať schému: %1</translation>
     </message>
 </context>
 <context>
@@ -120,47 +120,47 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>Rozlišovat malá/VELKÁ písmena</translation>
+        <translation>Rozlišovať veľké a malé písmená</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation>Regulární výraz</translation>
+        <translation>Regulárny výraz</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation>Zvýraznit všechny shody</translation>
+        <translation>Zvýrazniť všetky zhody</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Lišta hledání</translation>
+        <translation>Hľadanie</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
         <source>X</source>
-        <translation></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>Najít:</translation>
+        <translation>Hľadať:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
         <source>&lt;</source>
-        <translation></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="54"/>
         <source>&gt;</source>
-        <translation></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation>…</translation>
+        <translation>...</translation>
     </message>
 </context>
 </TS>

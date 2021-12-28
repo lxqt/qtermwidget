@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation>Pegar texto multirrenglón</translation>
+        <translation>Pegar un texto de varias líneas</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>¿Confirma que quiere pegar este texto?</translation>
+        <translation>¿Seguro que quiere pegar el texto?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation>Mostrar detalles…</translation>
+        <translation>Mostrar los detalles…</translation>
     </message>
 </context>
 <context>
