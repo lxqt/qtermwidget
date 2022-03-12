@@ -1,4 +1,4 @@
-%Module QTermWidget
+%Module(name=QTermWidget, use_limited_api=True)
 
 %ModuleHeaderCode
 #pragma GCC visibility push(default)
@@ -11,7 +11,7 @@
 class QTermWidget : QWidget {
 
 %TypeHeaderCode
-#include <../lib/qtermwidget.h>
+#include <qtermwidget.h>
 %End
 
 public:
