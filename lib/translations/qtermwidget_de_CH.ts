@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>SItzung &apos;%1&apos; wurde mit Status %2 beendet.</translation>
+        <translation>Sitzung &apos;%1&apos; wurde mit Status %2 beendet.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -29,12 +29,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1279"/>
         <source>Size: XXX x XXX</source>
-        <translation>Größe: XXX x XXX</translation>
+        <translation>Grösse: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1291"/>
         <source>Size: %1 x %2</source>
-        <translation>Größe: %1 x %2</translation>
+        <translation>Grösse: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Kein Tastaturinterpreter verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschließend zum Terminal zu senden, fehlt.</translation>
+        <translation>Kein Tastaturinterpreter verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschliessend zum Terminal zu senden, fehlt.</translation>
     </message>
 </context>
 <context>
@@ -120,7 +120,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>Groß-/Kleinschreibung beachten</translation>
+        <translation>Gross-/Kleinschreibung beachten</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
