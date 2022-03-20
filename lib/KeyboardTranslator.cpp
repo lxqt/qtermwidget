@@ -34,7 +34,10 @@
 #include <QKeySequence>
 #include <QDir>
 #include <QtDebug>
-
+#if QT_VERSION >= 0x060000
+#include <QtCore5Compat/QRegExp>
+#include <QtCore5Compat/QStringRef>
+#endif
 #include "tools.h"
 
 // KDE
@@ -676,7 +679,8 @@ QByteArray KeyboardTranslator::Entry::escapedText(bool expandWildCards,Qt::Keybo
 
         if ( replacement == 'x' )
         {
-            result.replace(i,1,"\\x"+QByteArray(1,ch).toHex());
+            QByteArray data = "\\x"+QByteArray(1,ch).toHex();
+            result.replace(i,1,data);
         } else if ( replacement != 0 )
         {
             result.remove(i,1);
@@ -694,7 +698,7 @@ QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
     for ( int i = 0 ; i < result.count()-1 ; i++ )
     {
 
-        QByteRef ch = result[i];
+        auto ch = result[i];
         if ( ch == '\\' )
         {
            char replacement[2] = {0,0};

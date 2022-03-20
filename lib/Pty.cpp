@@ -318,10 +318,11 @@ int Pty::foregroundProcessGroup() const
     return 0;
 }
 
+// TODO: we need to handle this
+#if QT_VERSION < 0x060000
 void Pty::setupChildProcess()
 {
     KPtyProcess::setupChildProcess();
-
     // reset all signal handlers
     // this ensures that terminal applications respond to
     // signals generated via key sequences such as Ctrl+C
@@ -338,3 +339,4 @@ void Pty::setupChildProcess()
     }
     sigprocmask(SIG_UNBLOCK, &sigset, nullptr);
 }
+#endif

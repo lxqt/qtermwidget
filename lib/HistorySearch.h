@@ -29,16 +29,25 @@
 #include "Emulation.h"
 #include "TerminalCharacterDecoder.h"
 
+#if QT_VERSION >= 0x06000
+#include <QRegularExpression>
+#include <QtCore5Compat/QRegExp>
+#endif
+
 using namespace Konsole;
 
 typedef QPointer<Emulation> EmulationPtr;
-
+#if QT_VERSION >= 0x06000
+typedef QRegularExpression RegExp;
+#else
+typedef QRegExp RegExp;
+#endif
 class HistorySearch : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit HistorySearch(EmulationPtr emulation, const QRegExp& regExp, bool forwards,
+    explicit HistorySearch(EmulationPtr emulation, const RegExp& regExp, bool forwards,
                            int startColumn, int startLine, QObject* parent);
 
     ~HistorySearch() override;
@@ -55,7 +64,7 @@ private:
 
 
     EmulationPtr m_emulation;
-    QRegExp m_regExp;
+    RegExp m_regExp;
     bool m_forwards;
     int m_startColumn;
     int m_startLine;

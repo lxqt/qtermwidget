@@ -119,6 +119,7 @@ KPtyDevice *KPtyProcess::pty() const
     return d->pty;
 }
 
+#if QT_VERSION < 0x060000
 void KPtyProcess::setupChildProcess()
 {
     Q_D(KPtyProcess);
@@ -140,5 +141,6 @@ void KPtyProcess::setupChildProcess()
 
     KProcess::setupChildProcess();
 }
+#endif
 
 //#include "kptyprocess.moc"

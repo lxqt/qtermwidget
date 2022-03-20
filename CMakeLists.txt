@@ -32,10 +32,21 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Minimum Versions
 set(QT_MINIMUM_VERSION "5.15.0")
+set(QT6_MINIMUM_VERSION "6.1.0")
 set(LXQTBT_MINIMUM_VERSION "0.10.0")
 
-find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
-find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
+find_package(Qt6 COMPONENTS Widgets)
+if (NOT Qt6_FOUND)
+    find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
+    find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
+endif()
+
+if (Qt6_FOUND)
+    find_package(Qt6Widgets "${QT6_MINIMUM_VERSION}" REQUIRED)
+    find_package(Qt6LinguistTools "${QT6_MINIMUM_VERSION}" REQUIRED)
+    find_package(Qt6Core5Compat "${QT6_MINIMUM_VERSION}" REQUIRED)
+endif()
+
 find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 
 if(USE_UTF8PROC)
@@ -54,8 +65,11 @@ if(APPLE)
     endif()
 endif()
 
-set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
-
+if (NOT Qt6_FOUND)
+    set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
+else()
+    set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
+endif()
 
 # main library
 
@@ -128,9 +142,15 @@ set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBR
 
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
 
-qt5_wrap_cpp(MOCS ${HDRS})
-qt5_wrap_ui(UI_SRCS ${UI})
-set(PKG_CONFIG_REQ "Qt5Widgets")
+if (NOT Qt6_FOUND)
+    qt5_wrap_cpp(MOCS ${HDRS})
+    qt5_wrap_ui(UI_SRCS ${UI})
+    set(PKG_CONFIG_REQ "Qt5Widgets")
+else()
+    qt6_wrap_cpp(MOCS ${HDRS})
+    qt6_wrap_ui(UI_SRCS ${UI})
+    set(PKG_CONFIG_REQ "Qt6Widgets")
+endif()
 
 lxqt_translate_ts(QTERMWIDGET_QM
     TRANSLATION_DIR "lib/translations"
@@ -145,7 +165,12 @@ lxqt_translate_ts(QTERMWIDGET_QM
 )
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
-target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
+if (NOT Qt6_FOUND)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
+else()
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Core5Compat)
+endif()
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}

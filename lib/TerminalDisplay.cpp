@@ -280,7 +280,9 @@ void TerminalDisplay::setVTFont(const QFont& f)
   //     this ensures the same handling for all platforms
   // but then there was revealed that various Linux distros
   // have this problem too...
+#if QT_VERSION < 0x060000
   font.setStyleStrategy(QFont::ForceIntegerMetrics);
+#endif
 
   if ( !QFontInfo(font).fixedPitch() )
   {
@@ -2016,7 +2018,13 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
           spot->activate(QLatin1String("click-action"));
     }
   }
-  else if ( ev->button() == Qt::MidButton )
+  else if ( ev->button() ==
+          #if QT_VERSION >= 0x060000
+            Qt::MiddleButton
+          #else
+            Qt::MidButton
+          #endif
+            )
   {
     if ( _mouseMarks || (ev->modifiers() & Qt::ShiftModifier) )
       emitSelection(true,ev->modifiers() & Qt::ControlModifier);
@@ -2107,7 +2115,13 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
     int button = 3;
     if (ev->buttons() & Qt::LeftButton)
         button = 0;
-    if (ev->buttons() & Qt::MidButton)
+    if (ev->buttons() &
+        #if QT_VERSION >= 0x060000
+          Qt::MiddleButton
+        #else
+          Qt::MidButton
+        #endif
+        )
         button = 1;
     if (ev->buttons() & Qt::RightButton)
         button = 2;
@@ -2149,7 +2163,13 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
   if (_actSel == 0) return;
 
  // don't extend selection while pasting
-  if (ev->buttons() & Qt::MidButton) return;
+  if (ev->buttons() &
+        #if QT_VERSION >= 0x060000
+          Qt::MiddleButton
+        #else
+          Qt::MidButton
+        #endif
+          ) return;
 
   extendSelection( ev->pos() );
 }
@@ -2401,12 +2421,23 @@ void TerminalDisplay::mouseReleaseEvent(QMouseEvent* ev)
     dragInfo.state = diNone;
   }
 
-
   if ( !_mouseMarks &&
        ((ev->button() == Qt::RightButton && !(ev->modifiers() & Qt::ShiftModifier))
-                        || ev->button() == Qt::MidButton) )
+                        || ev->button() ==
+      #if QT_VERSION >= 0x060000
+        Qt::MiddleButton
+      #else
+        Qt::MidButton
+      #endif
+        ) )
   {
-    emit mouseSignal( ev->button() == Qt::MidButton ? 1 : 2,
+    emit mouseSignal( ev->button() ==
+                #if QT_VERSION >= 0x060000
+                      Qt::MiddleButton
+                    #else
+                      Qt::MidButton
+                #endif
+                      ? 1 : 2,
                       charColumn + 1,
                       charLine + 1 +_scrollBar->value() -_scrollBar->maximum() ,
                       2);
@@ -2516,6 +2547,7 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
      // find the end of the word
      i = loc( endSel.x(), endSel.y() );
      x = endSel.x();
+
      while( ((x<_usedColumns-1) || (endSel.y()<_usedLines-1 && (_lineProperties[endSel.y()] & LINE_WRAPPED) ))
                      && charClass(_image[i+1].character) == selClass )
      {
@@ -2895,7 +2927,7 @@ QVariant TerminalDisplay::inputMethodQuery( Qt::InputMethodQuery query ) const
     const QPoint cursorPos = _screenWindow ? _screenWindow->cursorPosition() : QPoint(0,0);
     switch ( query )
     {
-        case Qt::ImMicroFocus:
+        case Qt::ImCursorRectangle:
                 return imageToWidget(QRect(cursorPos.x(),cursorPos.y(),1,1));
             break;
         case Qt::ImFont:

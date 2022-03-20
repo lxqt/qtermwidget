@@ -21,6 +21,9 @@
 #include <QtDebug>
 #include <QDir>
 #include <QMessageBox>
+#if QT_VERSION >= 0x060000
+#include <QRegularExpression>
+#endif
 
 #include "ColorTables.h"
 #include "Session.h"
@@ -167,10 +170,16 @@ void QTermWidget::search(bool forwards, bool next)
     //qDebug() << "current selection starts at: " << startColumn << startLine;
     //qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
 
+#if QT_VERSION < 0x060000
     QRegExp regExp(m_searchBar->searchText());
     regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
     regExp.setCaseSensitivity(m_searchBar->matchCase() ? Qt::CaseSensitive : Qt::CaseInsensitive);
-
+#else
+    QRegularExpression regExp(m_searchBar->searchText(),
+                              m_searchBar->matchCase() ? QRegularExpression::CaseInsensitiveOption|
+                                                         QRegularExpression::UseUnicodePropertiesOption
+                                                       : QRegularExpression::UseUnicodePropertiesOption);
+#endif
     HistorySearch *historySearch =
             new HistorySearch(m_impl->m_session->emulation(), regExp, forwards, startColumn, startLine, this);
     connect(historySearch, SIGNAL(matchFound(int, int, int, int)), this, SLOT(matchFound(int, int, int, int)));
@@ -261,7 +270,9 @@ void QTermWidget::startTerminalTeletype()
 void QTermWidget::init(int startnow)
 {
     m_layout = new QVBoxLayout();
+#if QT_VERSION < 0x060000
     m_layout->setMargin(0);
+#endif
     setLayout(m_layout);
 
     // translations
