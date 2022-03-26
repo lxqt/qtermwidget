@@ -38,6 +38,8 @@
 #include <QThread>
 
 #include <QTime>
+//TODO REMOVE THIS
+#include <QDebug>
 
 // KDE
 //#include <kdebug.h>
@@ -199,7 +201,9 @@ void Emulation::receiveChar(wchar_t c)
 // process application unicode input to terminal
 // this is a trivial scanner
 {
+    qDebug() << "Emulation::receiveChar: character " << c;
   c &= 0xff;
+  qDebug() << "Emulation::receiveChar (after &=): character " << c;
   switch (c)
   {
     case '\b'      : _currentScreen->backspace();                 break;
