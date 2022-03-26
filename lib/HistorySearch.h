@@ -29,7 +29,7 @@
 #include "Emulation.h"
 #include "TerminalCharacterDecoder.h"
 
-#if QT_VERSION >= 0x06000
+#if QT_VERSION >= 0x060000
 #include <QRegularExpression>
 #include <QtCore5Compat/QRegExp>
 #endif
@@ -37,7 +37,7 @@
 using namespace Konsole;
 
 typedef QPointer<Emulation> EmulationPtr;
-#if QT_VERSION >= 0x06000
+#if QT_VERSION >= 0x060000
 typedef QRegularExpression RegExp;
 #else
 typedef QRegExp RegExp;
