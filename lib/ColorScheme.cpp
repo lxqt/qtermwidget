@@ -341,7 +341,11 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
     bool ok = false;
     // XXX: Undocumented(?) QSettings behavior: values with commas are parsed
     // as QStringList and others QString
+#if QT_VERSION >= 0x060000
+    if (colorValue.typeId() == QMetaType::QStringList)
+#else
     if (colorValue.type() == QVariant::StringList)
+#endif
     {
         QStringList rgbList = colorValue.toStringList();
         colorStr = rgbList.join(QLatin1Char(','));

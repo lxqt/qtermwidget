@@ -2127,8 +2127,13 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
 
 //   int distance = KGlobalSettings::dndEventDelay();
    int distance = QApplication::startDragDistance();
+#if QT_VERSION >= 0x060000
+   if ( ev->position().x() > dragInfo.start.x() + distance || ev->position().x() < dragInfo.start.x() - distance ||
+        ev->position().y() > dragInfo.start.y() + distance || ev->position().y() < dragInfo.start.y() - distance)
+#else
    if ( ev->x() > dragInfo.start.x() + distance || ev->x() < dragInfo.start.x() - distance ||
         ev->y() > dragInfo.start.y() + distance || ev->y() < dragInfo.start.y() - distance)
+#endif
    {
       // we've left the drag square, we can start a real drag operation now
       emit isBusySelecting(false); // Ok.. we can breath again.
