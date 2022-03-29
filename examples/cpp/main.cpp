@@ -36,12 +36,12 @@ int main(int argc, char *argv[])
     QMenuBar *menuBar = new QMenuBar(mainWindow);
     QMenu *actionsMenu = new QMenu(QStringLiteral("Actions"), menuBar);
     menuBar->addMenu(actionsMenu);
-    actionsMenu->addAction(QStringLiteral("Find..."), console, &QTermWidget::toggleShowSearchBar,
+    /*actionsMenu->addAction(QStringLiteral("Find..."), console, &QTermWidget::toggleShowSearchBar,
                            QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionsMenu->addAction(QStringLiteral("Copy"), console, &QTermWidget::copyClipboard,
                            QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
     actionsMenu->addAction(QStringLiteral("Paste"), console, &QTermWidget::pasteClipboard,
-                           QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_V));
+                           QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_V));*/
     actionsMenu->addAction(QStringLiteral("About Qt"), &app, &QApplication::aboutQt);
     mainWindow->setMenuBar(menuBar);
 
