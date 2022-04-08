@@ -193,7 +193,7 @@ void TerminalDisplay::setColorTable(const ColorEntry table[])
    QT's iso mapping leaves 0x00..0x7f without any changes. But the graphicals
    come in here as proper unicode characters.
 
-   We treat non-iso10646 fonts as VT100 extended and do the requiered mapping
+   We treat non-iso10646 fonts as VT100 extended and do the required mapping
    from unicode to 0x00..0x1f. The remaining translation is then left to the
    QCodec.
 */
@@ -249,7 +249,7 @@ void TerminalDisplay::fontChange(const QFont&)
   propagateSize();
 
   // We will run paint event testing procedure.
-  // Although this operation will destory the orignal content,
+  // Although this operation will destroy the original content,
   // the content will be drawn again after the test.
   _drawTextTestFlag = true;
   update();
@@ -3183,7 +3183,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
   QString dropText;
   if (!urls.isEmpty())
   {
-      // TODO/FIXME: escape or quote pasted things if neccessary...
+      // TODO/FIXME: escape or quote pasted things if necessary...
       qDebug() << "TerminalDisplay: handling urls. It can be broken. Report any errors, please";
     for ( int i = 0 ; i < urls.count() ; i++ )
     {
