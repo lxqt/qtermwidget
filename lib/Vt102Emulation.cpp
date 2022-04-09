@@ -69,7 +69,7 @@ Vt102Emulation::Vt102Emulation()
   QObject::connect(_titleUpdateTimer , SIGNAL(timeout()) , this , SLOT(updateTitle()));
 
   initTokenizer();
-  reset();
+  Vt102Emulation::reset();
 }
 
 Vt102Emulation::~Vt102Emulation()

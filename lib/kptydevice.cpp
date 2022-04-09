@@ -294,7 +294,7 @@ KPtyDevice::KPtyDevice(QObject *parent) :
 
 KPtyDevice::~KPtyDevice()
 {
-    close();
+   KPtyDevice::close();
 }
 
 bool KPtyDevice::open(OpenMode mode)
