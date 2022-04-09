@@ -491,7 +491,11 @@ signals:
 private slots:
     void done(int);
 
-//  void fireZModemDetected();
+private:
+
+    void updateTerminalSize();
+    WId windowId() const;
+    //  void fireZModemDetected();
 
     void onReceiveBlock( const char * buffer, int len );
     void monitorTimerDone();
@@ -504,32 +508,28 @@ private slots:
     //automatically detach views from sessions when view is destroyed
     void viewDestroyed(QObject * view);
 
-//  void zmodemReadStatus();
-//  void zmodemReadAndSendBlock();
-//  void zmodemRcvBlock(const char *data, int len);
-//  void zmodemFinished();
+    //  void zmodemReadStatus();
+    //  void zmodemReadAndSendBlock();
+    //  void zmodemRcvBlock(const char *data, int len);
+    //  void zmodemFinished();
 
-private:
-
-    void updateTerminalSize();
-    WId windowId() const;
 
     int            _uniqueIdentifier;
 
-    Pty     *_shellProcess;
-    Emulation  *  _emulation;
+    Pty     *_shellProcess = nullptr;
+    Emulation  *  _emulation = nullptr;
 
     QList<TerminalDisplay *> _views;
 
-    bool           _monitorActivity;
-    bool           _monitorSilence;
-    bool           _notifiedActivity;
+    bool           _monitorActivity = false;
+    bool           _monitorSilence = false;
+    bool           _notifiedActivity = false;
     bool           _masterMode;
-    bool           _autoClose;
-    bool           _wantedClose;
+    bool           _autoClose = true;
+    bool           _wantedClose = true;
     QTimer    *    _monitorTimer;
 
-    int            _silenceSeconds;
+    int            _silenceSeconds = 10;
 
     QString        _nameTitle;
     QString        _displayTitle;
@@ -540,8 +540,15 @@ private:
 
     QString        _iconName;
     QString        _iconText; // as set by: echo -en '\033]1;IconText\007
-    bool           _isTitleChanged; ///< flag if the title/icon was changed by user
-    bool           _addToUtmp;
+    bool           _isTitleChanged = false; ///< flag if the title/icon was changed by user
+
+    /* Disabled by default because of a bug encountered on certain systems
+     * which caused Konsole to hang when closing a tab and then opening a new
+     * one.  A 'QProcess destroyed while still running' warning was being
+     * printed to the terminal.  Likely a problem in KPty::logout()
+     * or KPty::login() which uses a QProcess to start /usr/bin/utempter
+     */
+    bool           _addToUtmp = false;
     bool           _flowControl;
     bool           _fullScripting;
 
