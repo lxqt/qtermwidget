@@ -50,29 +50,21 @@
 
 using namespace Konsole;
 
-Emulation::Emulation() :
-  _currentScreen(nullptr),
-  _codec(nullptr),
-  _decoder(nullptr),
-  _keyTranslator(nullptr),
-  _usesMouse(false),
-  _bracketedPasteMode(false)
+Emulation::Emulation()
 {
   // create screens with a default size
   _screen[0] = new Screen(40,80);
   _screen[1] = new Screen(40,80);
   _currentScreen = _screen[0];
 
-  QObject::connect(&_bulkTimer1, SIGNAL(timeout()), this, SLOT(showBulk()) );
-  QObject::connect(&_bulkTimer2, SIGNAL(timeout()), this, SLOT(showBulk()) );
+  connect(&_bulkTimer1, &QTimer::timeout, this, &Emulation::showBulk);
+  connect(&_bulkTimer2, &QTimer::timeout, this, &Emulation::showBulk);
 
   // listen for mouse status changes
-  connect(this , SIGNAL(programUsesMouseChanged(bool)) ,
-           SLOT(usesMouseChanged(bool)));
-  connect(this , SIGNAL(programBracketedPasteModeChanged(bool)) ,
-           SLOT(bracketedPasteModeChanged(bool)));
+  connect(this, &Emulation::programUsesMouseChanged, this, &Emulation::usesMouseChanged);
+  connect(this, &Emulation::programBracketedPasteModeChanged, this, &Emulation::bracketedPasteModeChanged);
 
-  connect(this, &Emulation::cursorChanged, [this] (KeyboardCursorShape cursorShape, bool blinkingCursorEnabled) {
+  connect(this, &Emulation::cursorChanged, this, [this] (KeyboardCursorShape cursorShape, bool blinkingCursorEnabled) {
     emit titleChanged( 50, QString(QLatin1String("CursorShape=%1;BlinkingCursorEnabled=%2"))
                                .arg(static_cast<int>(cursorShape)).arg(blinkingCursorEnabled) );
   });
@@ -104,28 +96,20 @@ ScreenWindow* Emulation::createWindow()
     window->setScreen(_currentScreen);
     _windows << window;
 
-    connect(window , SIGNAL(selectionChanged()),
-            this , SLOT(bufferedUpdate()));
-
-    connect(this , SIGNAL(outputChanged()),
-            window , SLOT(notifyOutputChanged()) );
-
-    connect(this, &Emulation::handleCommandFromKeyboard,
-            window, &ScreenWindow::handleCommandFromKeyboard);
-    connect(this, &Emulation::outputFromKeypressEvent,
-            window, &ScreenWindow::scrollToEnd);
+    connect(window, &ScreenWindow::selectionChanged, this, &Emulation::bufferedUpdate);
+    connect(this, &Emulation::outputChanged, window, &ScreenWindow::notifyOutputChanged);
+    connect(this, &Emulation::handleCommandFromKeyboard, window, &ScreenWindow::handleCommandFromKeyboard);
+    connect(this, &Emulation::outputFromKeypressEvent, window, &ScreenWindow::scrollToEnd);
 
     return window;
 }
 
 Emulation::~Emulation()
 {
-  QListIterator<ScreenWindow*> windowIter(_windows);
+  for (auto window : qAsConst(_windows))
+      delete window;
 
-  while (windowIter.hasNext())
-  {
-    delete windowIter.next();
-  }
+  _windows.clear();
 
   delete _screen[0];
   delete _screen[1];
