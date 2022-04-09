@@ -30,12 +30,10 @@ public:
     SearchBar(QWidget* parent = nullptr);
     ~SearchBar() override;
     virtual void show();
-    QString searchText();
-    bool useRegularExpression();
-    bool matchCase();
-    bool highlightAllMatches();
-
-public slots:
+    QString searchText() const;
+    bool useRegularExpression() const;
+    bool matchCase() const;
+    bool highlightAllMatches() const;
     void noMatchFound();
     void hide();
 
@@ -48,14 +46,13 @@ signals:
 protected:
     void keyReleaseEvent(QKeyEvent* keyEvent) override;
 
-private slots:
+private:
     void clearBackgroundColor();
 
-private:
     Ui::SearchBar widget;
-    QAction *m_matchCaseMenuEntry;
-    QAction *m_useRegularExpressionMenuEntry;
-    QAction *m_highlightMatchesMenuEntry;
+    QAction *m_matchCaseMenuEntry = nullptr;
+    QAction *m_useRegularExpressionMenuEntry = nullptr;
+    QAction *m_highlightMatchesMenuEntry = nullptr;
 };
 
 #endif	/* _SEARCHBAR_H */
