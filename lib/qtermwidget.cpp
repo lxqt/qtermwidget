@@ -35,9 +35,9 @@
 
 #ifdef Q_OS_MACOS
 // Qt does not support fontconfig on macOS, so we need to use a "real" font name.
-#define DEFAULT_FONT_FAMILY                   "Menlo"
+#    define DEFAULT_FONT_FAMILY "Menlo"
 #else
-#define DEFAULT_FONT_FAMILY                   "Monospace"
+#    define DEFAULT_FONT_FAMILY "Monospace"
 #endif
 
 #define STEP_ZOOM 1
@@ -46,29 +46,29 @@ using namespace Konsole;
 
 void *createTermWidget(int startnow, void *parent)
 {
-    return (void*) new QTermWidget(startnow, (QWidget*)parent);
+    return (void *)new QTermWidget(startnow, (QWidget *)parent);
 }
 
-class TermWidgetImpl {
+class TermWidgetImpl
+{
 
 public:
-    TermWidgetImpl(QWidget* parent = nullptr);
+    TermWidgetImpl(QWidget *parent = nullptr);
 
     TerminalDisplay *m_terminalDisplay;
     Session *m_session;
 
-    Session* createSession(QWidget* parent);
-    TerminalDisplay* createTerminalDisplay(Session *session, QWidget* parent);
+    Session *createSession(QWidget *parent);
+    TerminalDisplay *createTerminalDisplay(Session *session, QWidget *parent);
 };
 
-TermWidgetImpl::TermWidgetImpl(QWidget* parent)
+TermWidgetImpl::TermWidgetImpl(QWidget *parent)
 {
     this->m_session = createSession(parent);
     this->m_terminalDisplay = createTerminalDisplay(this->m_session, parent);
 }
 
-
-Session *TermWidgetImpl::createSession(QWidget* parent)
+Session *TermWidgetImpl::createSession(QWidget *parent)
 {
     Session *session = new Session(parent);
 
@@ -79,13 +79,12 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
      * better set it to the current $SHELL
      * Maybe you can also make a list available and then let the widget-owner decide what to use.
      * By setting it to $SHELL right away we actually make the first filecheck obsolete.
-     * But as iam not sure if you want to do anything else ill just let both checks in and set this to $SHELL anyway.
+     * But as iam not sure if you want to do anything else ill just let both checks in and set this
+     * to $SHELL anyway.
      */
-    //session->setProgram("/bin/bash");
+    // session->setProgram("/bin/bash");
 
     session->setProgram(QString::fromLocal8Bit(qgetenv("SHELL")));
-
-
 
     QStringList args = QStringList(QString());
     session->setArguments(args);
@@ -102,10 +101,10 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
     return session;
 }
 
-TerminalDisplay *TermWidgetImpl::createTerminalDisplay(Session *session, QWidget* parent)
+TerminalDisplay *TermWidgetImpl::createTerminalDisplay(Session *session, QWidget *parent)
 {
-//    TerminalDisplay* display = new TerminalDisplay(this);
-    TerminalDisplay* display = new TerminalDisplay(parent);
+    //    TerminalDisplay* display = new TerminalDisplay(this);
+    TerminalDisplay *display = new TerminalDisplay(parent);
 
     display->setBellMode(TerminalDisplay::NotifyBell);
     display->setTerminalSizeHint(true);
@@ -117,15 +116,12 @@ TerminalDisplay *TermWidgetImpl::createTerminalDisplay(Session *session, QWidget
     return display;
 }
 
-
-QTermWidget::QTermWidget(int startnow, QWidget *parent)
-    : QWidget(parent)
+QTermWidget::QTermWidget(int startnow, QWidget *parent) : QWidget(parent)
 {
     init(startnow);
 }
 
-QTermWidget::QTermWidget(QWidget *parent)
-    : QWidget(parent)
+QTermWidget::QTermWidget(QWidget *parent) : QWidget(parent)
 {
     init(1);
 }
@@ -156,34 +152,38 @@ void QTermWidget::search(bool forwards, bool next)
 
     if (next) // search from just after current selection
     {
-        m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionEnd(startColumn, startLine);
+        m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionEnd(startColumn,
+                                                                             startLine);
         startColumn++;
     }
     else // search from start of current selection
     {
-        m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(startColumn, startLine);
+        m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(startColumn,
+                                                                               startLine);
     }
 
-    //qDebug() << "current selection starts at: " << startColumn << startLine;
-    //qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
+    // qDebug() << "current selection starts at: " << startColumn << startLine;
+    // qDebug() << "current cursor position: " <<
+    // m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
 
     QRegExp regExp(m_searchBar->searchText());
-    regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
+    regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp
+                                                                : QRegExp::FixedString);
     regExp.setCaseSensitivity(m_searchBar->matchCase() ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
-    HistorySearch *historySearch =
-            new HistorySearch(m_impl->m_session->emulation(), regExp, forwards, startColumn, startLine, this);
-    connect(historySearch, SIGNAL(matchFound(int, int, int, int)), this, SLOT(matchFound(int, int, int, int)));
+    HistorySearch *historySearch = new HistorySearch(m_impl->m_session->emulation(), regExp,
+                                                     forwards, startColumn, startLine, this);
+    connect(historySearch, SIGNAL(matchFound(int, int, int, int)), this,
+            SLOT(matchFound(int, int, int, int)));
     connect(historySearch, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
     connect(historySearch, SIGNAL(noMatchFound()), m_searchBar, SLOT(noMatchFound()));
     historySearch->search();
 }
 
-
 void QTermWidget::matchFound(int startColumn, int startLine, int endColumn, int endLine)
 {
-    ScreenWindow* sw = m_impl->m_terminalDisplay->screenWindow();
-    //qDebug() << "Scroll to" << startLine;
+    ScreenWindow *sw = m_impl->m_terminalDisplay->screenWindow();
+    // qDebug() << "Scroll to" << startLine;
     sw->scrollTo(startLine);
     sw->setTrackOutput(false);
     sw->notifyOutputChanged();
@@ -193,7 +193,7 @@ void QTermWidget::matchFound(int startColumn, int startLine, int endColumn, int 
 
 void QTermWidget::noMatchFound()
 {
-        m_impl->m_terminalDisplay->screenWindow()->clearSelection();
+    m_impl->m_terminalDisplay->screenWindow()->clearSelection();
 }
 
 int QTermWidget::getShellPID()
@@ -201,7 +201,7 @@ int QTermWidget::getShellPID()
     return m_impl->m_session->processId();
 }
 
-void QTermWidget::changeDir(const QString & dir)
+void QTermWidget::changeDir(const QString &dir)
 {
     /*
        this is a very hackish way of trying to determine if the shell is in
@@ -239,7 +239,7 @@ bool QTermWidget::terminalSizeHint()
 
 void QTermWidget::startShellProgram()
 {
-    if ( m_impl->m_session->isRunning() ) {
+    if (m_impl->m_session->isRunning()) {
         return;
     }
 
@@ -248,14 +248,14 @@ void QTermWidget::startShellProgram()
 
 void QTermWidget::startTerminalTeletype()
 {
-    if ( m_impl->m_session->isRunning() ) {
+    if (m_impl->m_session->isRunning()) {
         return;
     }
 
     m_impl->m_session->runEmptyPTY();
     // redirect data from TTY to external recipient
-    connect( m_impl->m_session->emulation(), SIGNAL(sendData(const char *,int)),
-             this, SIGNAL(sendData(const char *,int)) );
+    connect(m_impl->m_session->emulation(), SIGNAL(sendData(const char *, int)), this,
+            SIGNAL(sendData(const char *, int)));
 }
 
 void QTermWidget::init(int startnow)
@@ -276,11 +276,12 @@ void QTermWidget::init(int startnow)
 
     m_translator = new QTranslator(this);
 
-    for (const QString& dir : qAsConst(dirs)) {
-        //qDebug() << "Trying to load translation file from dir" << dir;
-        if (m_translator->load(QLocale::system(), QLatin1String("qtermwidget"), QLatin1String(QLatin1String("_")), dir)) {
+    for (const QString &dir : qAsConst(dirs)) {
+        // qDebug() << "Trying to load translation file from dir" << dir;
+        if (m_translator->load(QLocale::system(), QLatin1String("qtermwidget"),
+                               QLatin1String(QLatin1String("_")), dir)) {
             qApp->installTranslator(m_translator);
-            //qDebug() << "Translations found in" << dir;
+            // qDebug() << "Translations found in" << dir;
             break;
         }
     }
@@ -288,12 +289,14 @@ void QTermWidget::init(int startnow)
     m_impl = new TermWidgetImpl(this);
     m_layout->addWidget(m_impl->m_terminalDisplay);
 
-    connect(m_impl->m_session, SIGNAL(bellRequest(QString)), m_impl->m_terminalDisplay, SLOT(bell(QString)));
+    connect(m_impl->m_session, SIGNAL(bellRequest(QString)), m_impl->m_terminalDisplay,
+            SLOT(bell(QString)));
     connect(m_impl->m_terminalDisplay, SIGNAL(notifyBell(QString)), this, SIGNAL(bell(QString)));
 
     connect(m_impl->m_session, SIGNAL(activity()), this, SIGNAL(activity()));
     connect(m_impl->m_session, SIGNAL(silence()), this, SIGNAL(silence()));
-    connect(m_impl->m_session, &Session::profileChangeCommandReceived, this, &QTermWidget::profileChanged);
+    connect(m_impl->m_session, &Session::profileChangeCommandReceived, this,
+            &QTermWidget::profileChanged);
     connect(m_impl->m_session, &Session::receivedData, this, &QTermWidget::receivedData);
 
     // That's OK, FilterChain's dtor takes care of UrlFilter.
@@ -313,20 +316,18 @@ void QTermWidget::init(int startnow)
         m_impl->m_session->run();
     }
 
-    this->setFocus( Qt::OtherFocusReason );
-    this->setFocusPolicy( Qt::WheelFocus );
+    this->setFocus(Qt::OtherFocusReason);
+    this->setFocusPolicy(Qt::WheelFocus);
     m_impl->m_terminalDisplay->resize(this->size());
 
     this->setFocusProxy(m_impl->m_terminalDisplay);
-    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),
-            this, SLOT(selectionChanged(bool)));
-    connect(m_impl->m_terminalDisplay, SIGNAL(termGetFocus()),
-            this, SIGNAL(termGetFocus()));
-    connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
-            this, SIGNAL(termLostFocus()));
+    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)), this,
+            SLOT(selectionChanged(bool)));
+    connect(m_impl->m_terminalDisplay, SIGNAL(termGetFocus()), this, SIGNAL(termGetFocus()));
+    connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()), this, SIGNAL(termLostFocus()));
     connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal,
-            [this] (QKeyEvent* e, bool) { Q_EMIT termKeyPressed(e); });
-//    m_impl->m_terminalDisplay->setSize(80, 40);
+            [this](QKeyEvent *e, bool) { Q_EMIT termKeyPressed(e); });
+    //    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
     font.setFamily(QLatin1String(DEFAULT_FONT_FAMILY));
@@ -346,13 +347,11 @@ void QTermWidget::init(int startnow)
     connect(m_impl->m_session, &Session::cursorChanged, this, &QTermWidget::cursorChanged);
 }
 
-
 QTermWidget::~QTermWidget()
 {
     delete m_impl;
     emit destroyed();
 }
-
 
 void QTermWidget::setTerminalFont(const QFont &font)
 {
@@ -369,7 +368,7 @@ void QTermWidget::setTerminalOpacity(qreal level)
     m_impl->m_terminalDisplay->setOpacity(level);
 }
 
-void QTermWidget::setTerminalBackgroundImage(const QString& backgroundImage)
+void QTermWidget::setTerminalBackgroundImage(const QString &backgroundImage)
 {
     m_impl->m_terminalDisplay->setBackgroundImage(backgroundImage);
 }
@@ -386,7 +385,7 @@ void QTermWidget::setShellProgram(const QString &program)
     m_impl->m_session->setProgram(program);
 }
 
-void QTermWidget::setWorkingDirectory(const QString& dir)
+void QTermWidget::setWorkingDirectory(const QString &dir)
 {
     if (!m_impl->m_session)
         return;
@@ -399,12 +398,11 @@ QString QTermWidget::workingDirectory()
         return QString();
 
 #ifdef Q_OS_LINUX
-    // Christian Surlykke: On linux we could look at /proc/<pid>/cwd which should be a link to current
-    // working directory (<pid>: process id of the shell). I don't know about BSD.
-    // Maybe we could just offer it when running linux, for a start.
+    // Christian Surlykke: On linux we could look at /proc/<pid>/cwd which should be a link to
+    // current working directory (<pid>: process id of the shell). I don't know about BSD. Maybe we
+    // could just offer it when running linux, for a start.
     QDir d(QString::fromLatin1("/proc/%1/cwd").arg(getShellPID()));
-    if (!d.exists())
-    {
+    if (!d.exists()) {
         qDebug() << "Cannot find" << d.dirName();
         goto fallback;
     }
@@ -430,26 +428,20 @@ void QTermWidget::setTextCodec(QTextCodec *codec)
     m_impl->m_session->setCodec(codec);
 }
 
-void QTermWidget::setColorScheme(const QString& origName)
+void QTermWidget::setColorScheme(const QString &origName)
 {
     const ColorScheme *cs = nullptr;
 
     const bool isFile = QFile::exists(origName);
-    const QString& name = isFile ?
-            QFileInfo(origName).baseName() :
-            origName;
+    const QString &name = isFile ? QFileInfo(origName).baseName() : origName;
 
     // avoid legacy (int) solution
-    if (!availableColorSchemes().contains(name))
-    {
-        if (isFile)
-        {
+    if (!availableColorSchemes().contains(name)) {
+        if (isFile) {
             if (ColorSchemeManager::instance()->loadCustomColorScheme(origName))
                 cs = ColorSchemeManager::instance()->findColorScheme(name);
             else
-                qWarning () << Q_FUNC_INFO
-                        << "cannot load color scheme from"
-                        << origName;
+                qWarning() << Q_FUNC_INFO << "cannot load color scheme from" << origName;
         }
 
         if (!cs)
@@ -458,10 +450,8 @@ void QTermWidget::setColorScheme(const QString& origName)
     else
         cs = ColorSchemeManager::instance()->findColorScheme(name);
 
-    if (! cs)
-    {
-        QMessageBox::information(this,
-                                 tr("Color Scheme Error"),
+    if (!cs) {
+        QMessageBox::information(this, tr("Color Scheme Error"),
                                  tr("Cannot load color scheme: %1").arg(name));
         return;
     }
@@ -474,12 +464,12 @@ QStringList QTermWidget::availableColorSchemes()
 {
     QStringList ret;
     const auto allColorSchemes = ColorSchemeManager::instance()->allColorSchemes();
-    for (const ColorScheme* cs : allColorSchemes)
+    for (const ColorScheme *cs : allColorSchemes)
         ret.append(cs->name());
     return ret;
 }
 
-void QTermWidget::addCustomColorSchemeDir(const QString& custom_dir)
+void QTermWidget::addCustomColorSchemeDir(const QString &custom_dir)
 {
     ColorSchemeManager::instance()->addCustomColorSchemeDir(custom_dir);
 }
@@ -501,17 +491,19 @@ void QTermWidget::setHistorySize(int lines)
 
 int QTermWidget::historySize() const
 {
-    const HistoryType& currentHistory = m_impl->m_session->historyType();
+    const HistoryType &currentHistory = m_impl->m_session->historyType();
 
-     if (currentHistory.isEnabled()) {
-         if (currentHistory.isUnlimited()) {
-             return -1;
-         } else {
-             return currentHistory.maximumLineCount();
-         }
-     } else {
-         return 0;
-     }
+    if (currentHistory.isEnabled()) {
+        if (currentHistory.isUnlimited()) {
+            return -1;
+        }
+        else {
+            return currentHistory.maximumLineCount();
+        }
+    }
+    else {
+        return 0;
+    }
 }
 
 void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
@@ -534,19 +526,18 @@ void QTermWidget::sendKeyEvent(QKeyEvent *e)
     m_impl->m_session->sendKeyEvent(e);
 }
 
-void QTermWidget::resizeEvent(QResizeEvent*)
+void QTermWidget::resizeEvent(QResizeEvent *)
 {
-//qDebug("global window resizing...with %d %d", this->size().width(), this->size().height());
+    // qDebug("global window resizing...with %d %d", this->size().width(), this->size().height());
     m_impl->m_terminalDisplay->resize(this->size());
 }
-
 
 void QTermWidget::sessionFinished()
 {
     emit finished();
 }
 
-void QTermWidget::bracketText(QString& text)
+void QTermWidget::bracketText(QString &text)
 {
     m_impl->m_terminalDisplay->bracketText(text);
 }
@@ -594,7 +585,7 @@ void QTermWidget::zoomOut()
     setZoom(-STEP_ZOOM);
 }
 
-void QTermWidget::setKeyBindings(const QString & kb)
+void QTermWidget::setKeyBindings(const QString &kb)
 {
     m_impl->m_session->setKeyBindings(kb);
 }
@@ -639,14 +630,14 @@ void QTermWidget::setFlowControlWarningEnabled(bool enabled)
     }
 }
 
-void QTermWidget::setEnvironment(const QStringList& environment)
+void QTermWidget::setEnvironment(const QStringList &environment)
 {
     m_impl->m_session->setEnvironment(environment);
 }
 
 void QTermWidget::setMotionAfterPasting(int action)
 {
-    m_impl->m_terminalDisplay->setMotionAfterPasting((Konsole::MotionAfterPasting) action);
+    m_impl->m_terminalDisplay->setMotionAfterPasting((Konsole::MotionAfterPasting)action);
 }
 
 int QTermWidget::historyLinesCount()
@@ -674,12 +665,12 @@ void QTermWidget::setSelectionEnd(int row, int column)
     m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
 }
 
-void QTermWidget::getSelectionStart(int& row, int& column)
+void QTermWidget::getSelectionStart(int &row, int &column)
 {
     m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(column, row);
 }
 
-void QTermWidget::getSelectionEnd(int& row, int& column)
+void QTermWidget::getSelectionEnd(int &row, int &column)
 {
     m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionEnd(column, row);
 }
@@ -704,19 +695,19 @@ void QTermWidget::setSilenceTimeout(int seconds)
     m_impl->m_session->setMonitorSilenceSeconds(seconds);
 }
 
-Filter::HotSpot* QTermWidget::getHotSpotAt(const QPoint &pos) const
+Filter::HotSpot *QTermWidget::getHotSpotAt(const QPoint &pos) const
 {
     int row = 0, column = 0;
     m_impl->m_terminalDisplay->getCharacterPosition(pos, row, column);
     return getHotSpotAt(row, column);
 }
 
-Filter::HotSpot* QTermWidget::getHotSpotAt(int row, int column) const
+Filter::HotSpot *QTermWidget::getHotSpotAt(int row, int column) const
 {
     return m_impl->m_terminalDisplay->filterChain()->hotSpotAt(row, column);
 }
 
-QList<QAction*> QTermWidget::filterActions(const QPoint& position)
+QList<QAction *> QTermWidget::filterActions(const QPoint &position)
 {
     return m_impl->m_terminalDisplay->filterActions(position);
 }
@@ -772,7 +763,8 @@ void QTermWidget::setAutoClose(bool enabled)
     m_impl->m_session->setAutoClose(enabled);
 }
 
-void QTermWidget::cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled)
+void QTermWidget::cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape,
+                                bool blinkingCursorEnabled)
 {
     // TODO: A switch to enable/disable DECSCUSR?
     setKeyboardCursorShape(cursorShape);
@@ -794,7 +786,8 @@ void QTermWidget::saveHistory(QIODevice *device)
     QTextStream stream(device);
     PlainTextDecoder decoder;
     decoder.begin(&stream);
-    m_impl->m_session->emulation()->writeToStream(&decoder, 0, m_impl->m_session->emulation()->lineCount());
+    m_impl->m_session->emulation()->writeToStream(&decoder, 0,
+                                                  m_impl->m_session->emulation()->lineCount());
 }
 
 void QTermWidget::setDrawLineChars(bool drawLineChars)
@@ -807,10 +800,12 @@ void QTermWidget::setBoldIntense(bool boldIntense)
     m_impl->m_terminalDisplay->setBoldIntense(boldIntense);
 }
 
-void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
+void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste)
+{
     m_impl->m_terminalDisplay->setConfirmMultilinePaste(confirmMultilinePaste);
 }
 
-void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
+void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines)
+{
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
 }

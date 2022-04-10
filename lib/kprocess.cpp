@@ -32,33 +32,33 @@
 #include <qfile.h>
 
 #ifdef Q_OS_WIN
-# include <windows.h>
+#    include <windows.h>
 #else
-# include <unistd.h>
-# include <cerrno>
+#    include <unistd.h>
+#    include <cerrno>
 #endif
 
 #ifndef Q_OS_WIN
-# define STD_OUTPUT_HANDLE 1
-# define STD_ERROR_HANDLE 2
+#    define STD_OUTPUT_HANDLE 1
+#    define STD_ERROR_HANDLE 2
 #endif
 
 #ifdef _WIN32_WCE
-#include <stdio.h>
+#    include <stdio.h>
 #endif
 
 void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
 {
 #ifdef Q_OS_WIN
-#ifndef _WIN32_WCE
+#    ifndef _WIN32_WCE
     HANDLE h = GetStdHandle(fd);
     if (h) {
         DWORD wr;
         WriteFile(h, buf.data(), buf.size(), &wr, 0);
     }
-#else
-    fwrite(buf.data(), 1, buf.size(), (FILE*)fd);
-#endif
+#    else
+    fwrite(buf.data(), 1, buf.size(), (FILE *)fd);
+#    endif
 #else
     int off = 0;
     do {
@@ -66,7 +66,8 @@ void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
         if (ret < 0) {
             if (errno != EINTR)
                 return;
-        } else {
+        }
+        else {
             off += ret;
         }
     } while (off < buf.size());
@@ -105,17 +106,13 @@ void KProcessPrivate::_k_forwardStderr()
 // public member functions //
 /////////////////////////////
 
-KProcess::KProcess(QObject *parent) :
-    QProcess(parent),
-    d_ptr(new KProcessPrivate)
+KProcess::KProcess(QObject *parent) : QProcess(parent), d_ptr(new KProcessPrivate)
 {
     d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
 }
 
-KProcess::KProcess(KProcessPrivate *d, QObject *parent) :
-    QProcess(parent),
-    d_ptr(d)
+KProcess::KProcess(KProcessPrivate *d, QObject *parent) : QProcess(parent), d_ptr(d)
 {
     d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
@@ -223,7 +220,7 @@ void KProcess::setProgram(const QStringList &argv)
 {
     Q_D(KProcess);
 
-    Q_ASSERT( !argv.isEmpty() );
+    Q_ASSERT(!argv.isEmpty());
     d->args = argv;
     d->prog = d->args.takeFirst();
 #ifdef Q_OS_WIN
@@ -276,18 +273,19 @@ void KProcess::setShellCommand(const QString &cmd)
         d->prog = KStandardDirs::findExe(d->args[0]);
         if (!d->prog.isEmpty()) {
             d->args.removeFirst();
-#ifdef Q_OS_WIN
+#    ifdef Q_OS_WIN
             setNativeArguments(QString());
-#endif
+#    endif
             return;
         }
     }
 
     d->args.clear();
 
-#ifdef Q_OS_UNIX
+#    ifdef Q_OS_UNIX
 // #ifdef NON_FREE // ... as they ship non-POSIX /bin/sh
-# if !defined(__linux__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined(__OpenBSD__) && !defined(__DragonFly__) && !defined(__GNU__)
+#        if !defined(__linux__) && !defined(__FreeBSD__) && !defined(__NetBSD__)                   \
+                && !defined(__OpenBSD__) && !defined(__DragonFly__) && !defined(__GNU__)
     // If /bin/sh is a symlink, we can be pretty sure that it points to a
     // POSIX shell - the original bourne shell is about the only non-POSIX
     // shell still in use and it is always installed natively as /bin/sh.
@@ -308,27 +306,27 @@ void KProcess::setShellCommand(const QString &cmd)
             }
         }
     }
-# else
+#        else
     d->prog = QString::fromLatin1("/bin/sh");
-# endif
+#        endif
 
     d->args << QString::fromLatin1("-c") << cmd;
-#else // Q_OS_UNIX
+#    else // Q_OS_UNIX
     // KMacroExpander::expandMacrosShellQuote(), KShell::quoteArg() and
     // KShell::joinArgs() may generate these for security reasons.
     setEnv(PERCENT_VARIABLE, QLatin1String("%"));
 
-#ifndef _WIN32_WCE
+#        ifndef _WIN32_WCE
     WCHAR sysdir[MAX_PATH + 1];
     UINT size = GetSystemDirectoryW(sysdir, MAX_PATH + 1);
     d->prog = QString::fromUtf16((const ushort *) sysdir, size);
     d->prog += QLatin1String("\\cmd.exe");
     setNativeArguments(QLatin1String("/V:OFF /S /C \"") + cmd + QLatin1Char('"'));
-#else
+#        else
     d->prog = QLatin1String("\\windows\\cmd.exe");
     setNativeArguments(QLatin1String("/S /C \"") + cmd + QLatin1Char('"'));
-#endif
-#endif
+#        endif
+#    endif
 }
 #endif
 QStringList KProcess::program() const
@@ -381,7 +379,7 @@ int KProcess::startDetached()
     qint64 pid;
     if (!QProcess::startDetached(d->prog, d->args, workingDirectory(), &pid))
         return 0;
-    return (int) pid;
+    return (int)pid;
 }
 
 // static
@@ -390,7 +388,7 @@ int KProcess::startDetached(const QString &exe, const QStringList &args)
     qint64 pid;
     if (!QProcess::startDetached(exe, args, QString(), &pid))
         return 0;
-    return (int) pid;
+    return (int)pid;
 }
 
 // static

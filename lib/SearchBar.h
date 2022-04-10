@@ -17,17 +17,18 @@
     02110-1301  USA.
 */
 #ifndef _SEARCHBAR_H
-#define	_SEARCHBAR_H
+#define _SEARCHBAR_H
 
 #include <QRegExp>
 
 #include "ui_SearchBar.h"
 #include "HistorySearch.h"
 
-class SearchBar : public QWidget {
+class SearchBar : public QWidget
+{
     Q_OBJECT
 public:
-    SearchBar(QWidget* parent = nullptr);
+    SearchBar(QWidget *parent = nullptr);
     ~SearchBar() override;
     virtual void show();
     QString searchText();
@@ -46,7 +47,7 @@ signals:
     void findPrevious();
 
 protected:
-    void keyReleaseEvent(QKeyEvent* keyEvent) override;
+    void keyReleaseEvent(QKeyEvent *keyEvent) override;
 
 private slots:
     void clearBackgroundColor();
@@ -58,4 +59,4 @@ private:
     QAction *m_highlightMatchesMenuEntry;
 };
 
-#endif	/* _SEARCHBAR_H */
+#endif /* _SEARCHBAR_H */

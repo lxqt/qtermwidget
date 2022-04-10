@@ -16,7 +16,6 @@
     Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef _Q_TERM_WIDGET
 #define _Q_TERM_WIDGET
 
@@ -32,10 +31,10 @@ class TermWidgetImpl;
 class SearchBar;
 class QUrl;
 
-class QTERMWIDGET_EXPORT QTermWidget : public QWidget {
+class QTERMWIDGET_EXPORT QTermWidget : public QWidget
+{
     Q_OBJECT
 public:
-
     /**
      * This enum describes the location where the scroll bar is positioned in the display widget.
      */
@@ -50,22 +49,22 @@ public:
 
     using KeyboardCursorShape = Konsole::Emulation::KeyboardCursorShape;
 
-    //Creation of widget
+    // Creation of widget
     QTermWidget(int startnow, // 1 = start shell programm immediatelly
-                QWidget * parent = nullptr);
+                QWidget *parent = nullptr);
     // A dummy constructor for Qt Designer. startnow is 1 by default
     QTermWidget(QWidget *parent = nullptr);
 
     ~QTermWidget() override;
 
-    //Initial size
+    // Initial size
     QSize sizeHint() const override;
 
     // expose TerminalDisplay::TerminalSizeHint, setTerminalSizeHint
     void setTerminalSizeHint(bool enabled);
     bool terminalSizeHint();
 
-    //start shell program if it was not started in constructor
+    // start shell program if it was not started in constructor
     void startShellProgram();
 
     /**
@@ -77,43 +76,43 @@ public:
 
     int getShellPID();
 
-    void changeDir(const QString & dir);
+    void changeDir(const QString &dir);
 
-    //look-n-feel, if you don`t like defaults
+    // look-n-feel, if you don`t like defaults
 
     //  Terminal font
     // Default is application font with family Monospace, size 10
     // Beware of a performance penalty and display/alignment issues when using a proportional font.
-    void setTerminalFont(const QFont & font);
+    void setTerminalFont(const QFont &font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
-    void setTerminalBackgroundImage(const QString& backgroundImage);
+    void setTerminalBackgroundImage(const QString &backgroundImage);
     void setTerminalBackgroundMode(int mode);
 
-    //environment
-    void setEnvironment(const QStringList & environment);
+    // environment
+    void setEnvironment(const QStringList &environment);
 
     //  Shell program, default is /bin/bash
-    void setShellProgram(const QString & program);
+    void setShellProgram(const QString &program);
 
-    //working directory
-    void setWorkingDirectory(const QString & dir);
+    // working directory
+    void setWorkingDirectory(const QString &dir);
     QString workingDirectory();
 
     // Shell program args, default is none
-    void setArgs(const QStringList & args);
+    void setArgs(const QStringList &args);
 
-    //Text codec, default is UTF-8
-    void setTextCodec(QTextCodec * codec);
+    // Text codec, default is UTF-8
+    void setTextCodec(QTextCodec *codec);
 
     /** @brief Sets the color scheme, default is white on black
      *
      * @param[in] name The name of the color scheme, either returned from
      * availableColorSchemes() or a full path to a color scheme.
      */
-    void setColorScheme(const QString & name);
+    void setColorScheme(const QString &name);
     static QStringList availableColorSchemes();
-    static void addCustomColorSchemeDir(const QString& custom_dir);
+    static void addCustomColorSchemeDir(const QString &custom_dir);
 
     /** Sets the history size (in lines)
      *
@@ -133,10 +132,10 @@ public:
     void scrollToEnd();
 
     // Send some text to terminal
-    void sendText(const QString & text);
+    void sendText(const QString &text);
 
     // Send key event to terminal
-    void sendKeyEvent(QKeyEvent* e);
+    void sendKeyEvent(QKeyEvent *e);
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
@@ -167,8 +166,8 @@ public:
 
     void setSelectionStart(int row, int column);
     void setSelectionEnd(int row, int column);
-    void getSelectionStart(int& row, int& column);
-    void getSelectionEnd(int& row, int& column);
+    void getSelectionStart(int &row, int &column);
+    void getSelectionEnd(int &row, int &column);
 
     /**
      * Returns the currently selected text.
@@ -188,18 +187,18 @@ public:
      * @param[in] pos The point of interest in the QTermWidget coordinates.
      * @return Hotspot for the given position, or nullptr if no hotspot.
      */
-    Filter::HotSpot* getHotSpotAt(const QPoint& pos) const;
+    Filter::HotSpot *getHotSpotAt(const QPoint &pos) const;
 
     /** Returns the available hotspots for the given row and column.
      *
      * @return Hotspot for the given position, or nullptr if no hotspot.
      */
-    Filter::HotSpot* getHotSpotAt(int row, int column) const;
+    Filter::HotSpot *getHotSpotAt(int row, int column) const;
 
     /*
      * Proxy for TerminalDisplay::filterActions
      * */
-    QList<QAction*> filterActions(const QPoint& position);
+    QList<QAction *> filterActions(const QPoint &position);
 
     /**
      * Returns a pty slave file descriptor.
@@ -233,7 +232,7 @@ public:
     bool isTitleChanged() const;
 
     /** change and wrap text corresponding to paste mode **/
-    void bracketText(QString& text);
+    void bracketText(QString &text);
 
     /** forcefully disable bracketed paste mode **/
     void disableBracketedPasteMode(bool disable);
@@ -260,9 +259,9 @@ signals:
 
     void termKeyPressed(QKeyEvent *);
 
-    void urlActivated(const QUrl&, bool fromContextMenu);
+    void urlActivated(const QUrl &, bool fromContextMenu);
 
-    void bell(const QString& message);
+    void bell(const QString &message);
 
     void activity();
     void silence();
@@ -272,9 +271,9 @@ signals:
      * (redirected for external recipient). It can be used for
      * control and display the remote terminal.
      */
-    void sendData(const char *,int);
+    void sendData(const char *, int);
 
-    void profileChanged(const QString & profile);
+    void profileChanged(const QString &profile);
 
     void titleChanged();
 
@@ -303,7 +302,7 @@ public slots:
 
     /*! Set named key binding for given widget
      */
-    void setKeyBindings(const QString & kb);
+    void setKeyBindings(const QString &kb);
 
     /*! Clear the terminal content and move to home position
      */
@@ -312,6 +311,7 @@ public slots:
     void toggleShowSearchBar();
 
     void saveHistory(QIODevice *device);
+
 protected:
     void resizeEvent(QResizeEvent *) override;
 
@@ -329,25 +329,25 @@ private slots:
      * Emulation::cursorChanged() signal propogates to here and QTermWidget
      * sends the specified cursor states to the terminal display
      */
-    void cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
+    void cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape,
+                       bool blinkingCursorEnabled);
 
 private:
     void search(bool forwards, bool next);
     void setZoom(int step);
     void init(int startnow);
-    TermWidgetImpl * m_impl;
-    SearchBar* m_searchBar;
+    TermWidgetImpl *m_impl;
+    SearchBar *m_searchBar;
     QVBoxLayout *m_layout;
     QTranslator *m_translator;
 };
 
-
-//Maybe useful, maybe not
+// Maybe useful, maybe not
 
 #ifdef __cplusplus
 extern "C"
 #endif
-void * createTermWidget(int startnow, void * parent);
+        void *
+        createTermWidget(int startnow, void *parent);
 
 #endif
-

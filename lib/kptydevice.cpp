@@ -41,25 +41,22 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #ifdef HAVE_SYS_FILIO_H
-# include <sys/filio.h>
+#    include <sys/filio.h>
 #endif
 #ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
+#    include <sys/time.h>
 #endif
 
 #if defined(Q_OS_FREEBSD) || defined(Q_OS_MAC)
-  // "the other end's output queue size" - kinda braindead, huh?
-# define PTY_BYTES_AVAILABLE TIOCOUTQ
+// "the other end's output queue size" - kinda braindead, huh?
+#    define PTY_BYTES_AVAILABLE TIOCOUTQ
 #elif defined(TIOCINQ)
-  // "our end's input queue size"
-# define PTY_BYTES_AVAILABLE TIOCINQ
+// "our end's input queue size"
+#    define PTY_BYTES_AVAILABLE TIOCINQ
 #else
-  // likewise. more generic ioctl (theoretically)
-# define PTY_BYTES_AVAILABLE FIONREAD
+// likewise. more generic ioctl (theoretically)
+#    define PTY_BYTES_AVAILABLE FIONREAD
 #endif
-
-
-
 
 //////////////////
 // private data //
@@ -78,7 +75,10 @@ static void qt_ignore_sigpipe()
     }
 }
 
-#define NO_INTR(ret,func) do { ret = func; } while (ret < 0 && errno == EINTR)
+#define NO_INTR(ret, func)                                                                         \
+    do {                                                                                           \
+        ret = func;                                                                                \
+    } while (ret < 0 && errno == EINTR)
 
 bool KPtyDevicePrivate::_k_canRead()
 {
@@ -90,7 +90,7 @@ bool KPtyDevicePrivate::_k_canRead()
 #else
     int available;
 #endif
-    if (::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *) &available) != -1) {
+    if (::ioctl(q->masterFd(), PTY_BYTES_AVAILABLE, (char *)&available) != -1) {
 #ifdef Q_OS_SOLARIS
         // A Pty is a STREAMS module, and those can be activated
         // with 0 bytes available. This happens either when ^C is
@@ -126,7 +126,7 @@ bool KPtyDevicePrivate::_k_canRead()
 #endif
         // Useless block braces except in Solaris
         {
-          NO_INTR(readBytes, read(q->masterFd(), ptr, available));
+            NO_INTR(readBytes, read(q->masterFd(), ptr, available));
         }
         if (readBytes < 0) {
             readBuffer.unreserve(available);
@@ -140,7 +140,8 @@ bool KPtyDevicePrivate::_k_canRead()
         readNotifier->setEnabled(false);
         emit q->readEof();
         return false;
-    } else {
+    }
+    else {
         if (!emittedReadyRead) {
             emittedReadyRead = true;
             emit q->readyRead();
@@ -160,9 +161,7 @@ bool KPtyDevicePrivate::_k_canWrite()
 
     qt_ignore_sigpipe();
     int wroteBytes;
-    NO_INTR(wroteBytes,
-            write(q->masterFd(),
-                  writeBuffer.readPointer(), writeBuffer.readSize()));
+    NO_INTR(wroteBytes, write(q->masterFd(), writeBuffer.readPointer(), writeBuffer.readSize()));
     if (wroteBytes < 0) {
         q->setErrorString(QLatin1String("Error writing to PTY"));
         return false;
@@ -182,24 +181,24 @@ bool KPtyDevicePrivate::_k_canWrite()
 
 #ifndef timeradd
 // Lifted from GLIBC
-# define timeradd(a, b, result) \
-    do { \
-        (result)->tv_sec = (a)->tv_sec + (b)->tv_sec; \
-        (result)->tv_usec = (a)->tv_usec + (b)->tv_usec; \
-        if ((result)->tv_usec >= 1000000) { \
-            ++(result)->tv_sec; \
-            (result)->tv_usec -= 1000000; \
-        } \
-    } while (0)
-# define timersub(a, b, result) \
-    do { \
-        (result)->tv_sec = (a)->tv_sec - (b)->tv_sec; \
-        (result)->tv_usec = (a)->tv_usec - (b)->tv_usec; \
-        if ((result)->tv_usec < 0) { \
-            --(result)->tv_sec; \
-            (result)->tv_usec += 1000000; \
-        } \
-    } while (0)
+#    define timeradd(a, b, result)                                                                 \
+        do {                                                                                       \
+            (result)->tv_sec = (a)->tv_sec + (b)->tv_sec;                                          \
+            (result)->tv_usec = (a)->tv_usec + (b)->tv_usec;                                       \
+            if ((result)->tv_usec >= 1000000) {                                                    \
+                ++(result)->tv_sec;                                                                \
+                (result)->tv_usec -= 1000000;                                                      \
+            }                                                                                      \
+        } while (0)
+#    define timersub(a, b, result)                                                                 \
+        do {                                                                                       \
+            (result)->tv_sec = (a)->tv_sec - (b)->tv_sec;                                          \
+            (result)->tv_usec = (a)->tv_usec - (b)->tv_usec;                                       \
+            if ((result)->tv_usec < 0) {                                                           \
+                --(result)->tv_sec;                                                                \
+                (result)->tv_usec += 1000000;                                                      \
+            }                                                                                      \
+        } while (0)
 #endif
 
 bool KPtyDevicePrivate::doWait(int msecs, bool reading)
@@ -286,11 +285,7 @@ void KPtyDevicePrivate::finishOpen(QIODevice::OpenMode mode)
 // public member functions //
 /////////////////////////////
 
-KPtyDevice::KPtyDevice(QObject *parent) :
-    QIODevice(parent),
-    KPty(new KPtyDevicePrivate(this))
-{
-}
+KPtyDevice::KPtyDevice(QObject *parent) : QIODevice(parent), KPty(new KPtyDevicePrivate(this)) { }
 
 KPtyDevice::~KPtyDevice()
 {

@@ -102,9 +102,8 @@ public:
     bool isRunning() const
     {
         bool rval;
-        (processId() > 0) ? rval= true : rval= false;
+        (processId() > 0) ? rval = true : rval = false;
         return rval;
-
     }
     /**
      * Query to which channels the PTY is assigned.
@@ -150,18 +149,14 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _k_onStateChanged(QProcess::ProcessState))
 };
 
-
 //////////////////
 // private data //
 //////////////////
 
-class KPtyProcessPrivate : public KProcessPrivate {
+class KPtyProcessPrivate : public KProcessPrivate
+{
 public:
-    KPtyProcessPrivate() :
-        ptyChannels(KPtyProcess::NoChannels),
-        addUtmp(false)
-    {
-    }
+    KPtyProcessPrivate() : ptyChannels(KPtyProcess::NoChannels), addUtmp(false) { }
 
     void _k_onStateChanged(QProcess::ProcessState newState)
     {

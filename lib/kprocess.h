@@ -55,23 +55,22 @@ class KProcess : public QProcess
     Q_DECLARE_PRIVATE(KProcess)
 
 public:
-
     /**
      * Modes in which the output channels can be opened.
      */
     enum OutputChannelMode {
         SeparateChannels = QProcess::SeparateChannels,
-            /**< Standard output and standard error are handled by KProcess
-                 as separate channels */
+        /**< Standard output and standard error are handled by KProcess
+             as separate channels */
         MergedChannels = QProcess::MergedChannels,
-            /**< Standard output and standard error are handled by KProcess
-                 as one channel */
+        /**< Standard output and standard error are handled by KProcess
+             as one channel */
         ForwardedChannels = QProcess::ForwardedChannels,
-            /**< Both standard output and standard error are forwarded
-                 to the parent process' respective channel */
+        /**< Both standard output and standard error are forwarded
+             to the parent process' respective channel */
         OnlyStdoutChannel,
-            /**< Only standard output is handled; standard error is forwarded */
-        OnlyStderrChannel  /**< Only standard error is handled; standard output is forwarded */
+        /**< Only standard output is handled; standard error is forwarded */
+        OnlyStderrChannel /**< Only standard error is handled; standard output is forwarded */
     };
 
     /**
@@ -182,7 +181,7 @@ public:
      * @param arg the argument to add
      * @return a reference to this KProcess
      */
-    KProcess &operator<<(const QString& arg);
+    KProcess &operator<<(const QString &arg);
 
     /**
      * @overload
@@ -190,7 +189,7 @@ public:
      * @param args the arguments to add
      * @return a reference to this KProcess
      */
-    KProcess &operator<<(const QStringList& args);
+    KProcess &operator<<(const QStringList &args);
 
     /**
      * Clear the program and command line argument list.
@@ -320,32 +319,28 @@ protected:
     /**
      * @internal
      */
-    KProcessPrivate * const d_ptr;
+    KProcessPrivate *const d_ptr;
 
 private:
     // hide those
-    using QProcess::setReadChannelMode;
+    using QProcess::processChannelMode;
     using QProcess::readChannelMode;
     using QProcess::setProcessChannelMode;
-    using QProcess::processChannelMode;
+    using QProcess::setReadChannelMode;
 
     Q_PRIVATE_SLOT(d_func(), void _k_forwardStdout())
     Q_PRIVATE_SLOT(d_func(), void _k_forwardStderr())
 };
 
 /* ----------- kprocess_p.h ---------------- */
-class KProcessPrivate {
+class KProcessPrivate
+{
 
     Q_DECLARE_PUBLIC(KProcess)
 
 protected:
-    KProcessPrivate() :
-        openMode(QIODevice::ReadWrite)
-    {
-    }
-    virtual ~KProcessPrivate()
-    {
-    }
+    KProcessPrivate() : openMode(QIODevice::ReadWrite) { }
+    virtual ~KProcessPrivate() { }
     void writeAll(const QByteArray &buf, int fd);
     void forwardStd(KProcess::ProcessChannel good, int fd);
     void _k_forwardStdout();
@@ -360,4 +355,3 @@ protected:
 };
 /* ------------------------------------------- */
 #endif
-
