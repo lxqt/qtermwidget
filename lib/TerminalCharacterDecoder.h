@@ -28,14 +28,13 @@
 
 class QTextStream;
 
-namespace Konsole
-{
+namespace Konsole {
 
 /**
  * Base class for terminal character decoders
  *
- * The decoder converts lines of terminal characters which consist of a unicode character, foreground
- * and background colours and other appearance-related properties into text strings.
+ * The decoder converts lines of terminal characters which consist of a unicode character,
+ * foreground and background colours and other appearance-related properties into text strings.
  *
  * Derived classes may produce either plain text with no other colour or appearance information, or
  * they may produce text which incorporates these additional properties.
@@ -43,10 +42,10 @@ namespace Konsole
 class TerminalCharacterDecoder
 {
 public:
-    virtual ~TerminalCharacterDecoder() {}
+    virtual ~TerminalCharacterDecoder() { }
 
     /** Begin decoding characters.  The resulting text is appended to @p output. */
-    virtual void begin(QTextStream* output) = 0;
+    virtual void begin(QTextStream *output) = 0;
     /** End decoding. */
     virtual void end() = 0;
 
@@ -58,14 +57,13 @@ public:
      * @param count The number of characters
      * @param properties Additional properties which affect all characters in the line
      */
-    virtual void decodeLine(const Character* const characters,
-                            int count,
+    virtual void decodeLine(const Character *const characters, int count,
                             LineProperty properties) = 0;
 };
 
 /**
- * A terminal character decoder which produces plain text, ignoring colours and other appearance-related
- * properties of the original characters.
+ * A terminal character decoder which produces plain text, ignoring colours and other
+ * appearance-related properties of the original characters.
  */
 class PlainTextDecoder : public TerminalCharacterDecoder
 {
@@ -89,19 +87,17 @@ public:
      * the output device is not a string.
      */
     QList<int> linePositions() const;
-    /** Enables recording of character positions at which new lines are added.  See linePositions() */
+    /** Enables recording of character positions at which new lines are added.  See linePositions()
+     */
     void setRecordLinePositions(bool record);
 
-    void begin(QTextStream* output) override;
+    void begin(QTextStream *output) override;
     void end() override;
 
-    void decodeLine(const Character* const characters,
-                            int count,
-                            LineProperty properties) override;
-
+    void decodeLine(const Character *const characters, int count, LineProperty properties) override;
 
 private:
-    QTextStream* _output;
+    QTextStream *_output;
     bool _includeTrailingWhitespace;
 
     bool _recordLinePositions;
@@ -123,26 +119,23 @@ public:
      * Sets the colour table which the decoder uses to produce the HTML colour codes in its
      * output
      */
-    void setColorTable( const ColorEntry* table );
+    void setColorTable(const ColorEntry *table);
 
-    void decodeLine(const Character* const characters,
-                            int count,
-                            LineProperty properties) override;
+    void decodeLine(const Character *const characters, int count, LineProperty properties) override;
 
-    void begin(QTextStream* output) override;
+    void begin(QTextStream *output) override;
     void end() override;
 
 private:
-    void openSpan(std::wstring& text , const QString& style);
-    void closeSpan(std::wstring& text);
+    void openSpan(std::wstring &text, const QString &style);
+    void closeSpan(std::wstring &text);
 
-    QTextStream* _output;
-    const ColorEntry* _colorTable;
+    QTextStream *_output;
+    const ColorEntry *_colorTable;
     bool _innerSpanOpen;
     quint8 _lastRendition;
     CharacterColor _lastForeColor;
     CharacterColor _lastBackColor;
-
 };
 
 }

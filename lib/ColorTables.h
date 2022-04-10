@@ -3,7 +3,7 @@
 
 #include "CharacterColor.h"
 
-//using namespace Konsole;
+// using namespace Konsole;
 #if 0
 static const ColorEntry whiteonblack_color_table[TABLE_COLORS] = {
     // normal
@@ -47,9 +47,6 @@ static const ColorEntry blackonlightyellow_color_table[TABLE_COLORS] = {
     ColorEntry(QColor( 84, 255, 255),  false),  ColorEntry(QColor( 255, 255, 255),  false)
 };
 
-
 #endif
 
-
 #endif
-

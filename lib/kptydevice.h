@@ -38,20 +38,26 @@
 struct KPtyDevicePrivate;
 class QSocketNotifier;
 
-#define Q_DECLARE_PRIVATE_MI(Class, SuperClass) \
-    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(SuperClass::d_ptr); } \
-    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(SuperClass::d_ptr); } \
+#define Q_DECLARE_PRIVATE_MI(Class, SuperClass)                                                    \
+    inline Class##Private *d_func()                                                                \
+    {                                                                                              \
+        return reinterpret_cast<Class##Private *>(SuperClass::d_ptr);                              \
+    }                                                                                              \
+    inline const Class##Private *d_func() const                                                    \
+    {                                                                                              \
+        return reinterpret_cast<const Class##Private *>(SuperClass::d_ptr);                        \
+    }                                                                                              \
     friend struct Class##Private;
 
 /**
  * Encapsulates KPty into a QIODevice, so it can be used with Q*Stream, etc.
  */
-class KPtyDevice : public QIODevice, public KPty {
+class KPtyDevice : public QIODevice, public KPty
+{
     Q_OBJECT
     Q_DECLARE_PRIVATE_MI(KPtyDevice, KPty)
 
 public:
-
     /**
      * Constructor
      */
@@ -144,7 +150,6 @@ public:
     bool waitForBytesWritten(int msecs = -1) override;
     bool waitForReadyRead(int msecs = -1) override;
 
-
 Q_SIGNALS:
     /**
      * Emitted when EOF is read from the PTY.
@@ -175,10 +180,7 @@ private:
 class KRingBuffer
 {
 public:
-    KRingBuffer()
-    {
-        clear();
-    }
+    KRingBuffer() { clear(); }
 
     void clear()
     {
@@ -190,15 +192,9 @@ public:
         totalSize = 0;
     }
 
-    inline bool isEmpty() const
-    {
-        return buffers.size() == 1 && !tail;
-    }
+    inline bool isEmpty() const { return buffers.size() == 1 && !tail; }
 
-    inline int size() const
-    {
-        return totalSize;
-    }
+    inline int size() const { return totalSize; }
 
     inline int readSize() const
     {
@@ -248,7 +244,8 @@ public:
         if (tail + bytes <= buffers.back().size()) {
             ptr = buffers.back().data() + tail;
             tail += bytes;
-        } else {
+        }
+        else {
             buffers.back().resize(tail);
             QByteArray tmp;
             tmp.resize(qMax(CHUNKSIZE, bytes));
@@ -266,10 +263,7 @@ public:
         tail -= bytes;
     }
 
-    inline void write(const char *data, int len)
-    {
-        memcpy(reserve(len), data, len);
-    }
+    inline void write(const char *data, int len) { memcpy(reserve(len), data, len); }
 
     // Find the first occurrence of c and return the index after it.
     // If c is not found until maxLength, maxLength is returned, provided
@@ -286,8 +280,7 @@ public:
                 return -1;
             const QByteArray &buf = *it;
             ++it;
-            int len = qMin((it == buffers.cend() ? tail : buf.size()) - start,
-                           maxLength);
+            int len = qMin((it == buffers.cend() ? tail : buf.size()) - start, maxLength);
             const char *ptr = buf.data() + start;
             if (const char *rptr = (const char *)memchr(ptr, c, len))
                 return index + (rptr - ptr) + 1;
@@ -297,15 +290,9 @@ public:
         }
     }
 
-    inline int lineSize(int maxLength = KMAXINT) const
-    {
-        return indexAfter('\n', maxLength);
-    }
+    inline int lineSize(int maxLength = KMAXINT) const { return indexAfter('\n', maxLength); }
 
-    inline bool canReadLine() const
-    {
-        return lineSize() != -1;
-    }
+    inline bool canReadLine() const { return lineSize() != -1; }
 
     int read(char *data, int maxLength)
     {
@@ -332,14 +319,17 @@ private:
     int totalSize;
 };
 
-struct KPtyDevicePrivate : public KPtyPrivate {
+struct KPtyDevicePrivate : public KPtyPrivate
+{
 
     Q_DECLARE_PUBLIC(KPtyDevice)
 
-    KPtyDevicePrivate(KPty* parent) :
-        KPtyPrivate(parent),
-        emittedReadyRead(false), emittedBytesWritten(false),
-        readNotifier(nullptr), writeNotifier(nullptr)
+    KPtyDevicePrivate(KPty *parent)
+        : KPtyPrivate(parent),
+          emittedReadyRead(false),
+          emittedBytesWritten(false),
+          readNotifier(nullptr),
+          writeNotifier(nullptr)
     {
     }
 
@@ -358,4 +348,3 @@ struct KPtyDevicePrivate : public KPtyPrivate {
 };
 
 #endif
-

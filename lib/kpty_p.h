@@ -27,19 +27,19 @@
 
 #include <QByteArray>
 
-class KPtyPrivate {
+class KPtyPrivate
+{
 public:
-
     Q_DECLARE_PUBLIC(KPty)
 
-    KPtyPrivate(KPty* parent);
+    KPtyPrivate(KPty *parent);
     virtual ~KPtyPrivate();
 
     bool chownpty(bool grant);
 
     int masterFd;
     int slaveFd;
-    bool ownMaster:1;
+    bool ownMaster : 1;
 
     QByteArray ttyName;
 

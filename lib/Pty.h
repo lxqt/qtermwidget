@@ -55,12 +55,11 @@ namespace Konsole {
  * To start the terminal process, call the start() method
  * with the program name and appropriate arguments.
  */
-class Pty: public KPtyProcess
+class Pty : public KPtyProcess
 {
-Q_OBJECT
+    Q_OBJECT
 
-  public:
-
+public:
     /**
      * Constructs a new Pty.
      *
@@ -70,13 +69,13 @@ Q_OBJECT
      * To start the terminal process, call the run() method with the
      * name of the program to start and appropriate arguments.
      */
-    explicit Pty(QObject* parent = nullptr);
+    explicit Pty(QObject *parent = nullptr);
 
     /**
      * Construct a process using an open pty master.
      * See KPtyProcess::KPtyProcess()
      */
-    explicit Pty(int ptyMasterFd, QObject* parent = nullptr);
+    explicit Pty(int ptyMasterFd, QObject *parent = nullptr);
 
     ~Pty() override;
 
@@ -100,12 +99,8 @@ Q_OBJECT
      * @param dbusSession Specifies the value of the KONSOLE_DBUS_SESSION
      * environment variable in the process's environment.
      */
-    int start( const QString& program,
-               const QStringList& arguments,
-               const QStringList& environment,
-               ulong winid,
-               bool addToUtmp
-             );
+    int start(const QString &program, const QStringList &arguments, const QStringList &environment,
+              ulong winid, bool addToUtmp);
 
     /**
      * set properties for "EmptyPTY"
@@ -150,7 +145,7 @@ Q_OBJECT
      */
     int foregroundProcessGroup() const;
 
-  public slots:
+public slots:
 
     /**
      * Put the pty into UTF-8 mode on systems which support it.
@@ -175,9 +170,9 @@ Q_OBJECT
      * @param buffer Pointer to the data to send.
      * @param length Length of @p buffer.
      */
-    void sendData(const char* buffer, int length);
+    void sendData(const char *buffer, int length);
 
-  signals:
+signals:
 
     /**
      * Emitted when a new block of data is received from
@@ -186,24 +181,24 @@ Q_OBJECT
      * @param buffer Pointer to the data received.
      * @param length Length of @p buffer
      */
-    void receivedData(const char* buffer, int length);
+    void receivedData(const char *buffer, int length);
 
-  protected:
-      void setupChildProcess() override;
+protected:
+    void setupChildProcess() override;
 
-  private slots:
+private slots:
     // called when data is received from the terminal process
     void dataReceived();
 
-  private:
-      void init();
+private:
+    void init();
 
     // takes a list of key=value pairs and adds them
     // to the environment for the process
-    void addEnvironmentVariables(const QStringList& environment);
+    void addEnvironmentVariables(const QStringList &environment);
 
-    int  _windowColumns;
-    int  _windowLines;
+    int _windowColumns;
+    int _windowLines;
     char _eraseChar;
     bool _xonXoff;
     bool _utf8;

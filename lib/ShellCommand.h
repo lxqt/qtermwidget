@@ -48,18 +48,19 @@ namespace Konsole {
  *      </li>
  * </ul>
  */
-class ShellCommand {
+class ShellCommand
+{
 public:
     /**
      * Constructs a ShellCommand from a command line.
      *
      * @param fullCommand The command line to parse.
      */
-    ShellCommand(const QString & fullCommand);
+    ShellCommand(const QString &fullCommand);
     /**
      * Constructs a ShellCommand with the specified @p command and @p arguments.
      */
-    ShellCommand(const QString & command , const QStringList & arguments);
+    ShellCommand(const QString &command, const QStringList &arguments);
 
     /** Returns the command. */
     QString command() const;
@@ -77,10 +78,10 @@ public:
     bool isAvailable() const;
 
     /** Expands environment variables in @p text .*/
-    static QString expand(const QString & text);
+    static QString expand(const QString &text);
 
     /** Expands environment variables in each string in @p list. */
-    static QStringList expand(const QStringList & items);
+    static QStringList expand(const QStringList &items);
 
 private:
     QStringList _arguments;
@@ -89,4 +90,3 @@ private:
 }
 
 #endif // SHELLCOMMAND_H
-

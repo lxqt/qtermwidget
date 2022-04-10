@@ -32,11 +32,11 @@ struct termios;
  * Provides primitives for opening & closing a pseudo TTY pair, assigning the
  * controlling TTY, utmp registration and setting various terminal attributes.
  */
-class KPty {
+class KPty
+{
     Q_DECLARE_PRIVATE(KPty)
 
 public:
-
     /**
      * Constructor
      */
@@ -47,7 +47,7 @@ public:
      *
      *  If the pty is still open, it will be closed. Note, however, that
      *  an utmp registration is @em not undone.
-    */
+     */
     ~KPty();
 
     KPty(const KPty &) = delete;
@@ -98,7 +98,7 @@ public:
      *  of the client. For local logins from inside an X session it should
      *  be the name of the X display. Otherwise it should be empty.
      */
-    void login(const char * user = nullptr, const char * remotehost = nullptr);
+    void login(const char *user = nullptr, const char *remotehost = nullptr);
 
     /**
      * Removes the utmp entry for this tty.
@@ -118,7 +118,7 @@ public:
      *  the struct in your class, in your method.
      * @return @c true on success, false otherwise
      */
-    bool tcGetAttr(struct ::termios * ttmode) const;
+    bool tcGetAttr(struct ::termios *ttmode) const;
 
     /**
      * Wrapper around tcsetattr(3) with mode TCSANOW.
@@ -129,7 +129,7 @@ public:
      * @return @c true on success, false otherwise. Note that success means
      *  that @em at @em least @em one attribute could be set.
      */
-    bool tcSetAttr(struct ::termios * ttmode);
+    bool tcSetAttr(struct ::termios *ttmode);
 
     /**
      * Change the logical (screen) size of the pty.
@@ -162,7 +162,7 @@ public:
      *
      * This function should be called only while the pty is open.
      */
-    const char * ttyName() const;
+    const char *ttyName() const;
 
     /**
      * @return the file descriptor of the master pty
@@ -182,13 +182,12 @@ protected:
     /**
      * @internal
      */
-    KPty(KPtyPrivate * d);
+    KPty(KPtyPrivate *d);
 
     /**
      * @internal
      */
-    KPtyPrivate * const d_ptr;
+    KPtyPrivate *const d_ptr;
 };
 
 #endif
-
