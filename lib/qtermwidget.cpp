@@ -324,7 +324,7 @@ void QTermWidget::init(int startnow)
             this, SIGNAL(termGetFocus()));
     connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
             this, SIGNAL(termLostFocus()));
-    connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal,
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal, this,
             [this] (QKeyEvent* e, bool) { Q_EMIT termKeyPressed(e); });
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
