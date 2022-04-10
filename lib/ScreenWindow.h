@@ -248,15 +248,15 @@ private:
     int endWindowLine() const;
     void fillUnusedArea();
 
-    Screen* _screen; // see setScreen() , screen()
-    Character* _windowBuffer;
-    int _windowBufferSize;
-    bool _bufferNeedsUpdate;
+    Screen* _screen = nullptr; // see setScreen() , screen()
+    Character* _windowBuffer = nullptr;
+    int _windowBufferSize = 0;
+    bool _bufferNeedsUpdate = true;
 
-    int  _windowLines;
-    int  _currentLine; // see scrollTo() , currentLine()
-    bool _trackOutput; // see setTrackOutput() , trackOutput()
-    int  _scrollCount; // count of lines which the window has been scrolled by since
+    int  _windowLines = 1;
+    int  _currentLine = 0; // see scrollTo() , currentLine()
+    bool _trackOutput = true; // see setTrackOutput() , trackOutput()
+    int  _scrollCount = 0; // count of lines which the window has been scrolled by since
                        // the last call to resetScrollCount()
 };
 
