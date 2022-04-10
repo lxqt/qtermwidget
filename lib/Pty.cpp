@@ -256,6 +256,7 @@ Pty::Pty(int masterFd, QObject* parent)
 {
     init();
 }
+
 Pty::Pty(QObject* parent)
     : KPtyProcess(parent)
 {
@@ -263,13 +264,7 @@ Pty::Pty(QObject* parent)
 }
 void Pty::init()
 {
-  _windowColumns = 0;
-  _windowLines = 0;
-  _eraseChar = 0;
-  _xonXoff = true;
-  _utf8 =true;
-
-  connect(pty(), SIGNAL(readyRead()) , this , SLOT(dataReceived()));
+  connect(pty(), &KPtyDevice::readyRead, this , &Pty::dataReceived);
   setPtyChannels(KPtyProcess::AllChannels);
 }
 
