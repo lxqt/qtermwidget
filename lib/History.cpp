@@ -88,10 +88,6 @@ FIXME: There is noticeable decrease in speed, also. Perhaps,
 */
 
 HistoryFile::HistoryFile()
-  : ion(-1),
-    length(0),
-    fileMap(nullptr),
-    readWriteBalance(0)
 {
   if (tmpFile.open())
   {
@@ -177,7 +173,7 @@ void HistoryFile::get(unsigned char* bytes, int len, int loc)
   }
 }
 
-int HistoryFile::len()
+int HistoryFile::len() const
 {
   return length;
 }
@@ -217,10 +213,6 @@ bool HistoryScroll::hasScroll()
 HistoryScrollFile::HistoryScrollFile(const QString &logFileName)
   : HistoryScroll(new HistoryTypeFile(logFileName)),
   m_logFileName(logFileName)
-{
-}
-
-HistoryScrollFile::~HistoryScrollFile()
 {
 }
 
@@ -422,10 +414,6 @@ int HistoryScrollBuffer::bufferIndex(int lineNumber) const
 
 HistoryScrollNone::HistoryScrollNone()
   : HistoryScroll(new HistoryTypeNone())
-{
-}
-
-HistoryScrollNone::~HistoryScrollNone()
 {
 }
 
