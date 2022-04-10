@@ -127,7 +127,7 @@ public:
        int    _startColumn;
        int    _endLine;
        int    _endColumn;
-       Type _type;
+       Type _type = NotSpecified;
 
     };
 
