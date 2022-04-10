@@ -88,7 +88,7 @@ Session::Session(QObject* parent) :
 
     //setup timer for monitoring session activity
     _monitorTimer->setSingleShot(true);
-    connect(_monitorTimer, SIGNAL(timeout()), this, SLOT(monitorTimerDone()));
+    connect(_monitorTimer, &QTimer::timeout, this, &Session::monitorTimerDone);
 }
 
 WId Session::windowId() const
@@ -147,7 +147,7 @@ void Session::addView(TerminalDisplay * widget)
         connect(widget, &TerminalDisplay::keyPressedSignal, _emulation, &Emulation::sendKeyEvent);
         connect(widget, &TerminalDisplay::mouseSignal, _emulation, &Emulation::sendMouseEvent);
         connect( widget , SIGNAL(sendStringToEmu(const char *)) , _emulation ,
-                 SLOT(sendString(const char *)) );
+                SLOT(sendString(const char *)) );
 
         // allow emulation to notify view when the foreground process
         // indicates whether or not it is interested in mouse signals
@@ -155,8 +155,7 @@ void Session::addView(TerminalDisplay * widget)
 
         widget->setUsesMouse( _emulation->programUsesMouse() );
 
-        connect( _emulation , SIGNAL(programBracketedPasteModeChanged(bool)) ,
-                 widget , SLOT(setBracketedPasteMode(bool)) );
+        connect(_emulation , &Emulation::programBracketedPasteModeChanged, widget , &TerminalDisplay::setBracketedPasteMode);
 
         widget->setBracketedPasteMode(_emulation->programBracketedPasteMode());
 
