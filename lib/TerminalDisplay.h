@@ -569,9 +569,9 @@ signals:
    void sendStringToEmu(const char*);
 
    // qtermwidget signals
-	void copyAvailable(bool);
-	void termGetFocus();
-	void termLostFocus();
+   void copyAvailable(bool);
+   void termGetFocus();
+   void termLostFocus();
 
     void notifyBell(const QString&);
     void usesMouseChanged();
@@ -725,118 +725,118 @@ private:
     // is currently showing.
     QPointer<ScreenWindow> _screenWindow;
 
-    bool _allowBell;
+    bool _allowBell = true;
 
-    QGridLayout* _gridLayout;
+    QGridLayout* _gridLayout = nullptr;
 
     bool _fixedFont; // has fixed pitch
-    int  _fontHeight;     // height
-    int  _fontWidth;     // width
-    int  _fontAscent;     // ascend
-    bool _boldIntense;   // Whether intense colors should be rendered with bold font
-    int  _drawTextAdditionHeight;   // additional height to prevent font trancation
-    bool _drawTextTestFlag;         // indicate it is a testing or not
+    int  _fontHeight = 1;     // height
+    int  _fontWidth = 1;     // width
+    int  _fontAscent = 1;     // ascend
+    bool _boldIntense = true;   // Whether intense colors should be rendered with bold font
+    int  _drawTextAdditionHeight = 0;   // additional height to prevent font trancation
+    bool _drawTextTestFlag = false;         // indicate it is a testing or not
 
     int _leftMargin;    // offset
     int _topMargin;    // offset
 
-    int _lines;      // the number of lines that can be displayed in the widget
-    int _columns;    // the number of columns that can be displayed in the widget
+    int _lines = 1;      // the number of lines that can be displayed in the widget
+    int _columns = 1;    // the number of columns that can be displayed in the widget
 
-    int _usedLines;  // the number of lines that are actually being used, this will be less
+    int _usedLines = 1;  // the number of lines that are actually being used, this will be less
                     // than 'lines' if the character image provided with setImage() is smaller
                     // than the maximum image size which can be displayed
 
-    int _usedColumns; // the number of columns that are actually being used, this will be less
+    int _usedColumns = 1; // the number of columns that are actually being used, this will be less
                      // than 'columns' if the character image provided with setImage() is smaller
                      // than the maximum image size which can be displayed
 
-    int _contentHeight;
-    int _contentWidth;
-    Character* _image; // [lines][columns]
+    int _contentHeight = 1;
+    int _contentWidth = 1;
+    Character* _image = nullptr; // [lines][columns]
                // only the area [usedLines][usedColumns] in the image contains valid data
 
     int _imageSize;
     QVector<LineProperty> _lineProperties;
 
     ColorEntry _colorTable[TABLE_COLORS];
-    uint _randomSeed;
+    uint _randomSeed = 0U;
 
-    bool _resizing;
-    bool _terminalSizeHint;
-    bool _terminalSizeStartup;
-    bool _bidiEnabled;
-    bool _mouseMarks;
+    bool _resizing = false;
+    bool _terminalSizeHint = false;
+    bool _terminalSizeStartup = true;
+    bool _bidiEnabled = false;
+    bool _mouseMarks = false;
     bool _bracketedPasteMode;
-    bool _disabledBracketedPasteMode;
+    bool _disabledBracketedPasteMode = false;
 
     QPoint  _iPntSel; // initial selection point
     QPoint  _pntSel; // current selection point
     QPoint  _tripleSelBegin; // help avoid flicker
-    int     _actSel; // selection state
-    bool    _wordSelectionMode;
-    bool    _lineSelectionMode;
-    bool    _preserveLineBreaks;
-    bool    _columnSelectionMode;
+    int     _actSel = 0; // selection state
+    bool    _wordSelectionMode = false;
+    bool    _lineSelectionMode = false;
+    bool    _preserveLineBreaks = false;
+    bool    _columnSelectionMode = false;
 
     QClipboard*  _clipboard;
     QScrollBar* _scrollBar;
-    QTermWidget::ScrollBarPosition _scrollbarLocation;
-    QString     _wordCharacters;
-    int         _bellMode;
+    QTermWidget::ScrollBarPosition _scrollbarLocation = QTermWidget::ScrollBarPosition::NoScrollBar;
+    QString     _wordCharacters = QLatin1String(":@-./_~");
+    int         _bellMode = SystemBeepBell;
 
-    bool _blinking;   // hide text in paintEvent
-    bool _hasBlinker; // has characters to blink
-    bool _cursorBlinking;     // hide cursor in paintEvent
-    bool _hasBlinkingCursor;  // has blinking cursor enabled
-    bool _allowBlinkingText;  // allow text to blink
-    bool _ctrlDrag;           // require Ctrl key for drag
-    TripleClickMode _tripleClickMode;
-    bool _isFixedSize; //Columns / lines are locked.
-    QTimer* _blinkTimer;  // active when hasBlinker
-    QTimer* _blinkCursorTimer;  // active when hasBlinkingCursor
+    bool _blinking = false;   // hide text in paintEvent
+    bool _hasBlinker = false; // has characters to blink
+    bool _cursorBlinking = false;     // hide cursor in paintEvent
+    bool _hasBlinkingCursor = false;  // has blinking cursor enabled
+    bool _allowBlinkingText = true;  // allow text to blink
+    bool _ctrlDrag = false;           // require Ctrl key for drag
+    TripleClickMode _tripleClickMode = SelectWholeLine;
+    bool _isFixedSize = false; //Columns / lines are locked.
+    QTimer* _blinkTimer = nullptr;  // active when hasBlinker
+    QTimer* _blinkCursorTimer = nullptr;  // active when hasBlinkingCursor
 
     //QMenu* _drop;
     QString _dropText;
     int _dndFileCount;
 
-    bool _possibleTripleClick;  // is set in mouseDoubleClickEvent and deleted
+    bool _possibleTripleClick = false;  // is set in mouseDoubleClickEvent and deleted
                                // after QApplication::doubleClickInterval() delay
 
 
-    QLabel* _resizeWidget;
-    QTimer* _resizeTimer;
+    QLabel* _resizeWidget = nullptr;
+    QTimer* _resizeTimer = nullptr;
 
-    bool _flowControlWarningEnabled;
+    bool _flowControlWarningEnabled = false;
 
     //widgets related to the warning message that appears when the user presses Ctrl+S to suspend
     //terminal output - informing them what has happened and how to resume output
-    QLabel* _outputSuspendedLabel;
+    QLabel* _outputSuspendedLabel = nullptr;
 
-    uint _lineSpacing;
+    uint _lineSpacing = 0U;
 
-    bool _colorsInverted; // true during visual bell
+    bool _colorsInverted = false; // true during visual bell
 
     QSize _size;
 
-    qreal _opacity;
+    qreal _opacity = 1;
 
     QPixmap _backgroundImage;
-    BackgroundMode _backgroundMode;
+    BackgroundMode _backgroundMode = None;
 
     // list of filters currently applied to the display.  used for links and
     // search highlight
-    TerminalImageFilterChain* _filterChain;
+    TerminalImageFilterChain* _filterChain = nullptr;
     QRegion _mouseOverHotspotArea;
 
-    QTermWidget::KeyboardCursorShape _cursorShape;
+    QTermWidget::KeyboardCursorShape _cursorShape = Emulation::KeyboardCursorShape::BlockCursor;
 
     // custom cursor color.  if this is invalid then the foreground
     // color of the character under the cursor is used
     QColor _cursorColor;
 
 
-    MotionAfterPasting mMotionAfterPasting;
+    MotionAfterPasting mMotionAfterPasting = NoMoveScreenWindow;
     bool _confirmMultilinePaste;
     bool _trimPastedTrailingNewlines;
 
@@ -852,10 +852,10 @@ private:
     //the delay in milliseconds between redrawing blinking text
     static const int TEXT_BLINK_DELAY = 500;
 
-    int _leftBaseMargin;
-    int _topBaseMargin;
+    int _leftBaseMargin = 1;
+    int _topBaseMargin = 1;
 
-    bool _drawLineChars;
+    bool _drawLineChars = true;
 
 public:
     static void setTransparencyEnabled(bool enable)
