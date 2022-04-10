@@ -322,7 +322,7 @@ private:
 
 class CompactHistoryBlockList {
 public:
-  CompactHistoryBlockList() {};
+   CompactHistoryBlockList() = default;
   ~CompactHistoryBlockList();
 
   void *allocate( size_t size );
