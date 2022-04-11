@@ -24,6 +24,8 @@
 #include <QWidget>
 #include "Emulation.h"
 #include "Filter.h"
+#include "qtermwidget_export.h"
+#include "qtermwidget_version.h"
 #include "qtermwidget_interface.h"
 
 class QVBoxLayout;
