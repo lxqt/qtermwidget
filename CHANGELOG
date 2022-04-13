@@ -1,3 +1,14 @@
+qtermwidget-1.1.0 / 2022-04-15
+===============================
+ * Handled the zero history size.
+ * Removed an unused variable.
+ * Corrected some code indentations.
+ * Do not test PyQt on CI.
+ * Added API documentation and followed naming convention.
+ * Return focus to terminal on closing search bar.
+ * moved to SIP 5.x wth PyQt.
+ * Added contexts to some lambda connections.
+
 qtermwidget-1.0.0 / 2021-11-04
 ===============================
  * Bumped minimum required Qt version to 5.15.
