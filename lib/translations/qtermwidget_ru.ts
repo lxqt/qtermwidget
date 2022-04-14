@@ -39,12 +39,12 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2741"/>
         <source>Paste multiline text</source>
-        <translation>Вставка многострочного текста</translation>
+        <translation>Вставить многострочный текст</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2742"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Вы точно хотите вставить этот текст?</translation>
+        <translation>Вы уверены, что хотите вставить этот текст?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3241"/>
