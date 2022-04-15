@@ -104,6 +104,7 @@ public:
      * availableColorSchemes() or a full path to a color scheme.
      */
     void setColorScheme(const QString & name) override;
+    QStringList getAvailableColorSchemes() override;
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);
 

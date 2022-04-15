@@ -57,6 +57,7 @@ class QTermWidgetInterface {
    virtual void setArgs(const QStringList & args) = 0;
    virtual void setTextCodec(QTextCodec * codec) = 0;
    virtual void setColorScheme(const QString & name) = 0;
+   virtual QStringList getAvailableColorSchemes() = 0;
    virtual void setHistorySize(int lines) = 0;
    virtual int historySize() const = 0;
    virtual void setScrollBarPosition(ScrollBarPosition) = 0;

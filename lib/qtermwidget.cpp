@@ -470,6 +470,11 @@ void QTermWidget::setColorScheme(const QString& origName)
     m_impl->m_terminalDisplay->setColorTable(table);
 }
 
+QStringList QTermWidget::getAvailableColorSchemes()
+{
+   return QTermWidget::availableColorSchemes();
+}
+
 QStringList QTermWidget::availableColorSchemes()
 {
     QStringList ret;
