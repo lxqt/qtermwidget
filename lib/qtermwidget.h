@@ -36,6 +36,7 @@ class QUrl;
 class QTERMWIDGET_EXPORT QTermWidget : public QWidget, public QTermWidgetInterface {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "lxqt.qtermwidget" FILE "qtermwidget.json")
+    Q_INTERFACES(QTermWidgetInterface)
 
 public:
 
