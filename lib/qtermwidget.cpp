@@ -284,11 +284,11 @@ void QTermWidget::init(int startnow)
     m_impl = new TermWidgetImpl(this);
     m_layout->addWidget(m_impl->m_terminalDisplay);
 
-    connect(m_impl->m_session, SIGNAL(bellRequest(QString)), m_impl->m_terminalDisplay, SLOT(bell(QString)));
-    connect(m_impl->m_terminalDisplay, SIGNAL(notifyBell(QString)), this, SIGNAL(bell(QString)));
+    connect(m_impl->m_session, &Session::bellRequest, m_impl->m_terminalDisplay, &TerminalDisplay::bell);
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::notifyBell, this, &QTermWidget::bell);
 
-    connect(m_impl->m_session, SIGNAL(activity()), this, SIGNAL(activity()));
-    connect(m_impl->m_session, SIGNAL(silence()), this, SIGNAL(silence()));
+    connect(m_impl->m_session, &Session::activity, this, &QTermWidget::activity);
+    connect(m_impl->m_session, &Session::silence, this, &QTermWidget::silence);
     connect(m_impl->m_session, &Session::profileChangeCommandReceived, this, &QTermWidget::profileChanged);
     connect(m_impl->m_session, &Session::receivedData, this, &QTermWidget::receivedData);
 
@@ -299,9 +299,9 @@ void QTermWidget::init(int startnow)
 
     m_searchBar = new SearchBar(this);
     m_searchBar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-    connect(m_searchBar, SIGNAL(searchCriteriaChanged()), this, SLOT(find()));
-    connect(m_searchBar, SIGNAL(findNext()), this, SLOT(findNext()));
-    connect(m_searchBar, SIGNAL(findPrevious()), this, SLOT(findPrevious()));
+    connect(m_searchBar, &SearchBar::searchCriteriaChanged, this, &QTermWidget::find);
+    connect(m_searchBar, &SearchBar::findNext, this, &QTermWidget::findNext);
+    connect(m_searchBar, &SearchBar::findPrevious, this, &QTermWidget::findPrevious);
     m_layout->addWidget(m_searchBar);
     m_searchBar->hide();
 
