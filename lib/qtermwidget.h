@@ -243,6 +243,8 @@ public:
 
     void setConfirmMultilinePaste(bool confirmMultilinePaste) override;
     void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) override;
+
+    QTermWidgetInterface *createWidget(int startnow) const override;
 signals:
     void finished();
     void copyAvailable(bool);

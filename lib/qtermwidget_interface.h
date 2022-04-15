@@ -97,6 +97,7 @@ class QTermWidgetInterface {
    virtual void setBoldIntense(bool boldIntense) = 0;
    virtual void setConfirmMultilinePaste(bool confirmMultilinePaste) = 0;
    virtual void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) = 0;
+   virtual QTermWidgetInterface* createWidget(int startnow) const = 0;
 };
 
 #define QTermWidgetInterface_iid "lxqt.qtermwidget.QTermWidgetInterface/1.0"
