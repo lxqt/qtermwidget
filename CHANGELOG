@@ -124,10 +124,10 @@ qtermwidget-0.14.0 / 2019-01-25
     - Implemented terminal margins
   * Improved cmake scripting
     - Set cmake_minimum_required to 3.1.0
-    - Removed locale compile definitons
+    - Removed locale compile definitions
     - Removed QUIET from find_package
   * Moved translations from lxqt-l10n back to qtermwidget
-    - Removed obsolete translation fuctionality
+    - Removed obsolete translation functionality
     - Added translation promo in README.md
   * Translation updates
 
@@ -140,7 +140,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * Refactor and fixes Python binding
   * kptyprocess: Try to terminate the shell process
   * New color scheme: Ubuntu inspired
-  * Fixed some github pathes in uris
+  * Fixed some github paths in uris
   * Add a comment for potential future breakage
   * Use wstring in TerminalCharacterDecoder for UCS-4 compatibility
   * Support UTF-32 characters correctly
@@ -159,7 +159,7 @@ qtermwidget-0.9.0 / 2018-05-21
   * Add an example for remote terminal
   * Makes the use of libutempter optional
   * Fix behavior of scroll up (SU)
-  * Install cmake files in LIBDIR as they are architecture dependend
+  * Install cmake files in LIBDIR as they are architecture dependent
   * Check if utempter.h header exists (mainly for FreeBSD)
   * Need lxqt-build-tools 0.4.0
 
@@ -241,7 +241,7 @@ qtermwidget-0.7.0 / 2016-09-24
   * cmake support changes
   * Make addCustomColorSchemeDir() static and check for duplicates
   * Address review comments
-  * Allow app to add custom color sheme locations
+  * Allow app to add custom color scheme locations
   * Avoid enums duplication
   * Add support for setting keyboard cursor shape
   * Remove assignment to self

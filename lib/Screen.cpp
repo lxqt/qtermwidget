@@ -422,7 +422,7 @@ void Screen::setDefaultMargins()
    is to poor to distinguish between bold
    (which is a font attribute) and intensive
    (which is a color attribute), we translate
-   this and RE_BOLD in falls eventually appart
+   this and RE_BOLD in falls eventually apart
    into RE_BOLD and RE_INTENSIVE.
    */
 
@@ -578,7 +578,7 @@ QVector<LineProperty> Screen::getLineProperties( int startLine , int endLine ) c
 void Screen::reset(bool clearScreen)
 {
     setMode(MODE_Wrap  ); saveMode(MODE_Wrap  );  // wrap at end of margin
-    resetMode(MODE_Origin); saveMode(MODE_Origin);  // position refere to [1,1]
+    resetMode(MODE_Origin); saveMode(MODE_Origin);  // position refers to [1,1]
     resetMode(MODE_Insert); saveMode(MODE_Insert);  // overstroke
     setMode(MODE_Cursor);                         // cursor visible
     resetMode(MODE_Screen);                         // screen not inverse

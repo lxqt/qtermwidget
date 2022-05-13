@@ -34,7 +34,7 @@ color  9 178 178 178  0 0  # regular   color 7 White
 
 # intensive colors
 
-# instead of changing the colors, we've flaged the text to become bold
+# instead of changing the colors, we've flagged the text to become bold
 
 color 10 255 255 255  0 0  # intensive foreground color
 color 11 104 104 104  1 0  # intensive background color

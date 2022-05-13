@@ -74,12 +74,12 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
 
     session->setTitle(Session::NameRole, QLatin1String("QTermWidget"));
 
-    /* Thats a freaking bad idea!!!!
+    /* That's a freaking bad idea!!!!
      * /bin/bash is not there on every system
      * better set it to the current $SHELL
      * Maybe you can also make a list available and then let the widget-owner decide what to use.
      * By setting it to $SHELL right away we actually make the first filecheck obsolete.
-     * But as iam not sure if you want to do anything else ill just let both checks in and set this to $SHELL anyway.
+     * But as I'm not sure if you want to do anything else I'll just let both checks in and set this to $SHELL anyway.
      */
     //session->setProgram("/bin/bash");
 

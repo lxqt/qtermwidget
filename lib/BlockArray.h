@@ -59,7 +59,7 @@ public:
     * adds the Block at the end of history.
     * This may drop other blocks.
     *
-    * The ownership on the block is transfered.
+    * The ownership on the block is transferred.
     * An unique index number is returned for accessing
     * it later (if not yet dropped then)
     *
@@ -73,7 +73,7 @@ public:
     * 0 if the block isn't available any more.
     *
     * The returned block is strictly readonly as only
-    * maped in memory - and will be invalid on the next
+    * mapped in memory - and will be invalid on the next
     * operation on this class.
     */
     const Block * at(size_t index);

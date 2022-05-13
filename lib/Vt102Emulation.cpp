@@ -149,7 +149,7 @@ void Vt102Emulation::reset()
    The last two forms allow list of arguments. Since the elements of
    the lists are treated individually the same way, they are passed
    as individual tokens to the interpretation. Further, because the
-   meaning of the parameters are names (althought represented as numbers),
+   meaning of the parameters are names (although represented as numbers),
    they are includes within the token ('N').
 
 */
@@ -759,7 +759,7 @@ void Vt102Emulation::processToken(int token, wchar_t p, int q)
     //Note about mouse modes:
     //There are four mouse modes which xterm-compatible terminals can support - 1000,1001,1002,1003
     //Konsole currently supports mode 1000 (basic mouse press and release) and mode 1002 (dragging the mouse).
-    //TODO:  Implementation of mouse modes 1001 (something called hilight tracking) and
+    //TODO:  Implementation of mouse modes 1001 (something called highlight tracking) and
     //1003 (a slight variation on dragging the mouse)
     //
 
@@ -896,7 +896,7 @@ void Vt102Emulation::reportTerminalType()
 
 void Vt102Emulation::reportSecondaryAttributes()
 {
-  // Seconday device attribute response (Request was: ^[[>0c or ^[[>c)
+  // Secondary device attribute response (Request was: ^[[>0c or ^[[>c)
   if (getMode(MODE_Ansi))
     sendString("\033[>0;115;0c"); // Why 115?  ;)
   else
