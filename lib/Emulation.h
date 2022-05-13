@@ -474,7 +474,7 @@ protected:
 
   QList<ScreenWindow*> _windows;
 
-  Screen* _currentScreen;  // pointer to the screen which is currently active,
+  Screen* _currentScreen = nullptr;  // pointer to the screen which is currently active,
                             // this is one of the elements in the screen[] array
 
   Screen* _screen[2];      // 0 = primary screen ( used by most programs, including the shell
@@ -485,9 +485,9 @@ protected:
 
   //decodes an incoming C-style character stream into a unicode QString using
   //the current text codec.  (this allows for rendering of non-ASCII characters in text files etc.)
-  const QTextCodec* _codec;
-  QTextDecoder* _decoder;
-  const KeyboardTranslator* _keyTranslator; // the keyboard layout
+  const QTextCodec* _codec = nullptr;
+  QTextDecoder* _decoder = nullptr;
+  const KeyboardTranslator* _keyTranslator = nullptr; // the keyboard layout
 
 protected slots:
   /**
@@ -508,8 +508,8 @@ private slots:
   void bracketedPasteModeChanged(bool bracketedPasteMode);
 
 private:
-  bool _usesMouse;
-  bool _bracketedPasteMode;
+  bool _usesMouse = false;
+  bool _bracketedPasteMode = false;
   QTimer _bulkTimer1;
   QTimer _bulkTimer2;
 

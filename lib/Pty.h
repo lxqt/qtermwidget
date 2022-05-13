@@ -191,10 +191,6 @@ Q_OBJECT
   protected:
       void setupChildProcess() override;
 
-  private slots:
-    // called when data is received from the terminal process
-    void dataReceived();
-
   private:
       void init();
 
@@ -202,11 +198,14 @@ Q_OBJECT
     // to the environment for the process
     void addEnvironmentVariables(const QStringList& environment);
 
-    int  _windowColumns;
-    int  _windowLines;
-    char _eraseChar;
-    bool _xonXoff;
-    bool _utf8;
+    // called when data is received from the terminal process
+    void dataReceived();
+
+    int  _windowColumns = 0;
+    int  _windowLines = 0;
+    char _eraseChar = 0;
+    bool _xonXoff = true;
+    bool _utf8 = true;
 };
 
 }

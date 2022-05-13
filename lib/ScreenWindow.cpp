@@ -30,20 +30,14 @@ using namespace Konsole;
 
 ScreenWindow::ScreenWindow(QObject* parent)
     : QObject(parent)
-    , _screen(nullptr)
-    , _windowBuffer(nullptr)
-    , _windowBufferSize(0)
-    , _bufferNeedsUpdate(true)
-    , _windowLines(1)
-    , _currentLine(0)
-    , _trackOutput(true)
-    , _scrollCount(0)
 {
 }
+
 ScreenWindow::~ScreenWindow()
 {
     delete[] _windowBuffer;
 }
+
 void ScreenWindow::setScreen(Screen* screen)
 {
     Q_ASSERT( screen );

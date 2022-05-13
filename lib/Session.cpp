@@ -49,28 +49,10 @@ using namespace Konsole;
 int Session::lastSessionId = 0;
 
 Session::Session(QObject* parent) :
-    QObject(parent),
-        _shellProcess(nullptr)
-        , _emulation(nullptr)
-        , _monitorActivity(false)
-        , _monitorSilence(false)
-        , _notifiedActivity(false)
-        , _autoClose(true)
-        , _wantedClose(false)
-        , _silenceSeconds(10)
-        , _isTitleChanged(false)
-        , _addToUtmp(false)  // disabled by default because of a bug encountered on certain systems
-        // which caused Konsole to hang when closing a tab and then opening a new
-        // one.  A 'QProcess destroyed while still running' warning was being
-        // printed to the terminal.  Likely a problem in KPty::logout()
-        // or KPty::login() which uses a QProcess to start /usr/bin/utempter
-        , _flowControl(true)
-        , _fullScripting(false)
-        , _sessionId(0)
-//   , _zmodemBusy(false)
-//   , _zmodemProc(0)
-//   , _zmodemProgress(0)
-        , _hasDarkBackground(false)
+    QObject(parent)
+    , _shellProcess (new Pty())
+    , _emulation (new Vt102Emulation())
+    , _monitorTimer (new QTimer(this))
 {
     //prepare DBus communication
 //    new SessionAdaptor(this);
@@ -78,47 +60,35 @@ Session::Session(QObject* parent) :
 //    QDBusConnection::sessionBus().registerObject(QLatin1String("/Sessions/")+QString::number(_sessionId), this);
 
     //create teletype for I/O with shell process
-    _shellProcess = new Pty();
     ptySlaveFd = _shellProcess->pty()->slaveFd();
 
-    //create emulation backend
-    _emulation = new Vt102Emulation();
-
-    connect( _emulation, SIGNAL( titleChanged( int, const QString & ) ),
-             this, SLOT( setUserTitle( int, const QString & ) ) );
-    connect( _emulation, SIGNAL( stateSet(int) ),
-             this, SLOT( activityStateSet(int) ) );
+    connect( _emulation, &Emulation::titleChanged, this, &Session::setUserTitle);
+    connect( _emulation, &Emulation::stateSet, this, &Session::activityStateSet);
 //    connect( _emulation, SIGNAL( zmodemDetected() ), this ,
 //            SLOT( fireZModemDetected() ) );
-    connect( _emulation, SIGNAL( changeTabTextColorRequest( int ) ),
-             this, SIGNAL( changeTabTextColorRequest( int ) ) );
-    connect( _emulation, SIGNAL(profileChangeCommandReceived(const QString &)),
-             this, SIGNAL( profileChangeCommandReceived(const QString &)) );
+    connect( _emulation, &Emulation::changeTabTextColorRequest, this, &Session::changeTabTextColorRequest);
+    connect( _emulation, &Emulation::profileChangeCommandReceived, this, &Session::profileChangeCommandReceived);
 
-    connect(_emulation, SIGNAL(imageResizeRequest(QSize)),
-            this, SLOT(onEmulationSizeChange(QSize)));
-    connect(_emulation, SIGNAL(imageSizeChanged(int, int)),
-            this, SLOT(onViewSizeChange(int, int)));
-    connect(_emulation, &Vt102Emulation::cursorChanged,
+    connect(_emulation, &Emulation::imageResizeRequest, this, &Session::onEmulationSizeChange);
+    connect(_emulation, &Emulation::imageSizeChanged, this, &Session::onViewSizeChange);
+    connect(_emulation, &Emulation::cursorChanged,
             this, &Session::cursorChanged);
 
     //connect teletype to emulation backend
     _shellProcess->setUtf8Mode(_emulation->utf8());
 
-    connect( _shellProcess,SIGNAL(receivedData(const char *,int)),this,
-             SLOT(onReceiveBlock(const char *,int)) );
-    connect( _emulation,SIGNAL(sendData(const char *,int)),_shellProcess,
-             SLOT(sendData(const char *,int)) );
-    connect( _emulation,SIGNAL(lockPtyRequest(bool)),_shellProcess,SLOT(lockPty(bool)) );
-    connect( _emulation,SIGNAL(useUtf8Request(bool)),_shellProcess,SLOT(setUtf8Mode(bool)) );
+    connect( _shellProcess, &Pty::receivedData, this, &Session::onReceiveBlock);
+    connect( _emulation, &Emulation::sendData, _shellProcess, &Pty::sendData);
+    connect( _emulation,&Emulation::lockPtyRequest, _shellProcess, &Pty::lockPty);
+    connect( _emulation,&Emulation::useUtf8Request, _shellProcess, &Pty::setUtf8Mode);
 
+    // Not moved to the new connect way for now to avoid to use qoverload
     connect( _shellProcess,SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(done(int)) );
     // not in kprocess anymore connect( _shellProcess,SIGNAL(done(int)), this, SLOT(done(int)) );
 
     //setup timer for monitoring session activity
-    _monitorTimer = new QTimer(this);
     _monitorTimer->setSingleShot(true);
-    connect(_monitorTimer, SIGNAL(timeout()), this, SLOT(monitorTimerDone()));
+    connect(_monitorTimer, &QTimer::timeout, this, &Session::monitorTimerDone);
 }
 
 WId Session::windowId() const
@@ -174,22 +144,18 @@ void Session::addView(TerminalDisplay * widget)
 
     if ( _emulation != nullptr ) {
         // connect emulation - view signals and slots
-        connect( widget , &TerminalDisplay::keyPressedSignal, _emulation ,
-                 &Emulation::sendKeyEvent);
-        connect( widget , SIGNAL(mouseSignal(int,int,int,int)) , _emulation ,
-                 SLOT(sendMouseEvent(int,int,int,int)) );
+        connect(widget, &TerminalDisplay::keyPressedSignal, _emulation, &Emulation::sendKeyEvent);
+        connect(widget, &TerminalDisplay::mouseSignal, _emulation, &Emulation::sendMouseEvent);
         connect( widget , SIGNAL(sendStringToEmu(const char *)) , _emulation ,
-                 SLOT(sendString(const char *)) );
+                SLOT(sendString(const char *)) );
 
         // allow emulation to notify view when the foreground process
         // indicates whether or not it is interested in mouse signals
-        connect( _emulation , SIGNAL(programUsesMouseChanged(bool)) , widget ,
-                 SLOT(setUsesMouse(bool)) );
+        connect(_emulation, &Emulation::programUsesMouseChanged, widget, &TerminalDisplay::setUsesMouse);
 
         widget->setUsesMouse( _emulation->programUsesMouse() );
 
-        connect( _emulation , SIGNAL(programBracketedPasteModeChanged(bool)) ,
-                 widget , SLOT(setBracketedPasteMode(bool)) );
+        connect(_emulation , &Emulation::programBracketedPasteModeChanged, widget , &TerminalDisplay::setBracketedPasteMode);
 
         widget->setBracketedPasteMode(_emulation->programBracketedPasteMode());
 
@@ -197,13 +163,9 @@ void Session::addView(TerminalDisplay * widget)
     }
 
     //connect view signals and slots
-    QObject::connect( widget ,SIGNAL(changedContentSizeSignal(int,int)),this,
-                      SLOT(onViewSizeChange(int,int)));
-
-    QObject::connect( widget ,SIGNAL(destroyed(QObject *)) , this ,
-                      SLOT(viewDestroyed(QObject *)) );
-//slot for close
-    QObject::connect(this, SIGNAL(finished()), widget, SLOT(close()));
+    connect(widget, &TerminalDisplay::changedContentSizeSignal, this, &Session::onViewSizeChange);
+    connect(widget, &TerminalDisplay::destroyed, this , &Session::viewDestroyed);
+    connect(this, &Session::finished, widget, &TerminalDisplay::close);
 
 }
 
@@ -539,15 +501,15 @@ void Session::refresh()
 
 bool Session::sendSignal(int signal)
 {
-    int result = ::kill(static_cast<pid_t>(_shellProcess->processId()),signal);
+    const auto result = ::kill(static_cast<pid_t>(_shellProcess->processId()),signal);
 
-     if ( result == 0 )
-     {
-         _shellProcess->waitForFinished();
-         return true;
-     }
-     else
-         return false;
+    if ( result == 0 )
+    {
+        _shellProcess->waitForFinished();
+        return true;
+    }
+
+    return false;
 }
 
 void Session::close()
@@ -556,7 +518,7 @@ void Session::close()
     _wantedClose = true;
     if (!_shellProcess->isRunning() || !sendSignal(SIGHUP)) {
         // Forced close.
-        QTimer::singleShot(1, this, SIGNAL(finished()));
+        QTimer::singleShot(1, this, &Session::finished);
     }
 }
 
@@ -1041,8 +1003,7 @@ void SessionGroup::connectPair(Session * master , Session * other) const
     if ( _masterMode & CopyInputToAll ) {
         qDebug() << "Connection session " << master->nameTitle() << "to" << other->nameTitle();
 
-        connect( master->emulation() , SIGNAL(sendData(const char *,int)) , other->emulation() ,
-                 SLOT(sendString(const char *,int)) );
+        connect(master->emulation(), &Emulation::sendData, other->emulation(), &Emulation::sendString);
     }
 }
 void SessionGroup::disconnectPair(Session * master , Session * other) const
@@ -1052,8 +1013,7 @@ void SessionGroup::disconnectPair(Session * master , Session * other) const
     if ( _masterMode & CopyInputToAll ) {
         qDebug() << "Disconnecting session " << master->nameTitle() << "from" << other->nameTitle();
 
-        disconnect( master->emulation() , SIGNAL(sendData(const char *,int)) , other->emulation() ,
-                    SLOT(sendString(const char *,int)) );
+        disconnect(master->emulation(), &Emulation::sendData, other->emulation(), &Emulation::sendString);
     }
 }
 

@@ -625,28 +625,28 @@ private:
     typedef QVector<Character> ImageLine;      // [0..columns]
     ImageLine*          screenLines;    // [lines]
 
-    int _scrolledLines;
+    int _scrolledLines = 0;
     QRect _lastScrolledRegion;
 
-    int _droppedLines;
+    int _droppedLines = 0;
 
     QVarLengthArray<LineProperty,64> lineProperties;
 
     // history buffer ---------------
-    HistoryScroll* history;
+    HistoryScroll* history = nullptr;
 
     // cursor location
-    int cuX;
-    int cuY;
+    int cuX = 0;
+    int cuY = 0;
 
     // cursor color and rendition info
     CharacterColor currentForeground;
     CharacterColor currentBackground;
-    quint8 currentRendition;
+    quint8 currentRendition = 0;
 
     // margins ----------------
-    int _topMargin;
-    int _bottomMargin;
+    int _topMargin = 0;
+    int _bottomMargin = 0;
 
     // states ----------------
     bool currentModes[MODES_SCREEN];
@@ -657,15 +657,15 @@ private:
     QBitArray tabStops;
 
     // selection -------------------
-    int selBegin; // The first location selected.
-    int selTopLeft;    // TopLeft Location.
-    int selBottomRight;    // Bottom Right Location.
-    bool blockSelectionMode;  // Column selection mode
+    int selBegin = 0; // The first location selected.
+    int selTopLeft = 0;    // TopLeft Location.
+    int selBottomRight = 0;    // Bottom Right Location.
+    bool blockSelectionMode = false;  // Column selection mode
 
     // effective colors and rendition ------------
     CharacterColor effectiveForeground; // These are derived from
     CharacterColor effectiveBackground; // the cu_* variables above
-    quint8 effectiveRendition;          // to speed up operation
+    quint8 effectiveRendition = 0;          // to speed up operation
 
     class SavedState
     {
@@ -682,7 +682,7 @@ private:
     SavedState savedState;
 
     // last position where we added a character
-    int lastPos;
+    int lastPos = -1;
 
     // used in REP (repeating char)
     unsigned short lastDrawnChar;

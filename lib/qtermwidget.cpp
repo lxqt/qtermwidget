@@ -63,8 +63,8 @@ public:
 
 TermWidgetImpl::TermWidgetImpl(QWidget* parent)
 {
-    this->m_session = createSession(parent);
-    this->m_terminalDisplay = createTerminalDisplay(this->m_session, parent);
+    m_session = createSession(parent);
+    m_terminalDisplay = createTerminalDisplay(m_session, parent);
 }
 
 
@@ -104,14 +104,12 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
 
 TerminalDisplay *TermWidgetImpl::createTerminalDisplay(Session *session, QWidget* parent)
 {
-//    TerminalDisplay* display = new TerminalDisplay(this);
     TerminalDisplay* display = new TerminalDisplay(parent);
 
     display->setBellMode(TerminalDisplay::NotifyBell);
     display->setTerminalSizeHint(true);
     display->setTripleClickMode(TerminalDisplay::SelectWholeLine);
     display->setTerminalSizeStartup(true);
-
     display->setRandomSeed(session->sessionId() * 31);
 
     return display;
@@ -125,9 +123,8 @@ QTermWidget::QTermWidget(int startnow, QWidget *parent)
 }
 
 QTermWidget::QTermWidget(QWidget *parent)
-    : QWidget(parent)
+    : QTermWidget(1, parent)
 {
-    init(1);
 }
 
 void QTermWidget::selectionChanged(bool textSelected)
@@ -171,11 +168,11 @@ void QTermWidget::search(bool forwards, bool next)
     regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
     regExp.setCaseSensitivity(m_searchBar->matchCase() ? Qt::CaseSensitive : Qt::CaseInsensitive);
 
-    HistorySearch *historySearch =
+    const auto historySearch =
             new HistorySearch(m_impl->m_session->emulation(), regExp, forwards, startColumn, startLine, this);
-    connect(historySearch, SIGNAL(matchFound(int, int, int, int)), this, SLOT(matchFound(int, int, int, int)));
-    connect(historySearch, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
-    connect(historySearch, SIGNAL(noMatchFound()), m_searchBar, SLOT(noMatchFound()));
+    connect(historySearch, &HistorySearch::matchFound, this, &QTermWidget::matchFound);
+    connect(historySearch, &HistorySearch::noMatchFound, this, &QTermWidget::noMatchFound);
+    connect(historySearch, &HistorySearch::noMatchFound, m_searchBar, &SearchBar::noMatchFound);
     historySearch->search();
 }
 
@@ -254,8 +251,7 @@ void QTermWidget::startTerminalTeletype()
 
     m_impl->m_session->runEmptyPTY();
     // redirect data from TTY to external recipient
-    connect( m_impl->m_session->emulation(), SIGNAL(sendData(const char *,int)),
-             this, SIGNAL(sendData(const char *,int)) );
+    connect(m_impl->m_session->emulation(), &Emulation::sendData, this, &QTermWidget::sendData);
 }
 
 void QTermWidget::init(int startnow)
@@ -288,11 +284,11 @@ void QTermWidget::init(int startnow)
     m_impl = new TermWidgetImpl(this);
     m_layout->addWidget(m_impl->m_terminalDisplay);
 
-    connect(m_impl->m_session, SIGNAL(bellRequest(QString)), m_impl->m_terminalDisplay, SLOT(bell(QString)));
-    connect(m_impl->m_terminalDisplay, SIGNAL(notifyBell(QString)), this, SIGNAL(bell(QString)));
+    connect(m_impl->m_session, &Session::bellRequest, m_impl->m_terminalDisplay, &TerminalDisplay::bell);
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::notifyBell, this, &QTermWidget::bell);
 
-    connect(m_impl->m_session, SIGNAL(activity()), this, SIGNAL(activity()));
-    connect(m_impl->m_session, SIGNAL(silence()), this, SIGNAL(silence()));
+    connect(m_impl->m_session, &Session::activity, this, &QTermWidget::activity);
+    connect(m_impl->m_session, &Session::silence, this, &QTermWidget::silence);
     connect(m_impl->m_session, &Session::profileChangeCommandReceived, this, &QTermWidget::profileChanged);
     connect(m_impl->m_session, &Session::receivedData, this, &QTermWidget::receivedData);
 
@@ -303,9 +299,9 @@ void QTermWidget::init(int startnow)
 
     m_searchBar = new SearchBar(this);
     m_searchBar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-    connect(m_searchBar, SIGNAL(searchCriteriaChanged()), this, SLOT(find()));
-    connect(m_searchBar, SIGNAL(findNext()), this, SLOT(findNext()));
-    connect(m_searchBar, SIGNAL(findPrevious()), this, SLOT(findPrevious()));
+    connect(m_searchBar, &SearchBar::searchCriteriaChanged, this, &QTermWidget::find);
+    connect(m_searchBar, &SearchBar::findNext, this, &QTermWidget::findNext);
+    connect(m_searchBar, &SearchBar::findPrevious, this, &QTermWidget::findPrevious);
     m_layout->addWidget(m_searchBar);
     m_searchBar->hide();
 
@@ -313,19 +309,17 @@ void QTermWidget::init(int startnow)
         m_impl->m_session->run();
     }
 
-    this->setFocus( Qt::OtherFocusReason );
-    this->setFocusPolicy( Qt::WheelFocus );
+    setFocus( Qt::OtherFocusReason );
+    setFocusPolicy( Qt::WheelFocus );
     m_impl->m_terminalDisplay->resize(this->size());
 
-    this->setFocusProxy(m_impl->m_terminalDisplay);
-    connect(m_impl->m_terminalDisplay, SIGNAL(copyAvailable(bool)),
-            this, SLOT(selectionChanged(bool)));
-    connect(m_impl->m_terminalDisplay, SIGNAL(termGetFocus()),
-            this, SIGNAL(termGetFocus()));
-    connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
-            this, SIGNAL(termLostFocus()));
+    setFocusProxy(m_impl->m_terminalDisplay);
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::copyAvailable,
+            this, &QTermWidget::selectionChanged);
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::termGetFocus, this, &QTermWidget::termGetFocus);
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::termLostFocus, this, &QTermWidget::termLostFocus);
     connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal, this,
-            [this] (QKeyEvent* e, bool) { Q_EMIT termKeyPressed(e); });
+            [this] (QKeyEvent* e, bool) { emit termKeyPressed(e); });
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
@@ -340,10 +334,10 @@ void QTermWidget::init(int startnow)
 
     m_impl->m_session->addView(m_impl->m_terminalDisplay);
 
-    connect(m_impl->m_session, SIGNAL(resizeRequest(QSize)), this, SLOT(setSize(QSize)));
-    connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
+    connect(m_impl->m_session, &Session::resizeRequest, this, &QTermWidget::setSize);
+    connect(m_impl->m_session, &Session::finished, this, &QTermWidget::sessionFinished);
     connect(m_impl->m_session, &Session::titleChanged, this, &QTermWidget::titleChanged);
-    connect(m_impl->m_session, &Session::cursorChanged, this, &QTermWidget::cursorChanged);
+    connect(m_impl->m_session, &Session::cursorChanged, this, &QTermWidget::onCursorChanged);
 }
 
 
@@ -772,7 +766,7 @@ void QTermWidget::setAutoClose(bool enabled)
     m_impl->m_session->setAutoClose(enabled);
 }
 
-void QTermWidget::cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled)
+void QTermWidget::onCursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled)
 {
     // TODO: A switch to enable/disable DECSCUSR?
     setKeyboardCursorShape(cursorShape);

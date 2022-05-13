@@ -82,7 +82,7 @@ Q_OBJECT
 public:
   /** Constructs a new emulation */
   Vt102Emulation();
-  ~Vt102Emulation() override;
+  ~Vt102Emulation() override = default;
 
   // reimplemented from Emulation
   void clearEntireScreen() override;
@@ -143,7 +143,7 @@ private:
   int argv[MAXARGS];
   int argc;
   void initTokenizer();
-  int prevCC;
+  int prevCC = 0;
 
   // Set of flags for each of the ASCII characters which indicates
   // what category they fall into (printable character, control, digit etc.)
@@ -191,9 +191,9 @@ private:
   //these calls occur when certain escape sequences are seen in the
   //output from the terminal
   QHash<int,QString> _pendingTitleUpdates;
-  QTimer* _titleUpdateTimer;
+  QTimer* _titleUpdateTimer = nullptr;
 
-    bool _reportFocusEvents;
+    bool _reportFocusEvents = false;
 };
 
 }

@@ -72,19 +72,10 @@ Character Screen::defaultChar = Character(' ',
 : lines(l),
     columns(c),
     screenLines(new ImageLine[lines+1] ),
-    _scrolledLines(0),
-    _droppedLines(0),
-    history(new HistoryScrollNone()),
-    cuX(0), cuY(0),
-    currentRendition(0),
-    _topMargin(0), _bottomMargin(0),
-    selBegin(0), selTopLeft(0), selBottomRight(0),
-    blockSelectionMode(false),
-    effectiveForeground(CharacterColor()), effectiveBackground(CharacterColor()), effectiveRendition(0),
-    lastPos(-1)
+    history(new HistoryScrollNone())
 {
     lineProperties.resize(lines+1);
-    for (int i=0;i<lines+1;i++)
+    for (int i=0; i < lines+1; ++i)
         lineProperties[i]=LINE_DEFAULT;
 
     initTabStops();

@@ -283,7 +283,6 @@ Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int end
     , _startColumn(startColumn)
     , _endLine(endLine)
     , _endColumn(endColumn)
-    , _type(NotSpecified)
 {
 }
 QList<QAction*> Filter::HotSpot::actions()
@@ -421,8 +420,9 @@ UrlFilter::HotSpot::UrlType UrlFilter::HotSpot::urlType() const
         return StandardUrl;
     else if ( EmailAddressRegExp.exactMatch(url) )
         return Email;
-    else
-        return Unknown;
+
+
+    return Unknown;
 }
 
 void UrlFilter::HotSpot::activate(const QString& actionName)

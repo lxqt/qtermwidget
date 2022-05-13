@@ -141,11 +141,11 @@ void TerminalDisplay::setScreenWindow(ScreenWindow* window)
 
 // TODO: Determine if this is an issue.
 //#warning "The order here is not specified - does it matter whether updateImage or updateLineProperties comes first?"
-        connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateLineProperties()) );
-        connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateImage()) );
-        connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateFilters()) );
-        connect( _screenWindow , SIGNAL(scrolled(int)) , this , SLOT(updateFilters()) );
-        connect( _screenWindow , &ScreenWindow::scrollToEnd , this , &TerminalDisplay::scrollToEnd );
+        connect(_screenWindow, &ScreenWindow::outputChanged, this, &TerminalDisplay::updateLineProperties);
+        connect(_screenWindow, &ScreenWindow::outputChanged, this, &TerminalDisplay::updateImage);
+        connect(_screenWindow, &ScreenWindow::outputChanged, this, &TerminalDisplay::updateFilters);
+        connect(_screenWindow, &ScreenWindow::scrolled, this, &TerminalDisplay::updateFilters);
+        connect(_screenWindow, &ScreenWindow::scrollToEnd, this, &TerminalDisplay::scrollToEnd);
         window->setWindowLines(_lines);
     }
 }
@@ -258,15 +258,15 @@ void TerminalDisplay::fontChange(const QFont&)
 void TerminalDisplay::calDrawTextAdditionHeight(QPainter& painter)
 {
     QRect test_rect, feedback_rect;
-	test_rect.setRect(1, 1, _fontWidth * 4, _fontHeight);
+   test_rect.setRect(1, 1, _fontWidth * 4, _fontHeight);
     painter.drawText(test_rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QLatin1String("Mq"), &feedback_rect);
 
-	//qDebug() << "test_rect:" << test_rect << "feeback_rect:" << feedback_rect;
+   //qDebug() << "test_rect:" << test_rect << "feeback_rect:" << feedback_rect;
 
-	_drawTextAdditionHeight = (feedback_rect.height() - _fontHeight) / 2;
-	if(_drawTextAdditionHeight < 0) {
-	  _drawTextAdditionHeight = 0;
-	}
+   _drawTextAdditionHeight = (feedback_rect.height() - _fontHeight) / 2;
+   if(_drawTextAdditionHeight < 0) {
+     _drawTextAdditionHeight = 0;
+   }
 
   _drawTextTestFlag = false;
 }
@@ -314,63 +314,12 @@ void TerminalDisplay::setFont(const QFont &)
 
 TerminalDisplay::TerminalDisplay(QWidget *parent)
 :QWidget(parent)
-,_screenWindow(nullptr)
-,_allowBell(true)
-,_gridLayout(nullptr)
-,_fontHeight(1)
-,_fontWidth(1)
-,_fontAscent(1)
-,_boldIntense(true)
-,_lines(1)
-,_columns(1)
-,_usedLines(1)
-,_usedColumns(1)
-,_contentHeight(1)
-,_contentWidth(1)
-,_image(nullptr)
-,_randomSeed(0)
-,_resizing(false)
-,_terminalSizeHint(false)
-,_terminalSizeStartup(true)
-,_bidiEnabled(false)
-,_mouseMarks(false)
-,_disabledBracketedPasteMode(false)
-,_actSel(0)
-,_wordSelectionMode(false)
-,_lineSelectionMode(false)
-,_preserveLineBreaks(false)
-,_columnSelectionMode(false)
-,_scrollbarLocation(QTermWidget::NoScrollBar)
-,_wordCharacters(QLatin1String(":@-./_~"))
-,_bellMode(SystemBeepBell)
-,_blinking(false)
-,_hasBlinker(false)
-,_cursorBlinking(false)
-,_hasBlinkingCursor(false)
-,_allowBlinkingText(true)
-,_ctrlDrag(false)
-,_tripleClickMode(SelectWholeLine)
-,_isFixedSize(false)
-,_possibleTripleClick(false)
-,_resizeWidget(nullptr)
-,_resizeTimer(nullptr)
-,_flowControlWarningEnabled(false)
-,_outputSuspendedLabel(nullptr)
-,_lineSpacing(0)
-,_colorsInverted(false)
-,_opacity(static_cast<qreal>(1))
-,_backgroundMode(None)
+, _gridLayout (new QGridLayout())
+, _scrollBar(new QScrollBar(this))
+, _blinkTimer(new QTimer(this))
+, _blinkCursorTimer(new QTimer(this))
 ,_filterChain(new TerminalImageFilterChain())
-,_cursorShape(Emulation::KeyboardCursorShape::BlockCursor)
-,mMotionAfterPasting(NoMoveScreenWindow)
-,_leftBaseMargin(1)
-,_topBaseMargin(1)
-,_drawLineChars(true)
 {
-  // variables for draw text
-  _drawTextAdditionHeight = 0;
-  _drawTextTestFlag = false;
-
   // terminal applications are not designed with Right-To-Left in mind,
   // so the layout is forced to Left-To-Right
   setLayoutDirection(Qt::LeftToRight);
@@ -383,24 +332,20 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 
   // create scroll bar for scrolling output up and down
   // set the scroll bar's slider to occupy the whole area of the scroll bar initially
-  _scrollBar = new QScrollBar(this);
   // since the contrast with the terminal background may not be enough,
   // the scrollbar should be auto-filled if not transient
   if (!_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
     _scrollBar->setAutoFillBackground(true);
   setScroll(0,0);
   _scrollBar->setCursor( Qt::ArrowCursor );
-  connect(_scrollBar, SIGNAL(valueChanged(int)), this,
-                        SLOT(scrollBarPositionChanged(int)));
+  connect(_scrollBar, &QScrollBar::valueChanged, this, &TerminalDisplay::scrollBarPositionChanged);
   // qtermwidget: we have to hide it here due the _scrollbarLocation==NoScrollBar
   // check in TerminalDisplay::setScrollBarPosition(ScrollBarPosition position)
   _scrollBar->hide();
 
   // setup timers for blinking cursor and text
-  _blinkTimer   = new QTimer(this);
-  connect(_blinkTimer, SIGNAL(timeout()), this, SLOT(blinkEvent()));
-  _blinkCursorTimer   = new QTimer(this);
-  connect(_blinkCursorTimer, SIGNAL(timeout()), this, SLOT(blinkCursorEvent()));
+  connect(_blinkTimer, &QTimer::timeout, this, &TerminalDisplay::blinkEvent);
+  connect(_blinkCursorTimer, &QTimer::timeout, this, &TerminalDisplay::blinkCursorEvent);
 
 //  KCursor::setAutoHideCursor( this, true );
 
@@ -422,7 +367,6 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
   // that TerminalDisplay will handle repainting its entire area.
   setAttribute(Qt::WA_OpaquePaintEvent);
 
-  _gridLayout = new QGridLayout(this);
   _gridLayout->setContentsMargins(0, 0, 0, 0);
 
   setLayout( _gridLayout );

@@ -61,19 +61,14 @@ using namespace Konsole;
 
 Vt102Emulation::Vt102Emulation()
     : Emulation(),
-     prevCC(0),
-     _titleUpdateTimer(new QTimer(this)),
-     _reportFocusEvents(false)
+     _titleUpdateTimer(new QTimer(this))
 {
   _titleUpdateTimer->setSingleShot(true);
-  QObject::connect(_titleUpdateTimer , SIGNAL(timeout()) , this , SLOT(updateTitle()));
+  connect(_titleUpdateTimer, &QTimer::timeout, this, &Vt102Emulation::updateTitle);
 
   initTokenizer();
-  reset();
+  Vt102Emulation::reset();
 }
-
-Vt102Emulation::~Vt102Emulation()
-{}
 
 void Vt102Emulation::clearEntireScreen()
 {

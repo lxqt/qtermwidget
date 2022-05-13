@@ -314,31 +314,29 @@ public slots:
     void saveHistory(QIODevice *device);
 protected:
     void resizeEvent(QResizeEvent *) override;
-
-protected slots:
     void sessionFinished();
     void selectionChanged(bool textSelected);
-
-private slots:
-    void find();
-    void findNext();
-    void findPrevious();
-    void matchFound(int startColumn, int startLine, int endColumn, int endLine);
-    void noMatchFound();
-    /**
-     * Emulation::cursorChanged() signal propagates to here and QTermWidget
-     * sends the specified cursor states to the terminal display
-     */
-    void cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
 
 private:
     void search(bool forwards, bool next);
     void setZoom(int step);
     void init(int startnow);
-    TermWidgetImpl * m_impl;
-    SearchBar* m_searchBar;
-    QVBoxLayout *m_layout;
-    QTranslator *m_translator;
+    void find();
+    void findNext();
+    void findPrevious();
+    void matchFound(int startColumn, int startLine, int endColumn, int endLine);
+    void noMatchFound();
+
+    /**
+     * Emulation::cursorChanged() signal propagates to here and QTermWidget
+     * sends the specified cursor states to the terminal display
+     */
+    void onCursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
+
+    TermWidgetImpl * m_impl = nullptr;
+    SearchBar* m_searchBar = nullptr;
+    QVBoxLayout *m_layout = nullptr;
+    QTranslator *m_translator = nullptr;
 };
 
 

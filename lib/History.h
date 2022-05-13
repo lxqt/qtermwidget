@@ -53,7 +53,7 @@ public:
 
   virtual void add(const unsigned char* bytes, int len);
   virtual void get(unsigned char* bytes, int len, int loc);
-  virtual int  len();
+  virtual int len() const final;
 
   //mmaps the file in read-only mode
   void map();
@@ -64,18 +64,18 @@ public:
 
 
 private:
-  int  ion;
-  int  length;
+  int  ion = -1;
+  int  length = 0;
   QTemporaryFile tmpFile;
 
   //pointer to start of mmap'ed file data, or 0 if the file is not mmap'ed
-  char* fileMap;
+  char* fileMap = nullptr;
 
   //incremented whenever 'add' is called and decremented whenever
   //'get' is called.
   //this is used to detect when a large number of lines are being read and processed from the history
   //and automatically mmap the file for better performance (saves the overhead of many lseek-read calls).
-  int readWriteBalance;
+  int readWriteBalance = 0;
 
   //when readWriteBalance goes below this threshold, the file will be mmap'ed automatically
   static const int MAP_THRESHOLD = -1000;
@@ -125,7 +125,7 @@ public:
   const HistoryType& getType() { return *m_histType; }
 
 protected:
-  HistoryType* m_histType;
+  HistoryType* m_histType = nullptr;
 
 };
 
@@ -135,11 +135,11 @@ protected:
 // File-based history (e.g. file log, no limitation in length)
 //////////////////////////////////////////////////////////////////////
 
-class HistoryScrollFile : public HistoryScroll
+class HistoryScrollFile final : public HistoryScroll
 {
 public:
   HistoryScrollFile(const QString &logFileName);
-  ~HistoryScrollFile() override;
+  ~HistoryScrollFile() override = default;
 
   int  getLines() override;
   int  getLineLen(int lineno) override;
@@ -162,7 +162,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 // Buffer-based history (limited to a fixed nb of lines)
 //////////////////////////////////////////////////////////////////////
-class HistoryScrollBuffer : public HistoryScroll
+class HistoryScrollBuffer final : public HistoryScroll
 {
 public:
   typedef QVector<Character> HistoryLine;
@@ -219,11 +219,11 @@ public:
 //////////////////////////////////////////////////////////////////////
 // Nothing-based history (no history :-)
 //////////////////////////////////////////////////////////////////////
-class HistoryScrollNone : public HistoryScroll
+class HistoryScrollNone final : public HistoryScroll
 {
 public:
   HistoryScrollNone();
-  ~HistoryScrollNone() override;
+  ~HistoryScrollNone() override = default;
 
   bool hasScroll() override;
 
@@ -322,7 +322,7 @@ private:
 
 class CompactHistoryBlockList {
 public:
-  CompactHistoryBlockList() {};
+   CompactHistoryBlockList() = default;
   ~CompactHistoryBlockList();
 
   void *allocate( size_t size );
