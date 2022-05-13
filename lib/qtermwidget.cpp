@@ -79,7 +79,7 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
      * better set it to the current $SHELL
      * Maybe you can also make a list available and then let the widget-owner decide what to use.
      * By setting it to $SHELL right away we actually make the first filecheck obsolete.
-     * But as i'm not sure if you want to do anything else i'll just let both checks in and set this to $SHELL anyway.
+     * But as I'm not sure if you want to do anything else I'll just let both checks in and set this to $SHELL anyway.
      */
     //session->setProgram("/bin/bash");
 

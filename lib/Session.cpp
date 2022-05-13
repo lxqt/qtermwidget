@@ -246,7 +246,7 @@ void Session::run()
     // Upon a KPty error, there is no description on what that error was...
     // Check to see if the given program is executable.
 
-    /* ok i'm not exactly sure where _program comes from - however it was set to /bin/bash on my system
+    /* ok I'm not exactly sure where _program comes from - however it was set to /bin/bash on my system
      * That's bad for BSD as its /usr/local/bin/bash there - its also bad for arch as its /usr/bin/bash there too!
      * So i added a check to see if /bin/bash exists - if no then we use $SHELL - if that does not exist either, we fall back to /bin/sh
      * As far as i know /bin/sh exists on every unix system.. You could also just put some ifdef __FREEBSD__ here but i think these 2 filechecks are worth
