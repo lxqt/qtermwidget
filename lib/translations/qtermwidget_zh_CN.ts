@@ -16,7 +16,7 @@
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>会话 &apos;%1&apos; 奔溃了。</translation>
+        <translation>会话 &apos;%1&apos; 崩溃了。</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
