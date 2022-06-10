@@ -35,8 +35,8 @@ Mode names are:
     about this nasty detail. I may well remove this "feature"
     in a future clean up round. )
 
-  A "+" preceeding a Modename means the Key is pressed.
-  A "-" preceeding a Modename means the Key is not pressed.
+  A "+" preceding a Modename means the Key is pressed.
+  A "-" preceding a Modename means the Key is not pressed.
   If no mode is given it means don't care.
 
   Note that the combination of Key and Modes (set/reset)
@@ -47,7 +47,7 @@ Mode names are:
 
   will not accept the small letter "a" rule as expected,
   one has to add a "- Shift" to the last clause. Use
-  the stdout/stderr dianostics of konsole when modifying
+  the stdout/stderr diagnostics of konsole when modifying
   keytabs to find problems like this.
 
 Operations are

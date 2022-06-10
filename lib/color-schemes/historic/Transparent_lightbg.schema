@@ -36,7 +36,7 @@ color  9  50  50  50  0 0  # regular   foreground color (DarkGray)
 
 # intensive colors
 
-# instead of changing the colors, we've flaged the text to become bold
+# instead of changing the colors, we've flagged the text to become bold
 
 color 10 0   0   0  0 0  # intensive foreground color
 color 11 255  255  255  1 0  # intensive background color

@@ -9,7 +9,7 @@ Since an image may not be totally dark or light, you might want to use a translu
 As a result, the background image is mixed with the background color to improve readability.
 Opaque images can also be converted to translucent ones with a few steps.
 
-A common usage is an effect similiar to previous qtermwidget versions or other terminal emulators.
+A common usage is an effect similar to previous qtermwidget versions or other terminal emulators.
 To achieve that, you can convert the background image to a translucent one with the transparency level matching the original terminal transparency.
 For example, if the original terminal transparency of qtermwidget was 25% (or 75% in some other terminal emulators), a converted image with transparency 25% will work as usual.
 The conversion can be done via ImageMagick, GraphicsMagick, GIMP or Krita.

@@ -271,7 +271,7 @@ void BlockArray::decreaseBuffer(size_t newsize)
         return;
     }
 
-    // The Block constructor could do somthing in future...
+    // The Block constructor could do something in future...
     char * buffer1 = new char[blocksize];
 
     FILE * fion = fdopen(dup(ion), "w+b");
@@ -319,7 +319,7 @@ void BlockArray::increaseBuffer()
         return;
     }
 
-    // The Block constructor could do somthing in future...
+    // The Block constructor could do something in future...
     char * buffer1 = new char[blocksize];
     char * buffer2 = new char[blocksize];
 

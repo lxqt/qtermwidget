@@ -140,7 +140,7 @@ class CharacterColor
     friend class Character;
 
 public:
-  /** Constructs a new CharacterColor whoose color and color space are undefined. */
+  /** Constructs a new CharacterColor whose color and color space are undefined. */
   CharacterColor()
       : _colorSpace(COLOR_SPACE_UNDEFINED),
         _u(0),
