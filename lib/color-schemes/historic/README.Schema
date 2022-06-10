@@ -41,7 +41,7 @@ Meaning
       
     When a schema uses a background image (or transparency)
     one has to make at least one color slot transparent to
-    achive any visible effect. Please read below about the
+    achieve any visible effect. Please read below about the
     "Transparent" field in color,sysbg,sysfg.
 
   - The "transparency" clause picks and uses the background
