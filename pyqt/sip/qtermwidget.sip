@@ -48,7 +48,7 @@ public:
     void setArgs(QStringList & args);
     void setTextCodec(QTextCodec *codec);
     void setColorScheme(const QString & name);
-    QStringList getAvailableColorSchemes() override;
+    QStringList getAvailableColorSchemes();
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);
     void setHistorySize(int lines);
