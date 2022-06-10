@@ -32,6 +32,7 @@ Copyright: Author Adriaan de Groot <groot@kde.org>
            2006-2008, Robert Knight <robertknight@gmail.com>
            2002, Waldo Bastian <bastian@kde.org>
            2008, e_k <e_k@users.sourceforge.net>
+           2022, Francesc Martinez <info@francescmm.com>
 License: LGPL-2+
 
 Files: cmake/FindUtf8Proc.cmake
