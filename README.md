@@ -25,6 +25,7 @@ Files: example/main.cpp
        lib/kptyprocess.h
        lib/qtermwidget.cpp
        lib/qtermwidget.h
+       lib/qtermwidget_interface.h
 Copyright: Author Adriaan de Groot <groot@kde.org>
            2010, KDE e.V <kde-ev-board@kde.org>
            2002-2007, Oswald Buddenhagen <ossi@kde.org>
@@ -124,6 +125,7 @@ void | setTextCodec(QTextCodec *_codec_)
 void | setWorkingDirectory(const QString &_dir_)
 void | startShellProgram()
 void | startTerminalTeletype()
+QStringList | availableColorSchemes()
 
 ### Public Slots
 Type | Function

@@ -113,6 +113,7 @@ set(HDRS_DISTRIB
     lib/Emulation.h
     lib/KeyboardTranslator.h
     lib/Filter.h
+    lib/qtermwidget_interface.h
 )
 
 # dirs
@@ -243,7 +244,7 @@ install(EXPORT
 )
 
 install(FILES
-    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h" "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_version.h" "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_interface.h"
+    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h" "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_version.h"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
     COMPONENT Devel
 )
@@ -283,12 +284,6 @@ configure_file(
 configure_file(
     "${PROJECT_SOURCE_DIR}/lib/qtermwidget_version.h.in"
     "${CMAKE_BINARY_DIR}/lib/qtermwidget_version.h"
-    @ONLY
-)
-
-configure_file(
-    "${PROJECT_SOURCE_DIR}/lib/qtermwidget_interface.h"
-    "${CMAKE_BINARY_DIR}/lib/qtermwidget_interface.h"
     @ONLY
 )
 

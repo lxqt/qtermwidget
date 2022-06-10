@@ -104,6 +104,14 @@ public:
      * availableColorSchemes() or a full path to a color scheme.
      */
     void setColorScheme(const QString & name) override;
+
+    /**
+     * @brief Retrieves the available color schemes in the OS for the terminal.
+     *
+     * @note This function is needed in addition to the static one for making it availble when accessing QTermWidget as a plugin.
+     *
+     * @return A list of color schemes.
+     */
     QStringList getAvailableColorSchemes() override;
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);

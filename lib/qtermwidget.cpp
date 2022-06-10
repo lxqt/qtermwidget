@@ -817,7 +817,7 @@ void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 }
 
 void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
-   m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
+    m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
 }
 
 QTermWidgetInterface* QTermWidget::createWidget(int startnow) const
