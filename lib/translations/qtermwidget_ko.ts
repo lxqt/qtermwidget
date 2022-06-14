@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2748"/>
         <source>Show Details...</source>
-        <translation>세부정보 표시...</translation>
+        <translation>세부정보 표시하기...</translation>
     </message>
 </context>
 <context>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>링크 주소 복사</translation>
+        <translation>링크 주소 복사하기</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>이메일 주소 복사</translation>
+        <translation>이메일 주소 복사하기</translation>
     </message>
 </context>
 <context>
