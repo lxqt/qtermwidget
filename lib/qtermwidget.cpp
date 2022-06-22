@@ -497,6 +497,21 @@ void QTermWidget::addCustomColorSchemeDir(const QString& custom_dir)
     ColorSchemeManager::instance()->addCustomColorSchemeDir(custom_dir);
 }
 
+void QTermWidget::setBackgroundColor(const QColor &color)
+{
+    m_impl->m_terminalDisplay->setBackgroundColor(color);
+}
+
+void QTermWidget::setForegroundColor(const QColor &color)
+{
+    m_impl->m_terminalDisplay->setForegroundColor(color);
+}
+
+void QTermWidget::setANSIColor(const int ansiColorId, const QColor &color)
+{
+    m_impl->m_terminalDisplay->setColorTableColor(ansiColorId+2, color);
+}
+
 void QTermWidget::setSize(const QSize &size)
 {
     m_impl->m_terminalDisplay->setSize(size.width(), size.height());

@@ -525,7 +525,7 @@ public slots:
      * @see setColorTable(), setBackgroundColor()
      */
     void setForegroundColor(const QColor& color);
-
+    void setColorTableColor(const int colorId, const QColor &color);
     void selectionChanged();
 
 signals:

@@ -115,6 +115,11 @@ public:
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);
 
+    void setBackgroundColor(const QColor &color);
+    void setForegroundColor(const QColor &color);
+    void setANSIColor(const int ansiColorId, const QColor &color);
+
+
     /** Sets the history size (in lines)
      *
      * @param lines history size

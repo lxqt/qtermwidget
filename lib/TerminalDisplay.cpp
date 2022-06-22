@@ -172,6 +172,13 @@ void TerminalDisplay::setForegroundColor(const QColor& color)
 
     update();
 }
+
+void TerminalDisplay::setColorTableColor(const int colorId, const QColor &color)
+{
+    _colorTable[colorId].color = color;
+    update();
+}
+
 void TerminalDisplay::setColorTable(const ColorEntry table[])
 {
   for (int i = 0; i < TABLE_COLORS; i++)
