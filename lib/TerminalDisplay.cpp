@@ -2735,22 +2735,7 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
     }
 
     if (_confirmMultilinePaste && text.contains(QLatin1Char('\r'))) {
-        QMessageBox confirmation(this);
-        confirmation.setWindowTitle(tr("Paste multiline text"));
-        confirmation.setText(tr("Are you sure you want to paste this text?"));
-        confirmation.setDetailedText(text);
-        confirmation.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        // Click "Show details..." to show those by default
-        const auto buttons = confirmation.buttons();
-        for( QAbstractButton * btn : buttons ) {
-            if (confirmation.buttonRole(btn) == QMessageBox::ActionRole && btn->text() == QMessageBox::tr("Show Details...")) {
-                Q_EMIT btn->clicked();
-                break;
-            }
-        }
-        confirmation.setDefaultButton(QMessageBox::Yes);
-        confirmation.exec();
-        if (confirmation.standardButton(confirmation.clickedButton()) != QMessageBox::Yes) {
+        if (!multilineConfirmation(text)) {
             return;
         }
     }
@@ -2796,6 +2781,29 @@ void TerminalDisplay::bracketText(QString& text) const
         text.prepend(QLatin1String("\033[200~"));
         text.append(QLatin1String("\033[201~"));
     }
+}
+
+bool TerminalDisplay::multilineConfirmation(const QString& text)
+{
+    QMessageBox confirmation(this);
+    confirmation.setWindowTitle(tr("Paste multiline text"));
+    confirmation.setText(tr("Are you sure you want to paste this text?"));
+    confirmation.setDetailedText(text);
+    confirmation.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    // Click "Show details..." to show those by default
+    const auto buttons = confirmation.buttons();
+    for( QAbstractButton * btn : buttons ) {
+        if (confirmation.buttonRole(btn) == QMessageBox::ActionRole && btn->text() == QMessageBox::tr("Show Details...")) {
+            Q_EMIT btn->clicked();
+            break;
+        }
+    }
+    confirmation.setDefaultButton(QMessageBox::Yes);
+    confirmation.exec();
+    if (confirmation.standardButton(confirmation.clickedButton()) != QMessageBox::Yes) {
+        return false;
+    }
+    return true;
 }
 
 void TerminalDisplay::setSelection(const QString& t)
@@ -3209,9 +3217,23 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
   else
   {
     dropText = event->mimeData()->text();
+
+    dropText.replace(QLatin1String("\r\n"), QLatin1String("\n"));
+    dropText.replace(QLatin1Char('\n'), QLatin1Char('\r'));
+    if (_trimPastedTrailingNewlines)
+    {
+      dropText.replace(QRegularExpression(QStringLiteral("\\r+$")), QString());
+    }
+    if (_confirmMultilinePaste && dropText.contains(QLatin1Char('\r')))
+    {
+      if (!multilineConfirmation(dropText))
+      {
+        return;
+      }
+    }
   }
 
-    emit sendStringToEmu(dropText.toLocal8Bit().constData());
+  emit sendStringToEmu(dropText.toLocal8Bit().constData());
 }
 
 void TerminalDisplay::doDrag()
