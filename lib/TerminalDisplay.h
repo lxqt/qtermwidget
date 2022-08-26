@@ -697,6 +697,9 @@ private:
     // the left and right are ignored.
     void scrollImage(int lines , const QRect& region);
 
+    // shows the multiline prompt
+    bool multilineConfirmation(const QString& text);
+
     void calcGeometry();
     void propagateSize();
     void updateImageSize();
