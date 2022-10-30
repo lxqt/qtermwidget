@@ -470,6 +470,11 @@ void QTermWidget::setColorScheme(const QString& origName)
     m_impl->m_terminalDisplay->setColorTable(table);
 }
 
+QStringList QTermWidget::getAvailableColorSchemes()
+{
+   return QTermWidget::availableColorSchemes();
+}
+
 QStringList QTermWidget::availableColorSchemes()
 {
     QStringList ret;
@@ -813,4 +818,9 @@ void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 
 void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
+}
+
+QTermWidgetInterface* QTermWidget::createWidget(int startnow) const
+{
+   return new QTermWidget(startnow);
 }

@@ -113,6 +113,7 @@ set(HDRS_DISTRIB
     lib/Emulation.h
     lib/KeyboardTranslator.h
     lib/Filter.h
+    lib/qtermwidget_interface.h
 )
 
 # dirs

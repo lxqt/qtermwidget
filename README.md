@@ -25,12 +25,14 @@ Files: example/main.cpp
        lib/kptyprocess.h
        lib/qtermwidget.cpp
        lib/qtermwidget.h
+       lib/qtermwidget_interface.h
 Copyright: Author Adriaan de Groot <groot@kde.org>
            2010, KDE e.V <kde-ev-board@kde.org>
            2002-2007, Oswald Buddenhagen <ossi@kde.org>
            2006-2008, Robert Knight <robertknight@gmail.com>
            2002, Waldo Bastian <bastian@kde.org>
            2008, e_k <e_k@users.sourceforge.net>
+           2022, Francesc Martinez <info@francescmm.com>
 License: LGPL-2+
 
 Files: cmake/FindUtf8Proc.cmake
@@ -124,6 +126,7 @@ void | setTextCodec(QTextCodec *_codec_)
 void | setWorkingDirectory(const QString &_dir_)
 void | startShellProgram()
 void | startTerminalTeletype()
+QStringList | availableColorSchemes()
 
 ### Public Slots
 Type | Function
