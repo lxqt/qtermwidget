@@ -509,7 +509,7 @@ void QTermWidget::setForegroundColor(const QColor &color)
 
 void QTermWidget::setANSIColor(const int ansiColorId, const QColor &color)
 {
-    m_impl->m_terminalDisplay->setColorTableColor(ansiColorId+2, color);
+    m_impl->m_terminalDisplay->setColorTableColor(ansiColorId, color);
 }
 
 void QTermWidget::setSize(const QSize &size)
