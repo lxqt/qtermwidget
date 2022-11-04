@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1279"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>الحجم: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1291"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>الحجم: %1 x%2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2741"/>
+        <location filename="../TerminalDisplay.cpp" line="2789"/>
         <source>Paste multiline text</source>
         <translation>لصق نص متعدد الأسطر</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2742"/>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>هل أنت متأكد أنك تريد لصق هذا النص؟</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3241"/>
+        <location filename="../TerminalDisplay.cpp" line="3260"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;تم &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;تعليق&lt;/a&gt; الإخراج بالضغط على Ctrl + S. اضغط على &lt;b&gt;Ctrl + Q&lt;/b&gt; للاستئناف.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2748"/>
+        <location filename="../TerminalDisplay.cpp" line="2796"/>
         <source>Show Details...</source>
         <translation>اظهر التفاصيل...</translation>
     </message>
@@ -71,13 +71,13 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../ColorScheme.cpp" line="278"/>
-        <location filename="../ColorScheme.cpp" line="293"/>
+        <location filename="../ColorScheme.cpp" line="275"/>
+        <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
         <translation>نظام ألوان غير مسمى</translation>
     </message>
     <message>
-        <location filename="../ColorScheme.cpp" line="464"/>
+        <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
         <translation>نظام الألوان الذي يمكن الوصول إليه</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="468"/>
+        <location filename="../qtermwidget.cpp" line="464"/>
         <source>Color Scheme Error</source>
         <translation>خطأ في نظام الألوان</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="469"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Cannot load color scheme: %1</source>
         <translation>لا يمكن تحميل نظام الألوان:%1</translation>
     </message>
