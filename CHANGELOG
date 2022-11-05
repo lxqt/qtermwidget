@@ -1,3 +1,9 @@
+qtermwidget-1.2.0 / 2022-11-05
+===============================
+ * Enabled Bidi rendering by default.
+ * Made text DND follow the settings for newline trimming and multiline prompt.
+ * Allow `QTermWidget` to be used as a Qt Plugin.
+
 qtermwidget-1.1.0 / 2022-04-15
 ===============================
  * Handled the zero history size.
