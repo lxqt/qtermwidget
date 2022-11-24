@@ -206,7 +206,7 @@ public:
     void emitSelection(bool useXselection,bool appendReturn);
 
     /** change and wrap text corresponding to paste mode **/
-    void bracketText(QString& text);
+    void bracketText(QString& text) const;
 
     /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
@@ -428,7 +428,7 @@ public:
 
     // maps a point on the widget to the position ( ie. line and column )
     // of the character at that point.
-    void getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const;
+    void getCharacterPosition(const QPointF& widgetPoint,int& line,int& column) const;
 
     void disableBracketedPasteMode(bool disable) { _disabledBracketedPasteMode = disable; }
     bool bracketedPasteModeIsDisabled() const { return _disabledBracketedPasteMode; }
@@ -441,7 +441,7 @@ public slots:
      */
     void updateImage();
 
-    /** Essentially calles processFilters().
+    /** Essentially calls processFilters().
      */
     void updateFilters();
 
@@ -487,7 +487,7 @@ public slots:
     void outputSuspended(bool suspended);
 
     /**
-     * Sets whether the program whoose output is being displayed in the view
+     * Sets whether the program whose output is being displayed in the view
      * is interested in mouse events.
      *
      * If this is set to true, mouse signals will be emitted by the view when the user clicks, drags
@@ -672,7 +672,7 @@ private:
                                            const Character* style, bool invertCharacterColor);
     // draws a string of line graphics
     void drawLineCharString(QPainter& painter, int x, int y,
-                            const std::wstring& str, const Character* attributes);
+                            const std::wstring& str, const Character* attributes) const;
 
     // draws the preedit string for input methods
     void drawInputMethodPreeditString(QPainter& painter , const QRect& rect);
@@ -696,6 +696,9 @@ private:
     // the top, bottom and height of 'region' are taken into account,
     // the left and right are ignored.
     void scrollImage(int lines , const QRect& region);
+
+    // shows the multiline prompt
+    bool multilineConfirmation(const QString& text);
 
     void calcGeometry();
     void propagateSize();

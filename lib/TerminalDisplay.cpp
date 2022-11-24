@@ -193,7 +193,7 @@ void TerminalDisplay::setColorTable(const ColorEntry table[])
    QT's iso mapping leaves 0x00..0x7f without any changes. But the graphicals
    come in here as proper unicode characters.
 
-   We treat non-iso10646 fonts as VT100 extended and do the requiered mapping
+   We treat non-iso10646 fonts as VT100 extended and do the required mapping
    from unicode to 0x00..0x1f. The remaining translation is then left to the
    QCodec.
 */
@@ -226,14 +226,14 @@ void TerminalDisplay::fontChange(const QFont&)
   // "Base character width on widest ASCII character. This prevents too wide
   //  characters in the presence of double wide (e.g. Japanese) characters."
   // Get the width from representative normal width characters
-  _fontWidth = qRound((double)fm.width(QLatin1String(REPCHAR))/(double)qstrlen(REPCHAR));
+  _fontWidth = qRound((double)fm.horizontalAdvance(QLatin1String(REPCHAR))/(double)qstrlen(REPCHAR));
 
   _fixedFont = true;
 
-  int fw = fm.width(QLatin1Char(REPCHAR[0]));
+  int fw = fm.horizontalAdvance(QLatin1Char(REPCHAR[0]));
   for(unsigned int i=1; i< qstrlen(REPCHAR); i++)
   {
-    if (fw != fm.width(QLatin1Char(REPCHAR[i])))
+    if (fw != fm.horizontalAdvance(QLatin1Char(REPCHAR[i])))
     {
       _fixedFont = false;
       break;
@@ -249,7 +249,7 @@ void TerminalDisplay::fontChange(const QFont&)
   propagateSize();
 
   // We will run paint event testing procedure.
-  // Although this operation will destory the orignal content,
+  // Although this operation will destroy the original content,
   // the content will be drawn again after the test.
   _drawTextTestFlag = true;
   update();
@@ -275,14 +275,12 @@ void TerminalDisplay::setVTFont(const QFont& f)
 {
   QFont font = f;
 
-    // This was originally set for OS X only:
-    //     mac uses floats for font width specification.
-    //     this ensures the same handling for all platforms
-    // but then there was revealed that various Linux distros
-    // have this problem too...
-    font.setStyleStrategy(QFont::ForceIntegerMetrics);
-
-  QFontMetrics metrics(font);
+  // This was originally set for OS X only:
+  //     mac uses floats for font width specification.
+  //     this ensures the same handling for all platforms
+  // but then there was revealed that various Linux distros
+  // have this problem too...
+  font.setStyleStrategy(QFont::ForceIntegerMetrics);
 
   if ( !QFontInfo(font).fixedPitch() )
   {
@@ -334,7 +332,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_resizing(false)
 ,_terminalSizeHint(false)
 ,_terminalSizeStartup(true)
-,_bidiEnabled(false)
+,_bidiEnabled(true)
 ,_mouseMarks(false)
 ,_disabledBracketedPasteMode(false)
 ,_actSel(0)
@@ -649,7 +647,7 @@ static void drawOtherChar(QPainter& paint, int x, int y, int w, int h, uchar cod
 }
 
 void TerminalDisplay::drawLineCharString(    QPainter& painter, int x, int y, const std::wstring& str,
-                                    const Character* attributes)
+                                    const Character* attributes) const
 {
         const QPen& currentPen = painter.pen();
 
@@ -875,7 +873,7 @@ void TerminalDisplay::drawTextFragment(QPainter& painter ,
     const QColor backgroundColor = style->backgroundColor.color(_colorTable);
 
     // draw background if different from the display's background color
-    if ( backgroundColor != palette().background().color() )
+    if ( backgroundColor != palette().window().color() )
         drawBackground(painter,rect,backgroundColor,
                        false /* do not use transparency */);
 
@@ -1278,7 +1276,7 @@ void TerminalDisplay::showResizeNotification()
      {
          const QString label = tr("Size: XXX x XXX");
         _resizeWidget = new QLabel(label, this);
-        _resizeWidget->setMinimumWidth(_resizeWidget->fontMetrics().width(label));
+        _resizeWidget->setMinimumWidth(_resizeWidget->fontMetrics().horizontalAdvance(label));
         _resizeWidget->setMinimumHeight(_resizeWidget->sizeHint().height());
         _resizeWidget->setAlignment(Qt::AlignCenter);
 
@@ -1446,12 +1444,12 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     calDrawTextAdditionHeight(paint);
   }
 
-  const auto rects = (pe->region() & cr).rects();
-  for (const QRect &rect : rects)
+  const QRegion regToDraw = pe->region() & cr;
+  for (auto rect = regToDraw.begin(); rect != regToDraw.end(); rect++)
   {
-    drawBackground(paint,rect,palette().background().color(),
+    drawBackground(paint,*rect,palette().window().color(),
                    true /* use opacity setting */);
-    drawContents(paint, rect);
+    drawContents(paint, *rect);
   }
   drawInputMethodPreeditString(paint,preeditRect());
   paintFilters(paint);
@@ -1623,7 +1621,7 @@ int TerminalDisplay::textWidth(const int startColumn, const int length, const in
   QFontMetrics fm(font());
   int result = 0;
   for (int column = 0; column < length; column++) {
-    result += fm.width(_image[loc(startColumn + column, line)].character);
+    result += fm.horizontalAdvance(_image[loc(startColumn + column, line)].character);
   }
   return result;
 }
@@ -2415,7 +2413,7 @@ void TerminalDisplay::mouseReleaseEvent(QMouseEvent* ev)
   }
 }
 
-void TerminalDisplay::getCharacterPosition(const QPoint& widgetPoint,int& line,int& column) const
+void TerminalDisplay::getCharacterPosition(const QPointF& widgetPoint,int& line,int& column) const
 {
     line = (widgetPoint.y()-contentsRect().top()-_topMargin) / _fontHeight;
     if (line < 0)
@@ -2553,7 +2551,7 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
 
 void TerminalDisplay::wheelEvent( QWheelEvent* ev )
 {
-  if (ev->orientation() != Qt::Vertical)
+  if (ev->angleDelta().y() == 0)
     return;
 
   // if the terminal program is not interested mouse events
@@ -2573,10 +2571,10 @@ void TerminalDisplay::wheelEvent( QWheelEvent* ev )
         // to get a reasonable scrolling speed, scroll by one line for every 5 degrees
         // of mouse wheel rotation.  Mouse wheels typically move in steps of 15 degrees,
         // giving a scroll of 3 lines
-        int key = ev->delta() > 0 ? Qt::Key_Up : Qt::Key_Down;
+        int key = ev->angleDelta().y() > 0 ? Qt::Key_Up : Qt::Key_Down;
 
-        // QWheelEvent::delta() gives rotation in eighths of a degree
-        int wheelDegrees = ev->delta() / 8;
+        // QWheelEvent::angleDelta().y() gives rotation in eighths of a degree
+        int wheelDegrees = ev->angleDelta().y() / 8;
         int linesToScroll = abs(wheelDegrees) / 5;
 
         QKeyEvent keyScrollEvent(QEvent::KeyPress,key,Qt::NoModifier);
@@ -2591,9 +2589,9 @@ void TerminalDisplay::wheelEvent( QWheelEvent* ev )
 
     int charLine;
     int charColumn;
-    getCharacterPosition( ev->pos() , charLine , charColumn );
+    getCharacterPosition( ev->position() , charLine , charColumn );
 
-    emit mouseSignal( ev->delta() > 0 ? 4 : 5,
+    emit mouseSignal( ev->angleDelta().y() > 0 ? 4 : 5,
                       charColumn + 1,
                       charLine + 1 +_scrollBar->value() -_scrollBar->maximum() ,
                       0);
@@ -2737,22 +2735,7 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
     }
 
     if (_confirmMultilinePaste && text.contains(QLatin1Char('\r'))) {
-        QMessageBox confirmation(this);
-        confirmation.setWindowTitle(tr("Paste multiline text"));
-        confirmation.setText(tr("Are you sure you want to paste this text?"));
-        confirmation.setDetailedText(text);
-        confirmation.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        // Click "Show details..." to show those by default
-        const auto buttons = confirmation.buttons();
-        for( QAbstractButton * btn : buttons ) {
-            if (confirmation.buttonRole(btn) == QMessageBox::ActionRole && btn->text() == QMessageBox::tr("Show Details...")) {
-                Q_EMIT btn->clicked();
-                break;
-            }
-        }
-        confirmation.setDefaultButton(QMessageBox::Yes);
-        confirmation.exec();
-        if (confirmation.standardButton(confirmation.clickedButton()) != QMessageBox::Yes) {
+        if (!multilineConfirmation(text)) {
             return;
         }
     }
@@ -2791,13 +2774,36 @@ void TerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
   }
 }
 
-void TerminalDisplay::bracketText(QString& text)
+void TerminalDisplay::bracketText(QString& text) const
 {
     if (bracketedPasteMode() && !_disabledBracketedPasteMode)
     {
         text.prepend(QLatin1String("\033[200~"));
         text.append(QLatin1String("\033[201~"));
     }
+}
+
+bool TerminalDisplay::multilineConfirmation(const QString& text)
+{
+    QMessageBox confirmation(this);
+    confirmation.setWindowTitle(tr("Paste multiline text"));
+    confirmation.setText(tr("Are you sure you want to paste this text?"));
+    confirmation.setDetailedText(text);
+    confirmation.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    // Click "Show details..." to show those by default
+    const auto buttons = confirmation.buttons();
+    for( QAbstractButton * btn : buttons ) {
+        if (confirmation.buttonRole(btn) == QMessageBox::ActionRole && btn->text() == QMessageBox::tr("Show Details...")) {
+            Q_EMIT btn->clicked();
+            break;
+        }
+    }
+    confirmation.setDefaultButton(QMessageBox::Yes);
+    confirmation.exec();
+    if (confirmation.standardButton(confirmation.clickedButton()) != QMessageBox::Yes) {
+        return false;
+    }
+    return true;
 }
 
 void TerminalDisplay::setSelection(const QString& t)
@@ -3185,7 +3191,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
   QString dropText;
   if (!urls.isEmpty())
   {
-      // TODO/FIXME: escape or quote pasted things if neccessary...
+      // TODO/FIXME: escape or quote pasted things if necessary...
       qDebug() << "TerminalDisplay: handling urls. It can be broken. Report any errors, please";
     for ( int i = 0 ; i < urls.count() ; i++ )
     {
@@ -3203,18 +3209,31 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
         // without quoting them (this only affects paths with spaces in)
         //urlText = KShell::quoteArg(urlText);
 
-        dropText += urlText;
-
-        if ( i != urls.count()-1 )
-            dropText += QLatin1Char(' ');
+        QChar q(QLatin1Char('\''));
+        dropText += q + QString(urlText).replace(q, QLatin1String("'\\''")) + q;
+        dropText += QLatin1Char(' ');
     }
   }
   else
   {
     dropText = event->mimeData()->text();
+
+    dropText.replace(QLatin1String("\r\n"), QLatin1String("\n"));
+    dropText.replace(QLatin1Char('\n'), QLatin1Char('\r'));
+    if (_trimPastedTrailingNewlines)
+    {
+      dropText.replace(QRegularExpression(QStringLiteral("\\r+$")), QString());
+    }
+    if (_confirmMultilinePaste && dropText.contains(QLatin1Char('\r')))
+    {
+      if (!multilineConfirmation(dropText))
+      {
+        return;
+      }
+    }
   }
 
-    emit sendStringToEmu(dropText.toLocal8Bit().constData());
+  emit sendStringToEmu(dropText.toLocal8Bit().constData());
 }
 
 void TerminalDisplay::doDrag()
@@ -3224,7 +3243,7 @@ void TerminalDisplay::doDrag()
   QMimeData *mimeData = new QMimeData;
   mimeData->setText(QApplication::clipboard()->text(QClipboard::Selection));
   dragInfo.dragObject->setMimeData(mimeData);
-  dragInfo.dragObject->start(Qt::CopyAction);
+  dragInfo.dragObject->exec(Qt::CopyAction);
   // Don't delete the QTextDrag object.  Qt will delete it when it's done with it.
 }
 

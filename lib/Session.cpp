@@ -143,7 +143,7 @@ bool Session::isRunning() const
     return _shellProcess->state() == QProcess::Running;
 }
 
-void Session::setCodec(QTextCodec * codec)
+void Session::setCodec(QTextCodec * codec) const
 {
     emulation()->setCodec(codec);
 }
@@ -246,11 +246,11 @@ void Session::run()
     // Upon a KPty error, there is no description on what that error was...
     // Check to see if the given program is executable.
 
-    /* ok iam not exactly sure where _program comes from - however it was set to /bin/bash on my system
-     * Thats bad for BSD as its /usr/local/bin/bash there - its also bad for arch as its /usr/bin/bash there too!
+    /* ok I'm not exactly sure where _program comes from - however it was set to /bin/bash on my system
+     * That's bad for BSD as its /usr/local/bin/bash there - its also bad for arch as its /usr/bin/bash there too!
      * So i added a check to see if /bin/bash exists - if no then we use $SHELL - if that does not exist either, we fall back to /bin/sh
      * As far as i know /bin/sh exists on every unix system.. You could also just put some ifdef __FREEBSD__ here but i think these 2 filechecks are worth
-     * their computing time on any system - especially with the problem on arch linux beeing there too.
+     * their computing time on any system - especially with the problem on arch linux being there too.
      */
     QString exec = QString::fromLocal8Bit(QFile::encodeName(_program));
     // if 'exec' is not specified, fall back to default shell.  if that
@@ -323,7 +323,7 @@ void Session::runEmptyPTY()
     _shellProcess->setErase(_emulation->eraseChar());
     _shellProcess->setWriteable(false);
 
-    // disconnet send data from emulator to internal terminal process
+    // disconnect send data from emulator to internal terminal process
     disconnect( _emulation,SIGNAL(sendData(const char *,int)),
                 _shellProcess, SLOT(sendData(const char *,int)) );
 
@@ -1034,7 +1034,7 @@ void SessionGroup::setMasterStatus(Session * session, bool master)
     }
 }
 
-void SessionGroup::connectPair(Session * master , Session * other)
+void SessionGroup::connectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 
@@ -1045,7 +1045,7 @@ void SessionGroup::connectPair(Session * master , Session * other)
                  SLOT(sendString(const char *,int)) );
     }
 }
-void SessionGroup::disconnectPair(Session * master , Session * other)
+void SessionGroup::disconnectPair(Session * master , Session * other) const
 {
 //    qDebug() << k_funcinfo;
 

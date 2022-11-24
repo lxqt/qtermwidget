@@ -6,38 +6,48 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Klokke i økt «%1»</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt «%1» avsluttet med status %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt «%1» krasjet.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt «%1» avsluttet uventet.</translation>
     </message>
 </context>
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1282"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>Størrelse: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1294"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>Størrelse: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3180"/>
+        <location filename="../TerminalDisplay.cpp" line="2789"/>
+        <source>Paste multiline text</source>
+        <translation>Lim inn flerlinjerstekst</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <source>Are you sure you want to paste this text?</source>
+        <translation>Er du sikker på at du vil lime inn denne teksten?</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="3260"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Utgangssignalet ble &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;stoppet&lt;/a&gt; da Ctrl+S ble trykket.  Trykk &lt;b&gt;Ctrl+Q&lt;/b&gt; for å fortsette.&lt;/qt&gt;</translation>
     </message>
@@ -45,21 +55,29 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1113"/>
+        <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Ingen tastaturoversetter er tilgjengelig. Informasjonen som trengs for å gjøre tastetrykk om til tegn å sende til terminalen mangler.</translation>
+        <translation>Ingen tastaturoversetter er tilgjengelig. Nødvendig info for å gjøre om tastetrykk til tegn å sende terminalen mangler.</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2796"/>
+        <source>Show Details...</source>
+        <translation>Vis detaljer …</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../ColorScheme.cpp" line="278"/>
-        <location filename="../ColorScheme.cpp" line="293"/>
+        <location filename="../ColorScheme.cpp" line="275"/>
+        <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
         <translation>Fargemønster uten navn</translation>
     </message>
     <message>
-        <location filename="../ColorScheme.cpp" line="464"/>
+        <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
         <translation>Fargemønster for funksjonshemmede</translation>
     </message>
@@ -87,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="459"/>
+        <location filename="../qtermwidget.cpp" line="464"/>
         <source>Color Scheme Error</source>
         <translation>Feil med fargemønster</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="460"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Kan ikke åpne fargemønster: %1</translation>
     </message>

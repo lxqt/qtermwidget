@@ -27,17 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1282"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>Tamanho: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1294"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>Tamanho: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3180"/>
+        <location filename="../TerminalDisplay.cpp" line="2789"/>
+        <source>Paste multiline text</source>
+        <translation>Cole texto multilinha</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <source>Are you sure you want to paste this text?</source>
+        <translation>Tem certeza que deseja colar este texto?</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="3260"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;A saída foi &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspensa&lt;/a&gt; pressionando Ctrl+S.  Pressione &lt;b&gt;Ctrl+Q&lt;/b&gt; para continuar.&lt;/qt&gt;</translation>
     </message>
@@ -45,21 +55,29 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1113"/>
+        <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Nenhum tradutor de teclado disponível.  A informação necessária para converter a tecla pressionada em caracteres para enviar para o terminal está faltando.</translation>
     </message>
 </context>
 <context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2796"/>
+        <source>Show Details...</source>
+        <translation>Mostrar Detalhes...</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
-        <location filename="../ColorScheme.cpp" line="278"/>
-        <location filename="../ColorScheme.cpp" line="293"/>
+        <location filename="../ColorScheme.cpp" line="275"/>
+        <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
         <translation>Esquema de cor sem nome</translation>
     </message>
     <message>
-        <location filename="../ColorScheme.cpp" line="464"/>
+        <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
         <translation>Esquema de cor acessível</translation>
     </message>
@@ -87,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="459"/>
+        <location filename="../qtermwidget.cpp" line="464"/>
         <source>Color Scheme Error</source>
         <translation>Erro no esquema de cor</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="460"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Não foi possível carregar o esquema de cor: %1</translation>
     </message>

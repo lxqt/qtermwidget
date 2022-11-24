@@ -27,7 +27,7 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
 {
     widget.setupUi(this);
     setAutoFillBackground(true); // make it always opaque, especially inside translucent windows
-    connect(widget.closeButton, SIGNAL(clicked()), this, SLOT(hide()));
+    connect(widget.closeButton, &QAbstractButton::clicked, this, &SearchBar::hide);
     connect(widget.searchTextEdit, SIGNAL(textChanged(QString)), this, SIGNAL(searchCriteriaChanged()));
     connect(widget.findPreviousButton, SIGNAL(clicked()), this, SIGNAL(findPrevious()));
     connect(widget.findNextButton, SIGNAL(clicked()), this, SIGNAL(findNext()));
@@ -82,6 +82,15 @@ void SearchBar::show()
     QWidget::show();
     widget.searchTextEdit->setFocus();
     widget.searchTextEdit->selectAll();
+}
+
+void SearchBar::hide()
+{
+    QWidget::hide();
+    if (QWidget *p = parentWidget())
+    {
+        p->setFocus(Qt::OtherFocusReason); // give the focus to the parent widget on hiding
+    }
 }
 
 void SearchBar::noMatchFound()

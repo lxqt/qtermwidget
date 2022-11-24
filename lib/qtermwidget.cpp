@@ -74,12 +74,12 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
 
     session->setTitle(Session::NameRole, QLatin1String("QTermWidget"));
 
-    /* Thats a freaking bad idea!!!!
+    /* That's a freaking bad idea!!!!
      * /bin/bash is not there on every system
      * better set it to the current $SHELL
      * Maybe you can also make a list available and then let the widget-owner decide what to use.
      * By setting it to $SHELL right away we actually make the first filecheck obsolete.
-     * But as iam not sure if you want to do anything else ill just let both checks in and set this to $SHELL anyway.
+     * But as I'm not sure if you want to do anything else I'll just let both checks in and set this to $SHELL anyway.
      */
     //session->setProgram("/bin/bash");
 
@@ -227,9 +227,9 @@ QSize QTermWidget::sizeHint() const
     return size;
 }
 
-void QTermWidget::setTerminalSizeHint(bool on)
+void QTermWidget::setTerminalSizeHint(bool enabled)
 {
-    m_impl->m_terminalDisplay->setTerminalSizeHint(on);
+    m_impl->m_terminalDisplay->setTerminalSizeHint(enabled);
 }
 
 bool QTermWidget::terminalSizeHint()
@@ -267,11 +267,7 @@ void QTermWidget::init(int startnow)
     // translations
     // First check $XDG_DATA_DIRS. This follows the implementation in libqtxdg
     QString d = QFile::decodeName(qgetenv("XDG_DATA_DIRS"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5,15,0))
     QStringList dirs = d.split(QLatin1Char(':'), Qt::SkipEmptyParts);
-#else
-    QStringList dirs = d.split(QLatin1Char(':'), QString::SkipEmptyParts);
-#endif
     if (dirs.isEmpty()) {
         dirs.append(QString::fromLatin1("/usr/local/share"));
         dirs.append(QString::fromLatin1("/usr/share"));
@@ -328,7 +324,7 @@ void QTermWidget::init(int startnow)
             this, SIGNAL(termGetFocus()));
     connect(m_impl->m_terminalDisplay, SIGNAL(termLostFocus()),
             this, SIGNAL(termLostFocus()));
-    connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal,
+    connect(m_impl->m_terminalDisplay, &TerminalDisplay::keyPressedSignal, this,
             [this] (QKeyEvent* e, bool) { Q_EMIT termKeyPressed(e); });
 //    m_impl->m_terminalDisplay->setSize(80, 40);
 
@@ -383,11 +379,11 @@ void QTermWidget::setTerminalBackgroundMode(int mode)
     m_impl->m_terminalDisplay->setBackgroundMode((Konsole::BackgroundMode)mode);
 }
 
-void QTermWidget::setShellProgram(const QString &progname)
+void QTermWidget::setShellProgram(const QString &program)
 {
     if (!m_impl->m_session)
         return;
-    m_impl->m_session->setProgram(progname);
+    m_impl->m_session->setProgram(program);
 }
 
 void QTermWidget::setWorkingDirectory(const QString& dir)
@@ -475,6 +471,11 @@ void QTermWidget::setColorScheme(const QString& origName)
     m_impl->m_session->setDarkBackground(cs->hasDarkBackground());
 }
 
+QStringList QTermWidget::getAvailableColorSchemes()
+{
+   return QTermWidget::availableColorSchemes();
+}
+
 QStringList QTermWidget::availableColorSchemes()
 {
     QStringList ret;
@@ -498,8 +499,25 @@ void QTermWidget::setHistorySize(int lines)
 {
     if (lines < 0)
         m_impl->m_session->setHistoryType(HistoryTypeFile());
+    else if (lines == 0)
+        m_impl->m_session->setHistoryType(HistoryTypeNone());
     else
         m_impl->m_session->setHistoryType(HistoryTypeBuffer(lines));
+}
+
+int QTermWidget::historySize() const
+{
+    const HistoryType& currentHistory = m_impl->m_session->historyType();
+
+     if (currentHistory.isEnabled()) {
+         if (currentHistory.isUnlimited()) {
+             return -1;
+         } else {
+             return currentHistory.maximumLineCount();
+         }
+     } else {
+         return 0;
+     }
 }
 
 void QTermWidget::setScrollBarPosition(ScrollBarPosition pos)
@@ -677,14 +695,14 @@ QString QTermWidget::selectedText(bool preserveLineBreaks)
     return m_impl->m_terminalDisplay->screenWindow()->screen()->selectedText(preserveLineBreaks);
 }
 
-void QTermWidget::setMonitorActivity(bool monitor)
+void QTermWidget::setMonitorActivity(bool enabled)
 {
-    m_impl->m_session->setMonitorActivity(monitor);
+    m_impl->m_session->setMonitorActivity(enabled);
 }
 
-void QTermWidget::setMonitorSilence(bool monitor)
+void QTermWidget::setMonitorSilence(bool enabled)
 {
-    m_impl->m_session->setMonitorSilence(monitor);
+    m_impl->m_session->setMonitorSilence(enabled);
 }
 
 void QTermWidget::setSilenceTimeout(int seconds)
@@ -755,9 +773,9 @@ bool QTermWidget::isTitleChanged() const
     return m_impl->m_session->isTitleChanged();
 }
 
-void QTermWidget::setAutoClose(bool autoClose)
+void QTermWidget::setAutoClose(bool enabled)
 {
-    m_impl->m_session->setAutoClose(autoClose);
+    m_impl->m_session->setAutoClose(enabled);
 }
 
 void QTermWidget::cursorChanged(Konsole::Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled)
@@ -801,4 +819,9 @@ void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 
 void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
+}
+
+QTermWidgetInterface* QTermWidget::createWidget(int startnow) const
+{
+   return new QTermWidget(startnow);
 }

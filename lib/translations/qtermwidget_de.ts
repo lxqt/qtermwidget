@@ -16,7 +16,7 @@
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>SItzung &apos;%1&apos; ist abgestürzt.</translation>
+        <translation>Sitzung &apos;%1&apos; ist abgestürzt.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
@@ -27,17 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1282"/>
+        <location filename="../TerminalDisplay.cpp" line="1277"/>
         <source>Size: XXX x XXX</source>
         <translation>Größe: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1294"/>
+        <location filename="../TerminalDisplay.cpp" line="1289"/>
         <source>Size: %1 x %2</source>
         <translation>Größe: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3180"/>
+        <location filename="../TerminalDisplay.cpp" line="2789"/>
+        <source>Paste multiline text</source>
+        <translation>mehrzeiligen Text einfügen</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <source>Are you sure you want to paste this text?</source>
+        <translation>Sie wollen diesen Text einfügen?</translation>
+    </message>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="3260"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Druch drücken von Strg+S wurde die Ausgabe &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;unterbrochen&lt;/a&gt;.  &lt;b&gt;Strg+Q&lt;/b&gt; drücken um fortzufahren.&lt;/qt&gt;</translation>
     </message>
@@ -45,21 +55,29 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1113"/>
+        <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Kein Tastaturinterpreter verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschließenfd zum Terminal zu senden, fehlt.</translation>
+        <translation>Kein Tastaturinterpreter verfügbar. Die benötigte Information, um Tastenbefehle in Zeichen umzuwandeln und anschließend zum Terminal zu senden, fehlt.</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../TerminalDisplay.cpp" line="2796"/>
+        <source>Show Details...</source>
+        <translation>Details...</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../ColorScheme.cpp" line="278"/>
-        <location filename="../ColorScheme.cpp" line="293"/>
+        <location filename="../ColorScheme.cpp" line="275"/>
+        <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation>Nicht benanntes Farbschema</translation>
+        <translation>Unbenanntes Farbschema</translation>
     </message>
     <message>
-        <location filename="../ColorScheme.cpp" line="464"/>
+        <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
         <translation>Zugängliches Farbschema</translation>
     </message>
@@ -87,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="459"/>
+        <location filename="../qtermwidget.cpp" line="464"/>
         <source>Color Scheme Error</source>
         <translation>Fehler im Farbschema</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="460"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Kann Farbschema nicht laden: %1</translation>
     </message>

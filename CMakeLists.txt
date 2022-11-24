@@ -20,9 +20,10 @@ option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OF
 
 
 # just change version for releases
-set(QTERMWIDGET_VERSION_MAJOR "0")
-set(QTERMWIDGET_VERSION_MINOR "16")
-set(QTERMWIDGET_VERSION_PATCH "1")
+# keep this in sync with the version in pyqt/pyproject.toml
+set(QTERMWIDGET_VERSION_MAJOR "1")
+set(QTERMWIDGET_VERSION_MINOR "2")
+set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
@@ -31,8 +32,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Minimum Versions
-set(QT_MINIMUM_VERSION "5.12.0")
-set(LXQTBT_MINIMUM_VERSION "0.8.0")
+set(QT_MINIMUM_VERSION "5.15.0")
+set(LXQTBT_MINIMUM_VERSION "0.12.0")
 
 find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
@@ -112,6 +113,7 @@ set(HDRS_DISTRIB
     lib/Emulation.h
     lib/KeyboardTranslator.h
     lib/Filter.h
+    lib/qtermwidget_interface.h
 )
 
 # dirs
@@ -316,7 +318,7 @@ endif()
 
 # python binding
 if (QTERMWIDGET_BUILD_PYTHON_BINDING)
-    add_subdirectory(pyqt)
+    message(SEND_ERROR "QTERMWIDGET_BUILD_PYTHON_BINDING is no longer supported. Check README.md for how to build PyQt bindings.")
 endif()
 # end of python binding
 

@@ -94,6 +94,16 @@ public:
      */
     void cursorLeft(int n);
     /**
+     * Moves cursor to beginning of the line by @p n lines down.
+     * The cursor will stop at the beginning of the line.
+     */
+    void cursorNextLine(int n);
+    /**
+     * Moves cursor to beginning of the line by @p n lines up.
+     * The cursor will stop at the beginning of the line.
+     */
+    void cursorPreviousLine(int n);
+    /**
      * Move the cursor to the right by @p n columns.
      * The cursor will stop at the right-most column.
      */
@@ -198,7 +208,7 @@ public:
      */
     void insertChars(int n);
     /**
-     * Repeat the preceeding graphic character @count times, including SPACE.
+     * Repeat the preceding graphic character @count times, including SPACE.
      * If @count is 0 then the character is repeated once.
      */
     void repeatChars(int count);
@@ -289,7 +299,7 @@ public:
     void setForeColor(int space, int color);
     /**
      * Sets the cursor's background color.
-     * @param space The color space used by the @p color argumnet.
+     * @param space The color space used by the @p color argument.
      * @param color The new background color.  The meaning of this depends on
      * the color @p space used.
      *

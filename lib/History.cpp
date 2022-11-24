@@ -59,7 +59,7 @@ using namespace Konsole;
 
 KDE4: Can we use QTemporaryFile here, instead of KTempFile?
 
-FIXME: some complain about the history buffer comsuming the
+FIXME: some complain about the history buffer consuming the
        memory of their machines. This problem is critical
        since the history does not behave gracefully in cases
        where the memory is used up completely.
@@ -76,7 +76,7 @@ FIXME: There is noticeable decrease in speed, also. Perhaps,
        scheme with wrap around would be it's complexity.
 */
 
-//FIXME: tempory replacement for tmpfile
+//FIXME: temporary replacement for tmpfile
 //       this is here one for debugging purpose.
 
 //#define tmpfile xTmpFile
@@ -206,7 +206,7 @@ bool HistoryScroll::hasScroll()
 /*
    The history scroll makes a Row(Row(Cell)) from
    two history buffers. The index buffer contains
-   start of line positions which refere to the cells
+   start of line positions which refers to the cells
    buffer.
 
    Note that index[0] addresses the second line
@@ -401,7 +401,7 @@ void HistoryScrollBuffer::setMaxNbLines(unsigned int lineCount)
     dynamic_cast<HistoryTypeBuffer*>(m_histType)->m_nbLines = lineCount;
 }
 
-int HistoryScrollBuffer::bufferIndex(int lineNumber)
+int HistoryScrollBuffer::bufferIndex(int lineNumber) const
 {
     Q_ASSERT( lineNumber >= 0 );
     Q_ASSERT( lineNumber < _maxLineCount );
@@ -612,7 +612,7 @@ CompactHistoryLine::CompactHistoryLine ( const TextLine& line, CompactHistoryBlo
 {
   length=line.size();
 
-  if (line.size() > 0) {
+  if (!line.empty()) {
     formatLength=1;
     int k=1;
 
