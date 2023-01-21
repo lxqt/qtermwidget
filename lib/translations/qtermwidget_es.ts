@@ -39,7 +39,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2789"/>
         <source>Paste multiline text</source>
-        <translation>Pegar un texto de varias líneas</translation>
+        <translation>Pegar texto con varias líneas</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2790"/>
