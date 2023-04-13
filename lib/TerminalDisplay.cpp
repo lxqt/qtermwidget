@@ -2920,7 +2920,7 @@ QVariant TerminalDisplay::inputMethodQuery( Qt::InputMethodQuery query ) const
                 QTextStream stream(&lineText);
                 PlainTextDecoder decoder;
                 decoder.begin(&stream);
-                decoder.decodeLine(&_image[loc(0,cursorPos.y())],_usedColumns,_lineProperties[cursorPos.y()]);
+                decoder.decodeLine(&_image[loc(0,cursorPos.y())],_usedColumns,0);
                 decoder.end();
                 return lineText;
             }
