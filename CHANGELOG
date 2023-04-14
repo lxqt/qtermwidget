@@ -1,3 +1,8 @@
+qtermwidget-1.3.0 / 2023-04-15
+===============================
+ * Fixed a problem in switching the color scheme between dark and light.
+ * Prevented a crash on splitting the terminal under `kwin_wayland`
+
 qtermwidget-1.2.0 / 2022-11-05
 ===============================
  * Enabled Bidi rendering by default.
