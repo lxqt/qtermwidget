@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Sonnerie dans la session &apos;%1&apos;</translation>
+        <translation>Sonnerie dans la session « %1 »</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>La session &apos;%1&apos; s&apos;est terminée avec le statut %2.</translation>
+        <translation>La session « %1 » s’est terminée avec le statut %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>La session &apos;%1&apos; a planté.</translation>
+        <translation>La session « %1 » a planté.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>La session &apos;%1&apos; s&apos;est fermée de manière inattendue.</translation>
+        <translation>La session « %1 » s’est fermée de manière inattendue.</translation>
     </message>
 </context>
 <context>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Copier l&apos;adresse du lien</translation>
+        <translation>Copier l’adresse du lien</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>Copier l&apos;adresse du courriel</translation>
+        <translation>Copier l’adresse du courriel</translation>
     </message>
 </context>
 <context>
