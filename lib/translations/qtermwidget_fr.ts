@@ -44,7 +44,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Êtes vous sûr de vouloir coller ce texte ?</translation>
+        <translation>Êtes-vous sûr de vouloir coller ce texte ?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3260"/>
