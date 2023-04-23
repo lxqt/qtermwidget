@@ -82,6 +82,7 @@ enum | KeyboardCursorShape { BlockCursor, UnderlineCursor, IBeamCursor }
 * flowControlEnabled : bool
 * getPtySlaveFd : const int
 * getShellPID : int
+* getForegroundProcessId : int
 * getTerminalFont : QFont
 * historyLinesCount : int
 * icon : const QString
@@ -204,6 +205,11 @@ Returns whether flow control is enabled.
 Returns a pty slave file descriptor. This can be used for display and control a remote terminal.
 
 <!--**getShellPID : int**\-->
+**getForegroundProcessId : int**\
+Returns the PID of the foreground process. This is initially the same as processId() but can change
+as the user starts other programs inside the terminal. If there is a problem reading the foreground
+process id, 0 will be returned.
+
 <!--**getTerminalFont : QFont**\-->
 
 **historyLinesCount : int**\

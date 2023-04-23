@@ -44,6 +44,7 @@ class QTermWidgetInterface {
    virtual void startShellProgram() = 0;
    virtual void startTerminalTeletype() = 0;
    virtual int getShellPID() = 0;
+   virtual int getForegroundProcessId() = 0;
    virtual void changeDir(const QString & dir) = 0;
    virtual void setTerminalFont(const QFont & font) = 0;
    virtual QFont getTerminalFont() = 0;

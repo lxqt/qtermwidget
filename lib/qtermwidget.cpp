@@ -201,6 +201,11 @@ int QTermWidget::getShellPID()
     return m_impl->m_session->processId();
 }
 
+int QTermWidget::getForegroundProcessId()
+{
+    return m_impl->m_session->foregroundProcessId();
+}
+
 void QTermWidget::changeDir(const QString & dir)
 {
     /*

@@ -69,6 +69,11 @@ public:
 
     int getShellPID() override;
 
+    /**
+     * Get the PID of the foreground process
+     */
+    int getForegroundProcessId() override;
+
     void changeDir(const QString & dir) override;
 
     //look-n-feel, if you don`t like defaults
@@ -353,4 +358,3 @@ extern "C"
 void * createTermWidget(int startnow, void * parent);
 
 #endif
-
