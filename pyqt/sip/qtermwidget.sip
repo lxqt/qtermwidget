@@ -37,6 +37,7 @@ public:
     bool terminalSizeHint();
     void startShellProgram();
     int getShellPID();
+    int getForegroundProcessId();
     void changeDir(const QString & dir);
     void setTerminalFont(QFont &font);
     QFont getTerminalFont();
