@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Звуковой сигнал в сессии &apos;%1&apos;</translation>
+        <translation>Звуковой сигнал в сеансе «%1»</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Сессия &apos;%1&apos; завершилась со статусом %2.</translation>
+        <translation>Сеанс «%1» завершилась со статусом %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Сессия &apos;%1&apos; упала.</translation>
+        <translation>Сбой сеанса «%1».</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Сессия ’%1’ завершилась неожиданно.</translation>
+        <translation>Сеанс «%1» завершился неожиданно.</translation>
     </message>
 </context>
 <context>
