@@ -135,11 +135,8 @@ char Pty::erase() const
 
 void Pty::addEnvironmentVariables(const QStringList& environment)
 {
-    QListIterator<QString> iter(environment);
-    while (iter.hasNext())
+    for (const QString &pair : environment)
     {
-        QString pair = iter.next();
-
         // split on the first '=' character
         int pos = pair.indexOf(QLatin1Char('='));
 
