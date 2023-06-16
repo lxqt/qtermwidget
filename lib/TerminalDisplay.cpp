@@ -1150,7 +1150,9 @@ void TerminalDisplay::updateImage()
     if (!_resizing) // not while _resizing, we're expecting a paintEvent
     for (x = 0; x < columnsToUpdate; ++x)
     {
-      _hasBlinker |= ((newLine[x].rendition & RE_BLINK) != 0);
+      if ((newLine[x].rendition & RE_BLINK) != 0) {
+        _hasBlinker = true;
+      }
 
       // Start drawing if this character or the next one differs.
       // We also take the next one into account to handle the situation
@@ -1208,8 +1210,11 @@ void TerminalDisplay::updateImage()
     //although both top and bottom halves contain the same characters, only
     //the top one is actually
     //drawn.
-    if (_lineProperties.count() > y)
-        updateLine |= ((_lineProperties[y] & LINE_DOUBLEHEIGHT) != 0);
+    if (_lineProperties.count() > y) {
+        if ((_lineProperties[y] & LINE_DOUBLEHEIGHT) != 0) {
+            updateLine = true;
+        }
+    }
 
     // if the characters on the line are different in the old and the new _image
     // then this line must be repainted.
