@@ -135,6 +135,8 @@ char Pty::erase() const
 
 void Pty::addEnvironmentVariables(const QStringList& environment)
 {
+
+    bool termEnvVarAdded = false;
     for (const QString &pair : environment)
     {
         // split on the first '=' character
@@ -146,8 +148,17 @@ void Pty::addEnvironmentVariables(const QStringList& environment)
             QString value = pair.mid(pos+1);
 
             setEnv(variable,value);
+
+            if (variable == QLatin1String("TERM")) {
+                termEnvVarAdded = true;
         }
     }
+
+    // fallback to ensure that $TERM is always set
+    if (!termEnvVarAdded) {
+        setEnv(QStringLiteral("TERM"), QStringLiteral("xterm-256color"));
+    }
+}
 }
 
 int Pty::start(const QString& program,
