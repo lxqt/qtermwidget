@@ -37,9 +37,8 @@
 
 KProcess::KProcess(QObject *parent) :
     QProcess(parent),
-    d_ptr(new KProcessPrivate)
+    d_ptr(new KProcessPrivate(this))
 {
-    d_ptr->q_ptr = this;
     setOutputChannelMode(ForwardedChannels);
 }
 

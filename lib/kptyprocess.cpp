@@ -38,23 +38,24 @@
 #include <QDebug>
 
 KPtyProcess::KPtyProcess(QObject *parent) :
-    KProcess(new KPtyProcessPrivate, parent)
+    KPtyProcess(-1, parent)
 {
-    Q_D(KPtyProcess);
-
-    d->pty = new KPtyDevice(this);
-    d->pty->open();
-    connect(this, SIGNAL(stateChanged(QProcess::ProcessState)),
-            SLOT(_k_onStateChanged(QProcess::ProcessState)));
 }
 
 KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
-    KProcess(new KPtyProcessPrivate, parent)
+    KProcess(parent),
+    d_ptr(new KPtyProcessPrivate)
 {
     Q_D(KPtyProcess);
 
     d->pty = new KPtyDevice(this);
-    d->pty->open(ptyMasterFd);
+
+    if (ptyMasterFd == -1) {
+        d->pty->open();
+    } else {
+        d->pty->open(ptyMasterFd);
+    }
+
     connect(this, SIGNAL(stateChanged(QProcess::ProcessState)),
             SLOT(_k_onStateChanged(QProcess::ProcessState)));
 }
