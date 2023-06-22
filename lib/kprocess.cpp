@@ -31,76 +31,6 @@
 
 #include <qfile.h>
 
-#ifdef Q_OS_WIN
-# include <windows.h>
-#else
-# include <unistd.h>
-# include <cerrno>
-#endif
-
-#ifndef Q_OS_WIN
-# define STD_OUTPUT_HANDLE 1
-# define STD_ERROR_HANDLE 2
-#endif
-
-#ifdef _WIN32_WCE
-#include <stdio.h>
-#endif
-
-void KProcessPrivate::writeAll(const QByteArray &buf, int fd)
-{
-#ifdef Q_OS_WIN
-#ifndef _WIN32_WCE
-    HANDLE h = GetStdHandle(fd);
-    if (h) {
-        DWORD wr;
-        WriteFile(h, buf.data(), buf.size(), &wr, 0);
-    }
-#else
-    fwrite(buf.data(), 1, buf.size(), (FILE*)fd);
-#endif
-#else
-    int off = 0;
-    do {
-        int ret = ::write(fd, buf.data() + off, buf.size() - off);
-        if (ret < 0) {
-            if (errno != EINTR)
-                return;
-        } else {
-            off += ret;
-        }
-    } while (off < buf.size());
-#endif
-}
-
-void KProcessPrivate::forwardStd(KProcess::ProcessChannel good, int fd)
-{
-    Q_Q(KProcess);
-
-    QProcess::ProcessChannel oc = q->readChannel();
-    q->setReadChannel(good);
-    writeAll(q->readAll(), fd);
-    q->setReadChannel(oc);
-}
-
-void KProcessPrivate::_k_forwardStdout()
-{
-#ifndef _WIN32_WCE
-    forwardStd(KProcess::StandardOutput, STD_OUTPUT_HANDLE);
-#else
-    forwardStd(KProcess::StandardOutput, (int)stdout);
-#endif
-}
-
-void KProcessPrivate::_k_forwardStderr()
-{
-#ifndef _WIN32_WCE
-    forwardStd(KProcess::StandardError, STD_ERROR_HANDLE);
-#else
-    forwardStd(KProcess::StandardError, (int)stderr);
-#endif
-}
-
 /////////////////////////////
 // public member functions //
 /////////////////////////////
@@ -128,30 +58,12 @@ KProcess::~KProcess()
 
 void KProcess::setOutputChannelMode(OutputChannelMode mode)
 {
-    Q_D(KProcess);
-
-    d->outputChannelMode = mode;
-    disconnect(this, SIGNAL(readyReadStandardOutput()));
-    disconnect(this, SIGNAL(readyReadStandardError()));
-    switch (mode) {
-    case OnlyStdoutChannel:
-        connect(this, SIGNAL(readyReadStandardError()), SLOT(_k_forwardStderr()));
-        break;
-    case OnlyStderrChannel:
-        connect(this, SIGNAL(readyReadStandardOutput()), SLOT(_k_forwardStdout()));
-        break;
-    default:
-        QProcess::setProcessChannelMode((ProcessChannelMode)mode);
-        return;
-    }
-    QProcess::setProcessChannelMode(QProcess::SeparateChannels);
+    QProcess::setProcessChannelMode((ProcessChannelMode)mode);
 }
 
 KProcess::OutputChannelMode KProcess::outputChannelMode() const
 {
-    Q_D(const KProcess);
-
-    return d->outputChannelMode;
+    return (OutputChannelMode)QProcess::processChannelMode();
 }
 
 void KProcess::setNextOpenMode(QIODevice::OpenMode mode)
