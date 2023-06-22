@@ -34,6 +34,7 @@
 #include "kptydevice.h"
 
 #include <csignal>
+#include <memory>
 
 class KPtyDevice;
 
@@ -148,6 +149,8 @@ protected:
 
 private:
     Q_PRIVATE_SLOT(d_func(), void _k_onStateChanged(QProcess::ProcessState))
+
+    std::unique_ptr<KPtyProcessPrivate> const d_ptr;
 };
 
 
@@ -155,7 +158,7 @@ private:
 // private data //
 //////////////////
 
-class KPtyProcessPrivate : public KProcessPrivate {
+class KPtyProcessPrivate {
 public:
     KPtyProcessPrivate() :
         ptyChannels(KPtyProcess::NoChannels),
