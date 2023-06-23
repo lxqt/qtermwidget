@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+#include <memory>
+
 class KPtyPrivate;
 struct termios;
 
@@ -187,7 +189,7 @@ protected:
     /**
      * @internal
      */
-    KPtyPrivate * const d_ptr;
+    std::unique_ptr<KPtyPrivate> const d_ptr;
 };
 
 #endif

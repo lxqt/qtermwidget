@@ -34,6 +34,8 @@
 
 #include <QProcess>
 
+#include <memory>
+
 class KProcessPrivate;
 
 /**
@@ -321,7 +323,7 @@ protected:
     /**
      * @internal
      */
-    KProcessPrivate * const d_ptr;
+    std::unique_ptr<KProcessPrivate> const d_ptr;
 
 private:
     // hide those
@@ -340,9 +342,6 @@ protected:
     KProcessPrivate(KProcess *qq) :
         openMode(QIODevice::ReadWrite),
         q_ptr(qq)
-    {
-    }
-    virtual ~KProcessPrivate()
     {
     }
 
