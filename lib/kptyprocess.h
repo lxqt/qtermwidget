@@ -148,8 +148,6 @@ protected:
     void setupChildProcess() override;
 
 private:
-    Q_PRIVATE_SLOT(d_func(), void _k_onStateChanged(QProcess::ProcessState))
-
     std::unique_ptr<KPtyProcessPrivate> const d_ptr;
 };
 
@@ -162,12 +160,6 @@ class KPtyProcessPrivate {
 public:
     KPtyProcessPrivate()
     {
-    }
-
-    void _k_onStateChanged(QProcess::ProcessState newState)
-    {
-        if (newState == QProcess::NotRunning && addUtmp)
-            pty->logout();
     }
 
     std::unique_ptr<KPtyDevice> pty;
