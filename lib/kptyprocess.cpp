@@ -48,7 +48,7 @@ KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
 {
     Q_D(KPtyProcess);
 
-    d->pty = new KPtyDevice(this);
+    d->pty = std::make_unique<KPtyDevice>(this);
 
     if (ptyMasterFd == -1) {
         d->pty->open();
@@ -73,7 +73,6 @@ KPtyProcess::~KPtyProcess()
                     this, SLOT(_k_onStateChanged(QProcess::ProcessState)));
         }
     }
-    delete d->pty;
     waitForFinished(300); // give it some time to finish
     if (state() != QProcess::NotRunning)
     {
@@ -117,7 +116,7 @@ KPtyDevice *KPtyProcess::pty() const
 {
     Q_D(const KPtyProcess);
 
-    return d->pty;
+    return d->pty.get();
 }
 
 void KPtyProcess::setupChildProcess()
