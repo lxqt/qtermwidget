@@ -170,7 +170,7 @@ public:
             pty->logout();
     }
 
-    KPtyDevice *pty;
+    std::unique_ptr<KPtyDevice> pty;
     KPtyProcess::PtyChannels ptyChannels = KPtyProcess::NoChannels;
     bool addUtmp = false;
 };
