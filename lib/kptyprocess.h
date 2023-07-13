@@ -160,9 +160,7 @@ private:
 
 class KPtyProcessPrivate {
 public:
-    KPtyProcessPrivate() :
-        ptyChannels(KPtyProcess::NoChannels),
-        addUtmp(false)
+    KPtyProcessPrivate()
     {
     }
 
@@ -173,8 +171,8 @@ public:
     }
 
     KPtyDevice *pty;
-    KPtyProcess::PtyChannels ptyChannels;
-    bool addUtmp : 1;
+    KPtyProcess::PtyChannels ptyChannels = KPtyProcess::NoChannels;
+    bool addUtmp = false;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KPtyProcess::PtyChannels)
