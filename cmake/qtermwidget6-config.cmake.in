@@ -1,10 +1,10 @@
 # - Find the QTermWidget include and library
 #
 # Typical usage:
-#    find_package(QTermWidget5 REQUIRED)
+#    find_package(QTermWidget6 REQUIRED)
 #
 #    add_executable(foo main.cpp)
-#    target_link_libraries(foo qtermwidget5)
+#    target_link_libraries(foo qtermwidget6)
 
 @PACKAGE_INIT@
 
