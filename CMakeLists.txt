@@ -32,16 +32,15 @@ set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINO
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Minimum Versions
-set(QT_MINIMUM_VERSION "5.15.0")
-set(LXQTBT_MINIMUM_VERSION "0.13.0")
-
 if(NOT USE_QT6)
-    find_package(Qt5 "${QT_MINIMUM_VERSION}" REQUIRED COMPONENTS Widgets LinguistTools)
+    set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
+    find_package(Qt5 "5.15.0" REQUIRED COMPONENTS Widgets LinguistTools)
+    find_package(lxqt-build-tools "0.13.0" REQUIRED)
 else()
-    find_package(Qt6 "${QT_MINIMUM_VERSION}" REQUIRED COMPONENTS Widgets LinguistTools Core5Compat)
+    set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
+    find_package(Qt6 "6.3.0" REQUIRED COMPONENTS Widgets LinguistTools Core5Compat)
+    find_package(lxqt2-build-tools "2.0.0" REQUIRED)
 endif()
-find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 
 if(USE_UTF8PROC)
     find_package(Utf8Proc REQUIRED)
@@ -58,9 +57,6 @@ if(APPLE)
         set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON)
     endif()
 endif()
-
-set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
-
 
 # main library
 
