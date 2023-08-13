@@ -2236,7 +2236,7 @@ void TerminalDisplay::extendSelection( const QPoint& position )
     if (i>=0 && i<=_imageSize) {
       selClass = charClass(QChar(static_cast<ushort>(_image[i].character)));
       while( ((right.x()<_usedColumns-1) || (right.y()<_usedLines-1 && (_lineProperties[right.y()] & LINE_WRAPPED) ))
-                      && charClass(QChar(static_cast<ushort>(_image[i-1].character))) == selClass )
+                      && charClass(QChar(static_cast<ushort>(_image[i+1].character))) == selClass )
       { i++; if (right.x()<_usedColumns-1) right.rx()++; else {right.rx()=0; right.ry()++; } }
     }
 
