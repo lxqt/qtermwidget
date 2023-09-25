@@ -340,6 +340,9 @@ public:
      */
     void setSize(const QSize & size);
 
+    /** Sets the text codec used by this session's terminal emulation. */
+    void setCodec(QStringEncoder codec) const;
+
     /**
      * Sets whether the session has a dark background or not.  The session
      * uses this information to set the COLORFGBG variable in the process's

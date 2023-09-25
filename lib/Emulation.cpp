@@ -155,6 +155,30 @@ const HistoryType& Emulation::history() const
   return _screen[0]->getScroll();
 }
 
+void Emulation::setCodec(QStringEncoder qtc)
+{
+  if (qtc.isValid())
+     _fromUtf16 = std::move(qtc);
+  else
+    setCodec(LocaleCodec);
+
+  _toUtf16 = QStringDecoder{utf8() ? QStringConverter::Encoding::Utf8 : QStringConverter::Encoding::System};
+  emit useUtf8Request(utf8());
+}
+
+bool Emulation::utf8() const
+{
+  const auto enc = QStringConverter::encodingForName(_fromUtf16.name());
+  return enc && enc.value() == QStringConverter::Encoding::Utf8;
+}
+
+void Emulation::setCodec(EmulationCodec codec)
+{
+  setCodec( QStringEncoder{codec == Utf8Codec ?
+              QStringConverter::Encoding::Utf8 :
+              QStringConverter::Encoding::System} );
+}
+
 void Emulation::setKeyBindings(const QString& name)
 {
   _keyTranslator = KeyboardTranslatorManager::instance()->findTranslator(name);
@@ -224,13 +248,12 @@ void Emulation::receiveData(const char* text, int length)
      * U+10FFFF
      * https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates
      */
-    QString str = QString::fromUtf8(text, length);
-    auto encoded = _fromUtf8(str);
-    std::wstring unicodeText = encoded.data.toStdWString(); 
+    QString utf16Text = _toUtf16(QByteArray::fromRawData(text, length));
+    std::wstring unicodeText = utf16Text.toStdWString();
 
     //send characters to terminal emulator
-    for (size_t i=0;i<unicodeText.length();i++)
-        receiveChar(unicodeText[i]);
+    for (wchar_t i : unicodeText)
+        receiveChar(i);
 
     //look for z-modem indicator
     //-- someone who understands more about z-modems that I do may be able to move
