@@ -33,7 +33,6 @@
 #include <QClipboard>
 #include <QHash>
 #include <QKeyEvent>
-#include <QRegExp>
 #include <QTextStream>
 #include <QThread>
 
@@ -52,8 +51,6 @@ using namespace Konsole;
 
 Emulation::Emulation() :
   _currentScreen(nullptr),
-  _codec(nullptr),
-  _decoder(nullptr),
   _keyTranslator(nullptr),
   _usesMouse(false),
   _bracketedPasteMode(false)
@@ -129,7 +126,6 @@ Emulation::~Emulation()
 
   delete _screen[0];
   delete _screen[1];
-  delete _decoder;
 }
 
 void Emulation::setScreen(int n)
@@ -160,25 +156,28 @@ const HistoryType& Emulation::history() const
   return _screen[0]->getScroll();
 }
 
-void Emulation::setCodec(const QTextCodec * qtc)
+void Emulation::setCodec(QStringEncoder qtc)
 {
-  if (qtc)
-      _codec = qtc;
+  if (qtc.isValid())
+     _fromUtf16 = std::move(qtc);
   else
-     setCodec(LocaleCodec);
+    setCodec(LocaleCodec);
 
-  delete _decoder;
-  _decoder = _codec->makeDecoder();
-
+  _toUtf16 = QStringDecoder{utf8() ? QStringConverter::Encoding::Utf8 : QStringConverter::Encoding::System};
   emit useUtf8Request(utf8());
+}
+
+bool Emulation::utf8() const
+{
+  const auto enc = QStringConverter::encodingForName(_fromUtf16.name());
+  return enc && enc.value() == QStringConverter::Encoding::Utf8;
 }
 
 void Emulation::setCodec(EmulationCodec codec)
 {
-    if ( codec == Utf8Codec )
-        setCodec( QTextCodec::codecForName("utf8") );
-    else if ( codec == LocaleCodec )
-        setCodec( QTextCodec::codecForLocale() );
+  setCodec( QStringEncoder{codec == Utf8Codec ?
+              QStringConverter::Encoding::Utf8 :
+              QStringConverter::Encoding::System} );
 }
 
 void Emulation::setKeyBindings(const QString& name)
@@ -250,12 +249,12 @@ void Emulation::receiveData(const char* text, int length)
      * U+10FFFF
      * https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates
      */
-    QString utf16Text = _decoder->toUnicode(text,length);
+    QString utf16Text = _toUtf16(QByteArray::fromRawData(text, length));
     std::wstring unicodeText = utf16Text.toStdWString();
 
     //send characters to terminal emulator
-    for (size_t i=0;i<unicodeText.length();i++)
-        receiveChar(unicodeText[i]);
+    for (wchar_t i : unicodeText)
+        receiveChar(i);
 
     //look for z-modem indicator
     //-- someone who understands more about z-modems that I do may be able to move

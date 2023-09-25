@@ -142,9 +142,9 @@ bool Session::isRunning() const
     return _shellProcess->state() == QProcess::Running;
 }
 
-void Session::setCodec(QTextCodec * codec) const
+void Session::setCodec(QStringEncoder codec) const
 {
-    emulation()->setCodec(codec);
+    emulation()->setCodec(std::move(codec));
 }
 
 void Session::setProgram(const QString & program)

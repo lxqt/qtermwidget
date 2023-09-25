@@ -1091,7 +1091,7 @@ void Vt102Emulation::sendKeyEvent(QKeyEvent* event, bool fromPaste)
         }
         else if ( !entry.text().isEmpty() )
         {
-            textToSend += _codec->fromUnicode(QString::fromUtf8(entry.text(true,modifiers)));
+            textToSend += entry.text(true, modifiers);
         }
         else if((modifiers & KeyboardTranslator::CTRL_MOD) && event->key() >= 0x40 && event->key() < 0x5f) {
             textToSend += (event->key() & 0x1f);
@@ -1106,7 +1106,7 @@ void Vt102Emulation::sendKeyEvent(QKeyEvent* event, bool fromPaste)
             textToSend += "\033[6~";
         }
         else {
-            textToSend += _codec->fromUnicode(event->text());
+            textToSend += _fromUtf16(event->text());
         }
 
         if (!fromPaste && textToSend.length()) {
