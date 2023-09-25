@@ -33,6 +33,7 @@
 #include <QClipboard>
 #include <QHash>
 #include <QKeyEvent>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QThread>
 

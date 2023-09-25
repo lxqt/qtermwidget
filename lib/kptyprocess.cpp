@@ -121,6 +121,7 @@ KPtyDevice *KPtyProcess::pty() const
     return d->pty.get();
 }
 
+#if QT_VERSION < 0x060000
 void KPtyProcess::setupChildProcess_()
 {
     Q_D(KPtyProcess);
@@ -143,5 +144,6 @@ void KPtyProcess::setupChildProcess_()
     // https://phabricator.kde.org/T13940
     // KProcess::setupChildProcess();
 }
+#endif
 
 //#include "kptyprocess.moc"

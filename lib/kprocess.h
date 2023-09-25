@@ -327,6 +327,8 @@ protected:
 
 private:
     // hide those
+#if QT_VERSION < 0x060000
+#endif
     using QProcess::setProcessChannelMode;
     using QProcess::processChannelMode;
 };

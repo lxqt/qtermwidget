@@ -26,7 +26,11 @@
 #include <QObject>
 #include <QStringList>
 #include <QHash>
+#if QT_VERSION >= 0x060000
+#include <QtCore5Compat/QRegExp>
+#else
 #include <QRegExp>
+#endif
 
 // Local
 #include "qtermwidget_export.h"

@@ -32,7 +32,9 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QRandomGenerator>
-
+#if QT_VERSION >= 0x060000
+#include <QStringView>
+#endif
 
 // KDE
 //#include <KColorScheme>
@@ -364,9 +366,15 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
         if (hexColorPattern.match(colorStr).hasMatch())
         {
             // Parsing is always ok as already matched by the regexp
-            r = colorStr.mid(1, 2).toInt(nullptr, 16);
-            g = colorStr.mid(3, 2).toInt(nullptr, 16);
-            b = colorStr.mid(5, 2).toInt(nullptr, 16);
+#if QT_VERSION >= 0x060000
+            r = QStringView{colorStr}.mid(1, 2).toInt(nullptr, 16);
+            g = QStringView{colorStr}.mid(3, 2).toInt(nullptr, 16);
+            b = QStringView{colorStr}.mid(5, 2).toInt(nullptr, 16);
+#else
+            r = colorStr.midRef(1, 2).toInt(nullptr, 16);
+            g = colorStr.midRef(3, 2).toInt(nullptr, 16);
+            b = colorStr.midRef(5, 2).toInt(nullptr, 16);
+#endif
             ok = true;
         }
     }

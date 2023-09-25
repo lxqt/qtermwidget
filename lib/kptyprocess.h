@@ -142,11 +142,12 @@ public:
     KPtyDevice *pty() const;
 
 protected:
+#if QT_VERSION < 0x060000
     /**
      * @reimp
      */
     virtual void setupChildProcess_();
-
+#endif
 private:
     std::unique_ptr<KPtyProcessPrivate> const d_ptr;
 };

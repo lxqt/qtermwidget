@@ -17,13 +17,11 @@ option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses libutempter on Linux or libulog on FreeBSD for login records." OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
-option(USE_QT6 "Build with Qt 6 instead of Qt 5" OFF)
 
 
 # just change version for releases
-# keep this in sync with the version in pyqt/pyproject.toml
 set(QTERMWIDGET_VERSION_MAJOR "1")
-set(QTERMWIDGET_VERSION_MINOR "3")
+set(QTERMWIDGET_VERSION_MINOR "0")
 set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
@@ -32,15 +30,24 @@ set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINO
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(NOT USE_QT6)
-    set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
-    find_package(Qt5 "5.15.0" REQUIRED COMPONENTS Widgets LinguistTools)
-    find_package(lxqt-build-tools "0.13.0" REQUIRED)
-else()
-    set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
-    find_package(Qt6 "6.3.0" REQUIRED COMPONENTS Widgets LinguistTools Core5Compat)
-    find_package(lxqt2-build-tools "2.0.0" REQUIRED)
+# Minimum Versions
+set(QT_MINIMUM_VERSION "5.15.0")
+set(QT6_MINIMUM_VERSION "6.1.0")
+set(LXQTBT_MINIMUM_VERSION "0.10.0")
+
+find_package(Qt6 COMPONENTS Widgets)
+if (NOT Qt6_FOUND)
+    find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
+    find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
 endif()
+
+if (Qt6_FOUND)
+    find_package(Qt6Widgets "${QT6_MINIMUM_VERSION}" REQUIRED)
+    find_package(Qt6LinguistTools "${QT6_MINIMUM_VERSION}" REQUIRED)
+    find_package(Qt6Core5Compat "${QT6_MINIMUM_VERSION}" REQUIRED)
+endif()
+
+find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 
 if(USE_UTF8PROC)
     find_package(Utf8Proc REQUIRED)
@@ -56,6 +63,12 @@ if(APPLE)
         cmake_policy(SET CMP0068 NEW)
         set(CMAKE_BUILD_WITH_INSTALL_NAME_DIR ON)
     endif()
+endif()
+
+if (NOT Qt6_FOUND)
+    set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
+else()
+    set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
 endif()
 
 # main library
@@ -84,6 +97,7 @@ set(SRCS
     lib/TerminalDisplay.cpp
     lib/tools.cpp
     lib/Vt102Emulation.cpp
+    lib/qtermwidget_interface.h
 )
 
 # Only the Headers that need to be moc'd go here
@@ -113,7 +127,6 @@ set(HDRS_DISTRIB
     lib/Emulation.h
     lib/KeyboardTranslator.h
     lib/Filter.h
-    lib/qtermwidget_interface.h
 )
 
 # dirs
@@ -130,7 +143,7 @@ set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBR
 
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
 
-if(NOT USE_QT6)
+if (NOT Qt6_FOUND)
     qt5_wrap_cpp(MOCS ${HDRS})
     qt5_wrap_ui(UI_SRCS ${UI})
     set(PKG_CONFIG_REQ "Qt5Widgets")
@@ -153,10 +166,11 @@ lxqt_translate_ts(QTERMWIDGET_QM
 )
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
-if(NOT USE_QT6)
+if (NOT Qt6_FOUND)
     target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
 else()
-    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets Qt6::Core5Compat)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets)
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Core5Compat)
 endif()
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
@@ -218,8 +232,6 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
         "HAVE_POSIX_OPENPT"
         "HAVE_SYS_TIME_H"
-        # https://www.kdab.com/un-deprecate-qt-project/
-        "QT_DISABLE_DEPRECATED_BEFORE=0x050e00"
 )
 
 
@@ -330,7 +342,7 @@ endif()
 
 # python binding
 if (QTERMWIDGET_BUILD_PYTHON_BINDING)
-    message(SEND_ERROR "QTERMWIDGET_BUILD_PYTHON_BINDING is no longer supported. Check README.md for how to build PyQt bindings.")
+    add_subdirectory(pyqt)
 endif()
 # end of python binding
 

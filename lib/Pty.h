@@ -187,10 +187,10 @@ Q_OBJECT
      * @param length Length of @p buffer
      */
     void receivedData(const char* buffer, int length);
-
+#if QT_VERSION < 0x060000
   protected:
       void setupChildProcess_() override;
-
+#endif
   private slots:
     // called when data is received from the terminal process
     void dataReceived();
