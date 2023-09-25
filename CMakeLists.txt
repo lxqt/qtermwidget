@@ -37,16 +37,18 @@ set(LXQTBT_MINIMUM_VERSION "0.13.0")
 
 find_package(Qt5Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(Qt5LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
-find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
+find_package(lxqt-build-tools ${LXQTBT_MINIMUM_VERSION} QUIET)
 
 if(USE_UTF8PROC)
     find_package(Utf8Proc REQUIRED)
 endif()
 
-include(LXQtPreventInSourceBuilds)
-include(LXQtTranslateTs)
-include(LXQtCompilerSettings NO_POLICY_SCOPE)
-include(LXQtCreatePkgConfigFile)
+if (LXQT_BUILD_TOOLS_FOUND)
+    include(LXQtPreventInSourceBuilds)
+    include(LXQtTranslateTs)
+    include(LXQtCompilerSettings NO_POLICY_SCOPE)
+    include(LXQtCreatePkgConfigFile)
+endif()
 
 if(APPLE)
     if(CMAKE_VERSION VERSION_GREATER 3.9)
@@ -134,17 +136,19 @@ qt5_wrap_cpp(MOCS ${HDRS})
 qt5_wrap_ui(UI_SRCS ${UI})
 set(PKG_CONFIG_REQ "Qt5Widgets")
 
-lxqt_translate_ts(QTERMWIDGET_QM
-    TRANSLATION_DIR "lib/translations"
-    UPDATE_TRANSLATIONS
-        ${UPDATE_TRANSLATIONS}
-    SOURCES
-        ${SRCS} ${HDRS} ${UI}
-    INSTALL_DIR
-        ${TRANSLATIONS_DIR}
-    COMPONENT
-        Runtime
-)
+if (LXQT_BUILD_TOOLS_FOUND)
+    lxqt_translate_ts(QTERMWIDGET_QM
+        TRANSLATION_DIR "lib/translations"
+        UPDATE_TRANSLATIONS
+            ${UPDATE_TRANSLATIONS}
+        SOURCES
+            ${SRCS} ${HDRS} ${UI}
+        INSTALL_DIR
+            ${TRANSLATIONS_DIR}
+        COMPONENT
+            Runtime
+    )
+endif()
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
@@ -263,17 +267,19 @@ install(DIRECTORY
     FILES_MATCHING PATTERN "*.*schem*"
 )
 
-lxqt_create_pkgconfig_file(
-    PACKAGE_NAME ${QTERMWIDGET_LIBRARY_NAME}
-    DESCRIPTIVE_NAME ${QTERMWIDGET_LIBRARY_NAME}
-    DESCRIPTION "QTermWidget library for Qt ${QTERMWIDGET_VERSION_MAJOR}.x"
-    INCLUDEDIRS ${QTERMWIDGET_LIBRARY_NAME}
-    LIBS ${QTERMWIDGET_LIBRARY_NAME}
-    REQUIRES ${PKG_CONFIG_REQ}
-    VERSION ${QTERMWIDGET_VERSION}
-    INSTALL
-    COMPONENT Devel
-)
+if (LXQT_BUILD_TOOLS_FOUND)
+    lxqt_create_pkgconfig_file(
+        PACKAGE_NAME ${QTERMWIDGET_LIBRARY_NAME}
+        DESCRIPTIVE_NAME ${QTERMWIDGET_LIBRARY_NAME}
+        DESCRIPTION "QTermWidget library for Qt ${QTERMWIDGET_VERSION_MAJOR}.x"
+        INCLUDEDIRS ${QTERMWIDGET_LIBRARY_NAME}
+        LIBS ${QTERMWIDGET_LIBRARY_NAME}
+        REQUIRES ${PKG_CONFIG_REQ}
+        VERSION ${QTERMWIDGET_VERSION}
+        INSTALL
+        COMPONENT Devel
+    )
+endif()
 
 configure_file(
     "${PROJECT_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}-config.cmake.in"
