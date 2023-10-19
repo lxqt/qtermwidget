@@ -514,8 +514,8 @@ void ColorSchemeManager::loadAllColorSchemes()
             failed++;
     }
 
-    /*if ( failed > 0 )
-        qDebug() << "failed to load " << failed << " color schemes.";*/
+    if ( failed > 0 )
+        qDebug() << "failed to load " << failed << " color schemes.";
 
     _haveLoadedAll = true;
 }
