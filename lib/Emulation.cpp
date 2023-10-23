@@ -63,14 +63,14 @@ Emulation::Emulation() :
   _screen[1] = new Screen(40,80);
   _currentScreen = _screen[0];
 
-  QObject::connect(&_bulkTimer1, SIGNAL(timeout()), this, SLOT(showBulk()) );
-  QObject::connect(&_bulkTimer2, SIGNAL(timeout()), this, SLOT(showBulk()) );
+  QObject::connect(&_bulkTimer1, &QTimer::timeout, this, &Konsole::Emulation::showBulk);
+  QObject::connect(&_bulkTimer2, &QTimer::timeout, this, &Konsole::Emulation::showBulk);
 
   // listen for mouse status changes
-  connect(this , SIGNAL(programUsesMouseChanged(bool)) ,
-           SLOT(usesMouseChanged(bool)));
-  connect(this , SIGNAL(programBracketedPasteModeChanged(bool)) ,
-           SLOT(bracketedPasteModeChanged(bool)));
+  connect(this, &Konsole::Emulation::programUsesMouseChanged,
+          this, &Konsole::Emulation::usesMouseChanged);
+  connect(this, &Konsole::Emulation::programBracketedPasteModeChanged,
+          this, &Konsole::Emulation::bracketedPasteModeChanged);
 
   connect(this, &Emulation::cursorChanged, this, [this] (KeyboardCursorShape cursorShape, bool blinkingCursorEnabled) {
     emit titleChanged( 50, QString(QLatin1String("CursorShape=%1;BlinkingCursorEnabled=%2"))
@@ -104,11 +104,11 @@ ScreenWindow* Emulation::createWindow()
     window->setScreen(_currentScreen);
     _windows << window;
 
-    connect(window , SIGNAL(selectionChanged()),
-            this , SLOT(bufferedUpdate()));
+    connect(window, &Konsole::ScreenWindow::selectionChanged,
+            this, &Konsole::Emulation::bufferedUpdate);
 
-    connect(this , SIGNAL(outputChanged()),
-            window , SLOT(notifyOutputChanged()) );
+    connect(this, &Konsole::Emulation::outputChanged,
+            window, &Konsole::ScreenWindow::notifyOutputChanged);
 
     connect(this, &Emulation::handleCommandFromKeyboard,
             window, &ScreenWindow::handleCommandFromKeyboard);
