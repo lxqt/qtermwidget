@@ -39,9 +39,6 @@
 
 #include <QTime>
 
-// KDE
-//#include <kdebug.h>
-
 // Konsole
 #include "KeyboardTranslator.h"
 #include "Screen.h"

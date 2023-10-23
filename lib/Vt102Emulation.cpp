@@ -48,10 +48,6 @@
 #include <QByteRef>
 #include <QDebug>
 
-// KDE
-//#include <kdebug.h>
-//#include <klocale.h>
-
 // Konsole
 #include "KeyboardTranslator.h"
 #include "Screen.h"
