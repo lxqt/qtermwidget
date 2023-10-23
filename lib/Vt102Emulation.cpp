@@ -24,20 +24,6 @@
 #include "Vt102Emulation.h"
 #include "tools.h"
 
-// XKB
-//#include <config-konsole.h>
-
-// this allows konsole to be compiled without XKB and XTEST extensions
-// even though it might be available on a particular system.
-#if defined(AVOID_XKB)
-    #undef HAVE_XKB
-#endif
-
-#if defined(HAVE_XKB)
-    void scrolllock_set_off();
-    void scrolllock_set_on();
-#endif
-
 // Standard
 #include <cstdio>
 #include <unistd.h>
