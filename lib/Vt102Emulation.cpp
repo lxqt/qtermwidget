@@ -66,7 +66,8 @@ Vt102Emulation::Vt102Emulation()
      _reportFocusEvents(false)
 {
   _titleUpdateTimer->setSingleShot(true);
-  QObject::connect(_titleUpdateTimer , SIGNAL(timeout()) , this , SLOT(updateTitle()));
+  QObject::connect(_titleUpdateTimer, &QTimer::timeout,
+          this, &Konsole::Vt102Emulation::updateTitle);
 
   initTokenizer();
   reset();
