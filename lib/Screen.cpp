@@ -43,10 +43,6 @@
 
 using namespace Konsole;
 
-//FIXME: this is emulation specific. Use false for xterm, true for ANSI.
-//FIXME: see if we can get this from terminfo.
-#define BS_CLEARS false
-
 //Macro to convert x,y position on screen to position within an image.
 //
 //Originally the image was stored as one large contiguous block of
@@ -607,9 +603,6 @@ void Screen::backspace()
 
     if (screenLines[cuY].size() < cuX+1)
         screenLines[cuY].resize(cuX+1);
-
-    if (BS_CLEARS)
-        screenLines[cuY][cuX].character = ' ';
 }
 
 void Screen::tab(int n)
