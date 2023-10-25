@@ -510,8 +510,8 @@ private slots:
 private:
   bool _usesMouse;
   bool _bracketedPasteMode;
-  QTimer _bulkTimer1;
-  QTimer _bulkTimer2;
+  QTimer _bulkTimer1{this};
+  QTimer _bulkTimer2{this};
 
 };
 
