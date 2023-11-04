@@ -10,8 +10,8 @@
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
-        <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>會話 &apos;%1&apos; 以狀態 %2 退出。</translation>
+        <source>Session &apos;%1&apos; exited with code %2.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1277"/>
+        <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
         <translation>大小：XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1289"/>
+        <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
         <translation>大小：%1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2789"/>
+        <location filename="../TerminalDisplay.cpp" line="2787"/>
         <source>Paste multiline text</source>
         <translation>粘貼多行文本</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2788"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>你確定要粘貼這段文本嗎？</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3260"/>
+        <location filename="../TerminalDisplay.cpp" line="3258"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;輸出已被Ctrl+S&lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暫停&lt;/a&gt;。按&lt;b&gt;Ctrl+Q&lt;/b&gt;復原。&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2796"/>
+        <location filename="../TerminalDisplay.cpp" line="2794"/>
         <source>Show Details...</source>
         <translation>展示細節 ...</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="464"/>
+        <location filename="../qtermwidget.cpp" line="469"/>
         <source>Color Scheme Error</source>
         <translation>配色錯誤</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="465"/>
+        <location filename="../qtermwidget.cpp" line="470"/>
         <source>Cannot load color scheme: %1</source>
         <translation>無法載入配色：%1</translation>
     </message>
