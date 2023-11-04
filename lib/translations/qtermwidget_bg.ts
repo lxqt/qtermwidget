@@ -10,8 +10,8 @@
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
-        <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Сесия &apos;%1&apos; завърши със статус %2.</translation>
+        <source>Session &apos;%1&apos; exited with code %2.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1277"/>
+        <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
         <translation>Размер: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1289"/>
+        <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
         <translation>Размер: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2789"/>
+        <location filename="../TerminalDisplay.cpp" line="2787"/>
         <source>Paste multiline text</source>
         <translation>Поставяне на многоредов текст</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2788"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Сигурни ли сте, че искате да поставите този текст?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3260"/>
+        <location filename="../TerminalDisplay.cpp" line="3258"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Предаването на данни &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;прекъсна&lt;/a&gt; при натискане на Ctrl+S. Натиснете &lt;b&gt;Ctrl+Q&lt;/b&gt; за възстановяване.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2796"/>
+        <location filename="../TerminalDisplay.cpp" line="2794"/>
         <source>Show Details...</source>
         <translation>Показване на детайли...</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="464"/>
+        <location filename="../qtermwidget.cpp" line="469"/>
         <source>Color Scheme Error</source>
         <translation>Грешка в цветовата схема</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="465"/>
+        <location filename="../qtermwidget.cpp" line="470"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Цветна схема %1 не може да се зареди</translation>
     </message>

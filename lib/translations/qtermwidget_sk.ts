@@ -10,8 +10,8 @@
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
-        <source>Session &apos;%1&apos; exited with status %2.</source>
-        <translation>Relácia &apos;%1&apos; bola ukončená so stavom %2.</translation>
+        <source>Session &apos;%1&apos; exited with code %2.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1277"/>
+        <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
         <translation>Veľkosť: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1289"/>
+        <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
         <translation>Veľkosť: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2789"/>
+        <location filename="../TerminalDisplay.cpp" line="2787"/>
         <source>Paste multiline text</source>
         <translation>Prilepiť viacriadkový text</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2788"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Prajete si prilepiť tento text?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3260"/>
+        <location filename="../TerminalDisplay.cpp" line="3258"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Výstup bol &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastavený&lt;/a&gt; stlačením Ctrl+S.  Stlačte&lt;b&gt;Ctrl+Q&lt;/b&gt; pre opätovné spustenie.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2796"/>
+        <location filename="../TerminalDisplay.cpp" line="2794"/>
         <source>Show Details...</source>
         <translation>Zobraziť podrobnosti...</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="464"/>
+        <location filename="../qtermwidget.cpp" line="469"/>
         <source>Color Scheme Error</source>
         <translation>Chyba vo farebnej schéme</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="465"/>
+        <location filename="../qtermwidget.cpp" line="470"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Nepodarilo sa načítať schému: %1</translation>
     </message>
