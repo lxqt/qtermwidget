@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Oturum &apos;%1&apos;, %2 koduyla çıktı.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
