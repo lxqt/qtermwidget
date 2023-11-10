@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessioon „%1“ lõppes koodiga %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="470"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Värvikombinatsiooni laadimine ei õnnestu: %1</translation>
+        <translation>Värvikombinatsiooni laadimine ei õnnestunud: %1</translation>
     </message>
 </context>
 <context>
