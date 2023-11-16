@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Relácia &apos;%1&apos; bola ukončená s kódom %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
