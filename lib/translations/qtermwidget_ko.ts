@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos; 세션이 %2 코드로 종료되었습니다.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>

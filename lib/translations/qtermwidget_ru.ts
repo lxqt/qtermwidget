@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеанс «%1» завершился с кодом %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -44,7 +44,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2788"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Вы уверены, что хотите вставить этот текст?</translation>
+        <translation>Уверены, что хотите вставить этот текст?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3258"/>
