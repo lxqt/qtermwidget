@@ -6,7 +6,7 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>&apos;%1&apos;. oturumda zil</translation>
+        <translation>&apos;%1&apos; oturumunda zil çalıyor</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
