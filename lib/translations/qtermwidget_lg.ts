@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<TS version="2.1" language="lg">
 <context>
     <name>Konsole::Session</name>
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>在会话中响铃 &apos;%1&apos;</translation>
+        <translation>Akade kavugenga mu lutuula lwa mu katimbe &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation>会话 &apos;%1&apos; 退出代码为 %2。</translation>
+        <translation>Ennamba y&apos;emmala ey&apos;olutuula lwa mu katimbe &apos;%1&apos; eri %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>会话 &apos;%1&apos; 崩溃了。</translation>
+        <translation>Olutuula lwa mu katimbe &apos;%1&apos; lutabuse.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="613"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>会话 &apos;%1&apos; 意外退出了。</translation>
+        <translation>Olutuula lwa mu katimbe &apos;%1&apos; lumaze nga ssi kigenderere.</translation>
     </message>
 </context>
 <context>
@@ -29,27 +29,27 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1275"/>
         <source>Size: XXX x XXX</source>
-        <translation>大小: XXX x XXX</translation>
+        <translation>Obunene: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1287"/>
         <source>Size: %1 x %2</source>
-        <translation>大小: %1 x %2</translation>
+        <translation>Obunene: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2787"/>
         <source>Paste multiline text</source>
-        <translation>粘帖多行文本</translation>
+        <translation>Paatiika ebigambo ebiri ku nnyiriri ezisukka mu lumu</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2788"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>确定你想要粘贴此文本？</translation>
+        <translation>Ddala oyagala kupaatiika ebigambo bino?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3258"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;输出已被 Ctrl+S &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暂停&lt;/a&gt;。按 &lt;b&gt;Ctrl+Q&lt;/b&gt; 复原。&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Amapeesa Ctrl+S ganyigidwa ne &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;kiyimiriza&lt;/a&gt; omulimu.  Okugusumulula gweyongere mu maaso nyiga &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1121"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>没有可用的键码转换表。找不到需要把按键转换至符号以传送至终端的信息。</translation>
+        <translation>Tewali kivvuunula ebiva ku mapeesa. Kubulako ekikwataganya amapeesa aganyigibwa n&apos;obubonero obuba busindikibwa mu kiwandikiro.</translation>
     </message>
 </context>
 <context>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2794"/>
         <source>Show Details...</source>
-        <translation>显示详情...</translation>
+        <translation>Laga ebisingawo...</translation>
     </message>
 </context>
 <context>
@@ -74,32 +74,32 @@
         <location filename="../ColorScheme.cpp" line="275"/>
         <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation>未命名配色</translation>
+        <translation>Olulyo lwa langi telutumidwa linnya</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
-        <translation>可用配色</translation>
+        <translation>Olulyo lwa langi ezitegeereka bonna</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="515"/>
         <source>Open Link</source>
-        <translation>打开链接</translation>
+        <translation>Goberera nyunzi</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>复制链接地址</translation>
+        <translation>Koppa endagiriro enyunzi kw&apos;egguka</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>发送邮件至...</translation>
+        <translation>Sindika yimeero ewa...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>复制邮件地址</translation>
+        <translation>Koppa yimeero</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="469"/>
         <source>Color Scheme Error</source>
-        <translation>配色错误</translation>
+        <translation>Olulyo lwa langi luliko kiremya</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="470"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>无法加载配色: %1</translation>
+        <translation>Nemedwa okukozesa olulyo lwa langi: %1</translation>
     </message>
 </context>
 <context>
@@ -120,47 +120,47 @@
     <message>
         <location filename="../SearchBar.cpp" line="40"/>
         <source>Match case</source>
-        <translation>匹配大小写</translation>
+        <translation>Yawula mu nnukuta nnene n&apos;entono</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="46"/>
         <source>Regular expression</source>
-        <translation>正则表达式</translation>
+        <translation>Emboozi enoonya zinne wayo</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="50"/>
         <source>Highlight all matches</source>
-        <translation>高亮所有匹配项</translation>
+        <translation>Tangaaza buli ekizuulidwa</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>搜索栏</translation>
+        <translation>Kabaawo ka bya kunoonya</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
         <source>X</source>
-        <translation></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>寻找:</translation>
+        <translation>Noonya:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
         <source>&lt;</source>
-        <translation></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="54"/>
         <source>&gt;</source>
-        <translation></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
 </context>
 </TS>
