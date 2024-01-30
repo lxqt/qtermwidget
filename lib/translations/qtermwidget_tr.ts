@@ -6,7 +6,7 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>&apos;%1&apos; oturumunda zil çalıyor</translation>
+        <translation>&apos;%1&apos; oturumunda zil çal</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2794"/>
         <source>Show Details...</source>
-        <translation>Detayları göster...</translation>
+        <translation>Detayları Göster...</translation>
     </message>
 </context>
 <context>
