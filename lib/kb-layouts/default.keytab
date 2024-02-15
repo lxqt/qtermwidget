@@ -71,6 +71,8 @@ key Up    +Shift+AppScreen             : "\E[1;*A"
 key Down  +Shift+AppScreen             : "\E[1;*B"
 key Left  +Shift+AppScreen             : "\E[1;*D"
 key Right +Shift+AppScreen             : "\E[1;*C"
+key PgUp    +Shift+AppScreen           : "\E[5;2~"                                                                                                                                                                                                                   
+key PgDown  +Shift+AppScreen           : "\E[6;2~"  
 
 # Keypad keys with NumLock ON
 # (see "Numeric Keypad" section at http://www.nw.com/nw/WWW/products/wizcon/vt100.html )
