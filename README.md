@@ -92,6 +92,7 @@ enum | KeyboardCursorShape { BlockCursor, UnderlineCursor, IBeamCursor }
 * sizeHint : const QSize
 * terminalSizeHint : bool
 * title : const QString
+* wordCharacters : QString
 * workingDirectory : QString
 
 ### Public Functions
@@ -229,6 +230,10 @@ Returns the currently selected text.
 <!--**terminalSizeHint : bool**\-->
 <!--**title : const QString**\-->
 <!--**workingDirectory : QString**\-->
+
+**wordCharacters : QString**\
+When selecting text by word, consider these characters to be word characters in addition to
+alphanumeric characters, default is `:@-./_~`.
 
 ### Member Function Documentation
 <!--__void activity()__\-->
