@@ -826,6 +826,16 @@ void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines)
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
 }
 
+QString QTermWidget::wordCharacters() const
+{
+    return m_impl->m_terminalDisplay->wordCharacters();
+}
+
+void QTermWidget::setWordCharacters(const QString& chars)
+{
+    m_impl->m_terminalDisplay->setWordCharacters(chars);
+}
+
 QTermWidgetInterface* QTermWidget::createWidget(int startnow) const
 {
    return new QTermWidget(startnow);
