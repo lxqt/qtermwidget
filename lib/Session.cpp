@@ -71,6 +71,7 @@ Session::Session(QObject* parent) :
 //   , _zmodemProc(0)
 //   , _zmodemProgress(0)
         , _hasDarkBackground(false)
+      , _isPrimaryScreen(true)
 {
     //prepare DBus communication
 //    new SessionAdaptor(this);
@@ -94,7 +95,8 @@ Session::Session(QObject* parent) :
              this, SIGNAL( changeTabTextColorRequest( int ) ) );
     connect( _emulation, SIGNAL(profileChangeCommandReceived(const QString &)),
              this, SIGNAL( profileChangeCommandReceived(const QString &)) );
-
+    connect(_emulation, &Konsole::Emulation::primaryScreenInUse,
+            this, &Session::onPrimaryScreenInUse);
     connect(_emulation, SIGNAL(imageResizeRequest(QSize)),
             this, SLOT(onEmulationSizeChange(QSize)));
     connect(_emulation, SIGNAL(imageSizeChanged(int, int)),
@@ -204,6 +206,8 @@ void Session::addView(TerminalDisplay * widget)
                       SLOT(viewDestroyed(QObject *)) );
 //slot for close
     QObject::connect(this, SIGNAL(finished()), widget, SLOT(close()));
+//slot for primaryScreen
+    QObject::connect(this, &Session::primaryScreenInUse, widget, &TerminalDisplay::usingPrimaryScreen);
 
 }
 
@@ -448,6 +452,11 @@ void Session::monitorTimerDone()
     _notifiedActivity=false;
 }
 
+bool Session::isPrimaryScreen()
+{
+    return _isPrimaryScreen;
+}
+
 void Session::activityStateSet(int state)
 {
     if (state==NOTIFYBELL) {
@@ -483,6 +492,12 @@ void Session::onViewSizeChange(int /*height*/, int /*width*/)
 void Session::onEmulationSizeChange(QSize size)
 {
     setSize(size);
+}
+
+void Session::onPrimaryScreenInUse(bool use)
+{
+    _isPrimaryScreen = use;
+    emit primaryScreenInUse(use);
 }
 
 void Session::updateTerminalSize()
