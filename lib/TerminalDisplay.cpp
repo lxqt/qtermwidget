@@ -3314,6 +3314,7 @@ void AutoScrollHandler::timerEvent(QTimerEvent* event)
 
     QMouseEvent mouseEvent(    QEvent::MouseMove,
                               widget()->mapFromGlobal(QCursor::pos()),
+			      QCursor::pos(),
                               Qt::NoButton,
                               Qt::LeftButton,
                               Qt::NoModifier);
