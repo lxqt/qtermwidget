@@ -40,6 +40,9 @@
 KPtyProcess::KPtyProcess(QObject *parent) :
     KPtyProcess(-1, parent)
 {
+    setChildProcessModifier([this](){ 
+        ChildProcessSetup();
+    });
 }
 
 KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
@@ -121,7 +124,7 @@ KPtyDevice *KPtyProcess::pty() const
     return d->pty.get();
 }
 
-void KPtyProcess::setupChildProcess()
+void KPtyProcess::onSetupChildProcess()
 {
     Q_D(KPtyProcess);
 
@@ -139,8 +142,6 @@ void KPtyProcess::setupChildProcess()
 
     if (d->ptyChannels & StderrChannel)
         dup2(d->pty->slaveFd(), 2);
-
-    KProcess::setupChildProcess();
 }
 
 //#include "kptyprocess.moc"

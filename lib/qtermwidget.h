@@ -258,9 +258,6 @@ public:
     void setConfirmMultilinePaste(bool confirmMultilinePaste) override;
     void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) override;
 
-    QString wordCharacters() const override;
-    void setWordCharacters(const QString& chars) override;
-
     QTermWidgetInterface *createWidget(int startnow) const override;
 signals:
     void finished();

@@ -21,6 +21,7 @@
 #include <QtDebug>
 #include <QDir>
 #include <QMessageBox>
+#include <QRegularExpression>
 
 #include "ColorTables.h"
 #include "Session.h"
@@ -167,9 +168,13 @@ void QTermWidget::search(bool forwards, bool next)
     //qDebug() << "current selection starts at: " << startColumn << startLine;
     //qDebug() << "current cursor position: " << m_impl->m_terminalDisplay->screenWindow()->cursorPosition();
 
-    QRegExp regExp(m_searchBar->searchText());
-    regExp.setPatternSyntax(m_searchBar->useRegularExpression() ? QRegExp::RegExp : QRegExp::FixedString);
-    regExp.setCaseSensitivity(m_searchBar->matchCase() ? Qt::CaseSensitive : Qt::CaseInsensitive);
+    QRegularExpression regExp;
+    if (m_searchBar->useRegularExpression()) {
+        regExp.setPattern(m_searchBar->searchText());
+    } else {
+        regExp.setPattern(QRegularExpression::escape(m_searchBar->searchText()));
+    }
+    regExp.setPatternOptions(m_searchBar->matchCase() ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption);
 
     HistorySearch *historySearch =
             new HistorySearch(m_impl->m_session->emulation(), regExp, forwards, startColumn, startLine, this);
@@ -266,7 +271,7 @@ void QTermWidget::startTerminalTeletype()
 void QTermWidget::init(int startnow)
 {
     m_layout = new QVBoxLayout();
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(0,0,0,0);
     setLayout(m_layout);
 
     // translations
@@ -824,16 +829,6 @@ void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 
 void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
-}
-
-QString QTermWidget::wordCharacters() const
-{
-    return m_impl->m_terminalDisplay->wordCharacters();
-}
-
-void QTermWidget::setWordCharacters(const QString& chars)
-{
-    m_impl->m_terminalDisplay->setWordCharacters(chars);
 }
 
 QTermWidgetInterface* QTermWidget::createWidget(int startnow) const
