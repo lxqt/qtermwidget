@@ -367,7 +367,7 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
             r = colorStr.mid(1, 2).toInt(nullptr, 16);
             g = colorStr.mid(3, 2).toInt(nullptr, 16);
             b = colorStr.mid(5, 2).toInt(nullptr, 16);
-	    ok = true;
+            ok = true;
         }
     }
     if (!ok)
