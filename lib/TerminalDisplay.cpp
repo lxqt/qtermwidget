@@ -278,7 +278,7 @@ void TerminalDisplay::setVTFont(const QFont& f)
   // Check if font is not fixed pitch and print a warning
   if ( !QFontInfo(font).fixedPitch() )
   {
-	  qDebug() << "Using a variable-width font in the terminal.  This may cause performance degradation and display/alignment errors.";
+      qDebug() << "Using a variable-width font in the terminal.  This may cause performance degradation and display/alignment errors.";
   }
 
   // hint that text should be drawn without anti-aliasing.
