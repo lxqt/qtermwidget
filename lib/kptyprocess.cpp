@@ -41,7 +41,7 @@ KPtyProcess::KPtyProcess(QObject *parent) :
     KPtyProcess(-1, parent)
 {
     setChildProcessModifier([this](){ 
-        ChildProcessSetup();
+        onSetupChildProcess();
     });
 }
 

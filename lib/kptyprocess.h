@@ -141,11 +141,6 @@ public:
      */
     KPtyDevice *pty() const;
 
-    /**
-     * Do child process setup.
-     */
-    void ChildProcessSetup() { onSetupChildProcess(); };
-
 protected:
     /**
      * Child process configuration
