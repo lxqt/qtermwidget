@@ -2,7 +2,7 @@
 
 ## Overview
 
-A terminal emulator widget for Qt 5.
+A terminal emulator widget for Qt 6.
 
 QTermWidget is an open-source project originally based on the KDE4 Konsole application, but it took its own direction later on.
 The main goal of this project is to provide a Unicode-enabled, embeddable Qt widget for using as a built-in console (or terminal emulation widget).
@@ -45,7 +45,7 @@ License: BSD-3-clause
 
 ### Compiling sources
 
-The only runtime dependency is qtbase ≥ 5.12.0.
+The only runtime dependency is qtbase ≥ 6.6.0.
 Build dependencies are as follows:
 - CMake ≥ 3.1.0 serves as the build system and therefore needs to be present to compile.
 - The latest [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) is also needed for compilation.
