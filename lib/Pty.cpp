@@ -300,7 +300,7 @@ void Pty::sendData(const char* data, int length)
 void Pty::dataReceived()
 {
      QByteArray data = pty()->readAll();
-    emit receivedData(data.constData(),data.count());
+    emit receivedData(data.constData(),data.size());
 }
 
 void Pty::lockPty(bool lock)
@@ -326,9 +326,9 @@ int Pty::foregroundProcessGroup() const
     return 0;
 }
 
-void Pty::setupChildProcess()
+void Pty::onSetupChildProcess()
 {
-    KPtyProcess::setupChildProcess();
+    KPtyProcess::onSetupChildProcess();
 
     // reset all signal handlers
     // this ensures that terminal applications respond to

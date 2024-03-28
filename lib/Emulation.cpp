@@ -33,7 +33,7 @@
 #include <QClipboard>
 #include <QHash>
 #include <QKeyEvent>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QThread>
 
@@ -136,7 +136,7 @@ void Emulation::setScreen(int n)
   if (_currentScreen != old)
   {
      // tell all windows onto this emulation to switch to the newly active screen
-     for(ScreenWindow* window : qAsConst(_windows))
+     for(ScreenWindow* window : std::as_const(_windows))
          window->setScreen(_currentScreen);
   }
 }

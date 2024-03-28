@@ -89,7 +89,7 @@ const QStringList get_color_schemes_dirs()
     }
 #endif
 
-    for (const QString& custom_dir : qAsConst(custom_color_schemes_dirs))
+    for (const QString& custom_dir : std::as_const(custom_color_schemes_dirs))
     {
         d.setPath(custom_dir);
         if (d.exists())

@@ -34,6 +34,7 @@
 #include <QKeySequence>
 #include <QDir>
 #include <QtDebug>
+#include <QRegularExpression>
 
 #include "tools.h"
 
@@ -353,11 +354,11 @@ bool KeyboardTranslatorReader::decodeSequence(const QString& text,
     KeyboardTranslator::States tempFlags = flags;
     KeyboardTranslator::States tempFlagMask = flagMask;
 
-    for ( int i = 0 ; i < text.count() ; i++ )
+    for ( int i = 0 ; i < text.size() ; i++ )
     {
         const QChar& ch = text[i];
         bool isFirstLetter = i == 0;
-        bool isLastLetter = ( i == text.count()-1 );
+        bool isLastLetter = ( i == text.size()-1 );
         endOfItem = true;
         if ( ch.isLetterOrNumber() )
         {
@@ -453,7 +454,7 @@ bool KeyboardTranslatorReader::parseAsKeyCode(const QString& item , int& keyCode
     QKeySequence sequence = QKeySequence::fromString(item);
     if ( !sequence.isEmpty() )
     {
-        keyCode = sequence[0];
+        keyCode = sequence[0].toCombined();
 
         if ( sequence.count() > 1 )
         {
@@ -539,10 +540,10 @@ QList<KeyboardTranslatorReader::Token> KeyboardTranslatorReader::tokenize(const 
     text = text.simplified();
 
     // title line: keyboard "title"
-    static QRegExp title(QLatin1String("keyboard\\s+\"(.*)\""));
+    static QRegularExpression title(QLatin1String("keyboard\\s+\"(.*)\""));
     // key line: key KeySequence : "output"
     // key line: key KeySequence : command
-    static QRegExp key(QLatin1String("key\\s+([\\w\\+\\s\\-\\*\\.]+)\\s*:\\s*(\"(.*)\"|\\w+)"));
+    static QRegularExpression key(QLatin1String("key\\s+([\\w\\+\\s\\-\\*\\.]+)\\s*:\\s*(\"(.*)\"|\\w+)"));
 
     QList<Token> list;
     if ( text.isEmpty() )
@@ -550,30 +551,33 @@ QList<KeyboardTranslatorReader::Token> KeyboardTranslatorReader::tokenize(const 
         return list;
     }
 
-    if ( title.exactMatch(text) )
+    const auto titleMatch = title.match(text);
+    const auto keyMatch = key.match(text);
+
+    if ( titleMatch.hasMatch() )
     {
         Token titleToken = { Token::TitleKeyword , QString() };
-        Token textToken = { Token::TitleText , title.capturedTexts().at(1) };
+        Token textToken = { Token::TitleText , titleMatch.captured(1) };
 
         list << titleToken << textToken;
     }
-    else if  ( key.exactMatch(text) )
+    else if  ( keyMatch.hasMatch() )
     {
         Token keyToken = { Token::KeyKeyword , QString() };
-        Token sequenceToken = { Token::KeySequence , key.capturedTexts().value(1).remove(QLatin1Char(' ')) };
+        Token sequenceToken = { Token::KeySequence , keyMatch.captured(1).remove(QLatin1Char(' ')) };
 
         list << keyToken << sequenceToken;
 
-        if ( key.capturedTexts().at(3).isEmpty() )
+        if ( keyMatch.captured(3).isEmpty() )
         {
             // capturedTexts()[2] is a command
-            Token commandToken = { Token::Command , key.capturedTexts().at(2) };
+            Token commandToken = { Token::Command , keyMatch.captured(2) };
             list << commandToken;
         }
         else
         {
             // capturedTexts()[3] is the output string
-           Token outputToken = { Token::OutputText , key.capturedTexts().at(3) };
+           Token outputToken = { Token::OutputText , keyMatch.captured(3) };
            list << outputToken;
         }
     }
@@ -654,7 +658,7 @@ QByteArray KeyboardTranslator::Entry::escapedText(bool expandWildCards,Qt::Keybo
 {
     QByteArray result(text(expandWildCards,modifiers));
 
-    for ( int i = 0 ; i < result.count() ; i++ )
+    for ( int i = 0 ; i < result.size() ; i++ )
     {
         char ch = result[i];
         char replacement = 0;
@@ -676,7 +680,9 @@ QByteArray KeyboardTranslator::Entry::escapedText(bool expandWildCards,Qt::Keybo
 
         if ( replacement == 'x' )
         {
-            result.replace(i,1,"\\x"+QByteArray(1,ch).toHex());
+            QByteArray escaped("\\x");
+            escaped += QByteArray(1,ch).toHex();
+            result.replace(i, 1, QByteArrayView(escaped));
         } else if ( replacement != 0 )
         {
             result.remove(i,1);
@@ -691,10 +697,10 @@ QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
 {
     QByteArray result(input);
 
-    for ( int i = 0 ; i < result.count()-1 ; i++ )
+    for ( int i = 0 ; i < result.size()-1 ; i++ )
     {
 
-        QByteRef ch = result[i];
+        char ch = result[i];
         if ( ch == '\\' )
         {
            char replacement[2] = {0,0};
@@ -716,9 +722,9 @@ QByteArray KeyboardTranslator::Entry::unescape(const QByteArray& input) const
                     // with the corresponding character value
                     char hexDigits[3] = {0};
 
-                    if ( (i < result.count()-2) && isxdigit(result[i+2]) )
+                    if ( (i < result.size()-2) && isxdigit(result[i+2]) )
                             hexDigits[0] = result[i+2];
-                    if ( (i < result.count()-3) && isxdigit(result[i+3]) )
+                    if ( (i < result.size()-3) && isxdigit(result[i+3]) )
                             hexDigits[1] = result[i+3];
 
                     unsigned charValue = 0;
