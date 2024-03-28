@@ -11,5 +11,5 @@ class QTermWidgetBindings(PyQtBindings):
         self._project = project
 
     def apply_user_defaults(self, tool):
-        self.libraries.append('qtermwidget5')
+        self.libraries.append('qtermwidget6')
         super().apply_user_defaults(tool)
