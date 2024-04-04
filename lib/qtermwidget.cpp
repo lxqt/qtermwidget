@@ -92,8 +92,6 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
     session->setArguments(args);
     session->setAutoClose(true);
 
-    session->setCodec(QTextCodec::codecForName("UTF-8"));
-
     session->setFlowControlEnabled(true);
     session->setHistoryType(HistoryTypeBuffer(1000));
 
@@ -431,13 +429,6 @@ void QTermWidget::setArgs(const QStringList &args)
     if (!m_impl->m_session)
         return;
     m_impl->m_session->setArguments(args);
-}
-
-void QTermWidget::setTextCodec(QTextCodec *codec)
-{
-    if (!m_impl->m_session)
-        return;
-    m_impl->m_session->setCodec(codec);
 }
 
 void QTermWidget::setColorScheme(const QString& origName)

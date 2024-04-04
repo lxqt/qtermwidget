@@ -37,7 +37,6 @@ set(LXQTBT_MINIMUM_VERSION "0.13.0")
 
 find_package(Qt6Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(Qt6LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
-find_package(Qt6Core5Compat "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(lxqt2-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 
 if(USE_UTF8PROC)
@@ -149,7 +148,6 @@ lxqt_translate_ts(QTERMWIDGET_QM
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets)
-target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Core5Compat)
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}

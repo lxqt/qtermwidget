@@ -32,7 +32,6 @@
 #include <QApplication>
 #include <QDir>
 #include <QFile>
-#include <QRegExp>
 #include <QStringList>
 #include <QFile>
 #include <QtDebug>
@@ -103,7 +102,7 @@ Session::Session(QObject* parent) :
             this, &Session::cursorChanged);
 
     //connect teletype to emulation backend
-    _shellProcess->setUtf8Mode(_emulation->utf8());
+    _shellProcess->setUtf8Mode(true);
 
     connect( _shellProcess,SIGNAL(receivedData(const char *,int)),this,
              SLOT(onReceiveBlock(const char *,int)) );
@@ -141,11 +140,6 @@ bool Session::hasDarkBackground() const
 bool Session::isRunning() const
 {
     return _shellProcess->state() == QProcess::Running;
-}
-
-void Session::setCodec(QTextCodec * codec) const
-{
-    emulation()->setCodec(codec);
 }
 
 void Session::setProgram(const QString & program)

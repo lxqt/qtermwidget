@@ -124,7 +124,6 @@ void | setSilenceTimeout(int _seconds_)
 void | setTerminalFont(QFont &_font_)
 void | setTerminalOpacity(qreal _level_)
 void | setTerminalSizeHint(bool _enabled_)
-void | setTextCodec(QTextCodec *_codec_)
 void | setWorkingDirectory(const QString &_dir_)
 void | startShellProgram()
 void | startTerminalTeletype()
@@ -324,9 +323,6 @@ Sets terminal font. Default is application font with family Monospace, size 10. 
 
 __void setTerminalSizeHint(bool _enabled_)__\
 Exposes TerminalDisplay::TerminalSizeHint.
-
-__void setTextCodec(QTextCodec *_codec_)__\
-Sets text codec, default is UTF-8.
 
 <!--__void setWorkingDirectory(const QString &_dir_)__\-->
 <!--__void silence()__\-->

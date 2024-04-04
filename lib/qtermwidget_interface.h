@@ -56,7 +56,6 @@ class QTermWidgetInterface {
    virtual void setWorkingDirectory(const QString & dir) = 0;
    virtual QString workingDirectory() = 0;
    virtual void setArgs(const QStringList & args) = 0;
-   virtual void setTextCodec(QTextCodec * codec) = 0;
    virtual void setColorScheme(const QString & name) = 0;
    virtual QStringList getAvailableColorSchemes() = 0;
    virtual void setHistorySize(int lines) = 0;

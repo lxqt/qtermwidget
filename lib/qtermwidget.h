@@ -100,9 +100,6 @@ public:
     // Shell program args, default is none
     void setArgs(const QStringList & args) override;
 
-    //Text codec, default is UTF-8
-    void setTextCodec(QTextCodec * codec) override;
-
     /** @brief Sets the color scheme, default is white on black
      *
      * @param[in] name The name of the color scheme, either returned from
