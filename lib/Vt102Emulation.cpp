@@ -1073,7 +1073,8 @@ void Vt102Emulation::sendKeyEvent(QKeyEvent* event, bool fromPaste)
         }
         else if ( !entry.text().isEmpty() )
         {
-	    QByteArray bytes = _toUtf8(QString::fromUtf8(entry.text(true,modifiers)));
+	    QString str = QString::fromUtf8(entry.text(true,modifiers));
+	    QByteArray bytes = _toUtf8(str);
 	    textToSend += bytes;
         }
         else if((modifiers & KeyboardTranslator::CTRL_MOD) && event->key() >= 0x40 && event->key() < 0x5f) {

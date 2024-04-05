@@ -224,7 +224,8 @@ void Emulation::receiveData(const char* text, int length)
      * U+10FFFF
      * https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates
      */
-    auto encoded = _fromUtf8(QString::fromUtf8(text, length));
+    QString str = QString::fromUtf8(text, length);
+    auto encoded = _fromUtf8(str);
     std::wstring unicodeText = encoded.data.toStdWString(); 
 
     //send characters to terminal emulator
