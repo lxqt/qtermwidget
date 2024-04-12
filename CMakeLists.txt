@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 # CMP0000: Call the cmake_minimum_required() command at the beginning of the top-level
 # CMakeLists.txt file even before calling the project() command.
 # The cmake_minimum_required(VERSION) command implicitly invokes the cmake_policy(VERSION)
@@ -17,13 +17,11 @@ option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses libutempter on Linux or libulog on FreeBSD for login records." OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
-option(USE_QT6 "Build with Qt 6 instead of Qt 5" OFF)
-
 
 # just change version for releases
 # keep this in sync with the version in pyqt/pyproject.toml
-set(QTERMWIDGET_VERSION_MAJOR "1")
-set(QTERMWIDGET_VERSION_MINOR "4")
+set(QTERMWIDGET_VERSION_MAJOR "2")
+set(QTERMWIDGET_VERSION_MINOR "0")
 set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
@@ -32,15 +30,9 @@ set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINO
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(NOT USE_QT6)
-    set(QTERMWIDGET_LIBRARY_NAME qtermwidget5)
-    find_package(Qt5 "5.15.0" REQUIRED COMPONENTS Widgets LinguistTools)
-    find_package(lxqt-build-tools "0.13.0" REQUIRED)
-else()
-    set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
-    find_package(Qt6 "6.3.0" REQUIRED COMPONENTS Widgets LinguistTools Core5Compat)
-    find_package(lxqt2-build-tools "2.0.0" REQUIRED)
-endif()
+set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
+find_package(Qt6 "6.3.0" REQUIRED COMPONENTS Widgets LinguistTools Core5Compat)
+find_package(lxqt2-build-tools "2.0.0" REQUIRED)
 
 if(USE_UTF8PROC)
     find_package(Utf8Proc REQUIRED)
@@ -130,15 +122,9 @@ set(QTERMWIDGET_INCLUDE_DIR "${CMAKE_INSTALL_FULL_INCLUDEDIR}/${QTERMWIDGET_LIBR
 
 CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
 
-if(NOT USE_QT6)
-    qt5_wrap_cpp(MOCS ${HDRS})
-    qt5_wrap_ui(UI_SRCS ${UI})
-    set(PKG_CONFIG_REQ "Qt5Widgets")
-else()
-    qt6_wrap_cpp(MOCS ${HDRS})
-    qt6_wrap_ui(UI_SRCS ${UI})
-    set(PKG_CONFIG_REQ "Qt6Widgets")
-endif()
+qt6_wrap_cpp(MOCS ${HDRS})
+qt6_wrap_ui(UI_SRCS ${UI})
+set(PKG_CONFIG_REQ "Qt6Widgets")
 
 lxqt_translate_ts(QTERMWIDGET_QM
     TRANSLATION_DIR "lib/translations"
@@ -153,11 +139,7 @@ lxqt_translate_ts(QTERMWIDGET_QM
 )
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
-if(NOT USE_QT6)
-    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt5::Widgets)
-else()
-    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets Qt6::Core5Compat)
-endif()
+target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets Qt6::Core5Compat)
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
