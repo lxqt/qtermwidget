@@ -142,10 +142,6 @@ public:
     KPtyDevice *pty() const;
 
 protected:
-    /**
-     * @reimp
-     */
-    virtual void setupChildProcess_();
 
 private:
     std::unique_ptr<KPtyProcessPrivate> const d_ptr;

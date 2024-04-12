@@ -48,6 +48,24 @@ KPtyProcess::KPtyProcess(int ptyMasterFd, QObject *parent) :
 {
     Q_D(KPtyProcess);
 
+    setChildProcessModifier([d]() {
+        d->pty->setCTty();
+#if 0
+        if (d->addUtmp) {
+            d->pty->login(KUser(KUser::UseRealUserID).loginName().toLocal8Bit().constData(), qgetenv("DISPLAY").constData());
+        }
+#endif
+        if (d->ptyChannels & StdinChannel) {
+            dup2(d->pty->slaveFd(), 0);
+        }
+        if (d->ptyChannels & StdoutChannel) {
+            dup2(d->pty->slaveFd(), 1);
+        }
+        if (d->ptyChannels & StderrChannel) {
+            dup2(d->pty->slaveFd(), 2);
+        }
+    });
+
     d->pty = std::make_unique<KPtyDevice>(this);
 
     if (ptyMasterFd == -1) {
@@ -119,29 +137,6 @@ KPtyDevice *KPtyProcess::pty() const
     Q_D(const KPtyProcess);
 
     return d->pty.get();
-}
-
-void KPtyProcess::setupChildProcess_()
-{
-    Q_D(KPtyProcess);
-
-    d->pty->setCTty();
-
-#if 0
-    if (d->addUtmp)
-        d->pty->login(KUser(KUser::UseRealUserID).loginName().toLocal8Bit().data(), qgetenv("DISPLAY"));
-#endif
-    if (d->ptyChannels & StdinChannel)
-        dup2(d->pty->slaveFd(), 0);
-
-    if (d->ptyChannels & StdoutChannel)
-        dup2(d->pty->slaveFd(), 1);
-
-    if (d->ptyChannels & StderrChannel)
-        dup2(d->pty->slaveFd(), 2);
-
-    // https://phabricator.kde.org/T13940
-    // KProcess::setupChildProcess();
 }
 
 //#include "kptyprocess.moc"

@@ -189,7 +189,6 @@ Q_OBJECT
     void receivedData(const char* buffer, int length);
 
   protected:
-      void setupChildProcess_() override;
 
   private slots:
     // called when data is received from the terminal process
