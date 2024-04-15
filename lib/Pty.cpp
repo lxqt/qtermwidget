@@ -271,6 +271,26 @@ Pty::Pty(QObject* parent)
 }
 void Pty::init()
 {
+    // Must call parent class child process modifier, as it sets file descriptors ...etc
+    auto parentChildProcModifier = KPtyProcess::childProcessModifier();
+    setChildProcessModifier([parentChildProcModifier = std::move(parentChildProcModifier)]() {
+        if (parentChildProcModifier) {
+            parentChildProcModifier();
+        }
+
+        // reset all signal handlers
+        // this ensures that terminal applications respond to
+        // signals generated via key sequences such as Ctrl+C
+        // (which sends SIGINT)
+        struct sigaction action;
+        sigemptyset(&action.sa_mask);
+        action.sa_handler = SIG_DFL;
+        action.sa_flags = 0;
+        for (int signal = 1; signal < NSIG; signal++) {
+            sigaction(signal, &action, nullptr);
+        }
+    });
+
   _windowColumns = 0;
   _windowLines = 0;
   _eraseChar = 0;
@@ -326,23 +346,3 @@ int Pty::foregroundProcessGroup() const
     return 0;
 }
 
-void Pty::onSetupChildProcess()
-{
-    KPtyProcess::onSetupChildProcess();
-
-    // reset all signal handlers
-    // this ensures that terminal applications respond to
-    // signals generated via key sequences such as Ctrl+C
-    // (which sends SIGINT)
-    struct sigaction action;
-    sigset_t sigset;
-    sigemptyset(&action.sa_mask);
-    sigemptyset(&sigset);
-    action.sa_handler = SIG_DFL;
-    action.sa_flags = 0;
-    for (int signal=1;signal < NSIG; signal++) {
-        sigaction(signal,&action,nullptr);
-        sigaddset(&sigset, signal);
-    }
-    sigprocmask(SIG_UNBLOCK, &sigset, nullptr);
-}
