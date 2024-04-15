@@ -33,7 +33,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Minimum Versions
 set(QT_MINIMUM_VERSION "6.1.0")
-set(LXQTBT_MINIMUM_VERSION "0.13.0")
+set(LXQTBT_MINIMUM_VERSION "2.0.0")
 
 find_package(Qt6Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(Qt6LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
