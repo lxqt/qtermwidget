@@ -47,7 +47,7 @@ License: BSD-3-clause
 
 The only runtime dependency is qtbase ≥ 6.6.0.
 Build dependencies are as follows:
-- CMake ≥ 3.1.0 serves as the build system and therefore needs to be present to compile.
+- CMake ≥ 3.16.0 serves as the build system and therefore needs to be present to compile.
 - The latest [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) is also needed for compilation.
 - Git is needed to optionally pull latest VCS checkouts.
 
