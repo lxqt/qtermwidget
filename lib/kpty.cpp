@@ -511,7 +511,7 @@ void KPty::login(const char * user, const char * remotehost)
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
-    addToUtmp(d->ttyName.constData(), remotehost, d->masterFd);
+    utempter_add_record(d->masterFd, remotehost);
     Q_UNUSED(user)
 #else
 # ifdef HAVE_UTMPX
@@ -597,7 +597,7 @@ void KPty::logout()
 #ifdef HAVE_UTEMPTER
     Q_D(KPty);
 
-    removeLineFromUtmp(d->ttyName.constData(), d->masterFd);
+    utempter_remove_record(d->masterFd);
 #else
     Q_D(KPty);
 

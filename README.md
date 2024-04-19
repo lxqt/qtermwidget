@@ -2,7 +2,7 @@
 
 ## Overview
 
-A terminal emulator widget for Qt 5.
+A terminal emulator widget for Qt 6.
 
 QTermWidget is an open-source project originally based on the KDE4 Konsole application, but it took its own direction later on.
 The main goal of this project is to provide a Unicode-enabled, embeddable Qt widget for using as a built-in console (or terminal emulation widget).
@@ -45,7 +45,7 @@ License: BSD-3-clause
 
 ### Compiling sources
 
-The only runtime dependency is qtbase ≥ 5.12.0.
+The only runtime dependency is qtbase ≥ 6.6.0.
 Build dependencies are as follows:
 - CMake ≥ 3.1.0 serves as the build system and therefore needs to be present to compile.
 - The latest [lxqt-build-tools](https://github.com/lxqt/lxqt-build-tools/) is also needed for compilation.
@@ -124,7 +124,6 @@ void | setSilenceTimeout(int _seconds_)
 void | setTerminalFont(QFont &_font_)
 void | setTerminalOpacity(qreal _level_)
 void | setTerminalSizeHint(bool _enabled_)
-void | setTextCodec(QTextCodec *_codec_)
 void | setWorkingDirectory(const QString &_dir_)
 void | startShellProgram()
 void | startTerminalTeletype()
@@ -324,9 +323,6 @@ Sets terminal font. Default is application font with family Monospace, size 10. 
 
 __void setTerminalSizeHint(bool _enabled_)__\
 Exposes TerminalDisplay::TerminalSizeHint.
-
-__void setTextCodec(QTextCodec *_codec_)__\
-Sets text codec, default is UTF-8.
 
 <!--__void setWorkingDirectory(const QString &_dir_)__\-->
 <!--__void silence()__\-->

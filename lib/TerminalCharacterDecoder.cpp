@@ -75,7 +75,7 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
 
     if (_recordLinePositions && _output->string())
     {
-        int pos = _output->string()->count();
+        int pos = _output->string()->size();
         _linePositions << pos;
     }
 

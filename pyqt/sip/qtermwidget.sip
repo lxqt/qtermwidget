@@ -47,7 +47,6 @@ public:
     void setWorkingDirectory(const QString & dir);
     QString workingDirectory();
     void setArgs(QStringList & args);
-    void setTextCodec(QTextCodec *codec);
     void setColorScheme(const QString & name);
     QStringList getAvailableColorSchemes();
     static QStringList availableColorSchemes();

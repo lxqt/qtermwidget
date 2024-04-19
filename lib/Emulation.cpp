@@ -33,7 +33,7 @@
 #include <QClipboard>
 #include <QHash>
 #include <QKeyEvent>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QThread>
 
@@ -49,11 +49,10 @@ using namespace Konsole;
 
 Emulation::Emulation() :
   _currentScreen(nullptr),
-  _codec(nullptr),
-  _decoder(nullptr),
   _keyTranslator(nullptr),
   _usesMouse(false),
-  _bracketedPasteMode(false)
+  _bracketedPasteMode(false),
+  _fromUtf8(QStringEncoder::Utf16)
 {
   // create screens with a default size
   _screen[0] = new Screen(40,80);
@@ -126,7 +125,6 @@ Emulation::~Emulation()
 
   delete _screen[0];
   delete _screen[1];
-  delete _decoder;
 }
 
 void Emulation::setScreen(int n)
@@ -136,7 +134,7 @@ void Emulation::setScreen(int n)
   if (_currentScreen != old)
   {
      // tell all windows onto this emulation to switch to the newly active screen
-     for(ScreenWindow* window : qAsConst(_windows))
+     for(ScreenWindow* window : std::as_const(_windows))
          window->setScreen(_currentScreen);
   }
 }
@@ -155,27 +153,6 @@ void Emulation::setHistory(const HistoryType& t)
 const HistoryType& Emulation::history() const
 {
   return _screen[0]->getScroll();
-}
-
-void Emulation::setCodec(const QTextCodec * qtc)
-{
-  if (qtc)
-      _codec = qtc;
-  else
-     setCodec(LocaleCodec);
-
-  delete _decoder;
-  _decoder = _codec->makeDecoder();
-
-  emit useUtf8Request(utf8());
-}
-
-void Emulation::setCodec(EmulationCodec codec)
-{
-    if ( codec == Utf8Codec )
-        setCodec( QTextCodec::codecForName("utf8") );
-    else if ( codec == LocaleCodec )
-        setCodec( QTextCodec::codecForLocale() );
 }
 
 void Emulation::setKeyBindings(const QString& name)
@@ -247,8 +224,9 @@ void Emulation::receiveData(const char* text, int length)
      * U+10FFFF
      * https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates
      */
-    QString utf16Text = _decoder->toUnicode(text,length);
-    std::wstring unicodeText = utf16Text.toStdWString();
+    QString str = QString::fromUtf8(text, length);
+    auto encoded = _fromUtf8(str);
+    std::wstring unicodeText = encoded.data.toStdWString(); 
 
     //send characters to terminal emulator
     for (size_t i=0;i<unicodeText.length();i++)

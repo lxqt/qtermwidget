@@ -30,13 +30,12 @@
 
 // Qt
 #include <QApplication>
-#include <QByteRef>
 #include <QDir>
 #include <QFile>
-#include <QRegExp>
 #include <QStringList>
 #include <QFile>
 #include <QtDebug>
+#include <QRegularExpression>
 
 #include "Pty.h"
 //#include "kptyprocess.h"
@@ -103,7 +102,7 @@ Session::Session(QObject* parent) :
             this, &Session::cursorChanged);
 
     //connect teletype to emulation backend
-    _shellProcess->setUtf8Mode(_emulation->utf8());
+    _shellProcess->setUtf8Mode(true);
 
     connect( _shellProcess,SIGNAL(receivedData(const char *,int)),this,
              SLOT(onReceiveBlock(const char *,int)) );
@@ -141,11 +140,6 @@ bool Session::hasDarkBackground() const
 bool Session::isRunning() const
 {
     return _shellProcess->state() == QProcess::Running;
-}
-
-void Session::setCodec(QTextCodec * codec) const
-{
-    emulation()->setCodec(codec);
 }
 
 void Session::setProgram(const QString & program)
@@ -381,7 +375,7 @@ void Session::setUserTitle( int what, const QString & caption )
 
     if (what == 31) {
         QString cwd=caption;
-        cwd=cwd.replace( QRegExp(QLatin1String("^~")), QDir::homePath() );
+        cwd=cwd.replace( QRegularExpression(QLatin1String("^~")), QDir::homePath() );
         emit openUrlRequest(cwd);
     }
 
