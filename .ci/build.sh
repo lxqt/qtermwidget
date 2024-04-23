@@ -3,7 +3,7 @@ set -ex
 source shared-ci/prepare-archlinux.sh
 
 # See *depends in https://github.com/archlinuxcn/repo/blob/master/archlinuxcn/qtermwidget-git/PKGBUILD
-pacman -S --noconfirm --needed git cmake lxqt-build-tools-git qt6-5compat qt6-tools python-pyqt6 pyqt-builder sip
+pacman -S --noconfirm --needed git cmake lxqt-build-tools-git qt6-tools python-pyqt6 pyqt-builder sip
 
 cmake -B build -S . \
     -DBUILD_EXAMPLE=ON \
