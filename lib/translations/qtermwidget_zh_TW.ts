@@ -6,12 +6,12 @@
     <message>
         <location filename="../Session.cpp" line="454"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>在會話中響鈴 &apos;%1&apos;</translation>
+        <translation>在工作階段中響鈴 &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>工作階段 &apos;％1&apos; 以代碼 &apos;％2&apos; 退出。</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
@@ -49,7 +49,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="3258"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;輸出已被Ctrl+S&lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暫停&lt;/a&gt;。按&lt;b&gt;Ctrl+Q&lt;/b&gt;復原。&lt;/qt&gt;</translation>
+        <translation>輸出已被Ctrl+S暫停。按Ctrl+Q復原。</translation>
     </message>
 </context>
 <context>
