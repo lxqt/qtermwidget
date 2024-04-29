@@ -208,6 +208,7 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
         "HAVE_POSIX_OPENPT"
         "HAVE_SYS_TIME_H"
+        "QT_DISABLE_DEPRECATED_UP_TO=0x060600"
 )
 
 
