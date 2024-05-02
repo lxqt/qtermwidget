@@ -4,22 +4,22 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="454"/>
+        <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Bel in sessie ‘%1’</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="606"/>
+        <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Sessie ‘%1’ is afgesloten met code %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="608"/>
+        <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Sessie ‘%1’ is gecrasht.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="613"/>
+        <location filename="../Session.cpp" line="607"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Sessie ‘%1’ is onverwachts afgebroken.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1275"/>
+        <location filename="../TerminalDisplay.cpp" line="1278"/>
         <source>Size: XXX x XXX</source>
         <translation>Grootte: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1287"/>
+        <location filename="../TerminalDisplay.cpp" line="1290"/>
         <source>Size: %1 x %2</source>
         <translation>Grootte: %1x%2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2787"/>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Paste multiline text</source>
         <translation>Meerregelige tekst plakken</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2788"/>
+        <location filename="../TerminalDisplay.cpp" line="2791"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Weet u zeker dat u deze tekst wilt plakken?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3258"/>
+        <location filename="../TerminalDisplay.cpp" line="3261"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Door op Ctrl+S te drukken is de uitvoer &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;onderbroken&lt;/a&gt;. Druk op &lt;b&gt;Ctrl+Q&lt;/b&gt; om te hervatten.&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1121"/>
+        <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Er is geen toetsaanslagomzetting beschikbaar, waardoor toetsaanslagen niet kunnen worden omgezet in tekens.</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2794"/>
+        <location filename="../TerminalDisplay.cpp" line="2797"/>
         <source>Show Details...</source>
         <translation>Details tonen…</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>Toegankelijk kleurenschema</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="515"/>
+        <location filename="../Filter.cpp" line="520"/>
         <source>Open Link</source>
         <translation>Link openen</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="516"/>
+        <location filename="../Filter.cpp" line="521"/>
         <source>Copy Link Address</source>
         <translation>Linkadres kopiëren</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="525"/>
         <source>Send Email To...</source>
         <translation>E-mail versturen naar…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="526"/>
         <source>Copy Email Address</source>
         <translation>E-mailadres kopiëren</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="469"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
         <translation>Kleurenschemafout</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="470"/>
+        <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Het kleurenschema kan niet worden geladen: %1</translation>
     </message>
@@ -118,17 +118,17 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../SearchBar.cpp" line="40"/>
+        <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
         <translation>Hoofdlettergevoelig</translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="46"/>
+        <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
         <translation>Reguliere uitdrukking</translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="50"/>
+        <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
         <translation>Alle overeenkomsten markeren</translation>
     </message>

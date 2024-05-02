@@ -4,22 +4,22 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="454"/>
+        <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Skambutis “%1„ seanse</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="606"/>
+        <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Seansas „%1“ išėjo grąžindamas kodą %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="608"/>
+        <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Seansas „%1“ užstrigo.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="613"/>
+        <location filename="../Session.cpp" line="607"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Seansas „%1“ netikėtai išėjo.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1275"/>
+        <location filename="../TerminalDisplay.cpp" line="1278"/>
         <source>Size: XXX x XXX</source>
         <translation>Dydis: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1287"/>
+        <location filename="../TerminalDisplay.cpp" line="1290"/>
         <source>Size: %1 x %2</source>
         <translation>Dydis: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2787"/>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Paste multiline text</source>
         <translation>Įdėti kelių eilučių tekstą</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2788"/>
+        <location filename="../TerminalDisplay.cpp" line="2791"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Ar tikrai norite įdėti šį tekstą?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3258"/>
+        <location filename="../TerminalDisplay.cpp" line="3261"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Išvestis buvo &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pristabdyta,&lt;/a&gt; paspaudžiant Ctrl+S.  Paspauskite &lt;b&gt;Ctrl+Q&lt;/b&gt;, norėdami pratęsti.&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1121"/>
+        <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Nėra prieinamas joks klaviatūros vertėjas. Informacijos, kurios reikia, norint konvertuoti klavišų paspaudimus į simbolius ir siųsti į terminalą, nėra.</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2794"/>
+        <location filename="../TerminalDisplay.cpp" line="2797"/>
         <source>Show Details...</source>
         <translation>Rodyti išsamiau...</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>Pasiekiamas spalvų rinkinys</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="515"/>
+        <location filename="../Filter.cpp" line="520"/>
         <source>Open Link</source>
         <translation>Atverti nuorodą</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="516"/>
+        <location filename="../Filter.cpp" line="521"/>
         <source>Copy Link Address</source>
         <translation>Kopijuoti nuorodos adresą</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="525"/>
         <source>Send Email To...</source>
         <translation>Siųsti el. paštą...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="526"/>
         <source>Copy Email Address</source>
         <translation>Kopijuoti el. pašto adresą</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="469"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
         <translation>Spalvų rinkinio klaida</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="470"/>
+        <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Nepavyksta įkelti spalvų rinkinio: %1</translation>
     </message>
@@ -118,17 +118,17 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../SearchBar.cpp" line="40"/>
+        <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
         <translation>Skirti raidžių dydį</translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="46"/>
+        <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
         <translation>Reguliarusis reiškinys</translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="50"/>
+        <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
         <translation>Paryškinti visus atitikmenis</translation>
     </message>

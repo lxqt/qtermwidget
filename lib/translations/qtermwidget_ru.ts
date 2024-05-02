@@ -4,22 +4,22 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="454"/>
+        <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Звуковой сигнал в сеансе «%1»</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="606"/>
+        <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Сеанс «%1» завершился с кодом %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="608"/>
+        <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Сбой сеанса «%1».</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="613"/>
+        <location filename="../Session.cpp" line="607"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Сеанс «%1» завершился неожиданно.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1275"/>
+        <location filename="../TerminalDisplay.cpp" line="1278"/>
         <source>Size: XXX x XXX</source>
         <translation>Размер: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1287"/>
+        <location filename="../TerminalDisplay.cpp" line="1290"/>
         <source>Size: %1 x %2</source>
         <translation>Размер: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2787"/>
+        <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Paste multiline text</source>
         <translation>Вставить многострочный текст</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2788"/>
+        <location filename="../TerminalDisplay.cpp" line="2791"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Уверены, что хотите вставить этот текст?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3258"/>
+        <location filename="../TerminalDisplay.cpp" line="3261"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Вывод был &lt;a href=&quot;https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C_%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%D0%B0&quot;&gt;приостановлен&lt;/a&gt; нажатием Ctrl+S. Нажмите &lt;b&gt;Ctrl+Q&lt;/b&gt; для продолжения.&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1121"/>
+        <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Нет доступных трансляторов клавиатуры. Информация, необходимая, чтобы преобразовать нажатия клавиш в символы, которые будут отправлены на терминал, не найдена.</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2794"/>
+        <location filename="../TerminalDisplay.cpp" line="2797"/>
         <source>Show Details...</source>
         <translation>Показать подробности...</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>Упрощённая цветовая схема</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="515"/>
+        <location filename="../Filter.cpp" line="520"/>
         <source>Open Link</source>
         <translation>Открыть ссылку</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="516"/>
+        <location filename="../Filter.cpp" line="521"/>
         <source>Copy Link Address</source>
         <translation>Копировать адрес ссылки</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="525"/>
         <source>Send Email To...</source>
         <translation>Отправить эл. письмо на…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="526"/>
         <source>Copy Email Address</source>
         <translation>Копировать адрес эл. почты</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="469"/>
+        <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
         <translation>Ошибка цветовой схемы</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="470"/>
+        <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Не удалось загрузить цветовую схему: %1</translation>
     </message>
@@ -118,17 +118,17 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../SearchBar.cpp" line="40"/>
+        <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
         <translation>С учётом регистра</translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="46"/>
+        <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
         <translation>Регулярное выражение</translation>
     </message>
     <message>
-        <location filename="../SearchBar.cpp" line="50"/>
+        <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
         <translation>Подсвечивать все совпадения</translation>
     </message>
