@@ -89,17 +89,17 @@
     <message>
         <location filename="../Filter.cpp" line="516"/>
         <source>Copy Link Address</source>
-        <translation>Скопировать адрес ссылки</translation>
+        <translation>Копировать адрес ссылки</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Send Email To...</source>
-        <translation>Отправить e-mail на...</translation>
+        <translation>Отправить эл. письмо на…</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Email Address</source>
-        <translation>Скопировать e-mail адрес</translation>
+        <translation>Копировать адрес эл. почты</translation>
     </message>
 </context>
 <context>

@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="606"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation>工作階段 &apos;％1&apos; 以代碼 &apos;％2&apos; 退出。</translation>
+        <translation>工作階段 &apos;%1&apos; 以代碼 &apos;%2&apos; 退出。</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="608"/>
