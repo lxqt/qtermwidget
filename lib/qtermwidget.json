@@ -2,7 +2,7 @@
    "Name" : "QTermWidget",
    "Version" : "2.0.0",
    "Vendor" : "LXQt",
-   "Copyright" : "(C) 2022 LXQt",
+   "Copyright" : "(C) 2022-2024 LXQt",
    "Url" : "https://github.com/lxqt/qtermwidget",
    "License" : "GPLv2"
 }
