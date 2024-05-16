@@ -1,3 +1,23 @@
+qtermwidget-2.0.0 / 2024-05-17
+===============================
+ * Ported to Qt6.
+ * Used "new" signal/slot syntax.
+ * Dropped `#define` for bulk timeouts.
+ * Removed KDE `#include`s.
+ * Dropped XKB related conditional compilation.
+ * Assigned a parent to bulkTimers.
+ * Removed unused Screen artifacts.
+ * Added shortcuts for appscreen `default.keytab`.
+ * Exposed wordCharacters property to QTermWidget API.
+ * Fixed cursor positioning issues.
+ * Removed `ChildProcessSetup` and directly called `onsetupChildProcess`.
+ * Used PyQt6.
+ * Fixed deprecated function warning.
+ * Removed anchored pattern for email and url.
+ * Adapted to Qt6 `QProcess::setChildProcessModifier()`.
+ * Used std library find algorithm.
+ * Fixed comparison of pointer addition with NULL.
+
 qtermwidget-1.4.0 / 2023-11-05
 ===============================
  * TERM env variable is set to xterm-256color when not set with QTermWidget::setEnvironment().
