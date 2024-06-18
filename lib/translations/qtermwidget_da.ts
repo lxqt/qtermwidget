@@ -6,17 +6,17 @@
     <message>
         <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Bell i session &apos;%1&apos;</translation>
+        <translation>Klokke i session &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Session &apos;%1&apos; afsluttet med kode %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Session &apos;%1&apos; holdt op med at virke.</translation>
+        <translation>Session &apos;%1&apos; er holdt op med at virke.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="607"/>
@@ -44,7 +44,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2791"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Er du sikker på, at du vil indsætte teksten?</translation>
+        <translation>Er du sikker på, at du vil indsætte denne tekst?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3261"/>
@@ -84,22 +84,22 @@
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Open Link</source>
-        <translation>Åbn link</translation>
+        <translation>Åben lænke</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Link Address</source>
-        <translation>Kopiér linkadresse</translation>
+        <translation>Kopiér lænkeadresse</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="525"/>
         <source>Send Email To...</source>
-        <translation>Send e-mail til...</translation>
+        <translation>Send e-post til...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="526"/>
         <source>Copy Email Address</source>
-        <translation>Kopiér e-mailadresse</translation>
+        <translation>Kopiér e-postadresse</translation>
     </message>
 </context>
 <context>
