@@ -31,7 +31,7 @@
 //#include <QPointer>
 #include <QTextStream>
 #include <QTimer>
-#include <QStringEncoder>
+#include <QStringDecoder>
 
 #include "qtermwidget_export.h"
 #include "KeyboardTranslator.h"
@@ -494,7 +494,7 @@ private:
   bool _bracketedPasteMode;
   QTimer _bulkTimer1{this};
   QTimer _bulkTimer2{this};
-  QStringEncoder _fromUtf8;
+  QStringDecoder _toUtf16;
 };
 
 }

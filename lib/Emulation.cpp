@@ -52,7 +52,7 @@ Emulation::Emulation() :
   _keyTranslator(nullptr),
   _usesMouse(false),
   _bracketedPasteMode(false),
-  _fromUtf8(QStringEncoder::Utf16)
+  _toUtf16(QStringConverter::Utf8)
 {
   // create screens with a default size
   _screen[0] = new Screen(40,80);
@@ -224,9 +224,9 @@ void Emulation::receiveData(const char* text, int length)
      * U+10FFFF
      * https://unicodebook.readthedocs.io/unicode_encodings.html#surrogates
      */
-    QString str = QString::fromUtf8(text, length);
-    auto encoded = _fromUtf8(str);
-    std::wstring unicodeText = encoded.data.toStdWString(); 
+    QByteArray ba(text, length);
+    QString str = _toUtf16(ba);
+    std::wstring unicodeText = str.toStdWString();
 
     //send characters to terminal emulator
     for (size_t i=0;i<unicodeText.length();i++)
