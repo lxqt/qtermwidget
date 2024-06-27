@@ -23,7 +23,7 @@ option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OF
 # keep this in sync with the version in pyqt/pyproject.toml
 set(QTERMWIDGET_VERSION_MAJOR "2")
 set(QTERMWIDGET_VERSION_MINOR "0")
-set(QTERMWIDGET_VERSION_PATCH "0")
+set(QTERMWIDGET_VERSION_PATCH "1")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
 
