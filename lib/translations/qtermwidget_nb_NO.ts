@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Økt &apos;%1&apos; avsluttet med kode %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="602"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
-        <translation>Fargemønster for funksjonshemmede</translation>
+        <translation>Tilrettelagt fargeskjema</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
@@ -120,17 +120,17 @@
     <message>
         <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation>Bruk STORE og små bokstaver</translation>
+        <translation>Skill mellom store/små bokstaver</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation>Bokstavmønstre (regex)</translation>
+        <translation>Regulært uttrykk</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation>Lys opp alle søkeresultat</translation>
+        <translation>Framhev alle treff</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>

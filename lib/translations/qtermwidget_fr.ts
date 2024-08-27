@@ -16,12 +16,12 @@
     <message>
         <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>La session « %1 » a planté.</translation>
+        <translation>La session &apos;% 1&apos; a planté.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="607"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>La session « %1 » s&apos;est fermée de manière inattendue.</translation>
+        <translation>La session &apos;%1&apos; s&apos;est terminée de manière inattendue.</translation>
     </message>
 </context>
 <context>
