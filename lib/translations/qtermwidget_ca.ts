@@ -11,7 +11,7 @@
     <message>
         <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha acabat la sessió %1 amb el codi %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="602"/>
