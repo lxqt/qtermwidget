@@ -1,3 +1,7 @@
+qtermwidget-2.1.0 / 2024-11-05
+===============================
+ * Updated translation and bumped the version.
+
 qtermwidget-2.0.1 / 2024-06-27
 ===============================
  * Fixed visual artifacts due to a mistake about conversion to `std::wstring` in Qt6 port.
