@@ -467,7 +467,8 @@ void KPty::close()
         if (!geteuid()) {
             struct stat st;
             if (!stat(d->ttyName.data(), &st)) {
-                chown(d->ttyName.data(), 0, st.st_gid == getgid() ? 0 : -1);
+                int res = chown(d->ttyName.data(), 0, st.st_gid == getgid() ? 0 : -1);
+                Q_UNUSED (res);
                 chmod(d->ttyName.data(), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
             }
         } else {
