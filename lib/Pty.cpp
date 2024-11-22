@@ -319,7 +319,11 @@ void Pty::sendData(const char* data, int length)
 
 void Pty::dataReceived()
 {
-     QByteArray data = pty()->readAll();
+    QByteArray data = pty()->readAll();
+    if (data.isEmpty())
+    {
+        return;
+    }
     emit receivedData(data.constData(),data.size());
 }
 
@@ -336,13 +340,22 @@ void Pty::lockPty(bool lock)
 
 int Pty::foregroundProcessGroup() const
 {
-    int pid = tcgetpgrp(pty()->masterFd());
-
-    if ( pid != -1 )
+    const int master_fd = pty()->masterFd();
+    if (master_fd >= 0)
     {
-        return pid;
+        int pid = tcgetpgrp(master_fd);
+
+        if (pid != -1)
+        {
+            return pid;
+        }
     }
 
     return 0;
+}
+
+void Pty::closePty()
+{
+    pty()->close();
 }
 

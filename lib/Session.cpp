@@ -139,7 +139,7 @@ bool Session::hasDarkBackground() const
 }
 bool Session::isRunning() const
 {
-    return _shellProcess->state() == QProcess::Running;
+    return (_shellProcess != nullptr && _shellProcess->state() == QProcess::Running);
 }
 
 void Session::setProgram(const QString & program)
@@ -533,23 +533,52 @@ void Session::refresh()
 
 bool Session::sendSignal(int signal)
 {
-    int result = ::kill(static_cast<pid_t>(_shellProcess->processId()),signal);
+    if (processId() <= 0)
+    {
+        return false;
+    }
+
+    int result = ::kill(static_cast<pid_t>(_shellProcess->processId()), signal);
 
      if ( result == 0 )
      {
-         _shellProcess->waitForFinished();
-         return true;
+         return _shellProcess->waitForFinished(1000);
      }
      else
+     {
          return false;
+     }
 }
 
 void Session::close()
 {
     _autoClose = true;
     _wantedClose = true;
-    if (!_shellProcess->isRunning() || !sendSignal(SIGHUP)) {
-        // Forced close.
+
+    if (isRunning())
+    {
+        // Try SIGHUP, and if unsuccessful, do a hard kill.
+        // This is the sequence used by most other terminal emulators like xterm, gnome-terminal, ...
+        if (sendSignal(SIGHUP))
+        {
+            return;
+        }
+
+        qWarning() << "Process " << processId() << " did not die with SIGHUP";
+        _shellProcess->closePty();
+        if (!_shellProcess->waitForFinished(1000))
+        {
+            if (!sendSignal(SIGKILL))
+            {
+                qWarning() << "Process " << processId() << " did not die with SIGKILL";
+                // Forced close.
+                QTimer::singleShot(1, this, SIGNAL(finished()));
+            }
+        }
+    }
+    else
+    {
+        // terminal process has finished, just close the session
         QTimer::singleShot(1, this, SIGNAL(finished()));
     }
 }
@@ -566,6 +595,7 @@ void Session::sendKeyEvent(QKeyEvent* e) const
 
 Session::~Session()
 {
+    close();
     delete _emulation;
     delete _shellProcess;
 //  delete _zmodemProc;
