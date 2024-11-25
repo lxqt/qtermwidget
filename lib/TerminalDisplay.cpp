@@ -1145,6 +1145,7 @@ void TerminalDisplay::updateImage()
         }
     }
 
+    QFontMetrics fm(font());
     if (!_resizing) // not while _resizing, we're expecting a paintEvent
     for (x = 0; x < columnsToUpdate; ++x)
     {
@@ -1164,6 +1165,7 @@ void TerminalDisplay::updateImage()
         disstrU[p++] = c; //fontMap(c);
         bool lineDraw = isLineChar(c);
         bool doubleWidth = (x+1 == columnsToUpdate) ? false : (newLine[x+1].character == 0);
+        bool smallWidth = fm.horizontalAdvance(QChar(c)) < _fontWidth;
         cr = newLine[x].rendition;
         _clipboard = newLine[x].backgroundColor;
         if (newLine[x].foregroundColor != cf) cf = newLine[x].foregroundColor;
@@ -1176,14 +1178,20 @@ void TerminalDisplay::updateImage()
                 continue; // Skip trailing part of multi-col chars.
 
             bool nextIsDoubleWidth = (x+len+1 == columnsToUpdate) ? false : (newLine[x+len+1].character == 0);
+            bool nextIsSmallWidth = newLine[x+len].character
+                                    ? fm.horizontalAdvance(QChar(newLine[x+len].character)) < _fontWidth
+                                    : false;
 
-            if (  ch.foregroundColor != cf ||
-                  ch.backgroundColor != _clipboard ||
-                  ch.rendition != cr ||
-                  !dirtyMask[x+len] ||
-                  isLineChar(c) != lineDraw ||
-                  nextIsDoubleWidth != doubleWidth )
-            break;
+            if (ch.foregroundColor != cf ||
+                ch.backgroundColor != _clipboard ||
+                ch.rendition != cr ||
+                !dirtyMask[x+len] ||
+                isLineChar(c) != lineDraw ||
+                nextIsDoubleWidth != doubleWidth ||
+                smallWidth || nextIsSmallWidth)
+            {
+                break;
+            }
 
           disstrU[p++] = c; //fontMap(c);
         }
@@ -1648,6 +1656,7 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
   int rlx = qMin(_usedColumns-1, qMax(0,(rect.right()  - tLx - _leftMargin ) / _fontWidth));
   int rly = qMin(_usedLines-1,   qMax(0,(rect.bottom() - tLy - _topMargin  ) / _fontHeight));
 
+  QFontMetrics fm(font());
   const int bufferSize = _usedColumns;
   std::wstring unistr;
   unistr.reserve(bufferSize);
@@ -1691,16 +1700,20 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
 
       bool lineDraw = isLineChar(c);
       bool doubleWidth = (_image[ qMin(loc(x,y)+1,_imageSize) ].character == 0);
+      bool smallWidth = c ? fm.horizontalAdvance(QChar(c)) < _fontWidth : false;
       CharacterColor currentForeground = _image[loc(x,y)].foregroundColor;
       CharacterColor currentBackground = _image[loc(x,y)].backgroundColor;
       quint8 currentRendition = _image[loc(x,y)].rendition;
 
+      quint32 nxtC;
       while (x+len <= rlx &&
              _image[loc(x+len,y)].foregroundColor == currentForeground &&
              _image[loc(x+len,y)].backgroundColor == currentBackground &&
              _image[loc(x+len,y)].rendition == currentRendition &&
              (_image[ qMin(loc(x+len,y)+1,_imageSize) ].character == 0) == doubleWidth &&
-             isLineChar( c = _image[loc(x+len,y)].character) == lineDraw) // Assignment!
+             !smallWidth &&
+             !((nxtC = _image[loc(x+len,y)].character) && fm.horizontalAdvance(QChar(nxtC)) < _fontWidth) &&
+             isLineChar(c = _image[loc(x+len,y)].character) == lineDraw) // Assignment!
       {
         if (c)
           unistr[p++] = c; //fontMap(c);
