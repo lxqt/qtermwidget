@@ -141,7 +141,9 @@ void TerminalImageFilterChain::setImage(const Character* const image , int lines
     reset();
 
     PlainTextDecoder decoder;
-    decoder.setTrailingWhitespace(false);
+    // Include trailing whitespace because otherwise, if a string is wrapped at
+    // the end of a space, that space will not be taken into account in _buffer.
+    decoder.setTrailingWhitespace(true);
 
     // setup new shared buffers for the filters to process on
     QString* newBuffer = new QString();
@@ -359,8 +361,8 @@ void RegExpFilter::process()
     // ignore any regular expressions which match an empty string.
     // otherwise the while loop below will run indefinitely
     static const QString emptyString;
-    auto match = _searchText.match(emptyString, 0, 
-        QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption); 
+    auto match = _searchText.match(emptyString, 0,
+        QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
     if (match.hasMatch())
     {
         return;
@@ -378,7 +380,7 @@ void RegExpFilter::process()
             QString text = match.captured(i);
             captureList.append(text);
         }
-        
+
         getLineColumn(match.capturedStart(), startLine, startColumn);
         getLineColumn(match.capturedEnd(), endLine, endColumn);
 
@@ -393,7 +395,7 @@ void RegExpFilter::process()
         }
 
         match = _searchText.match(*text, match.capturedEnd());
-    }	
+    }
 }
 
 RegExpFilter::HotSpot* RegExpFilter::newHotSpot(int startLine,int startColumn,
