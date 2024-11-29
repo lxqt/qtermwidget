@@ -85,22 +85,10 @@ KPtyProcess::~KPtyProcess()
 {
     Q_D(KPtyProcess);
 
-    if (state() != QProcess::NotRunning)
+    if (state() != QProcess::NotRunning && d->addUtmp)
     {
-        if (d->addUtmp)
-        {
-            d->pty->logout();
-            disconnect(this, &QProcess::stateChanged, this, nullptr);
-        }
-    }
-    waitForFinished(300); // give it some time to finish
-    if (state() != QProcess::NotRunning)
-    {
-        qWarning() << Q_FUNC_INFO << "the terminal process is still running, trying to stop it by SIGHUP";
-        ::kill(static_cast<pid_t>(processId()), SIGHUP);
-        waitForFinished(300);
-        if (state() != QProcess::NotRunning)
-            qCritical() << Q_FUNC_INFO << "process didn't stop upon SIGHUP and will be SIGKILL-ed";
+        d->pty->logout();
+        disconnect(this, &QProcess::stateChanged, this, nullptr);
     }
 }
 
