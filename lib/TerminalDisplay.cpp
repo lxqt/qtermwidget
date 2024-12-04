@@ -1167,7 +1167,9 @@ void TerminalDisplay::updateImage()
         disstrU[p++] = c; //fontMap(c);
         bool lineDraw = isLineChar(c);
         bool doubleWidth = (x+1 == columnsToUpdate) ? false : (newLine[x+1].character == 0);
-        bool smallWidth = fm.horizontalAdvance(QChar(c)) < _fontWidth;
+        int charWidth = fm.horizontalAdvance(QChar(c));
+        bool bigWidth = !doubleWidth && charWidth > _fontWidth;
+        bool smallWidth = charWidth < _fontWidth;
         cr = newLine[x].rendition;
         _clipboard = newLine[x].backgroundColor;
         if (newLine[x].foregroundColor != cf) cf = newLine[x].foregroundColor;
@@ -1180,9 +1182,9 @@ void TerminalDisplay::updateImage()
                 continue; // Skip trailing part of multi-col chars.
 
             bool nextIsDoubleWidth = (x+len+1 == columnsToUpdate) ? false : (newLine[x+len+1].character == 0);
-            bool nextIsSmallWidth = newLine[x+len].character
-                                    ? fm.horizontalAdvance(QChar(newLine[x+len].character)) < _fontWidth
-                                    : false;
+            int nxtCharWidth = fm.horizontalAdvance(QChar(newLine[x+len].character));
+            bool nextIsbigWidth = !nextIsDoubleWidth && nxtCharWidth > _fontWidth;
+            bool nextIsSmallWidth = newLine[x+len].character && nxtCharWidth < _fontWidth;
 
             if (ch.foregroundColor != cf ||
                 ch.backgroundColor != _clipboard ||
@@ -1190,6 +1192,7 @@ void TerminalDisplay::updateImage()
                 !dirtyMask[x+len] ||
                 isLineChar(c) != lineDraw ||
                 nextIsDoubleWidth != doubleWidth ||
+                bigWidth || nextIsbigWidth ||
                 smallWidth || nextIsSmallWidth)
             {
                 break;
@@ -1715,19 +1718,25 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
 
       bool lineDraw = isLineChar(c);
       bool doubleWidth = (_image[ qMin(loc(x,y)+1,_imageSize) ].character == 0);
-      bool smallWidth = c ? fm.horizontalAdvance(QChar(c)) < _fontWidth : false;
+      int charWidth = fm.horizontalAdvance(QChar(c));
+      bool bigWidth = !doubleWidth && charWidth > _fontWidth;
+      bool smallWidth = c && charWidth < _fontWidth;
       CharacterColor currentForeground = _image[loc(x,y)].foregroundColor;
       CharacterColor currentBackground = _image[loc(x,y)].backgroundColor;
       quint8 currentRendition = _image[loc(x,y)].rendition;
 
-      quint32 nxtC;
+      quint32 nxtC = 0;
+      bool nxtDoubleWidth = false;
+      int nxtCharWidth = 0;
       while (x+len <= rlx &&
              _image[loc(x+len,y)].foregroundColor == currentForeground &&
              _image[loc(x+len,y)].backgroundColor == currentBackground &&
              _image[loc(x+len,y)].rendition == currentRendition &&
-             (_image[ qMin(loc(x+len,y)+1,_imageSize) ].character == 0) == doubleWidth &&
+             (nxtDoubleWidth = (_image[qMin(loc(x+len,y)+1,_imageSize)].character == 0)) == doubleWidth &&
              !smallWidth &&
-             !((nxtC = _image[loc(x+len,y)].character) && fm.horizontalAdvance(QChar(nxtC)) < _fontWidth) &&
+             !((nxtC = _image[loc(x+len,y)].character) && (nxtCharWidth = fm.horizontalAdvance(QChar(nxtC))) < _fontWidth) &&
+             !bigWidth &&
+             !(!nxtDoubleWidth && nxtC && nxtCharWidth > _fontWidth) &&
              isLineChar(c = _image[loc(x+len,y)].character) == lineDraw) // Assignment!
       {
         if (c)
