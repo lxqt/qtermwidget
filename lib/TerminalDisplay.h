@@ -733,6 +733,7 @@ private:
     QGridLayout* _gridLayout;
 
     bool _fixedFont; // has fixed pitch
+    bool _fixedFont_original; // used only in textWidth()
     int  _fontHeight;     // height
     int  _fontWidth;     // width
     int  _fontAscent;     // ascend

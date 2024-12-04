@@ -240,6 +240,8 @@ void TerminalDisplay::fontChange(const QFont&)
     }
   }
 
+  _fixedFont_original = _fixedFont;
+
   if (_fontWidth < 1)
     _fontWidth=1;
 
@@ -1625,12 +1627,25 @@ void TerminalDisplay::paintFilters(QPainter& painter)
     }
 }
 
+// NOTE: This should be called only when "_fixedFont" is set to "false" (temporarily).
 int TerminalDisplay::textWidth(const int startColumn, const int length, const int line) const
 {
   QFontMetrics fm(font());
   int result = 0;
-  for (int column = 0; column < length; column++) {
-    result += fm.horizontalAdvance(QChar(static_cast<ushort>(_image[loc(startColumn + column, line)].character)));
+  for (int column = 0; column < length; column++)
+  {
+    auto c = static_cast<ushort>(_image[loc(startColumn + column, line)].character);
+    // Take care of double-column characters and those with small widths.
+    // Exclude line characters, as some of them are ambiguous ('A') [1]
+    // [1] http://www.unicode.org/Public/UCD/latest/ucd/EastAsianWidth.txt
+    if (_fixedFont_original && !isLineChar(c))
+    { // c == 0 may happen here after a double-column character
+        result += fm.horizontalAdvance(QLatin1Char(REPCHAR[0]));
+    }
+    else
+    {
+        result += fm.horizontalAdvance(QChar(c));
+    }
   }
   return result;
 }
