@@ -68,8 +68,7 @@ QList<int> PlainTextDecoder::linePositions() const
 {
     return _linePositions;
 }
-void PlainTextDecoder::decodeLine(const Character* const characters, int count, LineProperty /*properties*/
-                             )
+void PlainTextDecoder::decodeLine(const Character* const characters, int count, LineProperty /*properties*/)
 {
     Q_ASSERT( _output );
 
@@ -102,17 +101,39 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
     {
         for (int i = count-1 ; i >= 0 ; i--)
         {
-            if ( characters[i].character != L' '  )
+            if (!characters[i].isSpace())
                 break;
             else
                 outputCount--;
         }
     }
 
-    for (int i=0;i<outputCount;)
+    for (int i = 0; i < outputCount;)
     {
-        plainText.push_back( characters[i].character );
-        i += qMax(1,konsole_wcwidth(characters[i].character));
+        if (characters[i].rendition & RE_EXTENDED_CHAR)
+        {
+            ushort extendedCharLength = 0;
+            const uint* chars = ExtendedCharTable::instance.lookupExtendedChar(characters[i].character, extendedCharLength);
+            if (chars)
+            {
+                std::wstring str;
+                for (ushort nchar = 0; nchar < extendedCharLength; nchar++)
+                {
+                    str.push_back(chars[nchar]);
+                }
+                plainText += str;
+                i += qMax(1, string_width(str));
+            }
+            else
+            {
+                ++i;
+            }
+        }
+        else
+        {
+            plainText.push_back(characters[i].character);
+            i += qMax(1, konsole_wcwidth(characters[i].character));
+        }
     }
     *_output << QString::fromStdWString(plainText);
 }
@@ -164,8 +185,6 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
 
     for (int i=0;i<count;i++)
     {
-        wchar_t ch(characters[i].character);
-
         //check if appearance of character is different from previous char
         if ( characters[i].rendition != _lastRendition  ||
              characters[i].foregroundColor != _lastForeColor  ||
@@ -211,7 +230,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
         }
 
         //handle whitespace
-        if (std::iswspace(ch))
+        if (characters[i].isSpace())
             spaceCount++;
         else
             spaceCount = 0;
@@ -220,17 +239,45 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
         //output current character
         if (spaceCount < 2)
         {
-            //escape HTML tag characters and just display others as they are
-            if ( ch == '<' )
-                text.append(L"&lt;");
-            else if (ch == '>')
-                    text.append(L"&gt;");
+            if (characters[i].rendition & RE_EXTENDED_CHAR)
+            {
+                ushort extendedCharLength = 0;
+                const uint* chars = ExtendedCharTable::instance.lookupExtendedChar(characters[i].character, extendedCharLength);
+                if (chars)
+                {
+                    for (ushort nchar = 0; nchar < extendedCharLength; nchar++)
+                    {
+                        text.push_back(chars[nchar]);
+                    }
+                }
+            }
             else
+            {
+                //escape HTML tag characters and just display others as they are
+                wchar_t ch(characters[i].character);
+                if ( ch == '<' )
+                {
+                    text.append(L"&lt;");
+                }
+                else if (ch == '>')
+                {
+                    text.append(L"&gt;");
+                }
+                else if (ch == '&')
+                {
+                    text.append(L"&amp;");
+                }
+                else
+                {
                     text.push_back(ch);
+                }
+            }
         }
         else
         {
-            text.append(L"&nbsp;"); //HTML truncates multiple spaces, so use a space marker instead
+            // HTML truncates multiple spaces, so use a space marker instead
+            // Use &#160 instead of &nbsp so xmllint will work.
+            text.append(L"&#160;");
         }
 
     }

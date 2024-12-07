@@ -616,7 +616,7 @@ protected:
     //     - A space (returns ' ')
     //     - Part of a word (returns 'a')
     //     - Other characters (returns the input character)
-    QChar charClass(QChar ch) const;
+    QChar charClass(const Character &ch) const;
 
     void clearImage();
 
@@ -721,7 +721,7 @@ private:
 
     bool handleShortcutOverrideEvent(QKeyEvent* event);
 
-    bool isLineChar(wchar_t c) const;
+    bool isLineChar(Character c) const;
     bool isLineCharString(const std::wstring& string) const;
 
     // the window onto the terminal screen which this display
