@@ -44,6 +44,8 @@
 #include "Screen.h"
 #include "TerminalCharacterDecoder.h"
 #include "ScreenWindow.h"
+#include "Session.h"
+#include "TerminalDisplay.h"
 
 using namespace Konsole;
 
@@ -99,6 +101,7 @@ ScreenWindow* Emulation::createWindow()
     ScreenWindow* window = new ScreenWindow();
     window->setScreen(_currentScreen);
     _windows << window;
+    ExtendedCharTable::instance.windows << window;
 
     connect(window, &Konsole::ScreenWindow::selectionChanged,
             this, &Konsole::Emulation::bufferedUpdate);
@@ -117,10 +120,11 @@ ScreenWindow* Emulation::createWindow()
 Emulation::~Emulation()
 {
   QListIterator<ScreenWindow*> windowIter(_windows);
-
   while (windowIter.hasNext())
   {
-    delete windowIter.next();
+    auto win = windowIter.next();
+    ExtendedCharTable::instance.windows.remove(win);
+    delete win;
   }
 
   delete _screen[0];
@@ -364,18 +368,18 @@ QSize Emulation::imageSize() const
   return {_currentScreen->getColumns(), _currentScreen->getLines()};
 }
 
-ushort ExtendedCharTable::extendedCharHash(ushort* unicodePoints , ushort length) const
+uint ExtendedCharTable::extendedCharHash(uint* unicodePoints , ushort length) const
 {
-    ushort hash = 0;
+    uint hash = 0;
     for ( ushort i = 0 ; i < length ; i++ )
     {
         hash = 31*hash + unicodePoints[i];
     }
     return hash;
 }
-bool ExtendedCharTable::extendedCharMatch(ushort hash , ushort* unicodePoints , ushort length) const
+bool ExtendedCharTable::extendedCharMatch(uint hash , uint* unicodePoints , ushort length) const
 {
-    ushort* entry = extendedCharTable[hash];
+    uint* entry = extendedCharTable[hash];
 
     // compare given length with stored sequence length ( given as the first ushort in the
     // stored buffer )
@@ -390,15 +394,17 @@ bool ExtendedCharTable::extendedCharMatch(ushort hash , ushort* unicodePoints , 
     }
     return true;
 }
-ushort ExtendedCharTable::createExtendedChar(ushort* unicodePoints , ushort length)
+uint ExtendedCharTable::createExtendedChar(uint* unicodePoints , ushort length)
 {
     // look for this sequence of points in the table
-    ushort hash = extendedCharHash(unicodePoints,length);
+    uint hash = extendedCharHash(unicodePoints,length);
+    const uint initialHash = hash;
+    bool triedCleaningSolution = false;
 
     // check existing entry for match
-    while ( extendedCharTable.contains(hash) )
+    while (extendedCharTable.contains(hash) && hash != 0) // 0 has a special meaning for chars so we don't use it
     {
-        if ( extendedCharMatch(hash,unicodePoints,length) )
+        if (extendedCharMatch(hash, unicodePoints, length))
         {
             // this sequence already has an entry in the table,
             // return its hash
@@ -406,16 +412,53 @@ ushort ExtendedCharTable::createExtendedChar(ushort* unicodePoints , ushort leng
         }
         else
         {
-            // if hash is already used by another, different sequence of unicode character
-            // points then try next hash
+            // if hash is already used by another, different sequence of
+            // unicode character points, then try next hash
             hash++;
+
+            if (hash == initialHash)
+            {
+                if (!triedCleaningSolution)
+                {
+                    triedCleaningSolution = true;
+                    // All the hashes are full, go to all Screens and try to free any
+                    // This is slow but should happen very rarely
+                    QSet<uint> usedExtendedChars;
+                    for (const auto &w : std::as_const(windows))
+                    {
+                        if (w->screen())
+                        {
+                            usedExtendedChars += w->screen()->usedExtendedChars();
+                        }
+                    }
+
+                    QHash<uint,uint*>::iterator it = extendedCharTable.begin();
+                    QHash<uint,uint*>::iterator itEnd = extendedCharTable.end();
+                    while (it != itEnd)
+                    {
+                        if (usedExtendedChars.contains(it.key()))
+                        {
+                            ++it;
+                        }
+                        else
+                        {
+                            it = extendedCharTable.erase(it);
+                        }
+                    }
+                }
+                else
+                {
+                    qWarning() << "Using all the extended char hashes, going to miss this extended character";
+                    return 0;
+                }
+            }
         }
     }
 
 
      // add the new sequence to the table and
      // return that index
-    ushort* buffer = new ushort[length+1];
+    uint* buffer = new uint[length+1];
     buffer[0] = length;
     for ( int i = 0 ; i < length ; i++ )
        buffer[i+1] = unicodePoints[i];
@@ -425,12 +468,12 @@ ushort ExtendedCharTable::createExtendedChar(ushort* unicodePoints , ushort leng
     return hash;
 }
 
-ushort* ExtendedCharTable::lookupExtendedChar(ushort hash , ushort& length) const
+uint* ExtendedCharTable::lookupExtendedChar(uint hash , ushort& length) const
 {
     // lookup index in table and if found, set the length
     // argument and return a pointer to the character sequence
 
-    ushort* buffer = extendedCharTable[hash];
+    uint* buffer = extendedCharTable[hash];
     if ( buffer )
     {
         length = buffer[0];
@@ -449,7 +492,7 @@ ExtendedCharTable::ExtendedCharTable()
 ExtendedCharTable::~ExtendedCharTable()
 {
     // free all allocated character buffers
-    QHashIterator<ushort,ushort*> iter(extendedCharTable);
+    QHashIterator<uint,uint*> iter(extendedCharTable);
     while ( iter.hasNext() )
     {
         iter.next();
