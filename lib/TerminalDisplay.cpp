@@ -802,7 +802,8 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
                                      const QRect& rect,
                                      const std::wstring& text,
                                      const Character* style,
-                                     bool invertCharacterColor)
+                                     bool invertCharacterColor,
+                                     bool tooWide)
 {
     // don't draw text which is currently blinking
     if ( _blinking && (style->rendition & RE_BLINK) )
@@ -855,13 +856,23 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
         painter.setLayoutDirection(Qt::LeftToRight);
 
         if (_bidiEnabled) {
-            painter.drawText(rect.x(), rect.y() + _fontAscent + _lineSpacing, QString::fromStdWString(text));
-        } else {
-         {
+            if (tooWide)
+            {
+                QRect drawRect(rect.topLeft(), rect.size());
+                drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
+                painter.drawText(drawRect, Qt::AlignBottom, QString::fromStdWString(text));
+            }
+            else
+            {
+                painter.drawText(rect.x(), rect.y() + _fontAscent + _lineSpacing,
+                                 QString::fromStdWString(text));
+            }
+        }
+        else
+        {
             QRect drawRect(rect.topLeft(), rect.size());
             drawRect.setHeight(rect.height() + _drawTextAdditionHeight);
             painter.drawText(drawRect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QString::fromStdWString(text));
-         }
         }
     }
 }
@@ -869,7 +880,8 @@ void TerminalDisplay::drawCharacters(QPainter& painter,
 void TerminalDisplay::drawTextFragment(QPainter& painter ,
                                        const QRect& rect,
                                        const std::wstring& text,
-                                       const Character* style)
+                                       const Character* style,
+                                       bool tooWide)
 {
     painter.save();
 
@@ -889,7 +901,7 @@ void TerminalDisplay::drawTextFragment(QPainter& painter ,
         drawCursor(painter,rect,foregroundColor,backgroundColor,invertCharacterColor);
 
     // draw text
-    drawCharacters(painter,rect,text,style,invertCharacterColor);
+    drawCharacters(painter,rect,text,style,invertCharacterColor, tooWide);
 
     painter.restore();
 }
@@ -1168,8 +1180,8 @@ void TerminalDisplay::updateImage()
         bool lineDraw = isLineChar(newLine[x+0]);
         bool doubleWidth = (x+1 == columnsToUpdate) ? false : (newLine[x+1].character == 0);
         int charWidth = fm.horizontalAdvance(QChar(c));
-        bool bigWidth = !doubleWidth && charWidth > _fontWidth;
-        bool smallWidth = charWidth < _fontWidth;
+        bool bigWidth = _fixedFont && !doubleWidth && charWidth > _fontWidth;
+        bool smallWidth = _fixedFont && charWidth < _fontWidth;
         cr = newLine[x].rendition;
         _clipboard = newLine[x].backgroundColor;
         if (newLine[x].foregroundColor != cf) cf = newLine[x].foregroundColor;
@@ -1183,8 +1195,8 @@ void TerminalDisplay::updateImage()
 
             bool nextIsDoubleWidth = (x+len+1 == columnsToUpdate) ? false : (newLine[x+len+1].character == 0);
             int nxtCharWidth = fm.horizontalAdvance(QChar(newLine[x+len].character));
-            bool nextIsbigWidth = !nextIsDoubleWidth && nxtCharWidth > _fontWidth;
-            bool nextIsSmallWidth = newLine[x+len].character && nxtCharWidth < _fontWidth;
+            bool nextIsbigWidth = _fixedFont && !nextIsDoubleWidth && nxtCharWidth > _fontWidth;
+            bool nextIsSmallWidth = _fixedFont && newLine[x+len].character && nxtCharWidth < _fontWidth;
 
             if (ch.foregroundColor != cf ||
                 ch.backgroundColor != _clipboard ||
@@ -1726,8 +1738,9 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
       bool lineDraw = isLineChar(_image[loc(x,y)]);
       bool doubleWidth = (_image[ qMin(loc(x,y)+1,_imageSize) ].character == 0);
       int charWidth = fm.horizontalAdvance(QChar(c));
-      bool bigWidth = !doubleWidth && charWidth > _fontWidth;
-      bool smallWidth = c && charWidth < _fontWidth;
+      bool bigWidth = _fixedFont && !doubleWidth && charWidth > _fontWidth;
+      bool tooWide = bigWidth && charWidth >= 2 * _fontWidth;
+      bool smallWidth = _fixedFont && c && charWidth < _fontWidth;
       CharacterColor currentForeground = _image[loc(x,y)].foregroundColor;
       CharacterColor currentBackground = _image[loc(x,y)].backgroundColor;
       quint8 currentRendition = _image[loc(x,y)].rendition;
@@ -1741,9 +1754,9 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
              _image[loc(x+len,y)].rendition == currentRendition &&
              (nxtDoubleWidth = (_image[qMin(loc(x+len,y)+1,_imageSize)].character == 0)) == doubleWidth &&
              !smallWidth &&
-             !((nxtC = _image[loc(x+len,y)].character) && (nxtCharWidth = fm.horizontalAdvance(QChar(nxtC))) < _fontWidth) &&
+             !(_fixedFont && (nxtC = _image[loc(x+len,y)].character) && (nxtCharWidth = fm.horizontalAdvance(QChar(nxtC))) < _fontWidth) &&
              !bigWidth &&
-             !(!nxtDoubleWidth && nxtC && nxtCharWidth > _fontWidth) &&
+             !(_fixedFont && !nxtDoubleWidth && nxtC && nxtCharWidth > _fontWidth) &&
              isLineChar(_image[loc(x+len,y)]) == lineDraw) // Assignment!
       {
         c = _image[loc(x+len,y)].character;
@@ -1813,12 +1826,11 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
          textArea.moveTopLeft( textScale.inverted().map(textArea.topLeft()) );
 
          //paint text fragment
-         drawTextFragment(    paint,
-                            textArea,
-                            unistr,
-                            &_image[loc(x,y)] ); //,
-                            //0,
-                            //!_isPrinting );
+         drawTextFragment(paint,
+                          textArea,
+                          unistr,
+                          &_image[loc(x,y)],
+                          tooWide);
 
          _fixedFont = save__fixedFont;
 
