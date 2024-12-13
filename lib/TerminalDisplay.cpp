@@ -260,17 +260,15 @@ void TerminalDisplay::fontChange(const QFont&)
 void TerminalDisplay::calDrawTextAdditionHeight(QPainter& painter)
 {
     QRect test_rect, feedback_rect;
-	test_rect.setRect(1, 1, _fontWidth * 4, _fontHeight);
+    test_rect.setRect(1, 1, _fontWidth * 4, _fontHeight);
+    painter.save();
+    painter.setOpacity(0);
     painter.drawText(test_rect, Qt::AlignBottom, LTR_OVERRIDE_CHAR + QLatin1String("Mq"), &feedback_rect);
+    painter.restore();
 
-	//qDebug() << "test_rect:" << test_rect << "feeback_rect:" << feedback_rect;
+    _drawTextAdditionHeight = qMax(0, (feedback_rect.height() - _fontHeight) / 2);
 
-	_drawTextAdditionHeight = (feedback_rect.height() - _fontHeight) / 2;
-	if(_drawTextAdditionHeight < 0) {
-	  _drawTextAdditionHeight = 0;
-	}
-
-  _drawTextTestFlag = false;
+    _drawTextTestFlag = false;
 }
 
 void TerminalDisplay::setVTFont(const QFont& f)
@@ -3430,12 +3428,12 @@ void AutoScrollHandler::timerEvent(QTimerEvent* event)
     if (event->timerId() != _timerId)
         return;
 
-    QMouseEvent mouseEvent(    QEvent::MouseMove,
-                              widget()->mapFromGlobal(QCursor::pos()),
-			      QCursor::pos(),
-                              Qt::NoButton,
-                              Qt::LeftButton,
-                              Qt::NoModifier);
+    QMouseEvent mouseEvent(QEvent::MouseMove,
+                           widget()->mapFromGlobal(QCursor::pos()),
+                           QCursor::pos(),
+                           Qt::NoButton,
+                           Qt::LeftButton,
+                           Qt::NoModifier);
 
     QApplication::sendEvent(widget(),&mouseEvent);
 }
