@@ -26,7 +26,6 @@
 // Standard
 #include <cstdio>
 #include <cstdlib>
-#include <unistd.h>
 #include <cstring>
 #include <cctype>
 
@@ -1350,6 +1349,8 @@ int Screen::copyLineToStream(int line ,
         }
 
         // count cannot be any greater than length
+        if(count > length - start)
+            return 0;
         count = qBound(0,count,length-start);
 
         Q_ASSERT( screenLine < lineProperties.count() );
