@@ -78,7 +78,6 @@ else()
 endif()
 
 set(SRCS
-    lib/BlockArray.cpp
     lib/ColorScheme.cpp
     lib/Emulation.cpp
     lib/Filter.cpp
