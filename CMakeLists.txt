@@ -61,10 +61,12 @@ set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
 # main library
 if(WIN32)
     set(WIN_SRCS
-
+        lib/ptyqt/conptyprocess.cpp
+        lib/ptyqt/iptyprocess.cpp
     )
     set(WIN_HDRS
-
+        lib/ptyqt/conptyprocess.h
+        lib/ptyqt/iptyprocess.h
     )
 else()
     set(UNIX_SRCS

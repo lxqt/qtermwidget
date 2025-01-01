@@ -39,6 +39,16 @@ Files: lib/wcwidth.c
 Copyright: Markus Kuhn
 License: MIT
 
+Files: lib/ptyqt/conptyprocess.cpp
+       lib/ptyqt/conptyprocess.h
+Copyright: Vitaly Petrov <v31337@gmail.com>
+License: MIT
+
+Files: lib/ptyqt/iptyprocess.cpp
+       lib/ptyqt/iptyprocess.h
+Copyright: Waqar Ahmed <waqar.17a@gmail.com>
+License: MIT
+
 Files: cmake/FindUtf8Proc.cmake
 Copyright: 2009-2011, Kitware, Inc
            2009-2011, Philip Lowman <philip@yhbt.com>
