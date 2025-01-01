@@ -59,6 +59,21 @@ set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
 
 
 # main library
+if(WIN32)
+    set(WIN_SRCS
+
+    )
+    set(WIN_HDRS
+
+    )
+else()
+    set(UNIX_SRCS
+        lib/BlockArray.cpp
+    )
+    set(UNIX_HDRS
+        
+    )
+endif()
 
 set(SRCS
     lib/BlockArray.cpp
@@ -84,6 +99,8 @@ set(SRCS
     lib/TerminalDisplay.cpp
     lib/tools.cpp
     lib/Vt102Emulation.cpp
+    ${WIN_SRCS}
+    ${UNIX_SRCS}
 )
 
 # Only the Headers that need to be moc'd go here
@@ -101,6 +118,8 @@ set(HDRS
     lib/Session.h
     lib/TerminalDisplay.h
     lib/Vt102Emulation.h
+    ${WIN_HDRS}
+    ${UNIX_HDRS}
 )
 
 set(UI
