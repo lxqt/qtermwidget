@@ -211,6 +211,10 @@ int QTermWidget::getForegroundProcessId()
 
 void QTermWidget::changeDir(const QString & dir)
 {
+#ifdef Q_OS_WIN
+    qWarning() << "QTermWidget::changeDir is not supported on Windows";
+    return;
+#endif
     /*
        this is a very hackish way of trying to determine if the shell is in
        the foreground before attempting to change the directory.  It may not
