@@ -70,10 +70,14 @@ if(WIN32)
     )
 else()
     set(UNIX_SRCS
+        lib/kpty.cpp
+        lib/kptydevice.cpp
+        lib/kptyprocess.cpp
         lib/BlockArray.cpp
     )
     set(UNIX_HDRS
-        
+        lib/kptydevice.h
+        lib/kptyprocess.h
     )
 endif()
 
@@ -86,9 +90,6 @@ set(SRCS
     lib/KeyboardTranslator.cpp
     lib/konsole_wcwidth.cpp
     lib/kprocess.cpp
-    lib/kpty.cpp
-    lib/kptydevice.cpp
-    lib/kptyprocess.cpp
     lib/Pty.cpp
     lib/qtermwidget.cpp
     lib/Screen.cpp
@@ -110,8 +111,6 @@ set(HDRS
     lib/Filter.h
     lib/HistorySearch.h
     lib/kprocess.h
-    lib/kptydevice.h
-    lib/kptyprocess.h
     lib/Pty.h
     lib/qtermwidget.h
     lib/ScreenWindow.h

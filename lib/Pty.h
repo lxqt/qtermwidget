@@ -36,11 +36,24 @@
 #include <QVector>
 #include <QList>
 #include <QSize>
+#include <QProcess>
 
+#ifndef WIN32
 // KDE
 #include "kptyprocess.h"
+#else
+#include <QObject>
+
+#include "ptyqt/iptyprocess.h"
+#endif
 
 namespace Konsole {
+
+#ifdef WIN32
+#define ParentClass QObject
+#else
+#define ParentClass KPtyProcess
+#endif
 
 /**
  * The Pty class is used to start the terminal process,
@@ -55,7 +68,7 @@ namespace Konsole {
  * To start the terminal process, call the start() method
  * with the program name and appropriate arguments.
  */
-class Pty: public KPtyProcess
+class Pty: public ParentClass
 {
 Q_OBJECT
 
@@ -80,6 +93,27 @@ Q_OBJECT
 
     ~Pty() override;
 
+#ifdef Q_OS_WIN
+    /**
+     * Starts the terminal process.
+     *
+     * Returns 0 if the process was started successfully or non-zero
+     * otherwise.
+     *
+     * @param program Path to the program to start
+     * @param arguments Arguments to pass to the program being started
+     * @param workingDir initial working directory
+     * @param environment A list of key=value pairs which will be added
+     * to the environment for the new process.  At the very least this
+     * should include an assignment for the TERM environment variable.
+     */
+    int start(const QString &program, const QStringList &arguments, const QString &workingDir, const QStringList &environment, int cols, int lines);
+
+    /**
+     * Sets the working directory.
+     */
+    void setWorkingDirectory(const QString &dir);
+#else
     /**
      * Starts the terminal process.
      *
@@ -91,21 +125,10 @@ Q_OBJECT
      * @param environment A list of key=value pairs which will be added
      * to the environment for the new process.  At the very least this
      * should include an assignment for the TERM environment variable.
-     * @param winid Specifies the value of the WINDOWID environment variable
-     * in the process's environment.
-     * @param addToUtmp Specifies whether a utmp entry should be created for
-     * the pty used.  See K3Process::setUsePty()
-     * @param dbusService Specifies the value of the KONSOLE_DBUS_SERVICE
-     * environment variable in the process's environment.
-     * @param dbusSession Specifies the value of the KONSOLE_DBUS_SESSION
-     * environment variable in the process's environment.
      */
-    int start( const QString& program,
-               const QStringList& arguments,
-               const QStringList& environment,
-               ulong winid,
-               bool addToUtmp
-             );
+    int start(const QString &program, const QStringList &arguments, const QStringList &environment);
+
+#endif
 
     /**
      * set properties for "EmptyPTY"
@@ -155,6 +178,45 @@ Q_OBJECT
      */
     void closePty();
 
+#ifdef Q_OS_WIN
+    int processId() const
+    {
+        if (m_proc && m_proc->isAvailable()) {
+            return m_proc->pid();
+        }
+        return 0;
+    }
+
+    bool isRunning() const
+    {
+        return processId() > 0;
+    }
+
+    QString errorString() const
+    {
+        if (m_proc) {
+            return m_proc->lastError();
+        }
+        return QStringLiteral("Conhost failed to start");
+    }
+
+    bool kill()
+    {
+        if (m_proc) {
+            return m_proc->kill();
+        }
+        return false;
+    }
+
+    int exitCode() const
+    {
+        if (m_proc) {
+            return m_proc->exitCode();
+        }
+        return -1;
+    }
+
+#endif
   public slots:
 
     /**
@@ -192,7 +254,10 @@ Q_OBJECT
      * @param length Length of @p buffer
      */
     void receivedData(const char* buffer, int length);
-
+#ifdef WIN32
+  signals:
+    void finished(int exitCode, QProcess::ExitStatus);
+#endif
   private slots:
     // called when data is received from the terminal process
     void dataReceived();
@@ -209,6 +274,9 @@ Q_OBJECT
     char _eraseChar;
     bool _xonXoff;
     bool _utf8;
+#ifdef Q_OS_WIN
+    std::unique_ptr<IPtyProcess> m_proc;
+#endif
 };
 
 }
