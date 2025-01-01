@@ -27,13 +27,14 @@ QString get_kb_layout_dir()
         return rval;
     }
 
-#ifdef Q_OS_MAC
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
     // subdir in the app location
     d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/"));
     //qDebug() << d.path();
     if (d.exists())
         return QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/");
-
+#endif
+#ifdef Q_OS_MAC
     d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kb-layouts/"));
     if (d.exists())
         return QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kb-layouts/");
