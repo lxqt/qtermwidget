@@ -84,7 +84,11 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
      */
     //session->setProgram("/bin/bash");
 
+#ifdef Q_OS_WIN
+    session->setProgram(QStringLiteral("C:\\WINDOWS\\system32\\cmd.exe"));
+#else
     session->setProgram(QString::fromLocal8Bit(qgetenv("SHELL")));
+#endif
 
 
 
