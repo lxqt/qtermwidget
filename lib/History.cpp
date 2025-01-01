@@ -27,9 +27,12 @@
 #include <cstdlib>
 #include <cstdio>
 #include <sys/types.h>
-#include <sys/mman.h>
-#include <unistd.h>
 #include <cerrno>
+
+#ifndef Q_OS_WIN
+#include <unistd.h>
+#include <sys/mman.h>
+#endif
 
 #include <QtDebug>
 
@@ -88,16 +91,30 @@ FIXME: There is noticeable decrease in speed, also. Perhaps,
 */
 
 HistoryFile::HistoryFile()
-  : ion(-1),
-    length(0),
-    fileMap(nullptr),
-    readWriteBalance(0)
+    : length(0)
+    , fileMap(nullptr)
+    , readWriteBalance(0)
 {
-  if (tmpFile.open())
-  {
-    tmpFile.setAutoRemove(true);
-    ion = tmpFile.handle();
-  }
+    if (tmpFile.open()) {
+#if defined(Q_OS_LINUX)
+// TODO:
+        // qWarning(KonsoleDebug, "HistoryFile: /proc/%lld/fd/%d", qApp->applicationPid(), _tmpFile.handle());
+#endif
+        // On some systems QTemporaryFile creates unnamed file.
+        // Do not interfere in such cases.
+        if (tmpFile.exists()) {
+            // Remove file entry from filesystem. Since the file
+            // is opened, it will still be available for reading
+            // and writing. This guarantees the file won't remain
+            // in filesystem after process termination, even when
+            // there was a crash.
+#ifndef Q_OS_WIN
+            unlink(QFile::encodeName(tmpFile.fileName()).constData());
+#else
+            // TODO Windows
+#endif
+        }
+    }
 }
 
 HistoryFile::~HistoryFile()
@@ -111,25 +128,28 @@ HistoryFile::~HistoryFile()
 //to avoid this.
 void HistoryFile::map()
 {
-    Q_ASSERT( fileMap == nullptr );
+    Q_ASSERT(fileMap == nullptr);
 
-    fileMap = (char*)mmap( nullptr , length , PROT_READ , MAP_PRIVATE , ion , 0 );
+    if (tmpFile.flush()) {
+        Q_ASSERT(tmpFile.size() >= length);
+        fileMap = tmpFile.map(0, length);
+    }
 
-    //if mmap'ing fails, fall back to the read-lseek combination
-    if ( fileMap == MAP_FAILED )
-    {
-            readWriteBalance = 0;
-            fileMap = nullptr;
-            //qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
+    // if mmap'ing fails, fall back to the read-lseek combination
+    if (fileMap == nullptr) {
+        readWriteBalance = 0;
+        qWarning() << "mmap'ing history failed.  errno = " << errno;
     }
 }
 
 void HistoryFile::unmap()
 {
-    int result = munmap( fileMap , length );
-    Q_ASSERT( result == 0 ); Q_UNUSED( result )
+    Q_ASSERT(fileMap);
 
-    fileMap = nullptr;
+    if (tmpFile.unmap(fileMap))
+        fileMap = nullptr;
+
+    Q_ASSERT(fileMap == nullptr);
 }
 
 bool HistoryFile::isMapped() const
@@ -137,47 +157,62 @@ bool HistoryFile::isMapped() const
     return (fileMap != nullptr);
 }
 
-void HistoryFile::add(const unsigned char* bytes, int len)
+void HistoryFile::add(const char* bytes, qint64 len)
 {
-  if ( fileMap )
-          unmap();
+    if (fileMap != nullptr)
+        unmap();
 
-  readWriteBalance++;
+    if (readWriteBalance < INT_MAX)
+        readWriteBalance++;
 
-  int rc = 0;
+    qint64 rc = 0;
 
-  rc = KDE_lseek(ion,length,SEEK_SET); if (rc < 0) { perror("HistoryFile::add.seek"); return; }
-  rc = write(ion,bytes,len);       if (rc < 0) { perror("HistoryFile::add.write"); return; }
-  length += rc;
+    if (!tmpFile.seek(length)) {
+        perror("HistoryFile::add.seek");
+        return;
+    }
+    rc = tmpFile.write(bytes, len);
+    if (rc < 0) {
+        perror("HistoryFile::add.write");
+        return;
+    }
+    length += rc;
 }
 
-void HistoryFile::get(unsigned char* bytes, int len, int loc)
+void HistoryFile::get(char* bytes, int len, int loc)
 {
-  //count number of get() calls vs. number of add() calls.
-  //If there are many more get() calls compared with add()
-  //calls (decided by using MAP_THRESHOLD) then mmap the log
-  //file to improve performance.
-  readWriteBalance--;
-  if ( !fileMap && readWriteBalance < MAP_THRESHOLD )
-          map();
+    if (loc < 0 || len < 0 || loc + len > (qint64)(length * sizeof(LineProperty))) {
+        fprintf(stderr, "getHist(...,%d,%d): invalid args.\n", len, loc);
+        return;
+    }
 
-  if ( fileMap )
-  {
-    for (int i=0;i<len;i++)
-            bytes[i]=fileMap[loc+i];
-  }
-  else
-  {
-      int rc = 0;
+    // count number of get() calls vs. number of add() calls.
+    // If there are many more get() calls compared with add()
+    // calls (decided by using MAP_THRESHOLD) then mmap the log
+    // file to improve performance.
+    if (readWriteBalance > INT_MIN)
+        readWriteBalance--;
+    if ((fileMap == nullptr) && readWriteBalance < MAP_THRESHOLD)
+        map();
 
-      if (loc < 0 || len < 0 || loc + len > length)
-        fprintf(stderr,"getHist(...,%d,%d): invalid args.\n",len,loc);
-      rc = KDE_lseek(ion,loc,SEEK_SET); if (rc < 0) { perror("HistoryFile::get.seek"); return; }
-      rc = read(ion,bytes,len);     if (rc < 0) { perror("HistoryFile::get.read"); return; }
-  }
+    if (fileMap != nullptr)
+        memcpy(bytes, fileMap + loc, len);
+    else {
+        qint64 rc = 0;
+
+        if (!tmpFile.seek(loc)) {
+            perror("HistoryFile::get.seek");
+            return;
+        }
+        rc = tmpFile.read(bytes, len);
+        if (rc < 0) {
+            perror("HistoryFile::get.read");
+            return;
+        }
+    }
 }
 
-int HistoryFile::len() const
+qint64 HistoryFile::len() const
 {
   return length;
 }
@@ -238,7 +273,7 @@ bool HistoryScrollFile::isWrappedLine(int lineno) const
 {
   if (lineno>=0 && lineno <= getLines()) {
     unsigned char flag;
-    lineflags.get((unsigned char*)&flag,sizeof(unsigned char),(lineno)*sizeof(unsigned char));
+    lineflags.get((char*)&flag, sizeof(unsigned char), (lineno) * sizeof(unsigned char));
     return flag;
   }
   return false;
@@ -254,7 +289,7 @@ int HistoryScrollFile::startOfLine(int lineno) const
             index.map();
 
     int res = 0;
-    index.get((unsigned char*)&res,sizeof(int),(lineno-1)*sizeof(int));
+    index.get((char*)&res, sizeof(int), (lineno - 1) * sizeof(int));
     return res;
     }
   return cells.len();
@@ -262,12 +297,12 @@ int HistoryScrollFile::startOfLine(int lineno) const
 
 void HistoryScrollFile::getCells(int lineno, int colno, int count, Character res[]) const
 {
-  cells.get((unsigned char*)res,count*sizeof(Character),startOfLine(lineno)+colno*sizeof(Character));
+  cells.get((char*)res, count * sizeof(Character), startOfLine(lineno) + colno * sizeof(Character));
 }
 
 void HistoryScrollFile::addCells(const Character text[], int count)
 {
-  cells.add((unsigned char*)text,count*sizeof(Character));
+  cells.add((char*)text, count * sizeof(Character));
 }
 
 void HistoryScrollFile::addLine(bool previousWrapped)
@@ -276,9 +311,9 @@ void HistoryScrollFile::addLine(bool previousWrapped)
           index.unmap();
 
   int locn = cells.len();
-  index.add((unsigned char*)&locn,sizeof(int));
+  index.add((char*)&locn,sizeof(int));
   unsigned char flags = previousWrapped ? 0x01 : 0x00;
-  lineflags.add((unsigned char*)&flags,sizeof(unsigned char));
+  lineflags.add((char*)&flags, sizeof(unsigned char));
 }
 
 
@@ -461,8 +496,9 @@ void HistoryScrollNone::addLine(bool)
 {
 }
 
-// History Scroll BlockArray //////////////////////////////////////
+#ifndef Q_OS_WIN
 
+// History Scroll BlockArray //////////////////////////////////////
 HistoryScrollBlockArray::HistoryScrollBlockArray(size_t size)
   : HistoryScroll(new HistoryTypeBlockArray(size))
 {
@@ -478,7 +514,7 @@ int  HistoryScrollBlockArray::getLines() const
   return m_lineLengths.count();
 }
 
-int  HistoryScrollBlockArray::getLineLen(int lineno) const
+int HistoryScrollBlockArray::getLineLen(int lineno) const
 {
     if ( m_lineLengths.contains(lineno) )
         return m_lineLengths[lineno];
@@ -701,6 +737,7 @@ void CompactHistoryLine::getCharacters ( Character* array, int length, int start
   }
 }
 
+
 CompactHistoryScroll::CompactHistoryScroll ( unsigned int maxLineCount )
     : HistoryScroll ( new CompactHistoryType ( maxLineCount ) )
     ,lines()
@@ -782,6 +819,7 @@ bool CompactHistoryScroll::isWrappedLine ( int lineNumber ) const
   return lines[lineNumber]->isWrapped();
 }
 
+#endif
 
 //////////////////////////////////////////////////////////////////////
 // History Types
@@ -819,6 +857,8 @@ int HistoryTypeNone::maximumLineCount() const
 
 //////////////////////////////
 
+#ifndef Q_OS_WIN
+
 HistoryTypeBlockArray::HistoryTypeBlockArray(size_t size)
   : m_size(size)
 {
@@ -840,6 +880,7 @@ HistoryScroll* HistoryTypeBlockArray::scroll(HistoryScroll *old) const
   return new HistoryScrollBlockArray(m_size);
 }
 
+#endif
 
 //////////////////////////////
 
@@ -956,6 +997,9 @@ int HistoryTypeFile::maximumLineCount() const
 
 //////////////////////////////
 
+#ifndef Q_OS_WIN
+
+
 CompactHistoryType::CompactHistoryType ( unsigned int nbLines )
     : m_nbLines ( nbLines )
 {
@@ -985,3 +1029,5 @@ HistoryScroll* CompactHistoryType::scroll ( HistoryScroll *old ) const
   }
   return new CompactHistoryScroll ( m_nbLines );
 }
+
+#endif
