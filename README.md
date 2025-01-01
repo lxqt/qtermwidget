@@ -35,6 +35,10 @@ Copyright: Author Adriaan de Groot <groot@kde.org>
            2022, Francesc Martinez <info@francescmm.com>
 License: LGPL-2+
 
+Files: lib/wcwidth.c
+Copyright: Markus Kuhn
+License: MIT
+
 Files: cmake/FindUtf8Proc.cmake
 Copyright: 2009-2011, Kitware, Inc
            2009-2011, Philip Lowman <philip@yhbt.com>
