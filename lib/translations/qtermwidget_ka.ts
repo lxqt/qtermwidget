@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="hu">
+<TS version="2.1" language="ka">
 <context>
     <name>Konsole::Session</name>
     <message>
         <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Jelzés a &apos;%1&apos; munkamenetben</translation>
+        <translation>ზარი სესიაში &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation>A munkamenet &apos;%1&apos; kilépett ezzel a kóddal %2.</translation>
+        <translation>სესია &apos;%1&apos; გამოვიდა კოდით %2.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>A(z) &apos;%1&apos; munkamenet összeomlott.</translation>
+        <translation>სესია &apos;%1&apos; ავარიულად დასრულდა.</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="607"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>A &apos;%1&apos; munkamenet váratlanul kilépett.</translation>
+        <translation>სესია &apos;%1&apos; მოულოდნელად დასრულდა.</translation>
     </message>
 </context>
 <context>
@@ -29,27 +29,27 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1278"/>
         <source>Size: XXX x XXX</source>
-        <translation>Méret: XXX x XXX</translation>
+        <translation>ზომა: XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1290"/>
         <source>Size: %1 x %2</source>
-        <translation>Méret: %1 x %2</translation>
+        <translation>ზომა: %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Paste multiline text</source>
-        <translation>Többsoros szöveg beillesztése</translation>
+        <translation>მრავალხაზიანი ტექსტის ჩასმა</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2791"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Biztosan beilleszti ezt a szöveget?</translation>
+        <translation>მართლა გნებავთ ამ ტექსტის ჩასმა?</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3261"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;A kimenet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;fel van függesztve&lt;/a&gt; a Ctrl+S megnyomásával.  Nyomjon &lt;b&gt;Ctrl+Q-t&lt;/b&gt; a folytatáshoz.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;გამოტანა &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;შეჩერდა&lt;/a&gt; ღილაკებით Ctrl+S.  გასაგრძელებლად დააწექით &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Nincs elérhető billentyűzet-átalakító.  Hiányzik az információ, amely a billentyű lenyomások a terminálhoz küldendő karakterekké alakításához szükséges.</translation>
+        <translation>კლავიატურის მთარგმნელი ხელმისაწვდომი არაა.  ინფორმაცია, რომელიც საჭიროა ღილაკის დაწოლების სიმბოლოებში გადასაყვანად, რომ ტერმინალს გავუგზავნო, ვერ ვიპოვე.</translation>
     </message>
 </context>
 <context>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2797"/>
         <source>Show Details...</source>
-        <translation>Részletek megjelenítése...</translation>
+        <translation>დეტალების ჩვენება...</translation>
     </message>
 </context>
 <context>
@@ -74,32 +74,32 @@
         <location filename="../ColorScheme.cpp" line="275"/>
         <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation>Névtelen Színséma</translation>
+        <translation>ფერების უსახელო სქემა</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
-        <translation>Elérhető színséma</translation>
+        <translation>ხელმისაწვდომი ფერების სქემა</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
         <source>Open Link</source>
-        <translation>Link megnyitása</translation>
+        <translation>ბმულის გახსნა</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Link Address</source>
-        <translation>Link másolása</translation>
+        <translation>ბმულის მისამართის კოპირება</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="525"/>
         <source>Send Email To...</source>
-        <translation>Email küldése ...</translation>
+        <translation>ელ. ფოსტის გაგზავნა...</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="526"/>
         <source>Copy Email Address</source>
-        <translation>Email cím másolása</translation>
+        <translation>ელფოსტის მისამართის კოპირება</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation>Színséma hiba</translation>
+        <translation>ფერების სქემის შეცდომა</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Nem sikerült betölteni a színsémát. %1</translation>
+        <translation>ვერ ჩაიტვირთა ფერების სქემა: %1</translation>
     </message>
 </context>
 <context>
@@ -120,47 +120,47 @@
     <message>
         <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation>Nagybetűérzékeny</translation>
+        <translation>დიდი და პატარა ასოების სხვაობა</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation>Reguláris kifejezés</translation>
+        <translation>რეგულარულ გამოსახულება</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation>Találatok kiemelése</translation>
+        <translation>ყველა დამთხვევის გამოკვეთა</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Keresősáv</translation>
+        <translation>ძებნის პანელი</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
         <source>X</source>
-        <translation></translation>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>Keresés:</translation>
+        <translation>მოძებნა:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
         <source>&lt;</source>
-        <translation></translation>
+        <translation>&lt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="54"/>
         <source>&gt;</source>
-        <translation></translation>
+        <translation>&gt;</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="66"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
 </context>
 </TS>
