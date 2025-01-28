@@ -122,6 +122,16 @@ const QChar LTR_OVERRIDE_CHAR( 0x202D );
    IBMPC (rgb) Black   Blue    Green   Cyan    Red     Magenta Yellow  White
 */
 
+
+// using global statics for the unclutter feature makes tracking the override cursor simple
+// there's only one cursor to override and only one terminal relevant for that at any time
+// gs_deadSpot serves as flag and also allows a position check - it doesn't matter that this isn't
+// correct when checking the position across instances as its only purpose is to catch judder when
+// the user doesn't really touch the mouse - once the mouse moves we'll quickly be out of the deadzone
+static QPoint gs_deadSpot(-1,-1);
+static QPoint gs_futureDeadSpot; // carry over the event position
+static QTimer *gs_hideMouseTimer = nullptr;
+
 ScreenWindow* TerminalDisplay::screenWindow() const
 {
     return _screenWindow;
@@ -405,7 +415,13 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
   _blinkCursorTimer   = new QTimer(this);
   connect(_blinkCursorTimer, SIGNAL(timeout()), this, SLOT(blinkCursorEvent()));
 
-//  KCursor::setAutoHideCursor( this, true );
+  // unclutter timer and connection - KCursor::setAutoHideCursor( this, true );
+  if (!gs_hideMouseTimer) {
+    gs_hideMouseTimer = new QTimer(this);
+    gs_hideMouseTimer->setSingleShot(true);
+    gs_hideMouseTimer->setInterval(1000);
+  }
+  connect(gs_hideMouseTimer, &QTimer::timeout, this, &TerminalDisplay::unclutter);
 
   setUsesMouse(true);
   setBracketedPasteMode(false);
@@ -2123,8 +2139,23 @@ QList<QAction*> TerminalDisplay::filterActions(const QPoint& position)
   return spot ? spot->actions() : QList<QAction*>();
 }
 
+void TerminalDisplay::unclutter() const {
+  if (underMouse() && gs_deadSpot.x() < 0) {
+    gs_deadSpot = gs_futureDeadSpot;
+    QApplication::setOverrideCursor(Qt::BlankCursor);
+  }
+}
+
 void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
 {
+  // unclutter
+  if (gs_deadSpot.x() > -1 && (ev->pos() - gs_deadSpot).manhattanLength() > 8) {
+    gs_deadSpot = QPoint(-1,-1);
+    QApplication::restoreOverrideCursor();
+  }
+  gs_futureDeadSpot = ev->pos();
+  gs_hideMouseTimer->start();
+
   int charLine = 0;
   int charColumn = 0;
   int leftMargin = _leftBaseMargin

@@ -725,6 +725,8 @@ private:
     bool isLineChar(Character c) const;
     bool isLineCharString(const std::wstring& string) const;
 
+    void unclutter() const; // conditionally hides the mouse cursor
+
     // the window onto the terminal screen which this display
     // is currently showing.
     QPointer<ScreenWindow> _screenWindow;
