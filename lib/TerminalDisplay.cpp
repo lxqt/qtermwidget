@@ -122,6 +122,16 @@ const QChar LTR_OVERRIDE_CHAR( 0x202D );
    IBMPC (rgb) Black   Blue    Green   Cyan    Red     Magenta Yellow  White
 */
 
+
+// using global statics for the unclutter feature makes tracking the override cursor simple
+// there's only one cursor to override and only one terminal relevant for that at any time
+// gs_deadSpot serves as flag and also allows a position check - it doesn't matter that this isn't
+// correct when checking the position across instances as its only purpose is to catch judder when
+// the user doesn't really touch the mouse - once the mouse moves we'll quickly be out of the deadzone
+static QPoint gs_deadSpot(-1,-1);
+static QPoint gs_futureDeadSpot;
+std::shared_ptr<QTimer> TerminalDisplay::_hideMouseTimer;
+
 ScreenWindow* TerminalDisplay::screenWindow() const
 {
     return _screenWindow;
@@ -369,6 +379,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_leftBaseMargin(1)
 ,_topBaseMargin(1)
 ,_drawLineChars(true)
+,_mouseAutohideDelay(-1)
 {
   // variables for draw text
   _drawTextAdditionHeight = 0;
@@ -405,8 +416,6 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
   _blinkCursorTimer   = new QTimer(this);
   connect(_blinkCursorTimer, SIGNAL(timeout()), this, SLOT(blinkCursorEvent()));
 
-//  KCursor::setAutoHideCursor( this, true );
-
   setUsesMouse(true);
   setBracketedPasteMode(false);
   setColorTable(base_color_table);
@@ -437,6 +446,8 @@ TerminalDisplay::~TerminalDisplay()
 {
   disconnect(_blinkTimer);
   disconnect(_blinkCursorTimer);
+  if (_hideMouseTimer)
+    disconnect(_hideMouseTimer.get());
   qApp->removeEventFilter( this );
 
   delete[] _image;
@@ -1363,6 +1374,11 @@ void TerminalDisplay::focusOutEvent(QFocusEvent*)
         blinkEvent();
 
     _blinkTimer->stop();
+    if (gs_deadSpot.x() > -1 && QApplication::activeWindow()) // we lost the focus internally
+    {
+      gs_deadSpot = QPoint(-1,-1);
+      QApplication::restoreOverrideCursor();
+    }
 }
 void TerminalDisplay::focusInEvent(QFocusEvent*)
 {
@@ -1375,6 +1391,12 @@ void TerminalDisplay::focusInEvent(QFocusEvent*)
 
     if (_hasBlinker)
         _blinkTimer->start();
+
+    if (gs_deadSpot.x() < 0 && _hideMouseTimer)
+    {
+        gs_futureDeadSpot = mapFromGlobal(QCursor::pos());
+        _hideMouseTimer->start(_mouseAutohideDelay);
+    }
 }
 
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
@@ -2123,8 +2145,53 @@ QList<QAction*> TerminalDisplay::filterActions(const QPoint& position)
   return spot ? spot->actions() : QList<QAction*>();
 }
 
+void TerminalDisplay::hideStaleMouse() const
+{
+    if (gs_deadSpot.x() > -1) // we already have a dead spot
+        return;
+    if (gs_futureDeadSpot.x() < 0) // that's not expected nor gonna end well
+        return;
+    if (!underMouse()) // we don't care about the mouse
+        return;
+    if (QApplication::activeWindow() && QApplication::activeWindow() != window()) // some other app window has the focus
+        return;
+    gs_deadSpot = gs_futureDeadSpot;
+    QApplication::setOverrideCursor(Qt::BlankCursor);
+}
+
+void TerminalDisplay::autoHideMouseAfter(int delay)
+{
+    if (delay > -1 && !_hideMouseTimer)
+    {
+        _hideMouseTimer = std::make_shared<QTimer>();
+        _hideMouseTimer->setSingleShot(true);
+    }
+    if ((_mouseAutohideDelay < 0) == (delay < 0))
+    {
+        _mouseAutohideDelay = delay;
+        return;
+    }
+    if (delay > -1)
+        connect(_hideMouseTimer.get(), &QTimer::timeout, this, &TerminalDisplay::hideStaleMouse);
+    else if (_hideMouseTimer)
+        disconnect(_hideMouseTimer.get(), &QTimer::timeout, this, &TerminalDisplay::hideStaleMouse);
+    _mouseAutohideDelay = delay;
+}
+
 void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
 {
+  // unclutter
+  if (_mouseAutohideDelay > -1) {
+      if (gs_deadSpot.x() > -1 && (ev->pos() - gs_deadSpot).manhattanLength() > 8)
+      {
+        gs_deadSpot = QPoint(-1,-1);
+        QApplication::restoreOverrideCursor();
+      }
+      gs_futureDeadSpot = ev->pos();
+      Q_ASSERT(_hideMouseTimer);
+      _hideMouseTimer->start(_mouseAutohideDelay);
+  }
+
   int charLine = 0;
   int charColumn = 0;
   int leftMargin = _leftBaseMargin
