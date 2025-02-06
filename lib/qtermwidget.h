@@ -259,6 +259,8 @@ public:
     void setWordCharacters(const QString& chars) override;
 
     QTermWidgetInterface *createWidget(int startnow) const override;
+
+    void autoHideMouseAfter(int delay) override;
 signals:
     void finished();
     void copyAvailable(bool);

@@ -101,6 +101,7 @@ class QTermWidgetInterface {
    virtual QString wordCharacters() const = 0;
    virtual void setWordCharacters(const QString& chars) = 0;
    virtual QTermWidgetInterface* createWidget(int startnow) const = 0;
+   virtual void autoHideMouseAfter(int delay) = 0;
 };
 
 #define QTermWidgetInterface_iid "lxqt.qtermwidget.QTermWidgetInterface/1.5"

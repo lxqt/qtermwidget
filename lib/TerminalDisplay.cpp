@@ -39,7 +39,6 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QRegularExpression>
-#include <QScrollBar>
 #include <QStyle>
 #include <QTimer>
 #include <QtDebug>
@@ -397,7 +396,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 
   // create scroll bar for scrolling output up and down
   // set the scroll bar's slider to occupy the whole area of the scroll bar initially
-  _scrollBar = new QScrollBar(this);
+  _scrollBar = new ScrollBar(this);
   // since the contrast with the terminal background may not be enough,
   // the scrollbar should be auto-filled if not transient
   if (!_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
@@ -1374,11 +1373,6 @@ void TerminalDisplay::focusOutEvent(QFocusEvent*)
         blinkEvent();
 
     _blinkTimer->stop();
-    if (gs_deadSpot.x() > -1 && QApplication::activeWindow()) // we lost the focus internally
-    {
-      gs_deadSpot = QPoint(-1,-1);
-      QApplication::restoreOverrideCursor();
-    }
 }
 void TerminalDisplay::focusInEvent(QFocusEvent*)
 {
@@ -1391,12 +1385,28 @@ void TerminalDisplay::focusInEvent(QFocusEvent*)
 
     if (_hasBlinker)
         _blinkTimer->start();
+}
 
-    if (gs_deadSpot.x() < 0 && _hideMouseTimer)
-    {
-        gs_futureDeadSpot = mapFromGlobal(QCursor::pos());
-        _hideMouseTimer->start(_mouseAutohideDelay);
-    }
+void TerminalDisplay::enterEvent(QEnterEvent* event)
+{
+  if (gs_deadSpot.x() < 0 && _hideMouseTimer
+      // NOTE: scrollBar->underMouse() doesn't work here
+      && !_scrollBar->rect().contains(_scrollBar->mapFromParent(event->position().toPoint())))
+  {
+    gs_futureDeadSpot = event->position().toPoint();
+    _hideMouseTimer->start(_mouseAutohideDelay);
+  }
+  QWidget::enterEvent(event);
+}
+
+void TerminalDisplay::leaveEvent(QEvent* event)
+{
+  if (gs_deadSpot.x() > -1)
+  {
+    gs_deadSpot = QPoint(-1,-1);
+    QApplication::restoreOverrideCursor();
+  }
+  QWidget::leaveEvent(event);
 }
 
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
@@ -2155,6 +2165,8 @@ void TerminalDisplay::hideStaleMouse() const
         return;
     if (QApplication::activeWindow() && QApplication::activeWindow() != window()) // some other app window has the focus
         return;
+    if (_scrollBar->underMouse()) // the mouse is over the scrollbar
+        return;
     gs_deadSpot = gs_futureDeadSpot;
     QApplication::setOverrideCursor(Qt::BlankCursor);
 }
@@ -2187,7 +2199,7 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
         gs_deadSpot = QPoint(-1,-1);
         QApplication::restoreOverrideCursor();
       }
-      gs_futureDeadSpot = ev->pos();
+      gs_futureDeadSpot = ev->position().toPoint();
       Q_ASSERT(_hideMouseTimer);
       _hideMouseTimer->start(_mouseAutohideDelay);
   }
@@ -2199,7 +2211,7 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
                        && !_scrollBar->style()->styleHint(QStyle::SH_ScrollBar_Transient, nullptr, _scrollBar))
                       ? _scrollBar->width() : 0);
 
-  getCharacterPosition(ev->pos(),charLine,charColumn);
+  getCharacterPosition(ev->position().toPoint(),charLine,charColumn);
 
   // handle filters
   // change link hot-spot appearance on mouse-over
@@ -2299,7 +2311,7 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
  // don't extend selection while pasting
   if (ev->buttons() & Qt::MiddleButton) return;
 
-  extendSelection( ev->pos() );
+  extendSelection(ev->position().toPoint());
 }
 
 void TerminalDisplay::extendSelection( const QPoint& position )
@@ -3541,6 +3553,19 @@ bool AutoScrollHandler::eventFilter(QObject* watched,QEvent* event)
     };
 
     return false;
+}
+
+ScrollBar::ScrollBar(QWidget* parent) : QScrollBar(parent) {}
+
+void ScrollBar::enterEvent(QEnterEvent* event)
+{
+  // show the mouse cursor that was auto-hidden
+  if (gs_deadSpot.x() > -1)
+  {
+    gs_deadSpot = QPoint(-1,-1);
+    QApplication::restoreOverrideCursor();
+  }
+  QScrollBar::enterEvent(event);
 }
 
 //#include "TerminalDisplay.moc"
