@@ -433,6 +433,8 @@ public:
     void disableBracketedPasteMode(bool disable) { _disabledBracketedPasteMode = disable; }
     bool bracketedPasteModeIsDisabled() const { return _disabledBracketedPasteMode; }
 
+    int mouseAutohideDelay() const { return _mouseAutohideDelay; }
+
 public slots:
 
     /**
@@ -525,6 +527,12 @@ public slots:
      * @see setColorTable(), setBackgroundColor()
      */
     void setForegroundColor(const QColor& color);
+
+    /**
+    * hide the mouse cursor after @param delay milliseconds of inactivity
+    * @param delay < 0 deactivates the behavior
+    */
+    void autoHideMouseAfter(int delay);
 
     void selectionChanged();
 
@@ -725,6 +733,8 @@ private:
     bool isLineChar(Character c) const;
     bool isLineCharString(const std::wstring& string) const;
 
+    void hideStaleMouse() const; // conditionally hides the mouse cursor
+
     // the window onto the terminal screen which this display
     // is currently showing.
     QPointer<ScreenWindow> _screenWindow;
@@ -800,6 +810,7 @@ private:
     bool _isFixedSize; //Columns / lines are locked.
     QTimer* _blinkTimer;  // active when hasBlinker
     QTimer* _blinkCursorTimer;  // active when hasBlinkingCursor
+    static std::shared_ptr<QTimer> _hideMouseTimer;
 
     //QMenu* _drop;
     QString _dropText;
@@ -861,6 +872,8 @@ private:
     int _topBaseMargin;
 
     bool _drawLineChars;
+
+    int _mouseAutohideDelay;
 
 public:
     static void setTransparencyEnabled(bool enable)
