@@ -832,8 +832,12 @@ void QTermWidget::setWordCharacters(const QString& chars)
     m_impl->m_terminalDisplay->setWordCharacters(chars);
 }
 
-
 QTermWidgetInterface* QTermWidget::createWidget(int startnow) const
 {
    return new QTermWidget(startnow);
+}
+
+void QTermWidget::autoHideMouseAfter(int delay)
+{
+    m_impl->m_terminalDisplay->autoHideMouseAfter(delay);
 }

@@ -24,7 +24,7 @@
 // Qt
 #include <QColor>
 #include <QPointer>
-#include <QWidget>
+#include <QScrollBar>
 
 // Konsole
 #include "Filter.h"
@@ -41,7 +41,6 @@ class QTimer;
 class QEvent;
 class QGridLayout;
 class QKeyEvent;
-class QScrollBar;
 class QShowEvent;
 class QHideEvent;
 class QTimerEvent;
@@ -73,6 +72,7 @@ namespace Konsole
 extern unsigned short vt100_graphics[32];
 
 class ScreenWindow;
+class ScrollBar;
 
 /**
  * A widget which displays output from a terminal emulation and sends input keypresses and mouse activity
@@ -435,6 +435,12 @@ public:
 
     int mouseAutohideDelay() const { return _mouseAutohideDelay; }
 
+    /**
+    * hide the mouse cursor after @param delay milliseconds of inactivity
+    * @param delay < 0 deactivates the behavior
+    */
+    void autoHideMouseAfter(int delay);
+
 public slots:
 
     /**
@@ -528,12 +534,6 @@ public slots:
      */
     void setForegroundColor(const QColor& color);
 
-    /**
-    * hide the mouse cursor after @param delay milliseconds of inactivity
-    * @param delay < 0 deactivates the behavior
-    */
-    void autoHideMouseAfter(int delay);
-
     void selectionChanged();
 
 signals:
@@ -596,6 +596,8 @@ protected:
     virtual void fontChange(const QFont &font);
     void focusInEvent(QFocusEvent* event) override;
     void focusOutEvent(QFocusEvent* event) override;
+    void enterEvent(QEnterEvent* event) override;
+    void leaveEvent(QEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;
     void mouseDoubleClickEvent(QMouseEvent* ev) override;
     void mousePressEvent( QMouseEvent* ) override;
@@ -795,7 +797,7 @@ private:
     bool    _columnSelectionMode;
 
     QClipboard*  _clipboard;
-    QScrollBar* _scrollBar;
+    ScrollBar* _scrollBar;
     QTermWidget::ScrollBarPosition _scrollbarLocation;
     QString     _wordCharacters;
     int         _bellMode;
@@ -894,6 +896,16 @@ protected:
 private:
     QWidget* widget() const { return static_cast<QWidget*>(parent()); }
     int _timerId;
+};
+
+class ScrollBar : public QScrollBar
+{
+Q_OBJECT
+
+public:
+    ScrollBar(QWidget* parent = nullptr);
+protected:
+    void enterEvent(QEnterEvent* event) override;
 };
 
 }
