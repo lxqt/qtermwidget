@@ -1333,7 +1333,11 @@ void TerminalDisplay::setBlinkingCursor(bool blink)
   _hasBlinkingCursor=blink;
 
   if (blink && !_blinkCursorTimer->isActive())
-      _blinkCursorTimer->start(QApplication::cursorFlashTime() / 2);
+  {
+      // QApplication::cursorFlashTime() may be negative, and a too fast
+      // blinking is not good. Also, see TerminalDisplay::keyPressEvent.
+      _blinkCursorTimer->start(std::max(QApplication::cursorFlashTime(), 1000) / 2);
+  }
 
   if (!blink && _blinkCursorTimer->isActive())
   {
@@ -3063,7 +3067,8 @@ void TerminalDisplay::keyPressEvent( QKeyEvent* event )
 
     if (_hasBlinkingCursor)
     {
-      _blinkCursorTimer->start(QApplication::cursorFlashTime() / 2);
+      // see TerminalDisplay::setBlinkingCursor
+      _blinkCursorTimer->start(std::max(QApplication::cursorFlashTime(), 1000) / 2);
       if (_cursorBlinking)
         blinkCursorEvent();
       else
