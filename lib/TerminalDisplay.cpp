@@ -1332,7 +1332,7 @@ void TerminalDisplay::setBlinkingCursor(bool blink)
 {
   _hasBlinkingCursor=blink;
 
-  if (blink && !_blinkCursorTimer->isActive())
+  if (blink && !_blinkCursorTimer->isActive() && hasFocus())
   {
       // QApplication::cursorFlashTime() may be negative, and a too fast
       // blinking is not good. Also, see TerminalDisplay::keyPressEvent.
@@ -1353,7 +1353,7 @@ void TerminalDisplay::setBlinkingTextEnabled(bool blink)
 {
     _allowBlinkingText = blink;
 
-    if (blink && !_blinkTimer->isActive())
+    if (blink && !_blinkTimer->isActive() && hasFocus())
         _blinkTimer->start(TEXT_BLINK_DELAY);
 
     if (!blink && _blinkTimer->isActive())
@@ -1365,30 +1365,37 @@ void TerminalDisplay::setBlinkingTextEnabled(bool blink)
 
 void TerminalDisplay::focusOutEvent(QFocusEvent*)
 {
-    emit termLostFocus();
     // trigger a repaint of the cursor so that it is both visible (in case
     // it was hidden during blinking)
     // and drawn in a focused out state
     _cursorBlinking = false;
     updateCursor();
-
     _blinkCursorTimer->stop();
+
     if (_blinking)
         blinkEvent();
 
     _blinkTimer->stop();
+
+    // This signal should be emitted only in the end
+    // because the focus may change in response to it.
+    emit termLostFocus();
 }
 void TerminalDisplay::focusInEvent(QFocusEvent*)
 {
-    emit termGetFocus();
     if (_hasBlinkingCursor)
     {
-        _blinkCursorTimer->start();
+        // see TerminalDisplay::setBlinkingCursor
+        _blinkCursorTimer->start(std::max(QApplication::cursorFlashTime(), 1000) / 2);
     }
     updateCursor();
 
     if (_hasBlinker)
-        _blinkTimer->start();
+        _blinkTimer->start(TEXT_BLINK_DELAY);
+
+    // This signal should be emitted only in the end
+    // because the focus may change in response to it.
+    emit termGetFocus();
 }
 
 void TerminalDisplay::enterEvent(QEnterEvent* event)
