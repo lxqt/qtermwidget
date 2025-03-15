@@ -74,7 +74,7 @@
         <location filename="../ColorScheme.cpp" line="275"/>
         <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation>未命名的配色</translation>
+        <translation>尚未命名的配色方案</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>無法載入配色：%1</translation>
+        <translation>無法載入配色： %1</translation>
     </message>
 </context>
 <context>
