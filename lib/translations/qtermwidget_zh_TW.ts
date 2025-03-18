@@ -6,22 +6,22 @@
     <message>
         <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>在工作階段中響鈴 &apos;%1&apos;</translation>
+        <translation>在工作階段 &apos;%1&apos; 中的鈴聲</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="600"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation>工作階段 &apos;%1&apos; 以代碼 &apos;%2&apos; 退出。</translation>
+        <translation>工作階段 &apos;%1&apos; 已經退出，使用程式碼 &apos;%2&apos;。</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="602"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>會話 &apos;%1&apos; 已崩潰。</translation>
+        <translation>工作階段 &apos;%1&apos; 已經崩潰。</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="607"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>會話 &apos;%1&apos; 意外退出。</translation>
+        <translation>工作階段 &apos;%1&apos; 已經意外退出。</translation>
     </message>
 </context>
 <context>
@@ -29,27 +29,27 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="1278"/>
         <source>Size: XXX x XXX</source>
-        <translation>大小：XXX x XXX</translation>
+        <translation>大小： XXX x XXX</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="1290"/>
         <source>Size: %1 x %2</source>
-        <translation>大小：%1 x %2</translation>
+        <translation>大小： %1 x %2</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2790"/>
         <source>Paste multiline text</source>
-        <translation>粘貼多行文本</translation>
+        <translation>貼上多行文字</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="2791"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>你確定要粘貼這段文本嗎？</translation>
+        <translation>確定要貼上這段文字嗎？</translation>
     </message>
     <message>
         <location filename="../TerminalDisplay.cpp" line="3261"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation>輸出已被Ctrl+S暫停。按Ctrl+Q復原。</translation>
+        <translation>&lt;qt&gt;按下 Ctrl+S 則輸出已經 &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暫停&lt;/a&gt; 。 按下 &lt;b&gt;Ctrl+Q&lt;/b&gt; 鍵重新繼續。&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>沒有可用的鍵碼轉換表。用來將按鍵轉換成終端機字元的資訊遺失。</translation>
+        <translation>沒有可用的鍵碼轉換表。.  用來將按鍵轉換成終端機字元的資訊遺失。</translation>
     </message>
 </context>
 <context>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2797"/>
         <source>Show Details...</source>
-        <translation>展示細節 ...</translation>
+        <translation>顯示細節…</translation>
     </message>
 </context>
 <context>
@@ -74,12 +74,12 @@
         <location filename="../ColorScheme.cpp" line="275"/>
         <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation>未命名的配色</translation>
+        <translation>尚未命名的配色方案</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
-        <translation>可用的配色</translation>
+        <translation>可以取用的配色方案</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="520"/>
@@ -89,17 +89,17 @@
     <message>
         <location filename="../Filter.cpp" line="521"/>
         <source>Copy Link Address</source>
-        <translation>複製網址</translation>
+        <translation>複製連結網址</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="525"/>
         <source>Send Email To...</source>
-        <translation>傳送郵件給…</translation>
+        <translation>傳送電子郵件至…</translation>
     </message>
     <message>
         <location filename="../Filter.cpp" line="526"/>
         <source>Copy Email Address</source>
-        <translation>複製信箱地址</translation>
+        <translation>複製電子信箱位址</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation>配色錯誤</translation>
+        <translation>配色方案錯誤</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>無法載入配色：%1</translation>
+        <translation>無法載入配色方案： %1</translation>
     </message>
 </context>
 <context>
@@ -130,7 +130,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation>標亮所有相符的項目</translation>
+        <translation>強調顯示全部相符的項目</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>搜尋：</translation>
+        <translation>查尋：</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
