@@ -9,17 +9,17 @@
         <translation>Jelzés a &apos;%1&apos; munkamenetben</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="600"/>
+        <location filename="../Session.cpp" line="630"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>A munkamenet &apos;%1&apos; kilépett ezzel a kóddal %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="602"/>
+        <location filename="../Session.cpp" line="632"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>A(z) &apos;%1&apos; munkamenet összeomlott.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="607"/>
+        <location filename="../Session.cpp" line="637"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>A &apos;%1&apos; munkamenet váratlanul kilépett.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1278"/>
+        <location filename="../TerminalDisplay.cpp" line="1311"/>
         <source>Size: XXX x XXX</source>
         <translation>Méret: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1290"/>
+        <location filename="../TerminalDisplay.cpp" line="1323"/>
         <source>Size: %1 x %2</source>
         <translation>Méret: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2987"/>
         <source>Paste multiline text</source>
         <translation>Többsoros szöveg beillesztése</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2791"/>
+        <location filename="../TerminalDisplay.cpp" line="2988"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Biztosan beilleszti ezt a szöveget?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3261"/>
+        <location filename="../TerminalDisplay.cpp" line="3459"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;A kimenet &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;fel van függesztve&lt;/a&gt; a Ctrl+S megnyomásával.  Nyomjon &lt;b&gt;Ctrl+Q-t&lt;/b&gt; a folytatáshoz.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2797"/>
+        <location filename="../TerminalDisplay.cpp" line="2994"/>
         <source>Show Details...</source>
         <translation>Részletek megjelenítése...</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>Elérhető színséma</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="522"/>
         <source>Open Link</source>
         <translation>Link megnyitása</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="523"/>
         <source>Copy Link Address</source>
         <translation>Link másolása</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="525"/>
+        <location filename="../Filter.cpp" line="527"/>
         <source>Send Email To...</source>
         <translation>Email küldése ...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="526"/>
+        <location filename="../Filter.cpp" line="528"/>
         <source>Copy Email Address</source>
         <translation>Email cím másolása</translation>
     </message>
