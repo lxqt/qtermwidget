@@ -9,17 +9,17 @@
         <translation>在工作階段 &apos;%1&apos; 中的鈴聲</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="600"/>
+        <location filename="../Session.cpp" line="630"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>工作階段 &apos;%1&apos; 已經退出，使用程式碼 &apos;%2&apos;。</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="602"/>
+        <location filename="../Session.cpp" line="632"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>工作階段 &apos;%1&apos; 已經崩潰。</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="607"/>
+        <location filename="../Session.cpp" line="637"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>工作階段 &apos;%1&apos; 已經意外退出。</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1278"/>
+        <location filename="../TerminalDisplay.cpp" line="1311"/>
         <source>Size: XXX x XXX</source>
         <translation>大小： XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1290"/>
+        <location filename="../TerminalDisplay.cpp" line="1323"/>
         <source>Size: %1 x %2</source>
         <translation>大小： %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2987"/>
         <source>Paste multiline text</source>
         <translation>貼上多行文字</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2791"/>
+        <location filename="../TerminalDisplay.cpp" line="2988"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>確定要貼上這段文字嗎？</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3261"/>
+        <location filename="../TerminalDisplay.cpp" line="3459"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;按下 Ctrl+S 則輸出已經 &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暫停&lt;/a&gt; 。 按下 &lt;b&gt;Ctrl+Q&lt;/b&gt; 鍵重新繼續。&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2797"/>
+        <location filename="../TerminalDisplay.cpp" line="2994"/>
         <source>Show Details...</source>
         <translation>顯示細節…</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>可以取用的配色方案</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="522"/>
         <source>Open Link</source>
         <translation>開啟連結</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="523"/>
         <source>Copy Link Address</source>
         <translation>複製連結網址</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="525"/>
+        <location filename="../Filter.cpp" line="527"/>
         <source>Send Email To...</source>
         <translation>傳送電子郵件至…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="526"/>
+        <location filename="../Filter.cpp" line="528"/>
         <source>Copy Email Address</source>
         <translation>複製電子信箱位址</translation>
     </message>

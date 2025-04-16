@@ -9,17 +9,17 @@
         <translation>Klokke i økt «%1»</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="600"/>
+        <location filename="../Session.cpp" line="630"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Økt &apos;%1&apos; avsluttet med kode %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="602"/>
+        <location filename="../Session.cpp" line="632"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Økt «%1» krasjet.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="607"/>
+        <location filename="../Session.cpp" line="637"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Økt «%1» avsluttet uventet.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1278"/>
+        <location filename="../TerminalDisplay.cpp" line="1311"/>
         <source>Size: XXX x XXX</source>
         <translation>Størrelse: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1290"/>
+        <location filename="../TerminalDisplay.cpp" line="1323"/>
         <source>Size: %1 x %2</source>
         <translation>Størrelse: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2987"/>
         <source>Paste multiline text</source>
         <translation>Lim inn flerlinjerstekst</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2791"/>
+        <location filename="../TerminalDisplay.cpp" line="2988"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Er du sikker på at du vil lime inn denne teksten?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3261"/>
+        <location filename="../TerminalDisplay.cpp" line="3459"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Utgangssignalet ble &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;stoppet&lt;/a&gt; da Ctrl+S ble trykket.  Trykk &lt;b&gt;Ctrl+Q&lt;/b&gt; for å fortsette.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2797"/>
+        <location filename="../TerminalDisplay.cpp" line="2994"/>
         <source>Show Details...</source>
         <translation>Vis detaljer …</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>Tilrettelagt fargeskjema</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="522"/>
         <source>Open Link</source>
         <translation>Åpne lenke</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="523"/>
         <source>Copy Link Address</source>
         <translation>Kopier lenkeadresse</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="525"/>
+        <location filename="../Filter.cpp" line="527"/>
         <source>Send Email To...</source>
         <translation>Send epost til...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="526"/>
+        <location filename="../Filter.cpp" line="528"/>
         <source>Copy Email Address</source>
         <translation>Kopier epostadressen</translation>
     </message>

@@ -9,17 +9,17 @@
         <translation>Zvonek v sezení „%1“</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="600"/>
+        <location filename="../Session.cpp" line="630"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Sezení &apos;%1&apos; bylo ukončeno s kódem %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="602"/>
+        <location filename="../Session.cpp" line="632"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Sezení „%1“ zhavarovalo.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="607"/>
+        <location filename="../Session.cpp" line="637"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Sezení „%1“ neočekávaně ukončeno.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1278"/>
+        <location filename="../TerminalDisplay.cpp" line="1311"/>
         <source>Size: XXX x XXX</source>
         <translation>Velikost: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1290"/>
+        <location filename="../TerminalDisplay.cpp" line="1323"/>
         <source>Size: %1 x %2</source>
         <translation>Velikost: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2987"/>
         <source>Paste multiline text</source>
         <translation>Vložit víceřádkový text</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2791"/>
+        <location filename="../TerminalDisplay.cpp" line="2988"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Opravdu chcete tento text vložit?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3261"/>
+        <location filename="../TerminalDisplay.cpp" line="3459"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Výstup byl &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pozastaven&lt;/a&gt; stisknutím Ctrl+S. Znovu ho spustíte stisknutím &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2797"/>
+        <location filename="../TerminalDisplay.cpp" line="2994"/>
         <source>Show Details...</source>
         <translation>Zobrazit podrobnosti…</translation>
     </message>
@@ -82,22 +82,22 @@
         <translation>Schéma barev pro uživatele se zrakovou vadou</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="522"/>
         <source>Open Link</source>
         <translation>Otevřít odkaz</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="523"/>
         <source>Copy Link Address</source>
         <translation>Zkopírovat adresu odkazu</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="525"/>
+        <location filename="../Filter.cpp" line="527"/>
         <source>Send Email To...</source>
         <translation>Poslat e-mail na…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="526"/>
+        <location filename="../Filter.cpp" line="528"/>
         <source>Copy Email Address</source>
         <translation>Zkopírovat e-mailovou adresu</translation>
     </message>
