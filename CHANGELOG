@@ -1,3 +1,16 @@
+qtermwidget-2.2.0 / 2025-04-17
+===============================
+ * Fixed the problem with characters like '⧸' (U+29F8).
+ * Close the session correctly before destroying it.
+ * Fixed URL highlighting on wrapping.
+ * Handle double-column and small characters correctly on calculating text width.
+ * Fixed problem with characters wider than monospace.
+ * Support combining characters.
+ * Make too wide characters fit into available space.
+ * Get rid of "Mq", which sometimes persisted at the top left corner after the display was updated.
+ * Added support for auto-hiding inactive mouse cursor.
+ * Fixed cursor blinking with subterminals.
+
 qtermwidget-2.1.0 / 2024-11-05
 ===============================
  * Silenced old compilation warnings.
