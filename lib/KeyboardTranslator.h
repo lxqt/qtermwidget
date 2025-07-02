@@ -505,6 +505,13 @@ public:
      * translators is started.
      */
     QList<QString> allTranslators();
+    
+    /**
+     * @brief Allows to add a custom location of keyboard layout.
+     *
+     * @param[in] custom_dir Custom location of keyboard layout (must end with /).
+     */
+    void addKeyboardLayoutDir(const QString& custom_dir);
 
     /** Returns the global KeyboardTranslatorManager instance. */
    static KeyboardTranslatorManager* instance();

@@ -117,6 +117,7 @@ public:
     QStringList getAvailableColorSchemes() override;
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);
+    static void addCustomKeyboardLayoutDir(const QString& custom_dir);
 
     /** Sets the history size (in lines)
      *

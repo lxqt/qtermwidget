@@ -4,8 +4,15 @@
 #include <QDir>
 #include <QtDebug>
 
-
 Q_LOGGING_CATEGORY(qtermwidgetLogger, "qtermwidget", QtWarningMsg)
+
+static QStringList custom_kb_layout_dirs;
+
+void add_custom_kb_layout_dir(const QString& custom_dir)
+{
+    if (!custom_kb_layout_dirs.contains(custom_dir))
+        custom_kb_layout_dirs << custom_dir;
+}
 
 /*! Helper function to get possible location of layout files.
 By default the KB_LAYOUT_DIR is used (linux/BSD/macports).
@@ -27,26 +34,44 @@ QString get_kb_layout_dir()
         return rval;
     }
 
-#ifdef Q_OS_MAC
     // subdir in the app location
-    d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/"));
+    k = QCoreApplication::applicationDirPath()
+        + QDir::separator() + QLatin1String("kb-layouts") + QDir::separator();
+    d.setPath(k);
     //qDebug() << d.path();
     if (d.exists())
-        return QCoreApplication::applicationDirPath() + QLatin1String("/kb-layouts/");
+        return k;
 
-    d.setPath(QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kb-layouts/"));
+    k = QCoreApplication::applicationDirPath()
+        + QDir::separator() + QLatin1String("..") + QDir::separator()
+        + QLatin1String("Resources") + QDir::separator() + QLatin1String("kb-layouts") + QDir::separator();
+    d.setPath(k);
     if (d.exists())
-        return QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kb-layouts/");
-#endif
+        return k;
+
+    k = QCoreApplication::applicationDirPath()
+        + QDir::separator() + QLatin1String("..")
+        + QDir::separator() + QLatin1String("share")
+        + QDir::separator() + QLatin1String("qtermwidget6")
+        + QDir::separator() + QLatin1String("kb-layouts") + QDir::separator();
+    d.setPath(k);
+    if(d.exists())
+        return k;
+
+    for (const QString& custom_dir : std::as_const(custom_kb_layout_dirs))
+    {
+        d.setPath(custom_dir);
+        if (d.exists())
+            return custom_dir + QDir::separator();
+    }
+
     //qDebug() << "Cannot find KB_LAYOUT_DIR. Default:" << k;
     return QString();
 }
 
 /*! Helper function to add custom location of color schemes.
 */
-namespace {
-    QStringList custom_color_schemes_dirs;
-}
+static QStringList custom_color_schemes_dirs;
 void add_custom_color_scheme_dir(const QString& custom_dir)
 {
     if (!custom_color_schemes_dirs.contains(custom_dir))
