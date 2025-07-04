@@ -146,7 +146,7 @@ lxqt_translate_ts(QTERMWIDGET_QM
         Runtime
 )
 
-add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
+add_library(${QTERMWIDGET_LIBRARY_NAME} STATIC ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets)
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
@@ -231,23 +231,24 @@ write_basic_package_version_file(
     COMPATIBILITY AnyNewerVersion
 )
 
-install(FILES
-    "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config-version.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
-    COMPONENT Devel
-)
-
-install(EXPORT
-    "${QTERMWIDGET_LIBRARY_NAME}-targets"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
-    COMPONENT Devel
-)
-
-install(FILES
-    ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h" "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_version.h"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
-    COMPONENT Devel
-)
+# Don't install library development files when building as static library for qterminal
+# install(FILES
+#     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config-version.cmake"
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
+#     COMPONENT Devel
+# )
+# 
+# install(EXPORT
+#     "${QTERMWIDGET_LIBRARY_NAME}-targets"
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
+#     COMPONENT Devel
+# )
+# 
+# install(FILES
+#     ${HDRS_DISTRIB} "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_export.h" "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_version.h"
+#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${QTERMWIDGET_LIBRARY_NAME}"
+#     COMPONENT Devel
+# )
 # keyboard layouts
 install(DIRECTORY
     lib/kb-layouts/
@@ -263,48 +264,49 @@ install(DIRECTORY
     FILES_MATCHING PATTERN "*.*schem*"
 )
 
-lxqt_create_pkgconfig_file(
-    PACKAGE_NAME ${QTERMWIDGET_LIBRARY_NAME}
-    DESCRIPTIVE_NAME ${QTERMWIDGET_LIBRARY_NAME}
-    DESCRIPTION "QTermWidget library for Qt ${QTERMWIDGET_VERSION_MAJOR}.x"
-    INCLUDEDIRS ${QTERMWIDGET_LIBRARY_NAME}
-    LIBS ${QTERMWIDGET_LIBRARY_NAME}
-    REQUIRES ${PKG_CONFIG_REQ}
-    VERSION ${QTERMWIDGET_VERSION}
-    INSTALL
-    COMPONENT Devel
-)
-
-configure_file(
-    "${PROJECT_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}-config.cmake.in"
-    "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
-    @ONLY
-)
+# Don't install library development files when building as static library for qterminal
+# lxqt_create_pkgconfig_file(
+#     PACKAGE_NAME ${QTERMWIDGET_LIBRARY_NAME}
+#     DESCRIPTIVE_NAME ${QTERMWIDGET_LIBRARY_NAME}
+#     DESCRIPTION "QTermWidget library for Qt ${QTERMWIDGET_VERSION_MAJOR}.x"
+#     INCLUDEDIRS ${QTERMWIDGET_LIBRARY_NAME}
+#     LIBS ${QTERMWIDGET_LIBRARY_NAME}
+#     REQUIRES ${PKG_CONFIG_REQ}
+#     VERSION ${QTERMWIDGET_VERSION}
+#     INSTALL
+#     COMPONENT Devel
+# )
+# 
+# configure_file(
+#     "${PROJECT_SOURCE_DIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}-config.cmake.in"
+#     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
+#     @ONLY
+# )
 
 configure_file(
     "${PROJECT_SOURCE_DIR}/lib/qtermwidget_version.h.in"
-    "${CMAKE_BINARY_DIR}/lib/qtermwidget_version.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/lib/qtermwidget_version.h"
     @ONLY
 )
 
-install(FILES
-    "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
-    COMPONENT Devel
-)
-
-install(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
-    DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    EXPORT "${QTERMWIDGET_LIBRARY_NAME}-targets"
-    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    PUBLIC_HEADER
-    COMPONENT Runtime
-)
-
-export(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
-    FILE "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-targets.cmake"
-    EXPORT_LINK_INTERFACE_LIBRARIES
-)
+# install(FILES
+#     "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-config.cmake"
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${QTERMWIDGET_LIBRARY_NAME}"
+#     COMPONENT Devel
+# )
+# 
+# install(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+#     EXPORT "${QTERMWIDGET_LIBRARY_NAME}-targets"
+#     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+#     PUBLIC_HEADER
+#     COMPONENT Runtime
+# )
+# 
+# export(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
+#     FILE "${CMAKE_BINARY_DIR}/${QTERMWIDGET_LIBRARY_NAME}-targets.cmake"
+#     EXPORT_LINK_INTERFACE_LIBRARIES
+# )
 # end of main library
 
 
