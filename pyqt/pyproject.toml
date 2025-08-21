@@ -4,7 +4,7 @@
 requires = ["sip", "PyQt-builder"]
 build-backend = "sipbuild.api"
 
-[tool.sip.metadata]
+[project]
 name = "QTermWidget"
 version = "2.2.0"
-requires-dist = ["PyQt6"]
+dependencies = ["PyQt6"]
