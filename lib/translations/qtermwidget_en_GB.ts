@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Colour Scheme Error</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cannot load colour scheme: %1</translation>
     </message>
 </context>
 <context>
@@ -125,7 +125,7 @@
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation type="unfinished"></translation>
+        <translation>Regular expression</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
