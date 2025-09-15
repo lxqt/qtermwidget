@@ -316,6 +316,19 @@ if(BUILD_EXAMPLE)
 endif()
 # end of example application
 
+# example application RemoteTerm
+if(BUILD_EXAMPLE_REMOTETERM)
+    find_package(Qt6Network "${QT_MINIMUM_VERSION}" REQUIRED)
+    set(EXAMPLE_REMOTETERM_SRC examples/cpp/RemoteTerm/main.cpp
+                               examples/cpp/RemoteTerm/remoteterm.cpp)
+    set(EXAMPLE_REMOTETERM_HDRS examples/cpp/RemoteTerm/remoteterm.h)
+    qt6_wrap_cpp(EXAMPLE_REMOTETERM_MOCS ${EXAMPLE_REMOTETERM_HDRS})
+    add_executable(remoteterm ${EXAMPLE_REMOTETERM_SRC} ${EXAMPLE_REMOTETERM_MOCS})
+    target_include_directories(remoteterm PRIVATE ${PROJECT_SOURCE_DIR}/examples/cpp/RemoteTerm)
+    target_link_libraries(remoteterm ${QTERMWIDGET_LIBRARY_NAME} Qt6::Network)
+endif()
+# end of example application RemoteTerm
+
 # python binding
 if (QTERMWIDGET_BUILD_PYTHON_BINDING)
     message(SEND_ERROR "QTERMWIDGET_BUILD_PYTHON_BINDING is no longer supported. Check README.md for how to build PyQt bindings.")
