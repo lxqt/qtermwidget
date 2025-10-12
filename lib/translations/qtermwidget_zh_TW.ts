@@ -6,7 +6,7 @@
     <message>
         <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>在工作階段 &apos;%1&apos; 中的鈴聲</translation>
+        <translation>在工作階段中 &apos;%1&apos; 的鈴聲</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="630"/>
