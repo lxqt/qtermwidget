@@ -21,7 +21,7 @@
     <message>
         <location filename="../Session.cpp" line="637"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>La session &apos;%1&apos; s&apos;est terminée de manière inattendue.</translation>
+        <translation>Session &apos;%1&apos; s&apos;est terminée de manière inattendue.</translation>
     </message>
 </context>
 <context>
