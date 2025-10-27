@@ -43,6 +43,7 @@
 //#include <KStandardDirs>
 
 using namespace Konsole;
+using namespace Qt::Literals::StringLiterals;
 
 const ColorEntry ColorScheme::defaultTable[TABLE_COLORS] =
  // The following are almost IBM standard color codes, with some slight
@@ -359,8 +360,8 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
     else
     {
         colorStr = colorValue.toString();
-        QRegularExpression hexColorPattern(QLatin1String("^#[0-9a-f]{6}$"),
-                                           QRegularExpression::CaseInsensitiveOption);
+        static const QRegularExpression hexColorPattern{"^#[0-9a-f]{6}$"_L1,
+                                           QRegularExpression::CaseInsensitiveOption};
         if (hexColorPattern.match(colorStr).hasMatch())
         {
             // Parsing is always ok as already matched by the regexp
