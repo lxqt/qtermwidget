@@ -1,3 +1,9 @@
+qtermwidget-2.3.0 / 2025-11-05
+===============================
+ * Support emoji flags.
+ * Moved away from deprecated declarations in `pyproject.toml`.
+ * Updated the example for using PyQt6.
+
 qtermwidget-2.2.0 / 2025-04-17
 ===============================
  * Fixed the problem with characters like '⧸' (U+29F8).
