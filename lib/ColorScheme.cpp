@@ -365,9 +365,9 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
         if (hexColorPattern.matchView(colorStr).hasMatch())
         {
             // If we got a match, colorStr size is 7
-            r = colorStr.slice(1, 2).toInt(nullptr, 16);
-            g = colorStr.slice(3, 2).toInt(nullptr, 16);
-            b = colorStr.slice(5, 2).toInt(nullptr, 16);
+            r = colorStr.sliced(1, 2).toInt(nullptr, 16);
+            g = colorStr.sliced(3, 2).toInt(nullptr, 16);
+            b = colorStr.sliced(5, 2).toInt(nullptr, 16);
             ok = true;
         }
     }
