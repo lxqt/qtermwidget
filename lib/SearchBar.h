@@ -44,6 +44,7 @@ signals:
     void highlightMatchesChanged(bool highlightMatches);
     void findNext();
     void findPrevious();
+    void madeHidden();
 
 protected:
     void keyReleaseEvent(QKeyEvent* keyEvent) override;

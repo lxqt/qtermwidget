@@ -61,13 +61,13 @@ void HistorySearch::search() {
 }
 
 bool HistorySearch::search(int startColumn, int startLine, int endColumn, int endLine) {
-    qDebug() << "search from" << startColumn << "," << startLine
-            <<  "to" << endColumn << "," << endLine;
+    //qDebug() << "search from" << startColumn << "," << startLine
+    //        <<  "to" << endColumn << "," << endLine;
 
     int linesRead = 0;
     int linesToRead = endLine - startLine + 1;
 
-    qDebug() << "linesToRead:" << linesToRead;
+    //qDebug() << "linesToRead:" << linesToRead;
 
     // We read process history from (and including) startLine to (and including) endLine in
     // blocks of at most 10K lines so that we do not use unhealthy amounts of memory
@@ -121,7 +121,7 @@ bool HistorySearch::search(int startColumn, int startLine, int endColumn, int en
         if (matchStart > -1)
         {
             int matchEnd = matchStart + match.capturedLength() - 1;
-            qDebug() << "Found in string from" << matchStart << "to" << matchEnd;
+            //qDebug() << "Found in string from" << matchStart << "to" << matchEnd;
 
             // Translate startPos and endPos to startColum, startLine, endColumn and endLine in history.
             int startLineNumberInString = findLineNumberInString(decoder.linePositions(), matchStart);
@@ -132,10 +132,10 @@ bool HistorySearch::search(int startColumn, int startLine, int endColumn, int en
             m_foundEndColumn = matchEnd - decoder.linePositions().at(endLineNumberInString);
             m_foundEndLine = endLineNumberInString + startLine + linesRead;
 
-            qDebug() << "m_foundStartColumn" << m_foundStartColumn
-                    << "m_foundStartLine" << m_foundEndLine
-                    << "m_foundEndColumn" << m_foundEndColumn
-                    << "m_foundEndLine" << m_foundEndLine;
+            //qDebug() << "m_foundStartColumn" << m_foundStartColumn
+            //        << "m_foundStartLine" << m_foundEndLine
+            //        << "m_foundEndColumn" << m_foundEndColumn
+            //        << "m_foundEndLine" << m_foundEndLine;
 
             return true;
         }
@@ -144,7 +144,7 @@ bool HistorySearch::search(int startColumn, int startLine, int endColumn, int en
         linesRead += blockSize;
     }
 
-    qDebug() << "Not found";
+    //qDebug() << "Not found";
     return false;
 }
 
