@@ -191,12 +191,14 @@ void QTermWidget::search(bool forwards, bool next)
         }
         m_impl->m_terminalDisplay->filterChain()->removeFilter(regexFilter);
         delete regexFilter;
+        m_impl->m_terminalDisplay->update();
     }
     if (m_searchBar->highlightAllMatches() && !regExp.pattern().isEmpty())
     {
         regexFilter = new RegExpFilter();
         regexFilter->setRegExp(regExp);
         m_impl->m_terminalDisplay->filterChain()->addFilter(regexFilter);
+        m_impl->m_terminalDisplay->update();
     }
 }
 
