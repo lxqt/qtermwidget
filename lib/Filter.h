@@ -353,8 +353,8 @@ public:
     /** Sets the buffer for each filter in the chain to process. */
     void setBuffer(const QString* buffer , const QList<int>* linePositions);
 
-    /** Gets the (first) RegExpFilter that is not a UrlFilter. */
-    RegExpFilter* getRegExpFilter() const;
+    /** Gets the (first named) RegExpFilter that is not a UrlFilter. */
+    RegExpFilter* getRegExpFilter(const QString& name = QString()) const;
 
     /** Returns the first hotspot which occurs at @p line, @p column or 0 if no hotspot was found */
     Filter::HotSpot* hotSpotAt(int line , int column) const;
