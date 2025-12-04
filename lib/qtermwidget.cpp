@@ -41,6 +41,8 @@
 #define DEFAULT_FONT_FAMILY                   "Monospace"
 #endif
 
+#define QTERMW_HLIGHT "qtermw_hlight"
+
 #define STEP_ZOOM 1
 
 using namespace Konsole;
@@ -182,7 +184,7 @@ void QTermWidget::search(bool forwards, bool next)
     historySearch->search();
 
     // Highlighting all matches.
-    auto regexFilter = m_impl->m_terminalDisplay->filterChain()->getRegExpFilter();
+    auto regexFilter = m_impl->m_terminalDisplay->filterChain()->getRegExpFilter(QLatin1String(QTERMW_HLIGHT));
     if (regexFilter)
     {
         if (m_searchBar->highlightAllMatches() && regexFilter->regExp() == regExp)
@@ -196,6 +198,7 @@ void QTermWidget::search(bool forwards, bool next)
     if (m_searchBar->highlightAllMatches() && !regExp.pattern().isEmpty())
     {
         regexFilter = new RegExpFilter();
+        regexFilter->setObjectName(QLatin1String(QTERMW_HLIGHT));
         regexFilter->setRegExp(regExp);
         m_impl->m_terminalDisplay->filterChain()->addFilter(regexFilter);
         m_impl->m_terminalDisplay->update();
@@ -337,7 +340,7 @@ void QTermWidget::init(int startnow)
     m_layout->addWidget(m_searchBar);
     m_searchBar->hide();
     connect(m_searchBar, &SearchBar::madeHidden, this, [this]() {
-        if (auto regexFilter = m_impl->m_terminalDisplay->filterChain()->getRegExpFilter())
+        if (auto regexFilter = m_impl->m_terminalDisplay->filterChain()->getRegExpFilter(QLatin1String(QTERMW_HLIGHT)))
         {
             m_impl->m_terminalDisplay->filterChain()->removeFilter(regexFilter);
             delete regexFilter;

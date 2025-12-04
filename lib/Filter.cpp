@@ -57,7 +57,7 @@ FilterChain::~FilterChain()
     }
 }
 
-RegExpFilter* FilterChain::getRegExpFilter() const
+RegExpFilter* FilterChain::getRegExpFilter(const QString& name) const
 {
     QListIterator<Filter*> iter(*this);
     while (iter.hasNext())
@@ -67,7 +67,10 @@ RegExpFilter* FilterChain::getRegExpFilter() const
         {
             if (qobject_cast<UrlFilter*>(filter) == nullptr)
             {
-                return f;
+                if (name.isEmpty() || f->objectName() == name)
+                {
+                    return f;
+                }
             }
         }
     }
