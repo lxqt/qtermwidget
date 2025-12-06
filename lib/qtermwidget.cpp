@@ -41,6 +41,8 @@
 #define DEFAULT_FONT_FAMILY                   "Monospace"
 #endif
 
+#define QTERMW_HLIGHT "qtermw_hlight"
+
 #define STEP_ZOOM 1
 
 using namespace Konsole;
@@ -180,6 +182,27 @@ void QTermWidget::search(bool forwards, bool next)
     connect(historySearch, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
     connect(historySearch, SIGNAL(noMatchFound()), m_searchBar, SLOT(noMatchFound()));
     historySearch->search();
+
+    // Highlighting all matches.
+    auto regexFilter = m_impl->m_terminalDisplay->filterChain()->getRegExpFilter(QLatin1String(QTERMW_HLIGHT));
+    if (regexFilter)
+    {
+        if (m_searchBar->highlightAllMatches() && regexFilter->regExp() == regExp)
+        {
+            return;
+        }
+        m_impl->m_terminalDisplay->filterChain()->removeFilter(regexFilter);
+        delete regexFilter;
+        m_impl->m_terminalDisplay->update();
+    }
+    if (m_searchBar->highlightAllMatches() && !regExp.pattern().isEmpty())
+    {
+        regexFilter = new RegExpFilter();
+        regexFilter->setObjectName(QLatin1String(QTERMW_HLIGHT));
+        regexFilter->setRegExp(regExp);
+        m_impl->m_terminalDisplay->filterChain()->addFilter(regexFilter);
+        m_impl->m_terminalDisplay->update();
+    }
 }
 
 
@@ -311,11 +334,18 @@ void QTermWidget::init(int startnow)
 
     m_searchBar = new SearchBar(this);
     m_searchBar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-    connect(m_searchBar, SIGNAL(searchCriteriaChanged()), this, SLOT(find()));
-    connect(m_searchBar, SIGNAL(findNext()), this, SLOT(findNext()));
-    connect(m_searchBar, SIGNAL(findPrevious()), this, SLOT(findPrevious()));
+    connect(m_searchBar, &SearchBar::searchCriteriaChanged, this, &QTermWidget::find);
+    connect(m_searchBar, &SearchBar::findNext, this, &QTermWidget::findNext);
+    connect(m_searchBar, &SearchBar::findPrevious, this, &QTermWidget::findPrevious);
     m_layout->addWidget(m_searchBar);
     m_searchBar->hide();
+    connect(m_searchBar, &SearchBar::madeHidden, this, [this]() {
+        if (auto regexFilter = m_impl->m_terminalDisplay->filterChain()->getRegExpFilter(QLatin1String(QTERMW_HLIGHT)))
+        {
+            m_impl->m_terminalDisplay->filterChain()->removeFilter(regexFilter);
+            delete regexFilter;
+        }
+    });
 
     if (startnow && m_impl->m_session) {
         m_impl->m_session->run();

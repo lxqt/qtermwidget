@@ -44,6 +44,7 @@
 #include "Vt102Emulation.h"
 
 using namespace Konsole;
+using namespace Qt::Literals::StringLiterals;
 
 int Session::lastSessionId = 0;
 
@@ -375,7 +376,8 @@ void Session::setUserTitle( int what, const QString & caption )
 
     if (what == 31) {
         QString cwd=caption;
-        cwd=cwd.replace( QRegularExpression(QLatin1String("^~")), QDir::homePath() );
+        static const QRegularExpression homeRegExp{"^~"_L1};
+        cwd = cwd.replace(homeRegExp, QDir::homePath());
         emit openUrlRequest(cwd);
     }
 

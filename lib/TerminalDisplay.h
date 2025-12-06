@@ -25,6 +25,7 @@
 #include <QColor>
 #include <QPointer>
 #include <QScrollBar>
+#include <QString>
 
 // Konsole
 #include "Filter.h"

@@ -29,6 +29,7 @@
 #include <QIODevice>
 #include <QSet>
 #include <QSettings>
+#include <QString>
 
 // Konsole
 #include "CharacterColor.h"
