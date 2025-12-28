@@ -212,9 +212,16 @@ Filter::~Filter()
     qDeleteAll(_hotspotList);
     _hotspotList.clear();
 }
+
 void Filter::reset()
 {
     qDeleteAll(_hotspotList);
+    _hotspots.clear();
+    _hotspotList.clear();
+}
+
+void Filter::clear()
+{
     _hotspots.clear();
     _hotspotList.clear();
 }
@@ -404,10 +411,7 @@ void RegExpFilter::process()
         getLineColumn(match.capturedStart(), startLine, startColumn);
         getLineColumn(match.capturedEnd(), endLine, endColumn);
 
-        RegExpFilter::HotSpot* spot = newHotSpot(startLine, startColumn, endLine, endColumn);
-        spot->setCapturedTexts(captureList);
-
-        addHotSpot(spot);
+        newHotSpot(startLine, startColumn, endLine, endColumn, captureList);
 
         // if capturedLength == 0, the program will get stuck in an infinite loop
         if (match.capturedLength() == 0) {
@@ -418,19 +422,69 @@ void RegExpFilter::process()
     }
 }
 
-RegExpFilter::HotSpot* RegExpFilter::newHotSpot(int startLine,int startColumn,
-                                                int endLine,int endColumn)
+void RegExpFilter::newHotSpot(int startLine, int startColumn, int endLine, int endColumn,
+                              const QStringList& captureList)
 {
-    return new RegExpFilter::HotSpot(startLine,startColumn,
-                                                  endLine,endColumn);
+    RegExpFilter::HotSpot* spot = new RegExpFilter::HotSpot(startLine, startColumn, endLine, endColumn);
+    spot->setCapturedTexts(captureList);
+    addHotSpot(spot);
 }
-RegExpFilter::HotSpot* UrlFilter::newHotSpot(int startLine,int startColumn,int endLine,
-                                                    int endColumn)
+
+void UrlFilter::process()
 {
-    HotSpot *spot = new UrlFilter::HotSpot(startLine,startColumn,
-                                               endLine,endColumn);
+    RegExpFilter::process();
+
+    // Delete invalid old hotspots if any.
+    const auto hotspotList = hotSpots();
+    for (const auto& hs : hotspotList)
+    {
+        if (UrlFilter::HotSpot* UrlHs = dynamic_cast<UrlFilter::HotSpot*>(hs))
+        {
+            _oldHotspotList.removeAll(UrlHs);
+        }
+    }
+    qDeleteAll(_oldHotspotList);
+    _oldHotspotList.clear();
+
+    // Repopulate _oldHotspotList with the valid hotspots.
+    for (const auto& hs : hotspotList)
+    {
+        if (UrlFilter::HotSpot* UrlHs = dynamic_cast<UrlFilter::HotSpot*>(hs))
+        {
+            _oldHotspotList << UrlHs;
+        }
+    }
+}
+
+void UrlFilter::newHotSpot(int startLine, int startColumn, int endLine, int endColumn,
+                           const QStringList& captureList)
+{
+    // Use the old hotspot if existing.
+    for (const auto& hs : std::as_const(_oldHotspotList))
+    {
+        if (hs->startLine() == startLine &&
+            hs->endLine() == endLine &&
+            hs->startColumn() == startColumn &&
+            hs->endColumn() == endColumn)
+        {
+            hs->setCapturedTexts(captureList);
+            addHotSpot(hs);
+            return;
+        }
+    }
+
+    UrlFilter::HotSpot* spot = new UrlFilter::HotSpot(startLine, startColumn, endLine, endColumn);
     connect(spot->getUrlObject(), &FilterObject::activated, this, &UrlFilter::activated);
-    return spot;
+    spot->setCapturedTexts(captureList);
+    addHotSpot(spot);
+}
+
+void UrlFilter::reset()
+{
+    // Clear hotspots without deleting them because, otherwise, their corresponding actions
+    // will be deleted too, while they may have not changed. Hotspots will be deleted in
+    // "UrlFilter::process" if not valid and also in the d-tor of "UrlFilter".
+    clear();
 }
 
 UrlFilter::HotSpot::HotSpot(int startLine,int startColumn,int endLine,int endColumn)
@@ -504,6 +558,13 @@ const QRegularExpression UrlFilter::CompleteUrlRegExp(QLatin1Char('(')+FullUrlRe
 UrlFilter::UrlFilter()
 {
     setRegExp( CompleteUrlRegExp );
+}
+
+UrlFilter::~UrlFilter()
+{
+    clear(); // makes the d-tor of "Filter" return without doing anything
+    qDeleteAll(_oldHotspotList); // deletes all hotspots, whether before processing or after it
+    _oldHotspotList.clear();
 }
 
 UrlFilter::HotSpot::~HotSpot()
