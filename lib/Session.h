@@ -373,6 +373,10 @@ public:
      */
     int getPtySlaveFd() const;
 
+    // Returns true if the current screen is the secondary/alternate one
+    // or false if it's the primary/normal buffer
+    bool isPrimaryScreen();
+
 public slots:
 
     /**
@@ -479,6 +483,15 @@ signals:
     void flowControlEnabledChanged(bool enabled);
 
     /**
+     * Emitted when the active screen is switched, to indicate whether the primary
+     * screen is in use.
+     *
+     * This signal serves as a relayer of Emulation::priamyScreenInUse(bool),
+     * making it usable for higher level component.
+     */
+    void primaryScreenInUse(bool use);
+
+    /**
      * Broker for Emulation::cursorChanged() signal
      */
     void cursorChanged(Emulation::KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
@@ -506,6 +519,9 @@ private slots:
 //  void zmodemReadAndSendBlock();
 //  void zmodemRcvBlock(const char *data, int len);
 //  void zmodemFinished();
+
+    // Relays the signal from Emulation and sets _isPrimaryScreen
+    void onPrimaryScreenInUse(bool use);
 
 private:
 
@@ -568,6 +584,7 @@ private:
 
     int ptySlaveFd;
 
+    bool _isPrimaryScreen;
 };
 
 /**

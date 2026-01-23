@@ -514,6 +514,15 @@ public slots:
     /** See setUsesMouse() */
     bool usesMouse() const;
 
+    /**
+     * Sets _isPrimaryScreen depending on which screen is currently in
+     * use, primary or alternate
+     *
+     * @param use Set to @c true if the primary screen is in use or to
+     * @c false otherwise (i.e. the alternate screen is in use)
+     */
+    void usingPrimaryScreen(bool use);
+
     void setBracketedPasteMode(bool bracketedPasteMode);
     bool bracketedPasteMode() const;
 
@@ -785,6 +794,7 @@ private:
     bool _terminalSizeStartup;
     bool _bidiEnabled;
     bool _mouseMarks;
+    bool _isPrimaryScreen;
     bool _bracketedPasteMode;
     bool _disabledBracketedPasteMode;
 
