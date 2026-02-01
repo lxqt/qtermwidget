@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="kab">
+<TS version="2.1" language="kk">
 <context>
     <name>Konsole::Session</name>
     <message>
         <location filename="../Session.cpp" line="448"/>
         <source>Bell in session &apos;%1&apos;</source>
-        <translation>Asṭenṭen deg tɣimit &apos;%1&apos;</translation>
+        <translation>&apos;%1&apos; сессиясындағы дыбыстық белгі</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="600"/>
+        <location filename="../Session.cpp" line="630"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
-        <translation>Tiɣimit &apos;%1&apos; teffeɣ s tengalt %2.</translation>
+        <translation>&apos;%1&apos; сессиясы %2 кодымен аяқталды.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="602"/>
+        <location filename="../Session.cpp" line="632"/>
         <source>Session &apos;%1&apos; crashed.</source>
-        <translation>Tiɣimit &apos;%1&apos; teɣli.</translation>
+        <translation>&apos;%1&apos; сессиясы апатты түрде аяқталды.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="607"/>
+        <location filename="../Session.cpp" line="637"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
-        <translation>Tiɣimit &apos;%1&apos; teffeɣ s wudem ur netturaǧu ara.</translation>
+        <translation>&apos;%1&apos; сессиясы күтпеген жерден аяқталды.</translation>
     </message>
 </context>
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1278"/>
+        <location filename="../TerminalDisplay.cpp" line="1311"/>
         <source>Size: XXX x XXX</source>
-        <translation>Tiddi: XXX x XXX</translation>
+        <translation>Өлшемі: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1290"/>
+        <location filename="../TerminalDisplay.cpp" line="1323"/>
         <source>Size: %1 x %2</source>
-        <translation>Tiddi: %1 x %2</translation>
+        <translation>Өлшемі: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2790"/>
+        <location filename="../TerminalDisplay.cpp" line="2987"/>
         <source>Paste multiline text</source>
-        <translation>Senṭeḍ aḍris n aget n yizirig</translation>
+        <translation>Көп жолды мәтінді кірістіру</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2791"/>
+        <location filename="../TerminalDisplay.cpp" line="2988"/>
         <source>Are you sure you want to paste this text?</source>
-        <translation>Tebɣiḍ ad tsenteḍeḍ aḍris-agi?</translation>
+        <translation>Бұл мәтінді кірістіруге сенімдісіз бе?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3261"/>
+        <location filename="../TerminalDisplay.cpp" line="3459"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Шығыс Ctrl+S пернесін басу арқылы &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;аялдатылды&lt;/a&gt;. Жалғастыру үшін &lt;b&gt;Ctrl+Q&lt;/b&gt; басыңыз.&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -57,15 +57,15 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation>Ulac amsuqqel n unasiw iwejden.  Talɣut ilaqen i uselket n usiti n tqeffalt ɣer isekkilen akken ad ttwaznen ɣer tdiwent ulac-itent.</translation>
+        <translation>Пернетақта аудармашысы қолжетімсіз. Перне басуларын терминалға жіберілетін таңбаларға түрлендіру үшін қажетті ақпарат жоқ.</translation>
     </message>
 </context>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2797"/>
+        <location filename="../TerminalDisplay.cpp" line="2994"/>
         <source>Show Details...</source>
-        <translation>Sken ifatusen...</translation>
+        <translation>Мәліметтерді көрсету...</translation>
     </message>
 </context>
 <context>
@@ -74,32 +74,32 @@
         <location filename="../ColorScheme.cpp" line="275"/>
         <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation>Azenziɣ n yini ur war isem</translation>
+        <translation>Атаусыз түстер схемасы</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
         <source>Accessible Color Scheme</source>
-        <translation>Azenziɣ n yini uffar</translation>
+        <translation>Қолжетімді түстер схемасы</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="520"/>
+        <location filename="../Filter.cpp" line="522"/>
         <source>Open Link</source>
-        <translation>Ldi asaɣ</translation>
+        <translation>Сілтемені ашу</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="521"/>
+        <location filename="../Filter.cpp" line="523"/>
         <source>Copy Link Address</source>
-        <translation>Nɣel tansa n wasaɣ</translation>
+        <translation>Сілтеме адресін көшіру</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="525"/>
+        <location filename="../Filter.cpp" line="527"/>
         <source>Send Email To...</source>
-        <translation>Azen imayl i...</translation>
+        <translation>Электрондық поштаны жіберу...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="526"/>
+        <location filename="../Filter.cpp" line="528"/>
         <source>Copy Email Address</source>
-        <translation>Nɣel tansa n yimayl</translation>
+        <translation>Электрондық пошта адресін көшіру</translation>
     </message>
 </context>
 <context>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../qtermwidget.cpp" line="465"/>
         <source>Color Scheme Error</source>
-        <translation>Tuccḍa n uzenziɣ n yiniten</translation>
+        <translation>Түстер схемасының қатесі</translation>
     </message>
     <message>
         <location filename="../qtermwidget.cpp" line="466"/>
         <source>Cannot load color scheme: %1</source>
-        <translation>Ulamek asali n uzenziɣ n yini: %1</translation>
+        <translation>Түстер схемасын жүктеу мүмкін емес: %1</translation>
     </message>
 </context>
 <context>
@@ -120,22 +120,22 @@
     <message>
         <location filename="../SearchBar.cpp" line="39"/>
         <source>Match case</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистрді ескеру</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="45"/>
         <source>Regular expression</source>
-        <translation>Tanfalit talugant</translation>
+        <translation>Тұрақты өрнек</translation>
     </message>
     <message>
         <location filename="../SearchBar.cpp" line="49"/>
         <source>Highlight all matches</source>
-        <translation>Sebṛuṛeq akk yemṣadan</translation>
+        <translation>Барлық сәйкестіктерді ерекшелеу</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="14"/>
         <source>SearchBar</source>
-        <translation>Afeggag n unadi</translation>
+        <translation>Іздеу жолағы</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="20"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../SearchBar.ui" line="32"/>
         <source>Find:</source>
-        <translation>Af-d:</translation>
+        <translation>Табу:</translation>
     </message>
     <message>
         <location filename="../SearchBar.ui" line="42"/>
