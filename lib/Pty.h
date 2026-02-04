@@ -141,6 +141,11 @@ Q_OBJECT
     char erase() const;
 
     /**
+     * Sets the initial working directory.
+     */
+    void setInitialWorkingDirectory(const QString &dir);
+
+    /**
      * Returns the process id of the teletype's current foreground
      * process.  This is the process which is currently reading
      * input sent to the terminal via. sendData()

@@ -27,6 +27,7 @@
 
 #include <QProcess>
 #include <QStringList>
+#include <QUrl>
 #include <QWidget>
 
 #include "Emulation.h"
@@ -197,6 +198,12 @@ public:
      * This has no effect once the session has been started.
      */
     void setInitialWorkingDirectory( const QString & dir );
+
+    /**
+     * Returns the current directory of the foreground process in the
+     * session.
+     */
+    QString currentWorkingDirectory();
 
     /**
      * Sets the type of history store used by this session.
@@ -421,6 +428,13 @@ signals:
     /** Emitted when the session's title has changed. */
     void titleChanged();
 
+    /**
+     * Emitted when the current working directory of this session changes.
+     *
+     * @param dir The new current working directory of the session.
+     */
+    void currentDirectoryChanged(const QString &dir);
+
     /** Emitted when the session's profile has changed. */
     void profileChanged(const QString & profile);
 
@@ -550,6 +564,7 @@ private:
     int            _sessionId;
 
     QString        _initialWorkingDir;
+    QUrl           _reportedWorkingUrl;
 
     // ZModem
 //  bool           _zmodemBusy;

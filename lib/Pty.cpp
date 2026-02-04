@@ -133,6 +133,24 @@ char Pty::erase() const
     return _eraseChar;
 }
 
+void Pty::setInitialWorkingDirectory(const QString &dir)
+{
+    QString pwd = dir;
+
+    // remove trailing slash in the path when appropriate
+    // example: /usr/share/icons/ ==> /usr/share/icons
+    if (pwd.length() > 1 && pwd.endsWith(QLatin1Char('/'))) {
+        pwd.chop(1);
+    }
+
+    setWorkingDirectory(pwd);
+
+    // setting PWD to "." will cause problem for bash & zsh
+    if (pwd != QLatin1String(".")) {
+        setEnv(QStringLiteral("PWD"), pwd);
+    }
+}
+
 void Pty::addEnvironmentVariables(const QStringList& environment)
 {
 

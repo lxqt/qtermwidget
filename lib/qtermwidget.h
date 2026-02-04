@@ -289,6 +289,12 @@ signals:
     void titleChanged();
 
     /**
+     * Emitted when the current working directory of the active session
+     * has changed.
+     */
+    void currentDirectoryChanged(const QString &dir);
+
+    /**
      * Signals that we received new data from the process running in the
      * terminal emulator
      */

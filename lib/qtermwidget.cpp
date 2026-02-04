@@ -19,7 +19,7 @@
 #include <QLayout>
 #include <QBoxLayout>
 #include <QtDebug>
-#include <QDir>
+#include <QFileInfo>
 #include <QMessageBox>
 #include <QRegularExpression>
 
@@ -381,6 +381,7 @@ void QTermWidget::init(int startnow)
     connect(m_impl->m_session, SIGNAL(resizeRequest(QSize)), this, SLOT(setSize(QSize)));
     connect(m_impl->m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
     connect(m_impl->m_session, &Session::titleChanged, this, &QTermWidget::titleChanged);
+    connect(m_impl->m_session, &Session::currentDirectoryChanged, this, &QTermWidget::currentDirectoryChanged);
     connect(m_impl->m_session, &Session::cursorChanged, this, &QTermWidget::cursorChanged);
 }
 
@@ -436,22 +437,7 @@ QString QTermWidget::workingDirectory()
     if (!m_impl->m_session)
         return QString();
 
-#ifdef Q_OS_LINUX
-    // Christian Surlykke: On linux we could look at /proc/<pid>/cwd which should be a link to current
-    // working directory (<pid>: process id of the shell). I don't know about BSD.
-    // Maybe we could just offer it when running linux, for a start.
-    QDir d(QString::fromLatin1("/proc/%1/cwd").arg(getShellPID()));
-    if (!d.exists())
-    {
-        qDebug() << "Cannot find" << d.dirName();
-        goto fallback;
-    }
-    return d.canonicalPath();
-#endif
-
-fallback:
-    // fallback, initial WD
-    return m_impl->m_session->initialWorkingDirectory();
+    return m_impl->m_session->currentWorkingDirectory();
 }
 
 void QTermWidget::setArgs(const QStringList &args)
