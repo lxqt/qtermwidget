@@ -33,7 +33,7 @@
 #include <QDir>
 #include <QFile>
 #include <QStringList>
-#include <QFile>
+#include <QSysInfo>
 #include <QtDebug>
 #include <QRegularExpression>
 
@@ -151,6 +151,32 @@ void Session::setInitialWorkingDirectory(const QString & dir)
 {
     _initialWorkingDir = ShellCommand::expand(dir);
 }
+
+QString Session::currentWorkingDirectory()
+{
+    if (_reportedWorkingUrl.isValid() && _reportedWorkingUrl.isLocalFile()
+        && (_reportedWorkingUrl.host().length() == 0 || _reportedWorkingUrl.host().compare(QSysInfo::machineHostName(), Qt::CaseInsensitive) == 0)) {
+        return _reportedWorkingUrl.path();
+    }
+
+#ifdef Q_OS_LINUX
+    // Christian Surlykke: On linux we could look at /proc/<pid>/cwd which should be a link to current
+    // working directory (<pid>: process id of the shell). I don't know about BSD.
+    // Maybe we could just offer it when running linux, for a start.
+    QDir d(QString::fromLatin1("/proc/%1/cwd").arg(processId()));
+    if (!d.exists())
+    {
+        qDebug() << "Cannot find" << d.dirName();
+        goto fallback;
+    }
+    return d.canonicalPath();
+#endif
+
+fallback:
+    // fallback, initial WD
+    return _initialWorkingDir;
+}
+
 void Session::setArguments(const QStringList & arguments)
 {
     _arguments = ShellCommand::expand(arguments);
@@ -279,9 +305,9 @@ void Session::run()
 
     QString cwd = QDir::currentPath();
     if (!_initialWorkingDir.isEmpty()) {
-        _shellProcess->setWorkingDirectory(_initialWorkingDir);
+        _shellProcess->setInitialWorkingDirectory(_initialWorkingDir);
     } else {
-        _shellProcess->setWorkingDirectory(cwd);
+        _shellProcess->setInitialWorkingDirectory(cwd);
     }
 
     _shellProcess->setFlowControlEnabled(_flowControl);
@@ -346,6 +372,12 @@ void Session::setUserTitle( int what, const QString & caption )
             _iconText = caption;
             modified = true;
         }
+    }
+
+    if (what == 7) {
+        _reportedWorkingUrl = QUrl::fromUserInput(caption);
+        emit currentDirectoryChanged(currentWorkingDirectory());
+        modified = true;
     }
 
     if (what == 11) {
