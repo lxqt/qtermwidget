@@ -38,6 +38,7 @@
 #include <csignal>
 
 // Qt
+#include <QFileInfo>
 #include <QStringList>
 #include <QtDebug>
 
@@ -147,7 +148,14 @@ void Pty::setInitialWorkingDirectory(const QString &dir)
 
     // setting PWD to "." will cause problem for bash & zsh
     if (pwd != QLatin1String(".")) {
-        setEnv(QStringLiteral("PWD"), pwd);
+        // Preserve the inherited PWD if it resolves to the same real directory.
+        // This keeps symlink-based paths intact (e.g., when a file manager opens
+        // a terminal in a symlinked directory with PWD set to the symlink path).
+        const QString inheritedPwd = QString::fromLocal8Bit(qgetenv("PWD"));
+        if (inheritedPwd.isEmpty()
+            || QFileInfo(inheritedPwd).canonicalFilePath() != QFileInfo(pwd).canonicalFilePath()) {
+            setEnv(QStringLiteral("PWD"), pwd);
+        }
     }
 }
 
