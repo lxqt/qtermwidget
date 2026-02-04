@@ -29,6 +29,12 @@
 // Own
 #include "Pty.h"
 
+// Qt
+#include <QStringList>
+#include <qplatformdefs.h>
+
+#ifndef Q_OS_WIN // Unix backend
+
 // System
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -163,9 +169,9 @@ void Pty::addEnvironmentVariables(const QStringList& environment)
 
 int Pty::start(const QString& program,
                const QStringList& programArguments,
-               const QStringList& environment,
-               ulong winid,
-               bool addToUtmp
+               const QStringList& environment
+            //    ulong winid,
+            //    bool addToUtmp
                //const QString& dbusService,
                //const QString& dbusSession
                )
@@ -180,7 +186,7 @@ int Pty::start(const QString& program,
 
   addEnvironmentVariables(environment);
 
-  setEnv(QLatin1String("WINDOWID"), QString::number(winid));
+//   setEnv(QLatin1String("WINDOWID"), QString::number(winid));
   setEnv(QLatin1String("COLORTERM"), QLatin1String("truecolor"));
 
   // unless the LANGUAGE environment variable has been set explicitly
@@ -195,8 +201,6 @@ int Pty::start(const QString& program,
   //
   // BR:149300
   setEnv(QLatin1String("LANGUAGE"),QString(),false /* do not overwrite existing value if any */);
-
-  setUseUtmp(addToUtmp);
 
   struct ::termios ttmode;
   pty()->tcGetAttr(&ttmode);
@@ -327,17 +331,6 @@ void Pty::dataReceived()
     emit receivedData(data.constData(),data.size());
 }
 
-void Pty::lockPty(bool lock)
-{
-    Q_UNUSED(lock)
-
-// TODO: Support for locking the Pty
-  //if (lock)
-    //suspend();
-  //else
-    //resume();
-}
-
 int Pty::foregroundProcessGroup() const
 {
     const int master_fd = pty()->masterFd();
@@ -359,3 +352,152 @@ void Pty::closePty()
     pty()->close();
 }
 
+#else // Windows backend
+
+#include "ptyqt/conptyprocess.h"
+
+using Konsole::Pty;
+
+Pty::Pty(QObject *aParent)
+    : Pty(-1, aParent)
+{
+}
+
+Pty::Pty(int masterFd, QObject *aParent)
+    : QObject(aParent)
+{
+    Q_UNUSED(masterFd)
+
+    m_proc = std::make_unique<ConPtyProcess>();
+    if (!m_proc->isAvailable()) {
+        m_proc.reset();
+    }
+
+    _windowColumns = 0;
+    _windowLines = 0;
+    _eraseChar = 0;
+    _xonXoff = true;
+    _utf8 = true;
+
+    setErase(_eraseChar);
+}
+
+Pty::~Pty() = default;
+
+void Pty::sendData(const char* buffer, int length)
+{
+    if (m_proc) {
+        m_proc->write(buffer, length);
+    }
+}
+
+void Pty::dataReceived()
+{
+    if (m_proc) {
+        auto data = m_proc->readAll();
+        Q_EMIT receivedData(data.constData(), data.length());
+    }
+}
+
+void Pty::setWindowSize(int lines, int columns)
+{
+    if (m_proc && isRunning())
+        m_proc->resize(columns, lines);
+}
+
+QSize Pty::windowSize() const
+{
+    if (!m_proc) {
+        return {};
+    }
+    auto s = m_proc->size();
+    return QSize(s.first, s.second);
+}
+
+void Pty::setFlowControlEnabled(bool enable)
+{
+    _xonXoff = enable;
+}
+
+bool Pty::flowControlEnabled() const
+{
+    return false;
+}
+
+void Pty::setUtf8Mode(bool)
+{
+}
+
+void Pty::setErase(char eChar)
+{
+    _eraseChar = eChar;
+}
+
+char Pty::erase() const
+{
+    return _eraseChar;
+}
+
+void Pty::setWorkingDirectory(const QString & /*dir*/)
+{
+}
+
+void Pty::addEnvironmentVariables(const QStringList & /*environmentVariables*/)
+{
+}
+
+int Pty::start(const QString &program, const QStringList &arguments, const QString &workingDir, const QStringList &environment, int cols, int lines)
+{
+    if (!m_proc || !m_proc->isAvailable()) {
+        return -1;
+    }
+    bool res = m_proc->startProcess(program, arguments, workingDir, environment, cols, lines);
+    if (!res) {
+        return -1;
+    } else {
+        auto n = m_proc->notifier();
+        connect(n, &QIODevice::readyRead, this, &Pty::dataReceived);
+        connect(m_proc.get(), &IPtyProcess::exited, this, [this] {
+            Q_EMIT finished(exitCode(), QProcess::NormalExit);
+        });
+        connect(n, &QIODevice::aboutToClose, this, [this] {
+            Q_EMIT finished(exitCode(), QProcess::NormalExit);
+        });
+    }
+    return 0;
+}
+
+void Pty::setWriteable(bool)
+{
+}
+
+void Pty::closePty()
+{
+    if (m_proc) {
+        m_proc->kill();
+    }
+}
+
+int Pty::foregroundProcessGroup() const
+{
+    return 0;
+}
+
+
+void Pty::setEmptyPTYProperties() {
+  
+}
+
+
+#endif
+
+void Pty::lockPty(bool lock)
+{
+    Q_UNUSED(lock)
+
+// TODO: Support for locking the Pty
+//   if (lock)
+    // suspend();
+  //else
+    //resume();
+}
