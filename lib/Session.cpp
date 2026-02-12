@@ -377,7 +377,6 @@ void Session::setUserTitle( int what, const QString & caption )
     if (what == 7) {
         _reportedWorkingUrl = QUrl::fromUserInput(caption);
         emit currentDirectoryChanged(currentWorkingDirectory());
-        modified = true;
     }
 
     if (what == 11) {
