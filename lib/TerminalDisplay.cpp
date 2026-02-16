@@ -1920,8 +1920,33 @@ QRect TerminalDisplay::imageToWidget(const QRect& imageArea) const
 
 void TerminalDisplay::updateCursor()
 {
-  QRect cursorRect = imageToWidget( QRect(cursorPosition(),QSize(1,1)) );
-  update(cursorRect);
+    QPoint cursorPos = cursorPosition();
+    int col = cursorPos.x();
+    int line = cursorPos.y();
+
+    // Start with the default cell width (based on ASCII average)
+    int charWidth = _fontWidth;
+
+    // If valid, compute the actual pixel width of the character under the cursor.
+    // This ensures wide characters (e.g. CJK) are fully covered during cursor redraw.
+    if (_image && line >= 0 && line < _lines && col >= 0 && col < _columns) {
+        Character c = _image[loc(col, line)];
+        if (c.character != 0) {
+            QFontMetrics fm(font());
+            charWidth = fm.horizontalAdvance(QChar(c.character));
+        }
+    }
+
+    // Compute cursor rectangle position using logical grid alignment
+    // (same as used in drawContents) to maintain column consistency.
+    int x = _leftMargin + contentsRect().left() + col * _fontWidth;
+    int y = _topMargin + contentsRect().top() + line * _fontHeight;
+    QRect cursorRect(x, y, charWidth, _fontHeight);
+
+    // Expand by 1 pixel on each side to guard against sub-pixel rendering
+    // and rounding issues that can cause the I-beam cursor to disappear.
+    cursorRect.adjust(-1, 0, 1, 0);
+    update(cursorRect);
 }
 
 void TerminalDisplay::blinkCursorEvent()
