@@ -36,6 +36,7 @@
 #include <QSysInfo>
 #include <QtDebug>
 #include <QRegularExpression>
+#include <QThread>
 
 #include "Pty.h"
 //#include "kptyprocess.h"
@@ -77,10 +78,6 @@ Session::Session(QObject* parent) :
     _sessionId = ++lastSessionId;
 //    QDBusConnection::sessionBus().registerObject(QLatin1String("/Sessions/")+QString::number(_sessionId), this);
 
-    //create teletype for I/O with shell process
-    _shellProcess = new Pty();
-    ptySlaveFd = _shellProcess->pty()->slaveFd();
-
     //create emulation backend
     _emulation = new Vt102Emulation();
 
@@ -102,17 +99,26 @@ Session::Session(QObject* parent) :
     connect(_emulation, &Vt102Emulation::cursorChanged,
             this, &Session::cursorChanged);
 
+    //create teletype for I/O with shell process
+    _shellProcess = new Pty();
+#ifndef Q_OS_WIN
+    ptySlaveFd = _shellProcess->pty()->slaveFd();
+#else
+    ptySlaveFd = -1;
+#endif
+    
+    // connect the I/O between emulator and pty process
+    connect(_shellProcess, &Konsole::Pty::receivedData, this, &Konsole::Session::onReceiveBlock);
+    connect(_emulation, &Konsole::Emulation::sendData, _shellProcess, &Konsole::Pty::sendData);
+
     //connect teletype to emulation backend
     _shellProcess->setUtf8Mode(true);
-
-    connect( _shellProcess,SIGNAL(receivedData(const char *,int)),this,
-             SLOT(onReceiveBlock(const char *,int)) );
-    connect( _emulation,SIGNAL(sendData(const char *,int)),_shellProcess,
-             SLOT(sendData(const char *,int)) );
-    connect( _emulation,SIGNAL(lockPtyRequest(bool)),_shellProcess,SLOT(lockPty(bool)) );
-    connect( _emulation,SIGNAL(useUtf8Request(bool)),_shellProcess,SLOT(setUtf8Mode(bool)) );
-
-    connect( _shellProcess,SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(done(int,QProcess::ExitStatus)) );
+    connect(_shellProcess, &Konsole::Pty::finished, this, &Konsole::Session::done);
+    connect(_emulation, &Konsole::Emulation::useUtf8Request, _shellProcess, &Konsole::Pty::setUtf8Mode);
+    connect( _emulation,&Konsole::Emulation::lockPtyRequest, _shellProcess, &Konsole::Pty::lockPty);
+    connect(_emulation, &Konsole::Emulation::imageSizeChanged, this, &Konsole::Session::onViewSizeChange);
+    connect(_emulation, &Konsole::Emulation::imageSizeInitialized, this, &Konsole::Session::run, Qt::QueuedConnection);
+    connect(_emulation, &Konsole::Emulation::imageSizeInitialized, this, &Konsole::Session::refresh, Qt::QueuedConnection);
     // not in kprocess anymore connect( _shellProcess,SIGNAL(done(int)), this, SLOT(done(int)) );
 
     //setup timer for monitoring session activity
@@ -140,7 +146,11 @@ bool Session::hasDarkBackground() const
 }
 bool Session::isRunning() const
 {
+#ifdef Q_OS_WIN
+    return (_shellProcess != nullptr) && _shellProcess->isRunning();
+#else
     return (_shellProcess != nullptr && _shellProcess->state() == QProcess::Running);
+#endif
 }
 
 void Session::setProgram(const QString & program)
@@ -264,6 +274,7 @@ void Session::removeView(TerminalDisplay * widget)
 
 void Session::run()
 {
+#ifndef Q_OS_WIN
     // Upon a KPty error, there is no description on what that error was...
     // Check to see if the given program is executable.
 
@@ -294,6 +305,12 @@ void Session::run()
             exec = defaultShell;
         }
     }
+#else
+    QString exec = QStringLiteral("C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe");
+    // Change shell to cmd.exe if we don't have powershell
+    if(!QFile(exec).exists())
+        exec = QStringLiteral("C:\\WINDOWS\\system32\\cmd.exe");
+#endif
 
     // _arguments sometimes contain ("") so isEmpty()
     // or count() does not work as expected...
@@ -312,6 +329,9 @@ void Session::run()
 
     _shellProcess->setFlowControlEnabled(_flowControl);
     _shellProcess->setErase(_emulation->eraseChar());
+#ifndef Q_OS_WIN
+    _shellProcess->setUseUtmp(_addToUtmp);
+#endif
 
     // this is not strictly accurate use of the COLORFGBG variable.  This does not
     // tell the terminal exactly which colors are being used, but instead approximates
@@ -319,15 +339,20 @@ void Session::run()
     // the background color is deemed dark or not
     QString backgroundColorHint = _hasDarkBackground ? QLatin1String("COLORFGBG=15;0") : QLatin1String("COLORFGBG=0;15");
 
-    /* if we do all the checking if this shell exists then we use it ;)
-     * Dont know about the arguments though.. maybe youll need some more checking im not sure
-     * However this works on Arch and FreeBSD now.
-     */
-    int result = _shellProcess->start(exec,
-                                      arguments,
-                                      _environment << backgroundColorHint,
-                                      windowId(),
-                                      _addToUtmp);
+#ifndef Q_OS_WIN
+    const auto originalEnvironment = _shellProcess->environment();
+    _shellProcess->setProgram(exec);
+    _shellProcess->setEnvironment(originalEnvironment + _environment);
+    // const auto context = KSandbox::makeHostContext(*_shellProcess);
+    // arguments = postProcessArgs(context.arguments, arguments);
+    _shellProcess->setEnvironment(originalEnvironment);
+    const auto result = _shellProcess->start(exec, arguments, _environment);
+#else // Q_OS_WIN
+    const auto size = _emulation->imageSize();
+    const int lines = size.height();
+    const int cols = size.width();
+    int result = _shellProcess->start(exec, arguments, _initialWorkingDir.isEmpty() ? QDir::currentPath() : _initialWorkingDir, _environment, cols, lines);
+#endif
 
     if (result < 0) {
         qDebug() << "CRASHED! result: " << result;
@@ -560,60 +585,92 @@ void Session::refresh()
     // send an email with method or patches to konsole-devel@kde.org
 
     const QSize existingSize = _shellProcess->windowSize();
-    _shellProcess->setWindowSize(existingSize.height(),existingSize.width()+1);
-    _shellProcess->setWindowSize(existingSize.height(),existingSize.width());
+    _shellProcess->setWindowSize(existingSize.height() + 1,existingSize.width() + 1);
+    // introduce small delay to avoid changing size too quickly
+    QThread::usleep(500);
+    _shellProcess->setWindowSize(existingSize.height(), existingSize.width());
 }
 
 bool Session::sendSignal(int signal)
 {
+#ifndef Q_OS_WIN
+
     if (processId() <= 0)
-    {
         return false;
-    }
 
     int result = ::kill(static_cast<pid_t>(_shellProcess->processId()), signal);
 
-     if ( result == 0 )
-     {
+     if (result == 0)
          return _shellProcess->waitForFinished(1000);
-     }
-     else
-     {
-         return false;
-     }
+#else
+    // FIXME: Can we do this on windows?
+    qWarning() << "Session::sendSignal is not supported on Windows platform";
+#endif
+    return false;
 }
 
 void Session::close()
 {
-    _autoClose = true;
-    _wantedClose = true;
-
-    if (isRunning())
-    {
-        // Try SIGHUP, and if unsuccessful, do a hard kill.
-        // This is the sequence used by most other terminal emulators like xterm, gnome-terminal, ...
-        if (sendSignal(SIGHUP))
-        {
-            return;
+    if (isRunning()) {
+        if (!closeInNormalWay()) {
+            closeInForceWay();
         }
-
-        qWarning() << "Process " << processId() << " did not die with SIGHUP";
-        _shellProcess->closePty();
-        if (!_shellProcess->waitForFinished(1000))
-        {
-            if (!sendSignal(SIGKILL))
-            {
-                qWarning() << "Process " << processId() << " did not die with SIGKILL";
-                // Forced close.
-                QTimer::singleShot(1, this, SIGNAL(finished()));
-            }
-        }
-    }
-    else
-    {
+    } else {
         // terminal process has finished, just close the session
-        QTimer::singleShot(1, this, SIGNAL(finished()));
+        QTimer::singleShot(1, this, [this]() {
+            Q_EMIT finished();
+        });
     }
+}
+
+bool Session::closeInNormalWay()
+{
+#ifdef Q_OS_WIN
+    _shellProcess->closePty();
+    return true;
+#else
+    _autoClose = true;
+    // _closePerUserRequest = true;
+
+    // for the possible case where following events happen in sequence:
+    //
+    // 1). the terminal process crashes
+    // 2). the tab stays open and displays warning message
+    // 3). the user closes the tab explicitly
+    //
+    if (!isRunning()) {
+        Q_EMIT finished();
+        return true;
+    }
+
+    // try SIGHUP, afterwards do hard kill
+    // this is the sequence used by most other terminal emulators like xterm, gnome-terminal, ...
+    // see bug 401898 for details about tries to have some "soft-terminate" via EOF character
+    pid_t pid = static_cast<pid_t>(_shellProcess->processId());
+    if (::kill(pid, SIGHUP)) {
+        return true;
+    }
+
+    qWarning() << "Process " << processId() << " did not die with SIGHUP";
+    _shellProcess->closePty();
+    return (_shellProcess->waitForFinished(1000));
+#endif
+}
+
+bool Session::closeInForceWay()
+{
+    _autoClose = true;
+    // _closePerUserRequest = true;
+
+#ifdef Q_OS_WIN
+    return _shellProcess->kill();
+#else
+    pid_t pid = static_cast<pid_t>(_shellProcess->processId());
+    if (kill(pid, SIGKILL))
+        return true;
+    qWarning() << "Process " << processId() << " did not die with SIGKILL";
+#endif
+    return false;
 }
 
 void Session::sendText(const QString & text) const
@@ -646,6 +703,7 @@ QString Session::profileKey() const
 
 void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    disconnect(_shellProcess, &Konsole::Pty::finished, this, &Konsole::Session::done);
     if (!_autoClose) {
         _userTitle = QString::fromLatin1("This session is done. Finished");
         emit titleChanged();
@@ -659,7 +717,7 @@ void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
     QString message;
     if (!_wantedClose || exitCode != 0) {
 
-        if (_shellProcess->exitStatus() == QProcess::NormalExit) {
+        if (exitStatus == QProcess::NormalExit) {
             message = tr("Session '%1' exited with code %2.").arg(_nameTitle).arg(exitCode);
         } else {
             message = tr("Session '%1' crashed.").arg(_nameTitle);
@@ -989,6 +1047,9 @@ int Session::processId() const
 }
 int Session::getPtySlaveFd() const
 {
+#ifdef Q_OS_WIN
+    qWarning() << "Windows does support getting fd of the slave PTY";
+#endif
     return ptySlaveFd;
 }
 
