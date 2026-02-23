@@ -1707,14 +1707,17 @@ int TerminalDisplay::textWidth(const int startColumn, const int length, const in
   return result;
 }
 
-QRect TerminalDisplay::calculateTextArea(int topLeftX, int topLeftY, int startColumn, int line, int length) {
+QRect TerminalDisplay::calculateTextArea(int topLeftX, int topLeftY, int startColumn, int line, int length,
+                                         const QTransform &textScale) {
+  // NOTE: Only the origin offset should be mapped inversely for double width/height lines.
+  QPoint origin = textScale.inverted().map(QPoint(_leftMargin + topLeftX, _topMargin + topLeftY));
   int left = _fixedFont ? _fontWidth * startColumn : textWidth(0, startColumn, line);
   int top = _fontHeight * line;
   int width = _fixedFont ? _fontWidth * length : textWidth(startColumn, length, line);
-  return {_leftMargin + topLeftX + left,
-               _topMargin + topLeftY + top,
-               width,
-               _fontHeight};
+  return {origin.x() + left,
+          origin.y() + top,
+          width,
+          _fontHeight};
 }
 
 void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
@@ -1857,15 +1860,7 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
          paint.setWorldTransform(textScale, true);
 
          //calculate the area in which the text will be drawn
-         QRect textArea = calculateTextArea(tLx, tLy, x, y, len);
-
-         //move the calculated area to take account of scaling applied to the painter.
-         //the position of the area from the origin (0,0) is scaled
-         //by the opposite of whatever
-         //transformation has been applied to the painter.  this ensures that
-         //painting does actually start from textArea.topLeft()
-         //(instead of textArea.topLeft() * painter-scale)
-         textArea.moveTopLeft( textScale.inverted().map(textArea.topLeft()) );
+         QRect textArea = calculateTextArea(tLx, tLy, x, y, len, textScale);
 
          //paint text fragment
          drawTextFragment(paint,
