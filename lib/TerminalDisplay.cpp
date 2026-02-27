@@ -347,6 +347,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_terminalSizeStartup(true)
 ,_bidiEnabled(true)
 ,_mouseMarks(false)
+,_isPrimaryScreen(true)
 ,_disabledBracketedPasteMode(false)
 ,_actSel(0)
 ,_wordSelectionMode(false)
@@ -2729,17 +2730,13 @@ void TerminalDisplay::wheelEvent( QWheelEvent* ev )
   if (ev->angleDelta().y() == 0)
     return;
 
-  // if the terminal program is not interested mouse events
-  // then send the event to the scrollbar if the slider has room to move
-  // or otherwise send simulated up / down key presses to the terminal program
-  // for the benefit of programs such as 'less'
-  if ( _mouseMarks )
-  {
-    bool canScroll = _scrollBar->maximum() > 0;
-      if (canScroll)
-        _scrollBar->event(ev);
-    else
+    if (_mouseMarks && _scrollBar->maximum() > 0)
     {
+        // If the program running in the terminal is not interested in
+        // Mouse events, send the event to the scrollbar if the slider
+        // has room to move
+        _scrollBar->event(ev);
+    } else if(_mouseMarks && !_isPrimaryScreen) {
         // assume that each Up / Down key event will cause the terminal application
         // to scroll by one line.
         //
@@ -2756,21 +2753,18 @@ void TerminalDisplay::wheelEvent( QWheelEvent* ev )
 
         for (int i=0;i<linesToScroll;i++)
             emit keyPressedSignal(&keyScrollEvent, false);
+    } else if(!_mouseMarks) {
+        // terminal program wants notification of mouse activity
+
+        int charLine;
+        int charColumn;
+        getCharacterPosition( ev->pos() , charLine , charColumn );
+
+        emit mouseSignal( ev->angleDelta().y() > 0 ? 4 : 5,
+                          charColumn + 1,
+                          charLine + 1 +_scrollBar->value() -_scrollBar->maximum() ,
+                          0);
     }
-  }
-  else
-  {
-    // terminal program wants notification of mouse activity
-
-    int charLine;
-    int charColumn;
-    getCharacterPosition( ev->position() , charLine , charColumn );
-
-    emit mouseSignal( ev->angleDelta().y() > 0 ? 4 : 5,
-                      charColumn + 1,
-                      charLine + 1 +_scrollBar->value() -_scrollBar->maximum() ,
-                      0);
-  }
 }
 
 void TerminalDisplay::tripleClickTimeout()
@@ -2897,6 +2891,11 @@ void TerminalDisplay::setUsesMouse(bool on)
 bool TerminalDisplay::usesMouse() const
 {
     return _mouseMarks;
+}
+
+void TerminalDisplay::usingPrimaryScreen(bool use)
+{
+    _isPrimaryScreen = use;
 }
 
 void TerminalDisplay::setBracketedPasteMode(bool on)
