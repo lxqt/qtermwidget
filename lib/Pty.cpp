@@ -161,22 +161,22 @@ void Pty::setInitialWorkingDirectory(const QString &dir)
 
 void Pty::addEnvironmentVariables(const QStringList& environment)
 {
-
     bool termEnvVarAdded = false;
     for (const QString &pair : environment)
     {
         // split on the first '=' character
         int pos = pair.indexOf(QLatin1Char('='));
 
-        if ( pos >= 0 )
+        if (pos >= 0)
         {
             QString variable = pair.left(pos);
-            QString value = pair.mid(pos+1);
+            QString value = pair.mid(pos + 1);
 
-            setEnv(variable,value);
+            setEnv(variable, value);
 
             if (variable == QLatin1String("TERM")) {
                 termEnvVarAdded = true;
+            }
         }
     }
 
@@ -184,7 +184,6 @@ void Pty::addEnvironmentVariables(const QStringList& environment)
     if (!termEnvVarAdded) {
         setEnv(QStringLiteral("TERM"), QStringLiteral("xterm-256color"));
     }
-}
 }
 
 int Pty::start(const QString& program,
