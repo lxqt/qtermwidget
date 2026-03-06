@@ -177,6 +177,7 @@ void Pty::addEnvironmentVariables(const QStringList& environment)
 
             if (variable == QLatin1String("TERM")) {
                 termEnvVarAdded = true;
+            }
         }
     }
 
@@ -184,7 +185,6 @@ void Pty::addEnvironmentVariables(const QStringList& environment)
     if (!termEnvVarAdded) {
         setEnv(QStringLiteral("TERM"), QStringLiteral("xterm-256color"));
     }
-}
 }
 
 int Pty::start(const QString& program,
