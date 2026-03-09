@@ -1,1 +1,84 @@
-Here are two sample programs which use QTermWidget for displaying a terminal
+Examples using QTermWidget
+==========================
+
+This directory contains minimal examples showing how to embed and use `QTermWidget` in both C++ and Python (PyQt/PySide) applications.
+
+Contents
+--------
+* `cpp/main.cpp` – Basic single–terminal C++ example with menu actions (Find / Copy / Paste / About Qt) and runtime selection of color schemes and key bindings via command‑line arguments.
+* `cpp/RemoteTerm/` – A simple remote client example that connects to a TCP server exposing a pseudo terminal. Local keystrokes are sent to the remote host; data received over the socket is written into the local PTY backing the widget.
+* `pyqt/` – Python examples (PyQt/PySide) demonstrating how to instantiate and configure the terminal widget from Python. See the files inside for details.
+
+Building C++ Examples
+---------------------
+
+Configure the build (top level) and enable example targets as needed:
+
+```
+mkdir -p build
+cd build
+cmake -DBUILD_EXAMPLE=ON -DBUILD_EXAMPLE_REMOTETERM=ON ..
+cmake --build . -j
+```
+
+Resulting binaries (paths relative to the build directory):
+* `./example` – the basic example.
+* `./remoteterm` – the remote terminal client (only if `BUILD_EXAMPLE_REMOTETERM=ON`).
+
+Running the Basic Example
+-------------------------
+```
+./example [colorScheme] [keyBinding]
+```
+
+You can pass any available color scheme or key binding name (both optional). To list what is available, just run without arguments – they are also printed to stdout on startup.
+
+RemoteTerm Example
+------------------
+Usage:
+```
+./remoteterm <ipaddr> <port>
+```
+
+It will:
+1. Start a local, empty PTY via `startTerminalTeletype()`.
+2. Connect a `QTcpSocket` to the remote server.
+3. Forward local user keystrokes (via the `sendData` signal) to the socket.
+4. Write any incoming socket data directly into the PTY so it appears in the widget.
+
+This is a minimal client-only demonstration. A corresponding server program (not included here) must:
+* Accept a TCP connection.
+* Spawn or attach to a PTY on the server side.
+* Forward data bidirectionally between the PTY and the socket.
+
+Python Examples
+---------------
+Install the Python bindings (PyQt6 recommended for Qt6 builds) and run the scripts directly, for example:
+```
+python3 pyqt/basic.py
+```
+Adjust according to the actual script names present in `pyqt/`.
+
+Customization Highlights (C++)
+------------------------------
+Some frequently-used APIs shown in the examples:
+* `setTerminalFont(QFont)` – choose a monospace font.
+* `setColorScheme(name)` / `availableColorSchemes()` – theme control.
+* `setKeyBindings(name)` / `availableKeyBindings()` – load alternate key mapping tables.
+* `toggleShowSearchBar()` – show/hide the built-in incremental search bar.
+* `copyClipboard()` / `pasteClipboard()` – clipboard integration.
+* `finished` signal – emitted when the child shell/pty terminates (connect to close your window/application).
+
+Troubleshooting
+---------------
+* If you see a link error about a missing vtable for `RemoteTerm`, ensure CMake ran `moc` on `remoteterm.h` (requires `Q_OBJECT` macro and `BUILD_EXAMPLE_REMOTETERM=ON`).
+* For OpenGL / Qt GUI discovery errors during configuration, install your distribution's OpenGL development packages (e.g. `libgl-dev` on Debian/Ubuntu) and ensure your `Qt6` installation is complete.
+
+License
+-------
+The examples are provided under the same licensing terms as the library (see the top-level `LICENSE` files). Individual source files retain their original header notices.
+
+Contributions
+-------------
+Pull requests adding small, focused examples (e.g. tabbed terminals, custom color schemes, server counterpart for `RemoteTerm`) are welcome—keep them minimal and well-commented.
+
