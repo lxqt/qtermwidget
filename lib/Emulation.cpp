@@ -117,6 +117,11 @@ ScreenWindow* Emulation::createWindow()
     return window;
 }
 
+void Emulation::checkScreenInUse()
+{
+    emit primaryScreenInUse(_currentScreen == _screen[0]);
+}
+
 Emulation::~Emulation()
 {
   QListIterator<ScreenWindow*> windowIter(_windows);
@@ -140,6 +145,7 @@ void Emulation::setScreen(int n)
      // tell all windows onto this emulation to switch to the newly active screen
      for(ScreenWindow* window : std::as_const(_windows))
          window->setScreen(_currentScreen);
+     checkScreenInUse();
   }
 }
 
