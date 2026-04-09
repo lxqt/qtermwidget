@@ -336,7 +336,7 @@ void ColorScheme::readColorEntry(QSettings * s , int index)
 
     QVariant colorValue = s->value(QLatin1String("Color"));
     QStringView colorStr;
-    int r, g, b;
+    int r = 0; int g = 0; int b = 0;
     bool ok = false;
     // XXX: Undocumented(?) QSettings behavior: values with commas are parsed
     // as QStringList and others QString
