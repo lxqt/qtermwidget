@@ -262,6 +262,7 @@ void moveBlock(FILE * fion, int cursor, int newpos, char * buffer2)
 
 void BlockArray::decreaseBuffer(size_t newsize)
 {
+    char *buffer1 = nullptr;
     if (index < newsize) { // still fits in whole
         return;
     }
@@ -272,12 +273,8 @@ void BlockArray::decreaseBuffer(size_t newsize)
         return;
     }
 
-    // The Block constructor could do something in future...
-    char * buffer1 = new char[blocksize];
-
     FILE * fion = fdopen(dup(ion), "w+b");
     if (!fion) {
-        delete [] buffer1;
         perror("fdopen/dup");
         return;
     }
@@ -288,6 +285,9 @@ void BlockArray::decreaseBuffer(size_t newsize)
     } else {
         firstblock = 0;
     }
+
+    // The Block constructor could do something in future...
+    buffer1 = new char[blocksize];
 
     size_t oldpos;
     for (size_t i = 0, cursor=firstblock; i < newsize; i++) {
@@ -311,6 +311,8 @@ void BlockArray::decreaseBuffer(size_t newsize)
 
 void BlockArray::increaseBuffer()
 {
+    char *buffer1 = nullptr;
+    char *buffer2 = nullptr;
     if (index < size) { // not even wrapped once
         return;
     }
@@ -319,10 +321,6 @@ void BlockArray::increaseBuffer()
     if (!offset) { // no moving needed
         return;
     }
-
-    // The Block constructor could do something in future...
-    char * buffer1 = new char[blocksize];
-    char * buffer2 = new char[blocksize];
 
     int runs = 1;
     int bpr = size; // blocks per run
@@ -335,10 +333,12 @@ void BlockArray::increaseBuffer()
     FILE * fion = fdopen(dup(ion), "w+b");
     if (!fion) {
         perror("fdopen/dup");
-        delete [] buffer1;
-        delete [] buffer2;
         return;
     }
+
+    // The Block constructor could do something in future...
+    buffer1 = new char[blocksize];
+    buffer2 = new char[blocksize];
 
     int res;
     for (int i = 0; i < runs; i++) {
