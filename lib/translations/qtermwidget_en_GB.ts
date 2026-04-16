@@ -57,7 +57,7 @@
     <message>
         <location filename="../Vt102Emulation.cpp" line="1106"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
-        <translation type="unfinished"></translation>
+        <translation>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</translation>
     </message>
 </context>
 <context>
@@ -65,7 +65,7 @@
     <message>
         <location filename="../TerminalDisplay.cpp" line="2994"/>
         <source>Show Details...</source>
-        <translation type="unfinished"></translation>
+        <translation>Show Details...</translation>
     </message>
 </context>
 <context>
@@ -74,7 +74,7 @@
         <location filename="../ColorScheme.cpp" line="275"/>
         <location filename="../ColorScheme.cpp" line="290"/>
         <source>Un-named Color Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Un-named Colour Scheme</translation>
     </message>
     <message>
         <location filename="../ColorScheme.cpp" line="461"/>
