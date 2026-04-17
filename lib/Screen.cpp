@@ -687,7 +687,7 @@ void Screen::displayCharacter(wchar_t c)
         // Also, make an extended character with a pair of flag codes
         || (w == 1 && isRegionalIndicator(c)))
     {
-        if (w == 0 && QChar(c).category() != QChar::Mark_NonSpacing)
+        if (w == 0 && QChar::category(static_cast<char32_t>(c)) != QChar::Mark_NonSpacing)
             return;
         // Find previous "real character" to try to combine with
         int charToCombineWithX = qMin(cuX, screenLines[cuY].length());

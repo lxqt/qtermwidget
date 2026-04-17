@@ -1188,7 +1188,7 @@ void TerminalDisplay::updateImage()
         disstrU[p++] = c; //fontMap(c);
         bool lineDraw = isLineChar(newLine[x+0]);
         bool doubleWidth = (x+1 == columnsToUpdate) ? false : (newLine[x+1].character == 0);
-        int charWidth = fm.horizontalAdvance(QChar(c));
+        int charWidth = QChar::requiresSurrogates(c) ? fm.horizontalAdvance(QString::fromWCharArray(&c, 1)) : fm.horizontalAdvance(QChar(static_cast<ushort>(c)));
         bool bigWidth = _fixedFont && !doubleWidth && charWidth > _fontWidth;
         bool smallWidth = _fixedFont && charWidth < _fontWidth;
         cr = newLine[x].rendition;
@@ -1203,7 +1203,8 @@ void TerminalDisplay::updateImage()
                 continue; // Skip trailing part of multi-col chars.
 
             bool nextIsDoubleWidth = (x+len+1 == columnsToUpdate) ? false : (newLine[x+len+1].character == 0);
-            int nxtCharWidth = fm.horizontalAdvance(QChar(newLine[x+len].character));
+            wchar_t _nxtCh = newLine[x+len].character;
+            int nxtCharWidth = QChar::requiresSurrogates(_nxtCh) ? fm.horizontalAdvance(QString::fromWCharArray(&_nxtCh, 1)) : fm.horizontalAdvance(QChar(static_cast<ushort>(_nxtCh)));
             bool nextIsbigWidth = _fixedFont && !nextIsDoubleWidth && nxtCharWidth > _fontWidth;
             bool nextIsSmallWidth = _fixedFont && newLine[x+len].character && nxtCharWidth < _fontWidth;
 
@@ -1632,7 +1633,7 @@ void TerminalDisplay::paintFilters(QPainter& painter)
                                         // display in _columns
 
             // ignore whitespace at the end of the lines
-            while ( QChar(_image[loc(endColumn,line)].character).isSpace() && endColumn > 0 )
+            while ( QChar::isSpace(static_cast<char32_t>(_image[loc(endColumn,line)].character)) && endColumn > 0 )
                 endColumn--;
 
             // increment here because the column which we want to set 'endColumn' to
@@ -1701,7 +1702,7 @@ int TerminalDisplay::textWidth(const int startColumn, const int length, const in
     }
     else
     {
-        result += fm.horizontalAdvance(QChar(static_cast<uint>(c.character)));
+        result += QChar::requiresSurrogates(c.character) ? fm.horizontalAdvance(QString::fromWCharArray(&c.character, 1)) : fm.horizontalAdvance(QChar(static_cast<ushort>(c.character)));
     }
   }
   return result;
@@ -1779,7 +1780,7 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
 
       bool lineDraw = isLineChar(_image[loc(x,y)]);
       bool doubleWidth = (_image[ qMin(loc(x,y)+1,_imageSize) ].character == 0);
-      int charWidth = fm.horizontalAdvance(QChar(c));
+      int charWidth = QChar::requiresSurrogates(c) ? fm.horizontalAdvance(QString::fromUcs4(reinterpret_cast<const char32_t*>(&c), 1)) : fm.horizontalAdvance(QChar(static_cast<ushort>(c)));
       bool bigWidth = _fixedFont && !doubleWidth && charWidth > _fontWidth;
       bool tooWide = bigWidth && charWidth >= 2 * _fontWidth;
       bool smallWidth = _fixedFont && c && charWidth < _fontWidth;
@@ -1796,7 +1797,7 @@ void TerminalDisplay::drawContents(QPainter &paint, const QRect &rect)
              _image[loc(x+len,y)].rendition == currentRendition &&
              (nxtDoubleWidth = (_image[qMin(loc(x+len,y)+1,_imageSize)].character == 0)) == doubleWidth &&
              !smallWidth &&
-             !(_fixedFont && (nxtC = _image[loc(x+len,y)].character) && (nxtCharWidth = fm.horizontalAdvance(QChar(nxtC))) < _fontWidth) &&
+             !(_fixedFont && (nxtC = _image[loc(x+len,y)].character) && (nxtCharWidth = (QChar::requiresSurrogates(nxtC) ? fm.horizontalAdvance(QString::fromUcs4(reinterpret_cast<const char32_t*>(&nxtC), 1)) : fm.horizontalAdvance(QChar(static_cast<ushort>(nxtC))))) < _fontWidth) &&
              !bigWidth &&
              !(_fixedFont && !nxtDoubleWidth && nxtC && nxtCharWidth > _fontWidth) &&
              isLineChar(_image[loc(x+len,y)]) == lineDraw) // Assignment!
@@ -2383,7 +2384,7 @@ void TerminalDisplay::extendSelection( const QPoint& position )
   {
     // Extend to word boundaries
     int i;
-    QChar selClass;
+    char32_t selClass;
 
     bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
        ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
@@ -2460,7 +2461,7 @@ void TerminalDisplay::extendSelection( const QPoint& position )
   if ( !_wordSelectionMode && !_lineSelectionMode )
   {
     int i;
-    QChar selClass;
+    char32_t selClass;
 
     bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
        ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
@@ -2665,7 +2666,7 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
   _wordSelectionMode = true;
 
   // find word boundaries...
-  QChar selClass = charClass(_image[i]);
+  char32_t selClass = charClass(_image[i]);
   {
      // find the start of the word
      int x = bgnSel.x();
@@ -2704,7 +2705,7 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
      endSel.setX(x);
 
      // In word selection mode don't select @ (64) if at end of word.
-     if (QChar(_image[i].character) == QLatin1Char('@') &&
+     if (_image[i].character == L'@' &&
          endSel.x() - bgnSel.x() > 0 &&
          (_image[i].rendition & RE_EXTENDED_CHAR) == 0)
      {
@@ -2801,7 +2802,7 @@ void TerminalDisplay::mouseTripleClickEvent(QMouseEvent* ev)
   if (_tripleClickMode == SelectForwardsFromCursor) {
     // find word boundary start
     int i = loc(_iPntSel.x(),_iPntSel.y());
-    QChar selClass = charClass(_image[i]);
+    char32_t selClass = charClass(_image[i]);
     int x = _iPntSel.x();
 
     while ( ((x>0) ||
@@ -2847,7 +2848,7 @@ bool TerminalDisplay::focusNextPrevChild( bool next )
 }
 
 
-QChar TerminalDisplay::charClass(const Character &ch) const
+char32_t TerminalDisplay::charClass(const Character &ch) const
 {
     if (ch.rendition & RE_EXTENDED_CHAR)
     {
@@ -2862,22 +2863,21 @@ QChar TerminalDisplay::charClass(const Character &ch) const
             }
             const QString s = QString::fromStdWString(str);
             if (_wordCharacters.contains(s, Qt::CaseInsensitive))
-                return QLatin1Char('a');
+                return 'a';
             bool allLetterOrNumber = true;
             for (int i = 0; allLetterOrNumber && i < s.size(); ++i)
                 allLetterOrNumber = s.at(i).isLetterOrNumber();
-            return allLetterOrNumber ? QLatin1Char('a') : s.at(0);
+            return allLetterOrNumber ? 'a' : chars[0];
         }
-        return QChar(0);
+        return 0;
     }
     else
     {
-        const QChar qch(ch.character);
-        if (qch.isSpace())
-            return QLatin1Char(' ');
-        if (qch.isLetterOrNumber() || _wordCharacters.contains(qch, Qt::CaseInsensitive ))
-            return QLatin1Char('a');
-        return qch;
+        if (QChar::isSpace(static_cast<char32_t>(ch.character)))
+            return ' ';
+        if (QChar::isLetterOrNumber(static_cast<char32_t>(ch.character)) || _wordCharacters.contains(QString::fromWCharArray(&ch.character, 1), Qt::CaseInsensitive ))
+            return 'a';
+        return ch.character;
     }
 }
 
