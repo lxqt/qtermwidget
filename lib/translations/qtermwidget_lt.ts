@@ -4,22 +4,22 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="448"/>
+        <location filename="../Session.cpp" line="481"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Skambutis “%1„ seanse</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="630"/>
+        <location filename="../Session.cpp" line="663"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Seansas „%1“ išėjo grąžindamas kodą %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="632"/>
+        <location filename="../Session.cpp" line="665"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Seansas „%1“ užstrigo.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="637"/>
+        <location filename="../Session.cpp" line="670"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Seansas „%1“ netikėtai išėjo.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1311"/>
+        <location filename="../TerminalDisplay.cpp" line="1312"/>
         <source>Size: XXX x XXX</source>
         <translation>Dydis: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1323"/>
+        <location filename="../TerminalDisplay.cpp" line="1324"/>
         <source>Size: %1 x %2</source>
         <translation>Dydis: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2987"/>
+        <location filename="../TerminalDisplay.cpp" line="2989"/>
         <source>Paste multiline text</source>
         <translation>Įdėti kelių eilučių tekstą</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2988"/>
+        <location filename="../TerminalDisplay.cpp" line="2990"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Ar tikrai norite įdėti šį tekstą?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3459"/>
+        <location filename="../TerminalDisplay.cpp" line="3462"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Išvestis buvo &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;pristabdyta,&lt;/a&gt; paspaudžiant Ctrl+S.  Paspauskite &lt;b&gt;Ctrl+Q&lt;/b&gt;, norėdami pratęsti.&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1106"/>
+        <location filename="../Vt102Emulation.cpp" line="1150"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Nėra prieinamas joks klaviatūros vertėjas. Informacijos, kurios reikia, norint konvertuoti klavišų paspaudimus į simbolius ir siųsti į terminalą, nėra.</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2994"/>
+        <location filename="../TerminalDisplay.cpp" line="2996"/>
         <source>Show Details...</source>
         <translation>Rodyti išsamiau...</translation>
     </message>
@@ -71,33 +71,33 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../ColorScheme.cpp" line="275"/>
-        <location filename="../ColorScheme.cpp" line="290"/>
+        <location filename="../ColorScheme.cpp" line="276"/>
+        <location filename="../ColorScheme.cpp" line="291"/>
         <source>Un-named Color Scheme</source>
         <translation>Nepavadintas spalvų rinkinys</translation>
     </message>
     <message>
-        <location filename="../ColorScheme.cpp" line="461"/>
+        <location filename="../ColorScheme.cpp" line="462"/>
         <source>Accessible Color Scheme</source>
         <translation>Pasiekiamas spalvų rinkinys</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="522"/>
+        <location filename="../Filter.cpp" line="603"/>
         <source>Open Link</source>
         <translation>Atverti nuorodą</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="523"/>
+        <location filename="../Filter.cpp" line="604"/>
         <source>Copy Link Address</source>
         <translation>Kopijuoti nuorodos adresą</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="527"/>
+        <location filename="../Filter.cpp" line="608"/>
         <source>Send Email To...</source>
         <translation>Siųsti el. paštą...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="528"/>
+        <location filename="../Filter.cpp" line="609"/>
         <source>Copy Email Address</source>
         <translation>Kopijuoti el. pašto adresą</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="465"/>
+        <location filename="../qtermwidget.cpp" line="481"/>
         <source>Color Scheme Error</source>
         <translation>Spalvų rinkinio klaida</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="466"/>
+        <location filename="../qtermwidget.cpp" line="482"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Nepavyksta įkelti spalvų rinkinio: %1</translation>
     </message>
