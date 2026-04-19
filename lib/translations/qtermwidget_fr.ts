@@ -4,22 +4,22 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="448"/>
+        <location filename="../Session.cpp" line="481"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Sonnerie dans la session &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="630"/>
+        <location filename="../Session.cpp" line="663"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>La session « %1 » s&apos;est terminée avec le code %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="632"/>
+        <location filename="../Session.cpp" line="665"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>La session &apos;% 1&apos; a planté.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="637"/>
+        <location filename="../Session.cpp" line="670"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Session &apos;%1&apos; s&apos;est terminée de manière inattendue.</translation>
     </message>
@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1311"/>
+        <location filename="../TerminalDisplay.cpp" line="1312"/>
         <source>Size: XXX x XXX</source>
         <translation>Taille : XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1323"/>
+        <location filename="../TerminalDisplay.cpp" line="1324"/>
         <source>Size: %1 x %2</source>
         <translation>Taille : %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2987"/>
+        <location filename="../TerminalDisplay.cpp" line="2989"/>
         <source>Paste multiline text</source>
         <translation>Coller des textes multiligne</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2988"/>
+        <location filename="../TerminalDisplay.cpp" line="2990"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Êtes-vous sûr de vouloir coller ce texte ?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3459"/>
+        <location filename="../TerminalDisplay.cpp" line="3462"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;La sortie a été &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspendue&lt;/a&gt; en pressant Ctrl+S.  Presser &lt;b&gt;Ctrl+Q&lt;/b&gt; pour reprendre.&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1106"/>
+        <location filename="../Vt102Emulation.cpp" line="1150"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Aucun traducteur de clavier disponible. Les informations nécessaires pour convertir les touches utilisées en caractères à envoyer au terminal sont manquantes.</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2994"/>
+        <location filename="../TerminalDisplay.cpp" line="2996"/>
         <source>Show Details...</source>
         <translation>Voir les détails...</translation>
     </message>
@@ -71,33 +71,33 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../ColorScheme.cpp" line="275"/>
-        <location filename="../ColorScheme.cpp" line="290"/>
+        <location filename="../ColorScheme.cpp" line="276"/>
+        <location filename="../ColorScheme.cpp" line="291"/>
         <source>Un-named Color Scheme</source>
         <translation>Jeu de couleurs non nommé</translation>
     </message>
     <message>
-        <location filename="../ColorScheme.cpp" line="461"/>
+        <location filename="../ColorScheme.cpp" line="462"/>
         <source>Accessible Color Scheme</source>
         <translation>Schéma de couleur accessible</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="522"/>
+        <location filename="../Filter.cpp" line="603"/>
         <source>Open Link</source>
         <translation>Ouvrir le lien</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="523"/>
+        <location filename="../Filter.cpp" line="604"/>
         <source>Copy Link Address</source>
         <translation>Copier l&apos;adresse du lien</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="527"/>
+        <location filename="../Filter.cpp" line="608"/>
         <source>Send Email To...</source>
         <translation>Envoyer un courriel à...</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="528"/>
+        <location filename="../Filter.cpp" line="609"/>
         <source>Copy Email Address</source>
         <translation>Copier l&apos;adresse du courriel</translation>
     </message>
@@ -105,12 +105,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="465"/>
+        <location filename="../qtermwidget.cpp" line="481"/>
         <source>Color Scheme Error</source>
         <translation>Erreur du schéma des couleurs</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="466"/>
+        <location filename="../qtermwidget.cpp" line="482"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Impossible de charger le schéma de couleurs : %1</translation>
     </message>
