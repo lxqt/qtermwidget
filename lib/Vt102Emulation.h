@@ -162,6 +162,9 @@ private:
   void reportAnswerBack();
   void reportCursorPosition();
   void reportTerminalParms(int p);
+  // DECRPM responses to DECRQM queries
+  void reportAnsiMode(int mode, int status);
+  void reportDecMode(int mode, int status);
 
   void onScrollLock();
   void scrollLock(const bool lock);
