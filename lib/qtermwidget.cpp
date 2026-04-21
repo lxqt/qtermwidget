@@ -644,6 +644,16 @@ QString QTermWidget::keyBindings()
     return m_impl->m_session->keyBindings();
 }
 
+void QTermWidget::setCustomKeyBindingsDir(const QString& custom_dir)
+{
+    KeyboardTranslatorManager::instance()->setTranslatorBaseDir(custom_dir);
+}
+
+void QTermWidget::clearCustomKeyBindingsDir()
+{
+    KeyboardTranslatorManager::instance()->clearTranslatorBaseDir();
+}
+
 void QTermWidget::toggleShowSearchBar()
 {
     m_searchBar->isHidden() ? m_searchBar->show() : m_searchBar->hide();

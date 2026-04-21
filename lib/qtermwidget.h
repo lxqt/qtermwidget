@@ -160,6 +160,12 @@ public:
     //! Return current key bindings
     QString keyBindings() override;
 
+    // Set the directory in which to look for key bindings
+    void setCustomKeyBindingsDir(const QString& custom_dir);
+    // Reset the directory in which to look for key bindings to the default
+    void clearCustomKeyBindingsDir();
+
+
     void setMotionAfterPasting(int) override;
 
     /** Return the number of lines in the history buffer. */
