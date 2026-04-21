@@ -631,7 +631,7 @@ CompactHistoryLine::CompactHistoryLine ( const TextLine& line, CompactHistoryBlo
     //kDebug() << "number of different formats in string: " << formatLength;
     formatArray = (CharacterFormat*) blockList.allocate(sizeof(CharacterFormat)*formatLength);
     Q_ASSERT (formatArray!=nullptr);
-    text = (quint16*) blockList.allocate(sizeof(quint16)*line.size());
+    text = (wchar_t*) blockList.allocate(sizeof(wchar_t)*line.size());
     Q_ASSERT (text!=nullptr);
 
     length=line.size();
