@@ -68,10 +68,6 @@
 using namespace Konsole;
 using namespace Qt::Literals::StringLiterals;
 
-#ifndef loc
-#define loc(X,Y) ((Y)*_columns+(X))
-#endif
-
 #define yMouseScroll 1
 
 #define REPCHAR   "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
@@ -107,6 +103,23 @@ bool TerminalDisplay::HAVE_TRANSPARENCY = true;
 // we use this to force QPainter to display text in LTR mode
 // more information can be found in: http://unicode.org/reports/tr9/
 const QChar LTR_OVERRIDE_CHAR( 0x202D );
+
+inline int TerminalDisplay::loc(int x, int y) const
+{
+    if (y < 0 || y > _lines) {
+        qDebug() << "Y: " << y << "Lines" << _lines;
+    }
+    if (x < 0 || x > _columns) {
+        qDebug() << "X" << x << "Columns" << _columns;
+    }
+
+    Q_ASSERT(y >= 0 && y < _lines);
+    Q_ASSERT(x >= 0 && x < _columns);
+    x = qBound(0, x, _columns - 1);
+    y = qBound(0, y, _lines - 1);
+
+    return y * _columns + x;
+}
 
 /* ------------------------------------------------------------------------- */
 /*                                                                           */

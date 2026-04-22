@@ -739,6 +739,8 @@ private:
 
     void hideStaleMouse() const; // conditionally hides the mouse cursor
 
+    int loc(int x, int y) const;
+
     // the window onto the terminal screen which this display
     // is currently showing.
     QPointer<ScreenWindow> _screenWindow;
