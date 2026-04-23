@@ -729,6 +729,8 @@ private:
     // returns the position of the cursor in columns and lines
     QPoint cursorPosition() const;
 
+    QPoint findLineStart(const QPoint &pnt);
+    QPoint findLineEnd(const QPoint &pnt);
     QPoint findWordStart(const QPoint &pnt);
     QPoint findWordEnd(const QPoint &pnt);
 

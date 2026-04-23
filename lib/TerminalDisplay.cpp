@@ -2421,31 +2421,19 @@ void TerminalDisplay::extendSelection( const QPoint& position )
   {
     // Extend to complete line
     bool above_not_below = ( here.y() < _iPntSelCorr.y() );
-
-    QPoint above = above_not_below ? here : _iPntSelCorr;
-    QPoint below = above_not_below ? _iPntSelCorr : here;
-
-    while (above.y()>0 && (_lineProperties[above.y()-1] & LINE_WRAPPED) )
-      above.ry()--;
-    while (below.y()<_usedLines-1 && (_lineProperties[below.y()] & LINE_WRAPPED) )
-      below.ry()++;
-
-    above.setX(0);
-    below.setX(_usedColumns-1);
-
-    // Pick which is start (ohere) and which is extension (here)
     if ( above_not_below )
     {
-      here = above; ohere = below;
+      ohere = findLineEnd(_iPntSelCorr);
+      here = findLineStart(here);
     }
     else
     {
-      here = below; ohere = above;
+      ohere = findLineStart(_iPntSelCorr);
+      here = findLineEnd(here);
     }
 
-    QPoint newSelBegin = QPoint( ohere.x(), ohere.y() );
-    swapping = !(_tripleSelBegin==newSelBegin);
-    _tripleSelBegin = newSelBegin;
+    swapping = !(_tripleSelBegin == ohere);
+    _tripleSelBegin = ohere;
 
     ohere.rx()++;
   }
@@ -2669,6 +2657,66 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
 
   QTimer::singleShot(QApplication::doubleClickInterval(),this,
                      SLOT(tripleClickTimeout()));
+}
+
+// Moving left/up from the line containing pnt, return the starting offset
+// point which the given line is continuously wrapped.
+// (top left corner = 0,0; previous line not visible = 0,-1)
+QPoint TerminalDisplay::findLineStart(const QPoint &pnt)
+{
+    const int visibleScreenLines = _lineProperties.size();
+    const int topVisibleLine = _screenWindow->currentLine();
+    Screen *screen = _screenWindow->screen();
+    int line = pnt.y();
+    int lineInHistory = line + topVisibleLine;
+
+    QVector<LineProperty> lineProperties = _lineProperties;
+
+    while (lineInHistory > 0) {
+        for (; line > 0; line--, lineInHistory--) {
+            // Does previous line wrap around?
+            if ((lineProperties[line - 1] & LINE_WRAPPED) == 0) {
+                return {0, lineInHistory - topVisibleLine};
+            }
+        }
+
+        if (lineInHistory < 1) {
+            break;
+        }
+
+        // _lineProperties is only for the visible screen, so grab new data
+        int newRegionStart = qMax(0, lineInHistory - visibleScreenLines);
+        lineProperties = screen->getLineProperties(newRegionStart, lineInHistory - 1);
+        line = lineInHistory - newRegionStart;
+    }
+    return {0, lineInHistory - topVisibleLine};
+}
+
+// Moving right/down from the line containing pnt, return the ending offset
+// point which the given line is continuously wrapped.
+QPoint TerminalDisplay::findLineEnd(const QPoint &pnt)
+{
+    const int visibleScreenLines = _lineProperties.size();
+    const int topVisibleLine = _screenWindow->currentLine();
+    const int maxY = _screenWindow->lineCount() - 1;
+    Screen *screen = _screenWindow->screen();
+    int line = pnt.y();
+    int lineInHistory = line + topVisibleLine;
+
+    QVector<LineProperty> lineProperties = _lineProperties;
+
+    while (lineInHistory < maxY) {
+        for (; line < lineProperties.count() && lineInHistory < maxY; line++, lineInHistory++) {
+            // Does current line wrap around?
+            if ((lineProperties[line] & LINE_WRAPPED) == 0) {
+                return {_columns - 1, lineInHistory - topVisibleLine};
+            }
+        }
+
+        line = 0;
+        lineProperties = screen->getLineProperties(lineInHistory, qMin(lineInHistory + visibleScreenLines, maxY));
+    }
+    return {_columns - 1, lineInHistory - topVisibleLine};
 }
 
 QPoint TerminalDisplay::findWordStart(const QPoint &pnt)
@@ -2918,22 +2966,17 @@ void TerminalDisplay::mouseTripleClickEvent(QMouseEvent* ev)
   _actSel = 2; // within selection
   emit isBusySelecting(true); // Keep it steady...
 
-  while (_iPntSel.y()>0 && (_lineProperties[_iPntSel.y()-1] & LINE_WRAPPED) )
-    _iPntSel.ry()--;
-
   if (_tripleClickMode == SelectForwardsFromCursor) {
     _tripleSelBegin = findWordStart( _iPntSel );
     _screenWindow->setSelectionStart( _tripleSelBegin.x() , _tripleSelBegin.y() , false );
   }
   else if (_tripleClickMode == SelectWholeLine) {
-    _screenWindow->setSelectionStart( 0 , _iPntSel.y() , false );
-    _tripleSelBegin = QPoint( 0, _iPntSel.y() );
+    _tripleSelBegin = findLineStart( _iPntSel );
+    _screenWindow->setSelectionStart( 0 , _tripleSelBegin.y() , false );
   }
 
-  while (_iPntSel.y()<_lines-1 && (_lineProperties[_iPntSel.y()] & LINE_WRAPPED) )
-    _iPntSel.ry()++;
-
-  _screenWindow->setSelectionEnd( _columns - 1 , _iPntSel.y() );
+  _iPntSel = findLineEnd( _iPntSel );
+  _screenWindow->setSelectionEnd( _iPntSel.x() , _iPntSel.y() );
 
   setSelection(_screenWindow->selectedText(_preserveLineBreaks));
 
