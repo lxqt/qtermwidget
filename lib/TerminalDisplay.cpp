@@ -2681,10 +2681,22 @@ QPoint TerminalDisplay::findWordStart(const QPoint &pnt)
     int imgLine = pnt.y();
     int x = pnt.x();
     int y = imgLine + firstVisibleLine;
-    int imgLoc = loc(x, imgLine);
     QVector<LineProperty> lineProperties = _lineProperties;
-    const QChar selClass = charClass(image[imgLoc]);
     const int imageSize = regSize * _columns;
+
+    if (imgLine < 0 || imgLine >= _usedLines) {
+        // Starting point outside the visible window, fetch it from Screen.
+        int newRegStart = qMax(0, y - regSize + 1);
+        int newRegEnd = qMin(y, screen->getHistLines() + screen->getLines() - 1);
+        lineProperties = screen->getLineProperties(newRegStart, newRegEnd);
+        imgLine = y - newRegStart;
+        tmp_image = new Character[imageSize];
+        image = tmp_image;
+        screen->getImage(tmp_image, imageSize, newRegStart, newRegEnd);
+    }
+
+    int imgLoc = loc(x, imgLine);
+    const QChar selClass = charClass(image[imgLoc]);
 
     while (true) {
         for (;; imgLoc--, x--) {
@@ -2748,15 +2760,27 @@ QPoint TerminalDisplay::findWordEnd(const QPoint &pnt)
     int imgLine = pnt.y();
     int x = pnt.x();
     int y = imgLine + firstVisibleLine;
-    int imgLoc = loc(x, imgLine);
     QVector<LineProperty> lineProperties = _lineProperties;
     Screen *screen = _screenWindow->screen();
     Character *image = _image;
     Character *tmp_image = nullptr;
-    const QChar selClass = charClass(image[imgLoc]);
     const int imageSize = regSize * _columns;
     const int maxY = _screenWindow->lineCount() - 1;
     const int maxX = _columns - 1;
+
+    if (imgLine < 0 || imgLine >= _usedLines) {
+        // Starting point outside the visible window, fetch it from Screen.
+        int newRegStart = qMax(0, y - regSize + 1);
+        int newRegEnd = qMin(y, screen->getHistLines() + screen->getLines() - 1);
+        lineProperties = screen->getLineProperties(newRegStart, newRegEnd);
+        imgLine = y - newRegStart;
+        tmp_image = new Character[imageSize];
+        image = tmp_image;
+        screen->getImage(tmp_image, imageSize, newRegStart, newRegEnd);
+    }
+
+    int imgLoc = loc(x, imgLine);
+    const QChar selClass = charClass(image[imgLoc]);
 
     while (true) {
         const int lineCount = lineProperties.count();
