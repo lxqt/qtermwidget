@@ -729,6 +729,11 @@ private:
     // returns the position of the cursor in columns and lines
     QPoint cursorPosition() const;
 
+    QPoint findLineStart(const QPoint &pnt);
+    QPoint findLineEnd(const QPoint &pnt);
+    QPoint findWordStart(const QPoint &pnt);
+    QPoint findWordEnd(const QPoint &pnt);
+
     // redraws the cursor
     void updateCursor();
 
@@ -738,6 +743,8 @@ private:
     bool isLineCharString(const std::wstring& string) const;
 
     void hideStaleMouse() const; // conditionally hides the mouse cursor
+
+    int loc(int x, int y) const;
 
     // the window onto the terminal screen which this display
     // is currently showing.
