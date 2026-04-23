@@ -62,6 +62,7 @@
 //#include <config-apps.h>
 #include "Filter.h"
 #include "konsole_wcwidth.h"
+#include "Screen.h"
 #include "ScreenWindow.h"
 #include "TerminalCharacterDecoder.h"
 
@@ -2390,34 +2391,19 @@ void TerminalDisplay::extendSelection( const QPoint& position )
   if ( _wordSelectionMode )
   {
     // Extend to word boundaries
-    int i;
-    QChar selClass;
-
     bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
        ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
     bool old_left_not_right = ( _pntSelCorr.y() < _iPntSelCorr.y() ||
        ( _pntSelCorr.y() == _iPntSelCorr.y() && _pntSelCorr.x() < _iPntSelCorr.x() ) );
     swapping = left_not_right != old_left_not_right;
 
-    // Find left (left_not_right ? from here : from start)
+    // Find left (left_not_right ? from here : from start of word)
     QPoint left = left_not_right ? here : _iPntSelCorr;
-    i = loc(left.x(),left.y());
-    if (i>=0 && i<=_imageSize) {
-      selClass = charClass(_image[i]);
-      while ( ((left.x()>0) || (left.y()>0 && (_lineProperties[left.y()-1] & LINE_WRAPPED) ))
-                      && charClass(_image[i-1]) == selClass )
-      { i--; if (left.x()>0) left.rx()--; else {left.rx()=_usedColumns-1; left.ry()--;} }
-    }
-
-    // Find left (left_not_right ? from start : from here)
+    // Find left (left_not_right ? from end of word : from here)
     QPoint right = left_not_right ? _iPntSelCorr : here;
-    i = loc(right.x(),right.y());
-    if (i>=0 && i<=_imageSize) {
-      selClass = charClass(_image[i]);
-      while( ((right.x()<_usedColumns-1) || (right.y()<_usedLines-1 && (_lineProperties[right.y()] & LINE_WRAPPED) ))
-                      && charClass(_image[i+1]) == selClass )
-      { i++; if (right.x()<_usedColumns-1) right.rx()++; else {right.rx()=0; right.ry()++; } }
-    }
+
+    left = findWordStart(left);
+    right = findWordEnd(right);
 
     // Pick which is start (ohere) and which is extension (here)
     if ( left_not_right )
@@ -2664,72 +2650,177 @@ void TerminalDisplay::mouseDoubleClickEvent(QMouseEvent* ev)
   }
 
   _screenWindow->clearSelection();
-  QPoint bgnSel = pos;
-  QPoint endSel = pos;
-  int i = loc(bgnSel.x(),bgnSel.y());
-  _iPntSel = bgnSel;
+  _iPntSel = pos;
   _iPntSel.ry() += _scrollBar->value();
 
   _wordSelectionMode = true;
+  _actSel = 2; // within selection
 
   // find word boundaries...
-  QChar selClass = charClass(_image[i]);
-  {
-     // find the start of the word
-     int x = bgnSel.x();
-     while ( ((x>0) || (bgnSel.y()>0 && (_lineProperties[bgnSel.y()-1] & LINE_WRAPPED) ))
-                     && charClass(_image[i-1]) == selClass )
-     {
-       i--;
-       if (x>0)
-           x--;
-       else
-       {
-           x=_usedColumns-1;
-           bgnSel.ry()--;
-       }
-     }
+  const QPoint bgnSel = findWordStart(pos);
+  const QPoint endSel = findWordEnd(pos);
 
-     bgnSel.setX(x);
-     _screenWindow->setSelectionStart( bgnSel.x() , bgnSel.y() , false );
+  _screenWindow->setSelectionStart( bgnSel.x() , bgnSel.y() , false );
+  _screenWindow->setSelectionEnd( endSel.x() , endSel.y() );
 
-     // find the end of the word
-     i = loc( endSel.x(), endSel.y() );
-     x = endSel.x();
-     while( ((x<_usedColumns-1) || (endSel.y()<_usedLines-1 && (_lineProperties[endSel.y()] & LINE_WRAPPED) ))
-                     && charClass(_image[i+1]) == selClass )
-     {
-         i++;
-         if (x<_usedColumns-1)
-             x++;
-         else
-         {
-             x=0;
-             endSel.ry()++;
-         }
-     }
-
-     endSel.setX(x);
-
-     // In word selection mode don't select @ (64) if at end of word.
-     if (QChar(_image[i].character) == QLatin1Char('@') &&
-         endSel.x() - bgnSel.x() > 0 &&
-         (_image[i].rendition & RE_EXTENDED_CHAR) == 0)
-     {
-       endSel.setX( x - 1 );
-     }
-
-     _actSel = 2; // within selection
-
-     _screenWindow->setSelectionEnd( endSel.x() , endSel.y() );
-
-     setSelection( _screenWindow->selectedText(_preserveLineBreaks) );
-   }
+  setSelection( _screenWindow->selectedText(_preserveLineBreaks) );
 
   _possibleTripleClick=true;
 
   QTimer::singleShot(QApplication::doubleClickInterval(),this,
                      SLOT(tripleClickTimeout()));
+}
+
+QPoint TerminalDisplay::findWordStart(const QPoint &pnt)
+{
+    const int regSize = qMax(_screenWindow->windowLines(), 10);
+    const int firstVisibleLine = _screenWindow->currentLine();
+    Screen *screen = _screenWindow->screen();
+    Character *image = _image;
+    Character *tmp_image = nullptr;
+    int imgLine = pnt.y();
+    int x = pnt.x();
+    int y = imgLine + firstVisibleLine;
+    int imgLoc = loc(x, imgLine);
+    QVector<LineProperty> lineProperties = _lineProperties;
+    const QChar selClass = charClass(image[imgLoc]);
+    const int imageSize = regSize * _columns;
+
+    while (true) {
+        for (;; imgLoc--, x--) {
+            if (imgLoc < 1) {
+                // no more chars in this region
+                break;
+            }
+            if (x > 0) {
+                // has previous char on this line
+                if (charClass(image[imgLoc - 1]) == selClass) {
+                    continue;
+                }
+                goto out;
+            } else if (imgLine > 0) {
+                // not the first line in the session
+                if ((lineProperties[imgLine - 1] & LINE_WRAPPED) != 0) {
+                    // have continuation on prev line
+                    if (charClass(image[imgLoc - 1]) == selClass) {
+                        x = _columns;
+                        imgLine--;
+                        y--;
+                        continue;
+                    }
+                }
+                goto out;
+            } else if (y > 0) {
+                // want more data, but need to fetch new region
+                break;
+            } else {
+                goto out;
+            }
+        }
+        if (y <= 0) {
+            // No more data
+            goto out;
+        }
+        int newRegStart = qMax(0, y - regSize + 1);
+        lineProperties = screen->getLineProperties(newRegStart, y - 1);
+        imgLine = y - newRegStart;
+
+        delete[] tmp_image;
+        tmp_image = new Character[imageSize];
+        image = tmp_image;
+
+        screen->getImage(tmp_image, imageSize, newRegStart, y - 1);
+        imgLoc = loc(x, imgLine);
+        if (imgLoc < 1) {
+            // Reached the start of the session
+            break;
+        }
+    }
+out:
+    delete[] tmp_image;
+    return {x, y - firstVisibleLine};
+}
+
+QPoint TerminalDisplay::findWordEnd(const QPoint &pnt)
+{
+    const int regSize = qMax(_screenWindow->windowLines(), 10);
+    const int firstVisibleLine = _screenWindow->currentLine();
+    int imgLine = pnt.y();
+    int x = pnt.x();
+    int y = imgLine + firstVisibleLine;
+    int imgLoc = loc(x, imgLine);
+    QVector<LineProperty> lineProperties = _lineProperties;
+    Screen *screen = _screenWindow->screen();
+    Character *image = _image;
+    Character *tmp_image = nullptr;
+    const QChar selClass = charClass(image[imgLoc]);
+    const int imageSize = regSize * _columns;
+    const int maxY = _screenWindow->lineCount() - 1;
+    const int maxX = _columns - 1;
+
+    while (true) {
+        const int lineCount = lineProperties.count();
+        for (;; imgLoc++, x++) {
+            if (x < maxX) {
+                if (charClass(image[imgLoc + 1]) == selClass &&
+                    // A colon right before whitespace is never part of a word
+                    !(image[imgLoc + 1].character == ':' &&
+                      charClass(image[imgLoc + 2]) == QLatin1Char(' ')))
+                {
+                    continue;
+                }
+                goto out;
+            } else if (imgLine < lineCount - 1) {
+                if (((lineProperties[imgLine] & LINE_WRAPPED) != 0) &&
+                    charClass(image[imgLoc + 1]) == selClass &&
+                    // A colon right before whitespace is never part of a word
+                    !(image[imgLoc + 1].character == ':' &&
+                      charClass(image[imgLoc + 2]) == QLatin1Char(' ')))
+                {
+                    x = -1;
+                    imgLine++;
+                    y++;
+                    continue;
+                }
+                goto out;
+            } else if (y < maxY) {
+                if (imgLine < lineCount &&
+                    ((lineProperties[imgLine] & LINE_WRAPPED) == 0))
+                {
+                    goto out;
+                }
+                break;
+            } else {
+                goto out;
+            }
+        }
+        int newRegEnd = qMin(y + regSize - 1, maxY);
+        lineProperties = screen->getLineProperties(y, newRegEnd);
+        imgLine = 0;
+        if (tmp_image == nullptr) {
+            tmp_image = new Character[imageSize];
+            image = tmp_image;
+        }
+        screen->getImage(tmp_image, imageSize, y, newRegEnd);
+        x--;
+        imgLoc = loc(x, imgLine);
+    }
+out:
+    y -= firstVisibleLine;
+    // In word selection mode don't select @ (64) if at end of word.
+    if (((image[imgLoc].rendition & RE_EXTENDED_CHAR) == 0) &&
+        (image[imgLoc].character == '@') &&
+        (y > pnt.y() || x > pnt.x()))
+    {
+        if (x > 0) {
+            x--;
+        } else {
+            y--;
+        }
+    }
+    delete[] tmp_image;
+
+    return {x, y};
 }
 
 void TerminalDisplay::wheelEvent( QWheelEvent* ev )
@@ -2807,28 +2898,8 @@ void TerminalDisplay::mouseTripleClickEvent(QMouseEvent* ev)
     _iPntSel.ry()--;
 
   if (_tripleClickMode == SelectForwardsFromCursor) {
-    // find word boundary start
-    int i = loc(_iPntSel.x(),_iPntSel.y());
-    QChar selClass = charClass(_image[i]);
-    int x = _iPntSel.x();
-
-    while ( ((x>0) ||
-             (_iPntSel.y()>0 && (_lineProperties[_iPntSel.y()-1] & LINE_WRAPPED) )
-            )
-            && charClass(_image[i-1]) == selClass )
-    {
-        i--;
-        if (x>0)
-            x--;
-        else
-        {
-            x=_columns-1;
-            _iPntSel.ry()--;
-        }
-    }
-
-    _screenWindow->setSelectionStart( x , _iPntSel.y() , false );
-    _tripleSelBegin = QPoint( x, _iPntSel.y() );
+    _tripleSelBegin = findWordStart( _iPntSel );
+    _screenWindow->setSelectionStart( _tripleSelBegin.x() , _tripleSelBegin.y() , false );
   }
   else if (_tripleClickMode == SelectWholeLine) {
     _screenWindow->setSelectionStart( 0 , _iPntSel.y() , false );

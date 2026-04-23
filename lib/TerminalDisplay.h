@@ -729,6 +729,9 @@ private:
     // returns the position of the cursor in columns and lines
     QPoint cursorPosition() const;
 
+    QPoint findWordStart(const QPoint &pnt);
+    QPoint findWordEnd(const QPoint &pnt);
+
     // redraws the cursor
     void updateCursor();
 
