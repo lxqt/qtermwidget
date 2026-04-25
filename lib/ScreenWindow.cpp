@@ -282,6 +282,12 @@ void ScreenWindow::notifyOutputChanged()
         _currentLine = qMax(0,_currentLine -
                               _screen->droppedLines());
 
+        // When the terminal shrinks, resizeImage() pushes excess screen
+        // lines into history to keep the cursor in view.  Advance
+        // _currentLine by the same amount so the viewport stays
+        // bottom-anchored instead of jumping towards the top.
+        _currentLine += _screen->resizePushedLines();
+
         // ensure that the screen window's current position does
         // not go beyond the bottom of the screen
         _currentLine = qMin( _currentLine , _screen->getHistLines() );
