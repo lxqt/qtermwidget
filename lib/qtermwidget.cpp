@@ -507,6 +507,11 @@ void QTermWidget::addCustomColorSchemeDir(const QString& custom_dir)
     ColorSchemeManager::instance()->addCustomColorSchemeDir(custom_dir);
 }
 
+void QTermWidget::addCustomKeyboardLayoutDir(const QString &custom_dir)
+{
+    KeyboardTranslatorManager::instance()->addKeyboardLayoutDir(custom_dir);
+}
+
 void QTermWidget::setSize(const QSize &size)
 {
     m_impl->m_terminalDisplay->setSize(size.width(), size.height());
