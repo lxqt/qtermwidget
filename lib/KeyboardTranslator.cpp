@@ -69,9 +69,9 @@ KeyboardTranslatorManager::~KeyboardTranslatorManager()
 }
 QString KeyboardTranslatorManager::findTranslatorPath(const QString& name)
 {
-    if (_translatorBaseDir.has_value() && _translatorBaseDir.value().exists())
+    if (_translatorBaseDir.has_value() && _translatorBaseDir.value().exists()) {
         return _translatorBaseDir.value().filePath(name + QLatin1String(".keytab"));
-
+    }
     return QString(get_kb_layout_dir() + name + QLatin1String(".keytab"));
     //return KGlobal::dirs()->findResource("data","konsole/"+name+".keytab");
 }
@@ -206,15 +206,16 @@ void KeyboardTranslatorManager::setTranslatorBaseDir(const QString& path)
     QDir d(path);
     if (d.isRelative())
         d.makeAbsolute();
-    if (d.exists()) 
+    if (d.exists())
         _translatorBaseDir = d;
     else
     {
-        qDebug() << "Cannot find" << d.dirName() << ", clearing KeyboardTranslator base dir.";
-        if (_translatorBaseDir.has_value())
+        qWarning() << "Cannot find" << d.dirName() << ", clearing KeyboardTranslator base dir.";
+        if (_translatorBaseDir.has_value()) {
             _translatorBaseDir = std::nullopt;
-        else
+        } else {
             return; // no need to clear values if we were already using the default dir
+        }
     }
     _haveLoadedAll = false;
     _translators.clear();
