@@ -51,6 +51,8 @@ public:
     QStringList getAvailableColorSchemes();
     static QStringList availableColorSchemes();
     static void addCustomColorSchemeDir(const QString& custom_dir);
+    void setCustomKeyBindingsDir(const QString& custom_dir);
+    void clearCustomKeyBindingsDir();
     void setHistorySize(int lines);
     void setScrollBarPosition(ScrollBarPosition);
     void scrollToEnd();
