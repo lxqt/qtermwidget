@@ -107,15 +107,15 @@ const QChar LTR_OVERRIDE_CHAR( 0x202D );
 
 inline int TerminalDisplay::loc(int x, int y) const
 {
-    if (y < 0 || y > _lines) {
-        qDebug() << "Y: " << y << "Lines" << _lines;
-    }
-    if (x < 0 || x > _columns) {
-        qDebug() << "X" << x << "Columns" << _columns;
-    }
+    // if (y < 0 || y >= _lines) {
+    //     qDebug() << "Y: " << y << "Lines" << _lines;
+    // }
+    // if (x < 0 || x >= _columns) {
+    //     qDebug() << "X" << x << "Columns" << _columns;
+    // }
+    // Q_ASSERT(y >= 0 && y < _lines);
+    // Q_ASSERT(x >= 0 && x < _columns);
 
-    Q_ASSERT(y >= 0 && y < _lines);
-    Q_ASSERT(x >= 0 && x < _columns);
     x = qBound(0, x, _columns - 1);
     y = qBound(0, y, _lines - 1);
 
