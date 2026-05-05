@@ -2447,9 +2447,6 @@ void TerminalDisplay::extendSelection( const QPoint& position )
   int offset = 0;
   if ( !_wordSelectionMode && !_lineSelectionMode )
   {
-    int i;
-    QChar selClass;
-
     bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
        ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
     bool old_left_not_right = ( _pntSelCorr.y() < _iPntSelCorr.y() ||
@@ -2458,26 +2455,8 @@ void TerminalDisplay::extendSelection( const QPoint& position )
 
     // Find left (left_not_right ? from here : from start)
     QPoint left = left_not_right ? here : _iPntSelCorr;
-
-    // Find left (left_not_right ? from start : from here)
+    // Find right (left_not_right ? from start : from here)
     QPoint right = left_not_right ? _iPntSelCorr : here;
-    if ( right.x() > 0 && !_columnSelectionMode )
-    {
-      i = loc(right.x(),right.y());
-      if (i>=0 && i<=_imageSize) {
-        selClass = charClass(_image[i-1]);
-       /* if (selClass == ' ')
-        {
-          while ( right.x() < _usedColumns-1 && charClass(_image[i+1]) == selClass && (right.y()<_usedLines-1) &&
-                          !(_lineProperties[right.y()] & LINE_WRAPPED))
-          { i++; right.rx()++; }
-          if (right.x() < _usedColumns-1)
-            right = left_not_right ? _iPntSelCorr : here;
-          else
-            right.rx()++;  // will be balanced later because of offset=-1;
-        }*/
-      }
-    }
 
     // Pick which is start (ohere) and which is extension (here)
     if ( left_not_right )
@@ -2504,7 +2483,6 @@ void TerminalDisplay::extendSelection( const QPoint& position )
     {
         _screenWindow->setSelectionStart( ohere.x()-1-offset , ohere.y() , false );
     }
-
   }
 
   _actSel = 2; // within selection
@@ -2519,7 +2497,6 @@ void TerminalDisplay::extendSelection( const QPoint& position )
   {
      _screenWindow->setSelectionEnd( here.x()+offset , here.y() );
   }
-
 }
 
 void TerminalDisplay::mouseReleaseEvent(QMouseEvent* ev)
