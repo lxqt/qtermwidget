@@ -259,7 +259,7 @@ void Vt102Emulation::initTokenizer()
 #define egt( )     (p >=  3  && s[2] == '>')
 #define esp( )     (p ==  4  && s[3] == ' ')
 #define Xpe        (tokenBufferPos >= 2 && (tokenBuffer[1] == ']' || tokenBuffer[1] == 'P' || tokenBuffer[1] == '_' || tokenBuffer[1] == '^' || tokenBuffer[1] == 'X'))
-#define Xte        (Xpe      && (cc ==  7 || (prevCC == 27 && cc == 92) )) // 27, 92 => "\e\\" (ST, String Terminator)
+#define Xte        (Xpe      && ((tokenBuffer[1] == ']' && cc == 7) || (prevCC == 27 && cc == 92) )) // 27, 92 => "\e\\" (ST, String Terminator); BEL only for OSC
 #define ces(C)     (cc < 256 && (charClass[cc] & (C)) == (C) && !Xte)
 
 #define CNTL(c) ((c)-'@')
@@ -274,11 +274,26 @@ void Vt102Emulation::receiveChar(wchar_t cc)
 
   if (ces(CTL))
   {
-    // ignore control characters in the text part of Xpe (aka OSC) "ESC]"
-    // escape sequences; this matches what XTERM docs say
+    // ignore control characters in the text part of Xpe escape sequences, aka:
+    // - OSC "ESC]"
+    // - DCS "ESCP"
+    // - APC "ESC_"
+    // - SOS "ESCX"
+    // - PM  "ESC^"
+    // this matches ECMA-48 5.6 Control strings and XTerm ctlseqs.html, Section "VT100 Mode",
+    // heading "Controls beginning with ESC"
     if (Xpe) {
-        prevCC = cc;
-        return;
+        // Allow ESC to interrupt string mode so RIS (\033c) and other
+        // escape sequences can recover from unterminated strings.
+        // This matches Konsole's behavior: ESC unconditionally interrupts
+        // string mode.  CAN/SUB are deliberately ignored (Konsole has
+        // always done so, differing from xterm/VT240).
+        if (cc == ESC) {
+            resetTokenizer();
+        } else {
+            prevCC = cc;
+            return;
+        }
     }
 
     // DEC HACK ALERT! Control Characters are allowed *within* esc sequences in VT100
