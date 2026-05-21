@@ -221,7 +221,7 @@ void Vt102Emulation::initTokenizer()
     charClass[*s] |= DIG;
   for(s = (quint8*)"()+*%"; *s; ++s)
     charClass[*s] |= SCS;
-  for(s = (quint8*)"()+*#[]%"; *s; ++s)
+  for(s = (quint8*)"()+*#[]%_^PX"; *s; ++s)
     charClass[*s] |= GRP;
 
   resetTokenizer();
@@ -258,7 +258,7 @@ void Vt102Emulation::initTokenizer()
 #define eeq( )     (p >=  3  && s[2] == '=')
 #define egt( )     (p >=  3  && s[2] == '>')
 #define esp( )     (p ==  4  && s[3] == ' ')
-#define Xpe        (tokenBufferPos >= 2 && tokenBuffer[1] == ']')
+#define Xpe        (tokenBufferPos >= 2 && (tokenBuffer[1] == ']' || tokenBuffer[1] == 'P' || tokenBuffer[1] == '_' || tokenBuffer[1] == '^' || tokenBuffer[1] == 'X'))
 #define Xte        (Xpe      && (cc ==  7 || (prevCC == 27 && cc == 92) )) // 27, 92 => "\e\\" (ST, String Terminator)
 #define ces(C)     (cc < 256 && (charClass[cc] & (C)) == (C) && !Xte)
 
@@ -304,7 +304,12 @@ void Vt102Emulation::receiveChar(wchar_t cc)
     if (lec(1,0,ESC)) { return; }
     if (lec(1,0,ESC+128)) { s[0] = ESC; receiveChar('['); return; }
     if (les(2,1,GRP)) { return; }
-    if (Xte         ) { processWindowAttributeChange(); resetTokenizer(); return; }
+    if (Xte         ) {
+        if (tokenBufferPos >= 2 && tokenBuffer[1] == ']')
+            processWindowAttributeChange();
+        resetTokenizer();
+        return;
+    }
     if (Xpe         ) { prevCC = cc; return; }
     if (lec(3,2,'?')) { return; }
     if (lec(3,2,'>')) { return; }
