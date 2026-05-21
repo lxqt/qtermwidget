@@ -274,26 +274,17 @@ void Vt102Emulation::receiveChar(wchar_t cc)
 
   if (ces(CTL))
   {
-    // ignore control characters in the text part of Xpe escape sequences, aka:
-    // - OSC "ESC]"
-    // - DCS "ESCP"
-    // - APC "ESC_"
-    // - SOS "ESCX"
-    // - PM  "ESC^"
-    // this matches ECMA-48 5.6 Control strings and XTerm ctlseqs.html, Section "VT100 Mode",
-    // heading "Controls beginning with ESC"
+    // ignore control characters in the text part of Xpe escape sequences, aka: OSC "ESC]", DCS
+    // "ESCP", APC "ESC_", SOS "ESCX", and PM  "ESC^".  This matches ECMA-48 5.6 Control strings and
+    // XTerm ctlseqs.html, Section "VT100 Mode", heading "Controls beginning with ESC"
     if (Xpe) {
-        // Allow ESC to interrupt string mode so RIS (\033c) and other
-        // escape sequences can recover from unterminated strings.
-        // This matches Konsole's behavior: ESC unconditionally interrupts
-        // string mode.  CAN/SUB are deliberately ignored (Konsole has
-        // always done so, differing from xterm/VT240).
-        if (cc == ESC) {
-            resetTokenizer();
-        } else {
-            prevCC = cc;
-            return;
-        }
+        // Store in prevCC so Xte can detect the ST terminator (prevCC == 27 && cc == 92 => ESC \).
+        //
+        // Unterminated strings freeze the parser. Unlike Konsole and xterm which feature state
+        // tracking, RIS (\033c) cannot interrupt string mode, e.g. '\x1b]0;OSC-NO-TERM \033c' does
+        // not recover the terminal.
+        prevCC = cc;
+        return;
     }
 
     // DEC HACK ALERT! Control Characters are allowed *within* esc sequences in VT100
