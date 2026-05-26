@@ -26,6 +26,7 @@
 #include <cstdio>
 
 // Qt
+#include <QColor>
 #include <QKeyEvent>
 //#include <QPointer>
 #include <QTextStream>
@@ -227,6 +228,21 @@ public slots:
 
   /** Change the size of the emulation's image */
   virtual void setImageSize(int lines, int columns);
+
+  /**
+   * Inform the emulation of the pixel dimensions of one terminal cell.
+   * Required by features that translate between pixel and cell coordinates
+   * (e.g. inline sixel graphics). Safe to call repeatedly; the active
+   * TerminalDisplay should call this whenever its font metrics change.
+   */
+  void setCellPixelSize(int width, int height);
+
+  /**
+   * Inform the emulation of the active terminal background color, used to
+   * answer OSC 11 (`ESC ] 11 ; ? BEL`) queries from sixel producers such
+   * that fill unused image regions with the terminal background.
+   */
+  void setBackgroundColor(const QColor& color);
 
   /**
    * Interprets a sequence of characters and sends the result to the terminal.
@@ -461,6 +477,17 @@ protected:
 
   Screen* _currentScreen;  // pointer to the screen which is currently active,
                             // this is one of the elements in the screen[] array
+
+  // Pixel dimensions of a single terminal cell, used by features that need
+  // to translate between pixel- and cell-space (sixel graphics). Updated by
+  // the active TerminalDisplay via setCellPixelSize(); zero before the first
+  // call.
+  int _cellPixelWidth;
+  int _cellPixelHeight;
+
+  // Active terminal background color, kept in sync with the TerminalDisplay
+  // color scheme so OSC 11 queries can be answered with the real bg color.
+  QColor _backgroundColor;
 
   Screen* _screen[2];      // 0 = primary screen ( used by most programs, including the shell
                             //                      scrollbars are enabled in this mode )

@@ -553,6 +553,7 @@ signals:
      */
     void mouseSignal(int button, int column, int line, int eventType);
     void changedFontMetricSignal(int height, int width);
+    void backgroundColorChanged(const QColor& color);
     void changedContentSizeSignal(int height, int width);
 
     /**
@@ -666,6 +667,8 @@ private:
     // fragments according to their colors and styles and calls
     // drawTextFragment() to draw the fragments
     void drawContents(QPainter &paint, const QRect &rect);
+    // draws inline sixel images that intersect the dirty 'rect'
+    void drawSixelImages(QPainter &paint, const QRect &rect);
     // draws a section of text, all the text in this section
     // has a common color and style
     void drawTextFragment(QPainter& painter, const QRect& rect,

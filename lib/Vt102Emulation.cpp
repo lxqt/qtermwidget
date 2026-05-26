@@ -36,16 +36,22 @@
 // Konsole
 #include "KeyboardTranslator.h"
 #include "Screen.h"
+#include "SixelDecoder.h"
 
 
 using namespace Konsole;
+
+static FILE* sixel_log();
+
 
 Vt102Emulation::Vt102Emulation()
     : Emulation(),
      prevCC(0),
      _titleUpdateTimer(new QTimer(this)),
      _reportFocusEvents(false),
-     _toUtf8(QStringEncoder::Utf8)
+     _toUtf8(QStringEncoder::Utf8),
+     _dcsIsSixel(false),
+     _dcsSixelTransparent(false)
 {
   _titleUpdateTimer->setSingleShot(true);
   QObject::connect(_titleUpdateTimer, &QTimer::timeout,
@@ -172,6 +178,8 @@ void Vt102Emulation::resetTokenizer()
   argv[0] = 0;
   argv[1] = 0;
   prevCC = 0;
+  _dcsIsSixel = false;
+  _dcsPayload.clear();
 }
 
 void Vt102Emulation::addDigit(int digit)
@@ -299,8 +307,108 @@ void Vt102Emulation::receiveChar(wchar_t cc)
         return;
     }
   }
+
+  // [debug] log every byte that arrives while inside a Cse string (DCS/OSC/APC/PM/SOS).
+  if (Cse) {
+      FILE* lg = sixel_log();
+      if (lg) {
+          static int cseByteCounter = 0;
+          if (cseByteCounter < 200) {
+              fprintf(lg, "[cse] pos=%d intro='%c'(%d) cc=%d ('%c') prevCC=%d _dcsIsSixel=%d\n",
+                      tokenBufferPos,
+                      tokenBufferPos>=2 ? (char)tokenBuffer[1] : '?',
+                      tokenBufferPos>=2 ? (int)tokenBuffer[1] : 0,
+                      (int)cc, (cc >= 32 && cc < 127) ? (char)cc : '.',
+                      (int)prevCC, _dcsIsSixel ? 1 : 0);
+              fflush(lg);
+              cseByteCounter++;
+          }
+      }
+  }
+  if (Cse && tokenBuffer[1] == 'P' && cc == 'q' && !_dcsIsSixel) {
+      FILE* lg = sixel_log();
+      if (lg) { fprintf(lg, "[sixel] saw 'q' final; tokenBufPos=%d\n", tokenBufferPos); fflush(lg); }
+  }
+
+  // Sixel DCS fast path: once a DCS sequence has been recognised as sixel
+  // (its 'q' final byte was already seen), every subsequent byte goes into
+  // the growable _dcsPayload buffer instead of the fixed-size tokenBuffer.
+  // This must run after the CTL handling above so that ESC inside the
+  // payload still flips prevCC for Cte detection.
+  if (_dcsIsSixel)
+  {
+    if (Cte)
+    {
+        processSixelDcs();
+        _dcsIsSixel = false;
+        _dcsPayload.clear();
+        resetTokenizer();
+        return;
+    }
+    _dcsPayload.append(static_cast<char>(cc & 0xff));
+    prevCC = cc;
+    return;
+  }
+
   // advance the state
   addToCurrentToken(cc);
+
+  // Detect the sixel final byte 'q' while still inside the small-token DCS
+  // parameter scan: switch to the growable payload buffer for everything
+  // that follows. Sixel parameters are restricted to digits and ';' / ':'
+  // digits and ';' / ':', if any intermediate byte (e.g. '$' for DECRQSS) appears in the
+  // parameter run, this is *not* a sixel DCS and must fall through to the
+  // existing short-DCS handler.
+  if (Cse && tokenBuffer[1] == 'P' && cc == 'q')
+  {
+    bool paramsAreSixelCompatible = true;
+    for (int i = 2; i < tokenBufferPos - 1; ++i)
+    {
+        const wchar_t c = tokenBuffer[i];
+        if (!((c >= '0' && c <= '9') || c == ';' || c == ':'))
+        {
+            paramsAreSixelCompatible = false;
+            break;
+        }
+    }
+    if (paramsAreSixelCompatible)
+    {
+        // Sixel image data starts AFTER 'q'. The DCS parameters (P1;P2;P3)
+        // and the 'q' final byte itself must NOT be in the payload.
+        // sixel_decode_raw expects to start parsing at the raster-attribute
+        // byte (`"`), the color introducer (`#`), or a sixel data byte.
+        //
+        // Parse P2 (the second `;`-separated param) to detect the
+        // transparent-background mode.
+        int paramIndex = 0;
+        int paramValue = 0;
+        bool sawDigit = false;
+        int p2 = 0;
+        for (int i = 2; i < tokenBufferPos - 1; ++i)
+        {
+            const wchar_t c = tokenBuffer[i];
+            if (c == ';')
+            {
+                if (paramIndex == 1 && sawDigit) p2 = paramValue;
+                paramIndex++;
+                paramValue = 0;
+                sawDigit = false;
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                paramValue = paramValue * 10 + (c - '0');
+                sawDigit = true;
+            }
+        }
+        if (paramIndex == 1 && sawDigit) p2 = paramValue;
+        _dcsSixelTransparent = (p2 == 1);
+
+        _dcsIsSixel = true;
+        _dcsPayload.clear();
+        prevCC = cc;
+        return;
+    }
+  }
 
   wchar_t* s = tokenBuffer;
   int  p = tokenBufferPos;
@@ -328,7 +436,7 @@ void Vt102Emulation::receiveChar(wchar_t cc)
     if (lec(3,1,'#')) { processToken( TY_ESC_DE(s[2]), 0, 0);           resetTokenizer(); return; }
     if (eps(    CPN)) { processToken( TY_CSI_PN(cc), argv[0],argv[1]);  resetTokenizer(); return; }
     if (esp(       )) { return; }
-    // DECRQM: CSI Pd $ p — absorb '$' intermediate byte and dispatch on 'p'
+    // DECRQM: CSI Pd $ p, absorb '$' intermediate byte and dispatch on 'p'
     if (eec('$')) { return; } // absorb '$' and wait for final byte
 
     // CSI with '<' private marker (e.g. SGR mouse reporting: CSI < ... M/m).
@@ -450,6 +558,34 @@ void Vt102Emulation::processWindowAttributeChange()
     return;
   }
 
+  // OSC 11 ; ?, query terminal background color. This is
+  // used to paint unused regions with the terminal's
+  // background color
+  if (attributeToChange == 11 &&
+      i + 1 < tokenBufferPos &&
+      tokenBuffer[i + 1] == '?' &&
+      _backgroundColor.isValid())
+  {
+    const int r16 = _backgroundColor.red()   * 0x101;
+    const int g16 = _backgroundColor.green() * 0x101;
+    const int b16 = _backgroundColor.blue()  * 0x101;
+    char buf[64];
+    const int n = std::snprintf(buf, sizeof(buf),
+                                "\033]11;rgb:%04x/%04x/%04x\033\\",
+                                r16, g16, b16);
+    if (n > 0) sendString(buf, n);
+    {
+      FILE* lg = sixel_log();
+      if (lg) {
+        fprintf(lg, "[osc11] reply bg=#%02x%02x%02x\n",
+                _backgroundColor.red(), _backgroundColor.green(),
+                _backgroundColor.blue());
+        fflush(lg);
+      }
+    }
+    return;
+  }
+
   // copy from the first char after ';', and skipping the ending delimiter
   // 0x07 or 0x92. Note that as control characters in OSC text parts are
   // ignored, only the second char in ST ("\e\\") is appended to tokenBuffer.
@@ -457,6 +593,77 @@ void Vt102Emulation::processWindowAttributeChange()
 
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
+}
+
+static FILE* sixel_log() {
+    static FILE* f = fopen("/tmp/sixel-debug.log", "a");
+    if (f) {
+        static bool wroteHeader = false;
+        if (!wroteHeader) {
+            wroteHeader = true;
+            fprintf(f, "----- sixel log session start -----\n");
+            fflush(f);
+        }
+    }
+    return f;
+}
+
+void Vt102Emulation::processSixelDcs()
+{
+  FILE* lg = sixel_log();
+  if (lg) {
+    fprintf(lg, "[sixel] DCS payload bytes=%lld first32=%s\n",
+            static_cast<long long>(_dcsPayload.size()),
+            _dcsPayload.left(32).toHex().constData());
+    fflush(lg);
+  }
+
+  // Dump payload to a file for offline inspection with sixel2png.
+  {
+    FILE* d = fopen("/tmp/sixel-payload.bin", "wb");
+    if (d) {
+      // Reconstruct the canonical DCS envelope so sixel2png can consume it.
+      fputs("\033Pq", d);
+      fwrite(_dcsPayload.constData(), 1, _dcsPayload.size(), d);
+      fputs("\033\\", d);
+      fclose(d);
+    }
+  }
+  QImage image = SixelDecoder::decode(_dcsPayload, _dcsSixelTransparent);
+  if (image.isNull())
+  {
+    if (lg) { fprintf(lg, "[sixel] decode returned null image\n"); fflush(lg); }
+    return;
+  }
+
+  const int cellW = _cellPixelWidth;
+  const int cellH = _cellPixelHeight;
+  if (cellW <= 0 || cellH <= 0)
+  {
+    if (lg) { fprintf(lg, "[sixel] no cell metrics w=%d h=%d\n", cellW, cellH); fflush(lg); }
+    return;
+  }
+
+  const int cellRows = (image.height() + cellH - 1) / cellH;
+  const int cellCols = (image.width()  + cellW - 1) / cellW;
+  if (lg) {
+    fprintf(lg, "[sixel] decoded %dx%d cellRows=%d cellCols=%d cuY=%d cuX=%d hist=%d\n",
+            image.width(), image.height(), cellRows, cellCols,
+            _currentScreen->getCursorY(), _currentScreen->getCursorX(),
+            _currentScreen->getHistLines());
+    fflush(lg);
+  }
+
+  // Anchor at the current cursor position BEFORE advancing. The anchor is
+  // stored in ScreenWindow line space (0 = oldest history line); subsequent
+  // history scrolling will keep the anchor pointing at the same content
+  // because addHistLine decrements anchors when history drops lines.
+  _currentScreen->addSixelImage(image, cellRows, cellCols);
+
+  // Advance the cursor below the image (DECSDM off, xterm display mode).
+  for (int i = 0; i < cellRows; ++i)
+    _currentScreen->index();
+  _currentScreen->toStartOfLine();
 }
 
 void Vt102Emulation::updateTitle()
@@ -862,10 +1069,10 @@ void Vt102Emulation::processToken(int token, wchar_t p, int q)
     //FIXME: weird DEC reset sequence
     case TY_CSI_PE('p'      ) : /* IGNORED: reset         (        ) */ break;
 
-    // DECRQM — Request Mode (Host To Terminal)
+    // DECRQM, Request Mode (Host To Terminal)
     // When the '$' intermediate byte is absorbed by the tokenizer, the natural
     // for-loop dispatch produces TY_CSI_PR('p',N) for DEC private modes and
-    // TY_CSI_PS('p',N) for ANSI modes — same token types konsole uses.
+    // TY_CSI_PS('p',N) for ANSI modes, same token types konsole uses.
     //
     // ANSI mode queries: CSI Pd $ p  →  TY_CSI_PS('p', Pd)
     // NOTE: Screen-owned modes (values < MODES_SCREEN=6) must be queried
@@ -966,7 +1173,11 @@ void Vt102Emulation::reportTerminalType()
   // VT101:  ^[[?1;0c
   // VT102:  ^[[?6v
   if (getMode(MODE_Ansi))
+#ifdef QTERMWIDGET_SIXEL
+    sendString("\033[?62;4c"); // VT220 with sixel graphics (4)
+#else
     sendString("\033[?1;2c"); // I'm a VT100
+#endif
   else
     sendString("\033/Z"); // I'm a VT52
 }
@@ -998,7 +1209,7 @@ void Vt102Emulation::reportStatus()
   sendString("\033[0n"); //VT100. Device status report. 0 = Ready.
 }
 
-// DECRPM — Report Mode (Terminal To Host), response to DECRQM
+// DECRPM, Report Mode (Terminal To Host), response to DECRQM
 // Responds to an ANSI mode query (CSI Pd $ p) with: CSI Pd ; Pm $ y
 void Vt102Emulation::reportAnsiMode(int mode, int status)
 {
@@ -1010,7 +1221,7 @@ void Vt102Emulation::reportAnsiMode(int mode, int status)
     sendString(tmp);
 }
 
-// DECRPM — Report Mode (Terminal To Host), response to DECRQM
+// DECRPM, Report Mode (Terminal To Host), response to DECRQM
 // Responds to a DEC private mode query (CSI ? Pd $ p) with: CSI ? Pd ; Pm $ y
 void Vt102Emulation::reportDecMode(int mode, int status)
 {

@@ -51,6 +51,8 @@ using namespace Konsole;
 
 Emulation::Emulation() :
   _currentScreen(nullptr),
+  _cellPixelWidth(0),
+  _cellPixelHeight(0),
   _keyTranslator(nullptr),
   _usesMouse(false),
   _bracketedPasteMode(false),
@@ -74,6 +76,17 @@ Emulation::Emulation() :
     emit titleChanged( 50, QString(QLatin1String("CursorShape=%1;BlinkingCursorEnabled=%2"))
                                .arg(static_cast<int>(cursorShape)).arg(blinkingCursorEnabled) );
   });
+}
+
+void Emulation::setCellPixelSize(int width, int height)
+{
+    _cellPixelWidth  = qMax(0, width);
+    _cellPixelHeight = qMax(0, height);
+}
+
+void Emulation::setBackgroundColor(const QColor& color)
+{
+    _backgroundColor = color;
 }
 
 bool Emulation::programUsesMouse() const

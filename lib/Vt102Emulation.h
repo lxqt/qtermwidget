@@ -27,8 +27,9 @@
 #include <cstdio>
 
 // Qt
-#include <QKeyEvent>
+#include <QByteArray>
 #include <QHash>
+#include <QKeyEvent>
 #include <QTimer>
 
 // Konsole
@@ -199,6 +200,19 @@ private:
   bool _reportFocusEvents;
 
   QStringEncoder _toUtf8;
+
+  // DCS payload accumulation for sixel (DCS ... q <sixel> ST).
+  //
+  // The fixed-size tokenBuffer is too small for sixel images (10s of KB+),
+  // so once we recognize a sixel DCS (final char 'q' after DCS params), we
+  // start appending raw bytes here instead of growing tokenBuffer.
+  QByteArray _dcsPayload;
+  bool       _dcsIsSixel;
+  bool       _dcsSixelTransparent;
+
+  // Dispatch the accumulated sixel payload to the decoder and screen.
+  // Called from the Cte branch when the ST terminator arrives.
+  void processSixelDcs();
 };
 
 }
