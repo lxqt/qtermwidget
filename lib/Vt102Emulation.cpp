@@ -41,9 +41,6 @@
 
 using namespace Konsole;
 
-static FILE* sixel_log();
-
-
 Vt102Emulation::Vt102Emulation()
     : Emulation(),
      prevCC(0),
@@ -306,28 +303,6 @@ void Vt102Emulation::receiveChar(wchar_t cc)
         processToken(TY_CTL(cc+'@' ),0,0);
         return;
     }
-  }
-
-  // [debug] log every byte that arrives while inside a Cse string (DCS/OSC/APC/PM/SOS).
-  if (Cse) {
-      FILE* lg = sixel_log();
-      if (lg) {
-          static int cseByteCounter = 0;
-          if (cseByteCounter < 200) {
-              fprintf(lg, "[cse] pos=%d intro='%c'(%d) cc=%d ('%c') prevCC=%d _dcsIsSixel=%d\n",
-                      tokenBufferPos,
-                      tokenBufferPos>=2 ? (char)tokenBuffer[1] : '?',
-                      tokenBufferPos>=2 ? (int)tokenBuffer[1] : 0,
-                      (int)cc, (cc >= 32 && cc < 127) ? (char)cc : '.',
-                      (int)prevCC, _dcsIsSixel ? 1 : 0);
-              fflush(lg);
-              cseByteCounter++;
-          }
-      }
-  }
-  if (Cse && tokenBuffer[1] == 'P' && cc == 'q' && !_dcsIsSixel) {
-      FILE* lg = sixel_log();
-      if (lg) { fprintf(lg, "[sixel] saw 'q' final; tokenBufPos=%d\n", tokenBufferPos); fflush(lg); }
   }
 
   // Sixel DCS fast path: once a DCS sequence has been recognised as sixel
@@ -603,15 +578,6 @@ void Vt102Emulation::processWindowAttributeChange()
                                 "\033]11;rgb:%04x/%04x/%04x\033\\",
                                 r16, g16, b16);
     if (n > 0) sendString(buf, n);
-    {
-      FILE* lg = sixel_log();
-      if (lg) {
-        fprintf(lg, "[osc11] reply bg=#%02x%02x%02x\n",
-                _backgroundColor.red(), _backgroundColor.green(),
-                _backgroundColor.blue());
-        fflush(lg);
-      }
-    }
     return;
   }
 
@@ -624,64 +590,19 @@ void Vt102Emulation::processWindowAttributeChange()
   _titleUpdateTimer->start(20);
 }
 
-static FILE* sixel_log() {
-    static FILE* f = fopen("/tmp/sixel-debug.log", "a");
-    if (f) {
-        static bool wroteHeader = false;
-        if (!wroteHeader) {
-            wroteHeader = true;
-            fprintf(f, "----- sixel log session start -----\n");
-            fflush(f);
-        }
-    }
-    return f;
-}
-
 void Vt102Emulation::processSixelDcs()
 {
-  FILE* lg = sixel_log();
-  if (lg) {
-    fprintf(lg, "[sixel] DCS payload bytes=%lld first32=%s\n",
-            static_cast<long long>(_dcsPayload.size()),
-            _dcsPayload.left(32).toHex().constData());
-    fflush(lg);
-  }
-
-  // Dump payload to a file for offline inspection with sixel2png.
-  {
-    FILE* d = fopen("/tmp/sixel-payload.bin", "wb");
-    if (d) {
-      // Reconstruct the canonical DCS envelope so sixel2png can consume it.
-      fputs("\033Pq", d);
-      fwrite(_dcsPayload.constData(), 1, _dcsPayload.size(), d);
-      fputs("\033\\", d);
-      fclose(d);
-    }
-  }
   QImage image = SixelDecoder::decode(_dcsPayload, _dcsSixelTransparent);
   if (image.isNull())
-  {
-    if (lg) { fprintf(lg, "[sixel] decode returned null image\n"); fflush(lg); }
     return;
-  }
 
   const int cellW = _cellPixelWidth;
   const int cellH = _cellPixelHeight;
   if (cellW <= 0 || cellH <= 0)
-  {
-    if (lg) { fprintf(lg, "[sixel] no cell metrics w=%d h=%d\n", cellW, cellH); fflush(lg); }
     return;
-  }
 
   const int cellRows = (image.height() + cellH - 1) / cellH;
   const int cellCols = (image.width()  + cellW - 1) / cellW;
-  if (lg) {
-    fprintf(lg, "[sixel] decoded %dx%d cellRows=%d cellCols=%d cuY=%d cuX=%d hist=%d\n",
-            image.width(), image.height(), cellRows, cellCols,
-            _currentScreen->getCursorY(), _currentScreen->getCursorX(),
-            _currentScreen->getHistLines());
-    fflush(lg);
-  }
 
   // Anchor at the current cursor position BEFORE advancing. The anchor is
   // stored in ScreenWindow line space (0 = oldest history line); subsequent

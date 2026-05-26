@@ -54,19 +54,6 @@ QImage SixelDecoder::decode(const QByteArray& payload, bool transparentBackgroun
         return QImage();
     }
 
-    {
-        FILE* f = fopen("/tmp/sixel-debug.log", "a");
-        if (f) {
-            fprintf(f, "[decoder] ncolors=%d palette[0..7]:", ncolors);
-            for (int n = 0; n < ncolors && n < 8; ++n) {
-                fprintf(f, " (%d,%d,%d)",
-                        palette[n*3+0], palette[n*3+1], palette[n*3+2]);
-            }
-            fprintf(f, "\n");
-            fflush(f);
-            fclose(f);
-        }
-    }
     QImage img(width, height, QImage::Format_ARGB32);
     const int total = width * height;
     for (int i = 0; i < total; ++i) {
@@ -89,6 +76,7 @@ QImage SixelDecoder::decode(const QByteArray& payload, bool transparentBackgroun
     return img;
 #else
     Q_UNUSED(payload);
+    Q_UNUSED(transparentBackground);
     return QImage();
 #endif
 }

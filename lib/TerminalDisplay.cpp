@@ -1563,23 +1563,6 @@ void TerminalDisplay::drawSixelImages(QPainter& paint, const QRect& rect)
     const qint64 windowBottom = windowTop + _screenWindow->windowLines() - 1;
 
     const QList<SixelImage> images = screen->sixelImagesInRange(windowTop, windowBottom);
-    static FILE* paintLog = fopen("/tmp/sixel-debug.log", "a");
-    static int g_sixelDebugTick = 0;
-    if (!screen->sixelImages().isEmpty() && (g_sixelDebugTick++ % 30) == 0 && paintLog) {
-        fprintf(paintLog,
-                "[sixel-paint] total stored=%lld visible=%lld windowTop=%lld windowBottom=%lld\n",
-                static_cast<long long>(screen->sixelImages().size()),
-                static_cast<long long>(images.size()),
-                static_cast<long long>(windowTop),
-                static_cast<long long>(windowBottom));
-        for (const SixelImage& s : screen->sixelImages()) {
-            fprintf(paintLog,
-                    "  image anchor=%lld col=%d cellRows=%d size=%dx%d\n",
-                    static_cast<long long>(s.anchorLine),
-                    s.anchorColumn, s.cellRows, s.image.width(), s.image.height());
-        }
-        fflush(paintLog);
-    }
     if (images.isEmpty())
         return;
 
