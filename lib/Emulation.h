@@ -362,6 +362,12 @@ signals:
    */
   void outputChanged();
 
+  /** Emitted when the set of inline (sixel) images changes in a way that
+   *  the regular character-buffer diff in updateImage() cannot detect
+   *  (e.g. images dropped on `clear`). The display should force a full
+   *  repaint in response. */
+  void sixelImagesChanged();
+
   /**
    * Emitted when the program running in the terminal wishes to update the
    * session's title.  This also allows terminal programs to customize other

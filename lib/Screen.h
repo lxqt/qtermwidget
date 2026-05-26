@@ -580,6 +580,9 @@ public:
     /** Returns all sixel images currently tracked (used by tests/diagnostics). */
     const QList<SixelImage>& sixelImages() const { return _sixelImages; }
 
+    /** Drop all sixel images. */
+    void clearSixelImages() { _sixelImages.clear(); }
+
     QSet<uint> usedExtendedChars() const
     {
         QSet<uint> result;

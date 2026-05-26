@@ -159,6 +159,12 @@ void Emulation::setScreen(int n)
 void Emulation::clearHistory()
 {
     _screen[0]->setScroll( _screen[0]->getScroll() , false );
+    // `clear` sends ESC[2J ESC[3J — the 2J just scrolls content (including
+    // sixel images) into history, and 3J resets that history. Drop the now-
+    // orphaned image anchors so the visible canvas is actually empty.
+    _screen[0]->clearSixelImages();
+    _screen[1]->clearSixelImages();
+    emit sixelImagesChanged();
 }
 void Emulation::setHistory(const HistoryType& t)
 {

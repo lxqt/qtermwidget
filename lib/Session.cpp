@@ -230,6 +230,12 @@ void Session::addView(TerminalDisplay * widget)
         connect(widget, &TerminalDisplay::backgroundColorChanged,
                 _emulation, &Emulation::setBackgroundColor);
 
+        // Force a full repaint when sixel images are dropped (e.g. `clear`):
+        // the character-buffer diff in updateImage() can miss the rows the
+        // image occupied, leaving stale pixels until a focus event.
+        connect(_emulation, &Emulation::sixelImagesChanged,
+                widget, QOverload<>::of(&TerminalDisplay::update));
+
         widget->setScreenWindow(_emulation->createWindow());
     }
 

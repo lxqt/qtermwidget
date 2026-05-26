@@ -479,6 +479,35 @@ void Vt102Emulation::receiveChar(wchar_t cc)
         return;
     }
 
+    // XTSMGRAPHICS: CSI ? Pi ; Pa ; Pv S
+    //   Pi = 1 (color registers), 2 (sixel geometry)
+    //   Pa = 1 read, 2 reset, 3 set, 4 read-max
+    // Reply: CSI ? Pi ; Ps ; Pv S  (Ps = 0 success).
+    // some apps use the color-register reply to pick a palette size
+    // without it apps fall back to numcolors=16
+    if (epp() && cc == 'S' && argc >= 1)
+    {
+        const int pi = argv[0];
+        const int pa = argv[1];
+        char buf[64];
+        int n = 0;
+        if (pi == 1) {
+            const int maxColors = 256;
+            int pv = maxColors;
+            if (pa == 3 && argc >= 2 && argv[2] > 0)
+                pv = qMin(argv[2], maxColors);
+            n = std::snprintf(buf, sizeof(buf), "\033[?1;0;%dS", pv);
+        } else if (pi == 2) {
+            n = std::snprintf(buf, sizeof(buf), "\033[?2;0;%d;%dS", 10000, 10000);
+        } else {
+            // Unknown item: reply with failure status (Ps=1).
+            n = std::snprintf(buf, sizeof(buf), "\033[?%d;1;0S", pi);
+        }
+        if (n > 0) sendString(buf, n);
+        resetTokenizer();
+        return;
+    }
+
     if (epe(   )) { processToken( TY_CSI_PE(cc), 0, 0); resetTokenizer(); return; }
     if (ees(DIG)) { addDigit(cc-'0'); return; }
     if (eec(';') || eec(':')) { addArgument(); return; }
@@ -664,6 +693,11 @@ void Vt102Emulation::processSixelDcs()
   for (int i = 0; i < cellRows; ++i)
     _currentScreen->index();
   _currentScreen->toStartOfLine();
+
+  // The character buffer under the image area is just spaces; updateImage's
+  // diff sees no change in those rows and won't request a repaint, leaving
+  // stale or missing pixels until a focus event forces a full paint.
+  emit sixelImagesChanged();
 }
 
 void Vt102Emulation::updateTitle()
