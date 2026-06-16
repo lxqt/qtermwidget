@@ -133,10 +133,10 @@ private:
   void resetModes();
 
   void resetTokenizer();
-  #define MAX_TOKEN_LENGTH 256 // Max length of tokens (e.g. window title)
+  static constexpr std::size_t MAX_TOKEN_LENGTH = 50 * (0x1 << 20); // Max length of tokens (e.g. window title, clipboard)
   void addToCurrentToken(wchar_t cc);
-  wchar_t tokenBuffer[MAX_TOKEN_LENGTH]; //FIXME: overflow?
-  int tokenBufferPos;
+  std::vector<wchar_t> tokenBuffer;
+  std::size_t tokenBufferPos;
 #define MAXARGS 15
   void addDigit(int dig);
   void addArgument();

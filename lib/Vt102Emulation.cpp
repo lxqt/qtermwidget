@@ -42,6 +42,7 @@ using namespace Konsole;
 
 Vt102Emulation::Vt102Emulation()
     : Emulation(),
+     tokenBuffer(256),
      prevCC(0),
      _titleUpdateTimer(new QTimer(this)),
      _reportFocusEvents(false),
@@ -189,7 +190,12 @@ void Vt102Emulation::addArgument()
 void Vt102Emulation::addToCurrentToken(wchar_t cc)
 {
   tokenBuffer[tokenBufferPos] = cc;
-  tokenBufferPos = qMin(tokenBufferPos+1,MAX_TOKEN_LENGTH-1);
+  if (++tokenBufferPos >= tokenBuffer.size()) {
+    if (tokenBuffer.size() < MAX_TOKEN_LENGTH)
+      tokenBuffer.resize(std::min(tokenBuffer.size() * 2, MAX_TOKEN_LENGTH));
+    else
+      --tokenBufferPos;
+  }
 }
 
 // Character Class flags used while decoding
@@ -302,7 +308,7 @@ void Vt102Emulation::receiveChar(wchar_t cc)
   // advance the state
   addToCurrentToken(cc);
 
-  wchar_t* s = tokenBuffer;
+  wchar_t* s = &tokenBuffer[0];
   int  p = tokenBufferPos;
 
   if (getMode(MODE_Ansi))
@@ -436,7 +442,7 @@ void Vt102Emulation::processWindowAttributeChange()
   // Describes the window or terminal session attribute to change
   // See Session::UserTitleChange for possible values
   int attributeToChange = 0;
-  int i;
+  std::size_t i;
   for (i = 2; i < tokenBufferPos     &&
               tokenBuffer[i] >= '0'  &&
               tokenBuffer[i] <= '9'; i++)
@@ -453,7 +459,7 @@ void Vt102Emulation::processWindowAttributeChange()
   // copy from the first char after ';', and skipping the ending delimiter
   // 0x07 or 0x92. Note that as control characters in OSC text parts are
   // ignored, only the second char in ST ("\e\\") is appended to tokenBuffer.
-  QString newValue = QString::fromWCharArray(tokenBuffer + i + 1, tokenBufferPos-i-2);
+  QString newValue = QString::fromWCharArray(&tokenBuffer[i + 1], tokenBufferPos-i-2);
 
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
@@ -1474,7 +1480,7 @@ void Vt102Emulation::reportDecodingError()
 {
   if (tokenBufferPos == 0 || ( tokenBufferPos == 1 && (tokenBuffer[0] & 0xff) >= 32) )
     return;
-  qCDebug(qtermwidgetLogger) << "Undecodable sequence:" << QString::fromWCharArray(tokenBuffer, tokenBufferPos);
+  qCDebug(qtermwidgetLogger) << "Undecodable sequence:" << QString::fromWCharArray(&tokenBuffer[0], tokenBufferPos);
 }
 
 //#include "Vt102Emulation.moc"
