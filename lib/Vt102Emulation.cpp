@@ -32,6 +32,8 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QDebug>
+#include <QApplication>
+#include <QClipboard>
 
 // Konsole
 #include "KeyboardTranslator.h"
@@ -460,6 +462,35 @@ void Vt102Emulation::processWindowAttributeChange()
   // 0x07 or 0x92. Note that as control characters in OSC text parts are
   // ignored, only the second char in ST ("\e\\") is appended to tokenBuffer.
   QString newValue = QString::fromWCharArray(&tokenBuffer[i + 1], tokenBufferPos-i-2);
+
+  // Handle OSC 52 - Clipboard operations (copy/clear clipboard content)
+  // OSC 52 ; Pc ; Pd ST
+  // - Pc 'p' - primary, 'c' - clipboard, 's' - cut buffers
+  // - Pd base64-encoded content
+  // - ST string terminator (already dismissed from new newValue)
+  // (if no Pd, i.e. only one part of ;-delmited list, clear the clipboard/selection)
+  if (attributeToChange == 52) {
+    // Parse the clipboard parameters
+    QStringList params = newValue.split(QLatin1Char{';'});
+
+    const bool clipboard = params[0].isEmpty() || params[0].contains(QLatin1Char{'c'}) || params[0].contains(QLatin1Char{'s'});
+    const bool selection = params[0].contains(QLatin1Char{'p'});
+
+    if (params.length() == 2) {
+      // Copy to clipboard
+      if (clipboard)
+        QApplication::clipboard()->setText(QString::fromUtf8(QByteArray::fromBase64(params[1].toUtf8())), QClipboard::Clipboard);
+      if (selection)
+        QApplication::clipboard()->setText(QString::fromUtf8(QByteArray::fromBase64(params[1].toUtf8())), QClipboard::Selection);
+    } else {
+      // Clear clipboard
+      if (clipboard)
+        QApplication::clipboard()->setText(QString{}, QClipboard::Clipboard);
+      if (selection)
+        QApplication::clipboard()->setText(QString{}, QClipboard::Selection);
+    }
+    return;
+  }
 
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
