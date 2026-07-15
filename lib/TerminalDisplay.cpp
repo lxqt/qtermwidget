@@ -1514,6 +1514,24 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
         r.moveCenter(cr.center());
         paint.drawPixmap(r.topLeft(), _backgroundImage);
     }
+    else if (_backgroundMode == Fill)
+    { // zoom in/out the image to fill all empty space
+        QRect r = _backgroundImage.rect();
+        qreal wRatio = static_cast<qreal>(cr.width()) / r.width();
+        qreal hRatio = static_cast<qreal>(cr.height()) / r.height();
+        if (wRatio < hRatio)
+        {
+            r.setWidth(qRound(r.width() * hRatio));
+            r.setHeight(cr.height());
+        }
+        else
+        {
+            r.setHeight(qRound(r.height() * wRatio));
+            r.setWidth(cr.width());
+        }
+        r.moveCenter(cr.center());
+        paint.drawPixmap(r, _backgroundImage, _backgroundImage.rect());
+    }
     else //if (_backgroundMode == None)
     {
         paint.drawPixmap(0, 0, _backgroundImage);
