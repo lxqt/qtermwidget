@@ -288,6 +288,7 @@ signals:
      * control and display the remote terminal.
      */
     void sendData(const char *,int);
+    void sendByteArray(const QByteArray&);
 
     void profileChanged(const QString & profile);
 

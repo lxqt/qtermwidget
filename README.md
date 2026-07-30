@@ -154,6 +154,7 @@ void | finished()
 void | profileChanged(const QString &_profile_)
 void | receivedData(const QString &_text_)
 void | sendData(const char*, int)
+void | sendByteArray(const QByteArray&)
 void | silence()
 void | termGetFocus()
 void | termKeyPressed(QKeyEvent*)
@@ -271,6 +272,9 @@ Wrapped, scroll to end of text.
 
 __void sendData(const char*, int)__\
 Emitted when emulator send data to the terminal process (redirected for external recipient). It can be used for control and display the remote terminal.
+
+__void sendByteArray(const QByteArray&)__\
+The same as sendData, but has QByteArray parameter.
 
 __void sendText(QString &_text_)__\
 Send text to terminal.
