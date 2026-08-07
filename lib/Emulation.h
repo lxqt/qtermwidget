@@ -419,6 +419,12 @@ signals:
   void flowControlKeyPressed(bool suspendKeyPressed);
 
   /**
+   * Emitted when the active screen is switched, to indicate whether the primary
+   * screen is in use.
+   */
+  void primaryScreenInUse(bool use);
+
+  /**
    * Emitted when the cursor shape or its blinking state is changed via
    * DECSCUSR sequences.
    *
@@ -477,6 +483,9 @@ protected slots:
    * much like the Qt buffered update of widgets.
    */
   void bufferedUpdate();
+
+  // used to emit the primaryScreenInUse(bool) signal
+  void checkScreenInUse();
 
 private slots:
 
