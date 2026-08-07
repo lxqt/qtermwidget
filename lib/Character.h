@@ -75,8 +75,9 @@ public:
   inline Character(quint16 _c = ' ',
             CharacterColor  _f = CharacterColor(COLOR_SPACE_DEFAULT,DEFAULT_FORE_COLOR),
             CharacterColor  _b = CharacterColor(COLOR_SPACE_DEFAULT,DEFAULT_BACK_COLOR),
-            quint8  _r = DEFAULT_RENDITION)
-       : character(_c), rendition(_r), foregroundColor(_f), backgroundColor(_b) {}
+            quint8  _r = DEFAULT_RENDITION,
+            quint16 _hyperlinkId = 0)
+       : character(_c), rendition(_r), foregroundColor(_f), backgroundColor(_b), hyperlinkId(_hyperlinkId) {}
 
   /** The unicode character value for this character.
    *
@@ -92,6 +93,12 @@ public:
   CharacterColor  foregroundColor;
   /** The color used to draw this character's background. */
   CharacterColor  backgroundColor;
+
+  /**
+   * OSC-8 hyperlink id for this cell (0 = none).
+   * Look up the URI with HyperlinkTable::instance.href(hyperlinkId).
+   */
+  quint16 hyperlinkId;
 
   /**
    * Returns true if this character has a transparent background when
@@ -137,7 +144,8 @@ inline bool operator == (const Character& a, const Character& b)
   return a.character == b.character &&
          a.rendition == b.rendition &&
          a.foregroundColor == b.foregroundColor &&
-         a.backgroundColor == b.backgroundColor;
+         a.backgroundColor == b.backgroundColor &&
+         a.hyperlinkId == b.hyperlinkId;
 }
 
 inline bool operator != (const Character& a, const Character& b)
@@ -145,7 +153,8 @@ inline bool operator != (const Character& a, const Character& b)
   return    a.character != b.character ||
             a.rendition != b.rendition ||
             a.foregroundColor != b.foregroundColor ||
-            a.backgroundColor != b.backgroundColor;
+            a.backgroundColor != b.backgroundColor ||
+            a.hyperlinkId != b.hyperlinkId;
 }
 
 inline bool Character::isTransparent(const ColorEntry* base) const
@@ -161,7 +170,8 @@ inline bool Character::equalsFormat(const Character& other) const
   return
     backgroundColor==other.backgroundColor &&
     foregroundColor==other.foregroundColor &&
-    rendition==other.rendition;
+    rendition==other.rendition &&
+    hyperlinkId==other.hyperlinkId;
 }
 
 inline ColorEntry::FontWeight Character::fontWeight(const ColorEntry* base) const

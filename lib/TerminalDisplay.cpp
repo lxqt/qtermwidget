@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QPixmap>
+#include <QToolTip>
 #include <QRegularExpression>
 #include <QStyle>
 #include <QTimer>
@@ -391,6 +392,10 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 ,_filterChain(new TerminalImageFilterChain())
 ,_cursorShape(Emulation::KeyboardCursorShape::BlockCursor)
 ,mMotionAfterPasting(NoMoveScreenWindow)
+,_confirmMultilinePaste(true)
+,_trimPastedTrailingNewlines(false)
+,_linkTooltipsEnabled(true)
+,_linkTooltipTimer(nullptr)
 ,_leftBaseMargin(1)
 ,_topBaseMargin(1)
 ,_drawLineChars(true)
@@ -430,6 +435,10 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
   connect(_blinkTimer, SIGNAL(timeout()), this, SLOT(blinkEvent()));
   _blinkCursorTimer   = new QTimer(this);
   connect(_blinkCursorTimer, SIGNAL(timeout()), this, SLOT(blinkCursorEvent()));
+
+  _linkTooltipTimer = new QTimer(this);
+  _linkTooltipTimer->setSingleShot(true);
+  connect(_linkTooltipTimer, &QTimer::timeout, this, &TerminalDisplay::showPendingLinkTooltip);
 
   setUsesMouse(true);
   setBracketedPasteMode(false);
@@ -1184,7 +1193,7 @@ void TerminalDisplay::updateImage()
     }
 
     QFontMetrics fm(font());
-    if (!_resizing) // not while _resizing, we're expecting a paintEvent
+    if (!_resizing) { // not while _resizing, we're expecting a paintEvent
     for (x = 0; x < columnsToUpdate; ++x)
     {
       if ((newLine[x].rendition & RE_BLINK) != 0) {
@@ -1251,6 +1260,7 @@ void TerminalDisplay::updateImage()
         x += len - 1;
       }
 
+    }
     }
 
     //both the top and bottom halves of double height _lines must always be redrawn
@@ -1433,6 +1443,7 @@ void TerminalDisplay::leaveEvent(QEvent* event)
     gs_deadSpot = QPoint(-1,-1);
     QApplication::restoreOverrideCursor();
   }
+  clearLinkTooltip();
   QWidget::leaveEvent(event);
 }
 
@@ -2294,12 +2305,41 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
     }
 
     update( _mouseOverHotspotArea | previousHotspotArea );
+
+    if (_linkTooltipsEnabled) {
+        const QString tip = spot->tooltip();
+        const QPoint globalPos = ev->globalPosition().toPoint();
+        if (tip.isEmpty()) {
+            clearLinkTooltip();
+        } else if (tip == _pendingLinkTooltip) {
+            // Still on the same link: keep the pending position up to date.
+            _pendingLinkTooltipPos = globalPos;
+            if (QToolTip::isVisible())
+                QToolTip::showText(globalPos, tip, this);
+        } else {
+            // New link under the cursor: wait before showing (intentional hover).
+            _pendingLinkTooltip = tip;
+            _pendingLinkTooltipPos = globalPos;
+            QToolTip::hideText();
+            // Snappier than the desktop default (~700ms), but still long enough
+            // that fast mouse sweeps over links do not pop a tip.
+            int delay = style()->styleHint(QStyle::SH_ToolTip_WakeUpDelay, nullptr, this);
+            if (delay < 0)
+                delay = 400;
+            else
+                delay = qMin(delay, 400);
+            _linkTooltipTimer->start(delay);
+        }
+    }
   }
   else if ( !_mouseOverHotspotArea.isEmpty() )
   {
         update( _mouseOverHotspotArea );
         // set hotspot area to an invalid rectangle
         _mouseOverHotspotArea = QRegion();
+        clearLinkTooltip();
+  } else {
+        clearLinkTooltip();
   }
 
   // for auto-hiding the cursor, we need mouseTracking
@@ -2577,7 +2617,7 @@ void TerminalDisplay::getCharacterPosition(const QPointF& widgetPoint,int& line,
     if (line >= _usedLines)
         line = _usedLines - 1;
 
-    int x = widgetPoint.x() + _fontWidth / 2 - contentsRect().left() - _leftMargin;
+    int x = widgetPoint.x() + _fontWidth / 2.0 - contentsRect().left() - _leftMargin;
     if ( _fixedFont )
         column = x / _fontWidth;
     else
@@ -2909,7 +2949,7 @@ void TerminalDisplay::wheelEvent( QWheelEvent* ev )
   if ( _mouseMarks )
   {
     bool canScroll = _scrollBar->maximum() > 0;
-      if (canScroll)
+    if (canScroll)
         _scrollBar->event(ev);
     else
     {
@@ -3189,6 +3229,33 @@ void TerminalDisplay::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 
 void TerminalDisplay::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     _trimPastedTrailingNewlines = trimPastedTrailingNewlines;
+}
+
+void TerminalDisplay::setLinkTooltipsEnabled(bool enabled)
+{
+    _linkTooltipsEnabled = enabled;
+    if (!enabled)
+        clearLinkTooltip();
+}
+
+bool TerminalDisplay::linkTooltipsEnabled() const
+{
+    return _linkTooltipsEnabled;
+}
+
+void TerminalDisplay::clearLinkTooltip()
+{
+    if (_linkTooltipTimer)
+        _linkTooltipTimer->stop();
+    _pendingLinkTooltip.clear();
+    QToolTip::hideText();
+}
+
+void TerminalDisplay::showPendingLinkTooltip()
+{
+    if (!_linkTooltipsEnabled || _pendingLinkTooltip.isEmpty())
+        return;
+    QToolTip::showText(_pendingLinkTooltipPos, _pendingLinkTooltip, this);
 }
 
 /* ------------------------------------------------------------------------- */

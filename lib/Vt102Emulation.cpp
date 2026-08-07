@@ -455,6 +455,25 @@ void Vt102Emulation::processWindowAttributeChange()
   // ignored, only the second char in ST ("\e\\") is appended to tokenBuffer.
   QString newValue = QString::fromWCharArray(tokenBuffer + i + 1, tokenBufferPos-i-2);
 
+  // OSC 8 ; params ; URI ST  — hyperlinks (per-screen pen state)
+  if (attributeToChange == 8)
+  {
+    // newValue is "params;URI" (URI may be empty to close the link)
+    const int sep = newValue.indexOf(QLatin1Char(';'));
+    QString params;
+    QString uri;
+    if (sep < 0) {
+      // Malformed; treat as link close
+      params.clear();
+      uri.clear();
+    } else {
+      params = newValue.left(sep);
+      uri = newValue.mid(sep + 1);
+    }
+    _currentScreen->setHyperlinkFromOsc(params, uri);
+    return;
+  }
+
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
 }

@@ -26,6 +26,8 @@
 #include <QStringList>
 #include <QHash>
 #include <QRegularExpression>
+#include <QVector>
+#include <QUrl>
 
 // Local
 #include "qtermwidget_export.h"
@@ -102,6 +104,12 @@ public:
         * the hotspot graphically.  eg.  Link hotspots are typically underlined when the user mouses over them
         */
        Type type() const;
+       /**
+        * Returns a tooltip string for this hotspot, or empty if none.
+        * Used e.g. to show the destination URL when hovering a link.
+        */
+       virtual QString tooltip() const;
+
        /**
         * Causes the an action associated with a hotspot to be triggered.
         *
@@ -264,6 +272,8 @@ public:
 
         QList<QAction*> actions() override;
 
+        QString tooltip() const override;
+
         /**
          * Open a web browser at the current URL.  The url itself can be determined using
          * the capturedTexts() method.
@@ -306,6 +316,63 @@ private:
     QList<UrlFilter::HotSpot*> _oldHotspotList;
 signals:
     void activated(const QUrl& url, bool fromContextMenu);
+};
+
+/**
+ * A filter which finds OSC-8 hyperlinks by scanning Character cells for
+ * non-zero hyperlinkId values and creates Link hotspots for them.
+ */
+class QTERMWIDGET_EXPORT HyperlinkFilter : public Filter
+{
+    Q_OBJECT
+public:
+    class HotSpot : public Filter::HotSpot
+    {
+    public:
+        HotSpot(int startLine, int startColumn, int endLine, int endColumn,
+                const QString& url);
+        ~HotSpot() override;
+
+        FilterObject* getUrlObject() const;
+        QString url() const;
+
+        QList<QAction*> actions() override;
+        void activate(const QString& action = QString()) override;
+        QString tooltip() const override;
+
+    private:
+        FilterObject* _urlObject;
+        QString _url;
+
+        HotSpot(const HotSpot&) = delete;
+        HotSpot& operator=(const HotSpot&) = delete;
+    };
+
+    HyperlinkFilter();
+    ~HyperlinkFilter() override;
+
+    /** When false, process() creates no hotspots (OSC-8 parsing still occurs). */
+    void setEnabled(bool enabled);
+    bool isEnabled() const;
+
+    /**
+     * Provides the terminal Character image used by process().
+     * Called from TerminalImageFilterChain::setImage().
+     */
+    void setImage(const Character* image, int lines, int columns,
+                  const QVector<LineProperty>& lineProperties);
+
+    void process() override;
+
+signals:
+    void activated(const QUrl& url, bool fromContextMenu);
+
+private:
+    const Character* _image = nullptr;
+    int _lines = 0;
+    int _columns = 0;
+    QVector<LineProperty> _lineProperties;
+    bool _enabled = true;
 };
 
 class QTERMWIDGET_NO_EXPORT FilterObject : public QObject
@@ -366,6 +433,9 @@ public:
 
     /** Gets the (first named) RegExpFilter that is not a UrlFilter. */
     RegExpFilter* getRegExpFilter(const QString& name = QString()) const;
+
+    /** Returns the first HyperlinkFilter in the chain, or nullptr. */
+    HyperlinkFilter* getHyperlinkFilter() const;
 
     /** Returns the first hotspot which occurs at @p line, @p column or 0 if no hotspot was found */
     Filter::HotSpot* hotSpotAt(int line , int column) const;

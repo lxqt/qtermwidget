@@ -428,6 +428,10 @@ public:
     void setConfirmMultilinePaste(bool confirmMultilinePaste);
     void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines);
 
+    /** Show destination URL tooltips when hovering link hotspots. */
+    void setLinkTooltipsEnabled(bool enabled);
+    bool linkTooltipsEnabled() const;
+
     // maps a point on the widget to the position ( ie. line and column )
     // of the character at that point.
     void getCharacterPosition(const QPointF& widgetPoint,int& line,int& column) const;
@@ -652,8 +656,11 @@ private slots:
 
     void swapColorTable();
     void tripleClickTimeout();  // resets possibleTripleClick
+    void showPendingLinkTooltip();
 
 private:
+
+    void clearLinkTooltip();
 
     // -- Drawing helpers --
 
@@ -867,6 +874,10 @@ private:
     MotionAfterPasting mMotionAfterPasting;
     bool _confirmMultilinePaste;
     bool _trimPastedTrailingNewlines;
+    bool _linkTooltipsEnabled;
+    QTimer* _linkTooltipTimer;
+    QString _pendingLinkTooltip;
+    QPoint _pendingLinkTooltipPos;
 
     struct InputMethodData
     {

@@ -97,12 +97,16 @@ class QTermWidgetInterface {
    virtual void setBoldIntense(bool boldIntense) = 0;
    virtual void setConfirmMultilinePaste(bool confirmMultilinePaste) = 0;
    virtual void setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) = 0;
+   virtual void setOsc8HyperlinksEnabled(bool enabled) = 0;
+   virtual bool osc8HyperlinksEnabled() const = 0;
+   virtual void setLinkTooltipsEnabled(bool enabled) = 0;
+   virtual bool linkTooltipsEnabled() const = 0;
    virtual QString wordCharacters() const = 0;
    virtual void setWordCharacters(const QString& chars) = 0;
    virtual QTermWidgetInterface* createWidget(int startnow) const = 0;
    virtual void autoHideMouseAfter(int delay) = 0;
 };
 
-#define QTermWidgetInterface_iid "lxqt.qtermwidget.QTermWidgetInterface/1.5"
+#define QTermWidgetInterface_iid "lxqt.qtermwidget.QTermWidgetInterface/1.6"
 
 Q_DECLARE_INTERFACE(QTermWidgetInterface, QTermWidgetInterface_iid)

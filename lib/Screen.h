@@ -561,6 +561,17 @@ public:
       */
     static void fillWithDefaultChar(Character* dest, int count);
 
+    /**
+     * Applies an OSC-8 hyperlink escape sequence to the current pen state.
+     *
+     * @param params OSC-8 parameter string (e.g. "id=foo" or empty)
+     * @param uri Target URI; empty URI clears the current hyperlink
+     */
+    void setHyperlinkFromOsc(const QString& params, const QString& uri);
+
+    /** Clears the current OSC-8 hyperlink pen state without affecting cells. */
+    void clearCurrentHyperlink();
+
     QSet<uint> usedExtendedChars() const
     {
         QSet<uint> result;
@@ -661,6 +672,9 @@ private:
     CharacterColor currentForeground;
     CharacterColor currentBackground;
     quint8 currentRendition;
+
+    // OSC-8 hyperlink currently being written (0 = none)
+    quint16 currentHyperlinkId;
 
     // margins ----------------
     int _topMargin;

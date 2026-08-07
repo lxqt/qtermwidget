@@ -67,6 +67,7 @@ set(SRCS
     lib/Filter.cpp
     lib/History.cpp
     lib/HistorySearch.cpp
+    lib/Hyperlink.cpp
     lib/KeyboardTranslator.cpp
     lib/konsole_wcwidth.cpp
     lib/kprocess.cpp

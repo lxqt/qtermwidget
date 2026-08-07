@@ -327,7 +327,12 @@ void QTermWidget::init(int startnow)
     connect(m_impl->m_session, &Session::profileChangeCommandReceived, this, &QTermWidget::profileChanged);
     connect(m_impl->m_session, &Session::receivedData, this, &QTermWidget::receivedData);
 
-    // That's OK, FilterChain's dtor takes care of UrlFilter.
+    // That's OK, FilterChain's dtor takes care of filters.
+    // OSC-8 hyperlinks take priority over regex URL detection when both match.
+    HyperlinkFilter *hyperlinkFilter = new HyperlinkFilter();
+    connect(hyperlinkFilter, &HyperlinkFilter::activated, this, &QTermWidget::urlActivated);
+    m_impl->m_terminalDisplay->filterChain()->addFilter(hyperlinkFilter);
+
     UrlFilter *urlFilter = new UrlFilter();
     connect(urlFilter, &UrlFilter::activated, this, &QTermWidget::urlActivated);
     m_impl->m_terminalDisplay->filterChain()->addFilter(urlFilter);
@@ -846,6 +851,31 @@ void QTermWidget::setConfirmMultilinePaste(bool confirmMultilinePaste) {
 
 void QTermWidget::setTrimPastedTrailingNewlines(bool trimPastedTrailingNewlines) {
     m_impl->m_terminalDisplay->setTrimPastedTrailingNewlines(trimPastedTrailingNewlines);
+}
+
+void QTermWidget::setOsc8HyperlinksEnabled(bool enabled)
+{
+    if (auto* filter = m_impl->m_terminalDisplay->filterChain()->getHyperlinkFilter()) {
+        filter->setEnabled(enabled);
+        m_impl->m_terminalDisplay->processFilters();
+    }
+}
+
+bool QTermWidget::osc8HyperlinksEnabled() const
+{
+    if (auto* filter = m_impl->m_terminalDisplay->filterChain()->getHyperlinkFilter())
+        return filter->isEnabled();
+    return false;
+}
+
+void QTermWidget::setLinkTooltipsEnabled(bool enabled)
+{
+    m_impl->m_terminalDisplay->setLinkTooltipsEnabled(enabled);
+}
+
+bool QTermWidget::linkTooltipsEnabled() const
+{
+    return m_impl->m_terminalDisplay->linkTooltipsEnabled();
 }
 
 QString QTermWidget::wordCharacters() const

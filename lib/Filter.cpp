@@ -35,13 +35,17 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+#include <utility>
+
 // KDE
 //#include <KLocale>
 //#include <KRun>
 
 // Konsole
+#include "Character.h"
 #include "TerminalCharacterDecoder.h"
 #include "konsole_wcwidth.h"
+#include "Hyperlink.h"
 
 using namespace Konsole;
 
@@ -73,6 +77,17 @@ RegExpFilter* FilterChain::getRegExpFilter(const QString& name) const
                 }
             }
         }
+    }
+    return nullptr;
+}
+
+HyperlinkFilter* FilterChain::getHyperlinkFilter() const
+{
+    QListIterator<Filter*> iter(*this);
+    while (iter.hasNext())
+    {
+        if (auto* f = qobject_cast<HyperlinkFilter*>(iter.next()))
+            return f;
     }
     return nullptr;
 }
@@ -159,6 +174,14 @@ void TerminalImageFilterChain::setImage(const Character* const image , int lines
 
     // reset all filters and hotspots
     reset();
+
+    // Give OSC-8 hyperlink filters access to the Character image
+    QListIterator<Filter*> filterIter(*this);
+    while (filterIter.hasNext()) {
+        if (auto* hyperlinkFilter = qobject_cast<HyperlinkFilter*>(filterIter.next())) {
+            hyperlinkFilter->setImage(image, lines, columns, lineProperties);
+        }
+    }
 
     PlainTextDecoder decoder;
     // Include trailing whitespace because otherwise, if a string is wrapped at
@@ -318,6 +341,10 @@ Filter::HotSpot::HotSpot(int startLine , int startColumn , int endLine , int end
 QList<QAction*> Filter::HotSpot::actions()
 {
     return QList<QAction*>();
+}
+QString Filter::HotSpot::tooltip() const
+{
+    return QString();
 }
 int Filter::HotSpot::startLine() const
 {
@@ -572,6 +599,11 @@ UrlFilter::HotSpot::~HotSpot()
     delete _urlObject;
 }
 
+QString UrlFilter::HotSpot::tooltip() const
+{
+    return capturedTexts().value(0);
+}
+
 void FilterObject::emitActivated(const QUrl& url, bool fromContextMenu)
 {
     emit activated(url, fromContextMenu);
@@ -621,6 +653,150 @@ QList<QAction*> UrlFilter::HotSpot::actions()
     list << openAction;
     list << copyAction;
 
+    return list;
+}
+
+// ==================== HyperlinkFilter (OSC-8) ====================
+
+HyperlinkFilter::HyperlinkFilter() = default;
+
+HyperlinkFilter::~HyperlinkFilter() = default;
+
+void HyperlinkFilter::setEnabled(bool enabled)
+{
+    _enabled = enabled;
+}
+
+bool HyperlinkFilter::isEnabled() const
+{
+    return _enabled;
+}
+
+void HyperlinkFilter::setImage(const Character* image, int lines, int columns,
+                               const QVector<LineProperty>& lineProperties)
+{
+    _image = image;
+    _lines = lines;
+    _columns = columns;
+    _lineProperties = lineProperties;
+}
+
+void HyperlinkFilter::process()
+{
+    if (!_enabled || !_image || _lines <= 0 || _columns <= 0)
+        return;
+
+    for (int line = 0; line < _lines; ) {
+        int col = 0;
+        while (col < _columns) {
+            const quint16 id = _image[line * _columns + col].hyperlinkId;
+            if (id == 0) {
+                ++col;
+                continue;
+            }
+
+            const int startLine = line;
+            const int startCol = col;
+            while (col < _columns && _image[line * _columns + col].hyperlinkId == id)
+                ++col;
+
+            int endLine = line;
+            int endCol = col - 1;
+
+            // Merge with following wrapped lines that continue the same link id
+            int mergeLine = line;
+            while (mergeLine + 1 < _lines
+                   && (_lineProperties.value(mergeLine, LINE_DEFAULT) & LINE_WRAPPED)
+                   && _image[(mergeLine + 1) * _columns].hyperlinkId == id) {
+                ++mergeLine;
+                int c = 0;
+                while (c < _columns && _image[mergeLine * _columns + c].hyperlinkId == id)
+                    ++c;
+                endLine = mergeLine;
+                endCol = c - 1;
+            }
+
+            const QString href = HyperlinkTable::instance.href(id);
+            if (!href.isEmpty() && endCol >= startCol) {
+                auto* spot = new HotSpot(startLine, startCol, endLine, endCol, href);
+                connect(spot->getUrlObject(), &FilterObject::activated,
+                        this, &HyperlinkFilter::activated);
+                addHotSpot(spot);
+            }
+
+            if (endLine > line) {
+                // Skip the merged lines; continue scanning after the run on the last line
+                line = endLine;
+                col = endCol + 1;
+            }
+        }
+        ++line;
+    }
+
+    _image = nullptr;
+}
+
+HyperlinkFilter::HotSpot::HotSpot(int startLine, int startColumn, int endLine, int endColumn,
+                                  const QString& url)
+    : Filter::HotSpot(startLine, startColumn, endLine, endColumn)
+    , _urlObject(new FilterObject(this))
+    , _url(url)
+{
+    setType(Link);
+}
+
+HyperlinkFilter::HotSpot::~HotSpot()
+{
+    delete _urlObject;
+}
+
+FilterObject* HyperlinkFilter::HotSpot::getUrlObject() const
+{
+    return _urlObject;
+}
+
+QString HyperlinkFilter::HotSpot::url() const
+{
+    return _url;
+}
+
+QString HyperlinkFilter::HotSpot::tooltip() const
+{
+    return _url;
+}
+
+void HyperlinkFilter::HotSpot::activate(const QString& actionName)
+{
+    if (actionName == QLatin1String("copy-action")) {
+        QApplication::clipboard()->setText(_url);
+        return;
+    }
+
+    if (actionName.isEmpty()
+        || actionName == QLatin1String("open-action")
+        || actionName == QLatin1String("click-action")) {
+        _urlObject->emitActivated(QUrl(_url, QUrl::StrictMode),
+                                  actionName != QLatin1String("click-action"));
+    }
+}
+
+QList<QAction*> HyperlinkFilter::HotSpot::actions()
+{
+    QList<QAction*> list;
+
+    QAction* openAction = new QAction(_urlObject);
+    QAction* copyAction = new QAction(_urlObject);
+
+    openAction->setText(QObject::tr("Open Link"));
+    copyAction->setText(QObject::tr("Copy Link Address"));
+    openAction->setObjectName(QLatin1String("open-action"));
+    copyAction->setObjectName(QLatin1String("copy-action"));
+
+    QObject::connect(openAction, &QAction::triggered, _urlObject, &FilterObject::activate);
+    QObject::connect(copyAction, &QAction::triggered, _urlObject, &FilterObject::activate);
+
+    list << openAction;
+    list << copyAction;
     return list;
 }
 

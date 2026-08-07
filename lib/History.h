@@ -269,21 +269,25 @@ class CharacterFormat
 {
 public:
   bool equalsFormat(const CharacterFormat &other) const {
-    return other.rendition==rendition && other.fgColor==fgColor && other.bgColor==bgColor;
+    return other.rendition==rendition && other.fgColor==fgColor && other.bgColor==bgColor
+           && other.hyperlinkId==hyperlinkId;
   }
 
   bool equalsFormat(const Character &c) const {
-    return c.rendition==rendition && c.foregroundColor==fgColor && c.backgroundColor==bgColor;
+    return c.rendition==rendition && c.foregroundColor==fgColor && c.backgroundColor==bgColor
+           && c.hyperlinkId==hyperlinkId;
   }
 
   void setFormat(const Character& c) {
     rendition=c.rendition;
     fgColor=c.foregroundColor;
     bgColor=c.backgroundColor;
+    hyperlinkId=c.hyperlinkId;
   }
 
   CharacterColor fgColor, bgColor;
   quint16 startPos;
+  quint16 hyperlinkId = 0;
   quint8 rendition;
 };
 

@@ -688,6 +688,7 @@ void CompactHistoryLine::getCharacter ( int index, Character &r )
   r.rendition = formatArray[formatPos].rendition;
   r.foregroundColor = formatArray[formatPos].fgColor;
   r.backgroundColor = formatArray[formatPos].bgColor;
+  r.hyperlinkId = formatArray[formatPos].hyperlinkId;
 }
 
 void CompactHistoryLine::getCharacters ( Character* array, int length, int startColumn )

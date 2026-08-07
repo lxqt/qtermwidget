@@ -33,6 +33,7 @@
 // Qt
 #include <QTextStream>
 #include <QDate>
+#include <QUrl>
 
 // KDE
 //#include <kdebug.h>
@@ -40,6 +41,7 @@
 // Konsole
 #include "konsole_wcwidth.h"
 #include "TerminalCharacterDecoder.h"
+#include "Hyperlink.h"
 
 using namespace Konsole;
 
@@ -73,6 +75,7 @@ Character Screen::defaultChar = Character(' ',
     history(new HistoryScrollNone()),
     cuX(0), cuY(0),
     currentRendition(0),
+    currentHyperlinkId(0),
     _topMargin(0), _bottomMargin(0),
     selBegin(0), selTopLeft(0), selBottomRight(0),
     blockSelectionMode(false),
@@ -584,6 +587,7 @@ void Screen::reset(bool clearScreen)
     _bottomMargin=lines-1;
 
     setDefaultRendition();
+    clearCurrentHyperlink();
     saveCursor();
 
     if ( clearScreen )
@@ -767,6 +771,7 @@ void Screen::displayCharacter(wchar_t c)
                 ch.foregroundColor = effectiveForeground;
                 ch.backgroundColor = effectiveBackground;
                 ch.rendition = effectiveRendition;
+                ch.hyperlinkId = currentHyperlinkId;
 
                 if (getMode(MODE_Insert))
                 {
@@ -832,6 +837,7 @@ notcombine:
     currentChar.foregroundColor = effectiveForeground;
     currentChar.backgroundColor = effectiveBackground;
     currentChar.rendition = effectiveRendition;
+    currentChar.hyperlinkId = currentHyperlinkId;
 
     lastDrawnChar = c;
 
@@ -849,6 +855,7 @@ notcombine:
         ch.foregroundColor = effectiveForeground;
         ch.backgroundColor = effectiveBackground;
         ch.rendition = effectiveRendition;
+        ch.hyperlinkId = currentHyperlinkId;
 
         w--;
     }
@@ -1157,6 +1164,52 @@ void Screen::setDefaultRendition()
     setBackColor(COLOR_SPACE_DEFAULT,DEFAULT_BACK_COLOR);
     currentRendition   = DEFAULT_RENDITION;
     updateEffectiveRendition();
+}
+
+void Screen::clearCurrentHyperlink()
+{
+    currentHyperlinkId = 0;
+}
+
+void Screen::setHyperlinkFromOsc(const QString& params, const QString& uri)
+{
+    if (uri.isEmpty()) {
+        currentHyperlinkId = 0;
+        return;
+    }
+
+    // Reject obviously malformed URIs (e.g. shell quoting bugs that swallow ST and
+    // append the visible label / trailing OSC junk into the URI payload).
+    for (const QChar ch : uri) {
+        if (ch.isSpace() || ch.category() == QChar::Other_Control) {
+            currentHyperlinkId = 0;
+            return;
+        }
+    }
+
+    const QUrl url(uri, QUrl::StrictMode);
+    const QString scheme = url.scheme().toLower();
+    // Restrict to common safe schemes (same idea as Konsole / VTE defaults).
+    const bool allowedScheme = (scheme == QLatin1String("http")
+                                || scheme == QLatin1String("https")
+                                || scheme == QLatin1String("file")
+                                || scheme == QLatin1String("mailto")
+                                || scheme == QLatin1String("ftp"));
+    if (!url.isValid() || !allowedScheme) {
+        currentHyperlinkId = 0;
+        return;
+    }
+
+    QString idParam;
+    const QStringList parts = params.split(QLatin1Char(':'));
+    for (const QString& part : parts) {
+        if (part.startsWith(QLatin1String("id="))) {
+            idParam = part.mid(3);
+            break;
+        }
+    }
+
+    currentHyperlinkId = HyperlinkTable::instance.createHyperlink(idParam, url.toString());
 }
 
 void Screen::setForeColor(int space, int color)
