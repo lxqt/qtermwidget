@@ -3540,8 +3540,7 @@ void TerminalDisplay::dropEvent(QDropEvent* event)
   QString dropText;
   if (!urls.isEmpty())
   {
-      // TODO/FIXME: escape or quote pasted things if necessary...
-      qDebug() << "TerminalDisplay: handling urls. It can be broken. Report any errors, please";
+    // TODO/FIXME: escape or quote pasted things if necessary...
     for ( int i = 0 ; i < urls.count() ; i++ )
     {
         //KUrl url = KIO::NetAccess::mostLocalUrl( urls[i] , 0 );
