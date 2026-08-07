@@ -214,6 +214,28 @@ void Session::addView(TerminalDisplay * widget)
 
         widget->setBracketedPasteMode(_emulation->programBracketedPasteMode());
 
+        // Push the view's current cell pixel size to the emulation, and keep
+        // it in sync when the font metrics change. Used by sixel rendering to
+        // compute how many cell rows a decoded image occupies.
+        _emulation->setCellPixelSize(widget->fontWidth(), widget->fontHeight());
+        connect(widget, &TerminalDisplay::changedFontMetricSignal,
+                _emulation, [this](int h, int w) {
+                    _emulation->setCellPixelSize(w, h);
+                });
+
+        // Push the view's background color so the emulation can answer OSC 11
+        // queries
+        _emulation->setBackgroundColor(
+            widget->colorTable()[DEFAULT_BACK_COLOR].color);
+        connect(widget, &TerminalDisplay::backgroundColorChanged,
+                _emulation, &Emulation::setBackgroundColor);
+
+        // Force a full repaint when sixel images are dropped (e.g. `clear`):
+        // the character-buffer diff in updateImage() can miss the rows the
+        // image occupied, leaving stale pixels until a focus event.
+        connect(_emulation, &Emulation::sixelImagesChanged,
+                widget, QOverload<>::of(&TerminalDisplay::update));
+
         widget->setScreenWindow(_emulation->createWindow());
     }
 

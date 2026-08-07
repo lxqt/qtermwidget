@@ -24,6 +24,7 @@
 #define SCREEN_H
 
 // Qt
+#include <QList>
 #include <QRect>
 #include <QSet>
 #include <QTextStream>
@@ -32,6 +33,7 @@
 // Konsole
 #include "Character.h"
 #include "History.h"
+#include "SixelImage.h"
 
 #define MODE_Origin    0
 #define MODE_Wrap      1
@@ -561,6 +563,26 @@ public:
       */
     static void fillWithDefaultChar(Character* dest, int count);
 
+    /**
+     * Append an inline sixel image at the current cursor position.
+     * The image's anchorLine is set here from the current history+cursor row,
+     * and its anchorColumn from getCursorX().
+     */
+    void addSixelImage(QImage image, int cellRows, int cellCols);
+
+    /**
+     * Return all sixel images whose vertical span intersects the absolute-line
+     * range [firstLine, lastLine] (inclusive). Coordinates are in the same
+     * absolute-line space as ScreenWindow::currentLine().
+     */
+    QList<SixelImage> sixelImagesInRange(qint64 firstLine, qint64 lastLine) const;
+
+    /** Returns all sixel images currently tracked (used by tests/diagnostics). */
+    const QList<SixelImage>& sixelImages() const { return _sixelImages; }
+
+    /** Drop all sixel images. */
+    void clearSixelImages() { _sixelImages.clear(); }
+
     QSet<uint> usedExtendedChars() const
     {
         QSet<uint> result;
@@ -701,6 +723,12 @@ private:
 
     // last position where we added a character
     int lastPos;
+
+    // Inline sixel images, anchored to the same line-index space as
+    // ScreenWindow::currentLine() (0 = oldest history line). When the history
+    // drops a line, every anchor is decremented and fully off-screen images
+    // are pruned.
+    QList<SixelImage> _sixelImages;
 
     // used in REP (repeating char)
     unsigned short lastDrawnChar;

@@ -1453,7 +1453,20 @@ void Screen::addHistLine()
         // If the history is full, increment the count
         // of dropped lines
         if ( newHistLines == oldHistLines )
+        {
             _droppedLines++;
+
+            // Shift sixel image anchors down by 1 to track the dropped line,
+            // and prune images whose entire span is now gone.
+            for (auto it = _sixelImages.begin(); it != _sixelImages.end(); )
+            {
+                it->anchorLine -= 1;
+                if (it->anchorLine + it->cellRows <= 0)
+                    it = _sixelImages.erase(it);
+                else
+                    ++it;
+            }
+        }
 
         // Adjust selection for the new point of reference
         if (newHistLines > oldHistLines)
@@ -1533,4 +1546,34 @@ void Screen::fillWithDefaultChar(Character* dest, int count)
 {
     for (int i=0;i<count;i++)
         dest[i] = defaultChar;
+}
+
+void Screen::addSixelImage(QImage image, int cellRows, int cellCols)
+{
+    if (image.isNull() || cellRows <= 0)
+        return;
+
+    SixelImage entry;
+    entry.image        = std::move(image);
+    entry.anchorLine   = static_cast<qint64>(history->getLines()) + cuY;
+    entry.anchorColumn = cuX;
+    entry.cellRows     = cellRows;
+    entry.cellCols     = cellCols;
+    _sixelImages.append(std::move(entry));
+}
+
+QList<SixelImage> Screen::sixelImagesInRange(qint64 firstLine, qint64 lastLine) const
+{
+    QList<SixelImage> result;
+    if (lastLine < firstLine)
+        return result;
+    for (const SixelImage& img : _sixelImages)
+    {
+        const qint64 top    = img.anchorLine;
+        const qint64 bottom = img.anchorLine + img.cellRows - 1;
+        if (bottom < firstLine || top > lastLine)
+            continue;
+        result.append(img);
+    }
+    return result;
 }

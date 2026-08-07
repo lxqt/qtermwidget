@@ -17,6 +17,7 @@ option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses libutempter on Linux or libulog on FreeBSD for login records." OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
+set(QTERMWIDGET_USE_SIXEL "AUTO" CACHE STRING "Enable inline sixel graphics via libsixel (AUTO/ON/OFF).")
 
 
 # just change version for releases
@@ -41,6 +42,23 @@ find_package(lxqt2-build-tools ${LXQTBT_MINIMUM_VERSION} REQUIRED)
 
 if(USE_UTF8PROC)
     find_package(Utf8Proc REQUIRED)
+endif()
+
+# Optional libsixel, detect via pkg-config unless explicitly disabled.
+set(QTERMWIDGET_SIXEL_ENABLED OFF)
+if(NOT QTERMWIDGET_USE_SIXEL STREQUAL "OFF")
+    find_package(PkgConfig)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(SIXEL IMPORTED_TARGET libsixel)
+    endif()
+    if(SIXEL_FOUND)
+        set(QTERMWIDGET_SIXEL_ENABLED ON)
+        message(STATUS "libsixel ${SIXEL_VERSION} found, inline sixel graphics enabled")
+    elseif(QTERMWIDGET_USE_SIXEL STREQUAL "ON")
+        message(FATAL_ERROR "QTERMWIDGET_USE_SIXEL=ON but libsixel was not found via pkg-config")
+    else()
+        message(STATUS "libsixel not found, inline sixel graphics disabled")
+    endif()
 endif()
 
 include(LXQtPreventInSourceBuilds)
@@ -77,6 +95,7 @@ set(SRCS
     lib/qtermwidget.cpp
     lib/Screen.cpp
     lib/ScreenWindow.cpp
+    lib/SixelDecoder.cpp
     lib/SearchBar.cpp
     lib/Session.cpp
     lib/ShellCommand.cpp
@@ -178,6 +197,14 @@ if (QTERMWIDGET_USE_UTEMPTER)
         find_library(UTEMPTER_LIB NAMES utempter ulog REQUIRED)
         target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} ${UTEMPTER_LIB})
     endif()
+endif()
+
+if (QTERMWIDGET_SIXEL_ENABLED)
+    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "QTERMWIDGET_SIXEL"
+    )
+    target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} PkgConfig::SIXEL)
 endif()
 
 if (UTF8PROC_FOUND)

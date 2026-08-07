@@ -190,6 +190,7 @@ void TerminalDisplay::setBackgroundColor(const QColor& color)
       _scrollBar->setPalette( QApplication::palette() );
 
     update();
+    emit backgroundColorChanged(color);
 }
 void TerminalDisplay::setForegroundColor(const QColor& color)
 {
@@ -969,6 +970,14 @@ void TerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
     if ( _outputSuspendedLabel && _outputSuspendedLabel->isVisible() )
         return;
 
+    // Sixel images live in the framebuffer at fixed pixel coordinates and
+    // are not part of the character grid that scroll() bitblts. When any
+    // sixel image is stored, force a full widget repaint instead of using
+    // the bitblt path, otherwise image pixels get smeared into rows that
+    // scrolled past them.
+    const bool hasSixelImages = _screenWindow && _screenWindow->screen() &&
+                                !_screenWindow->screen()->sixelImages().isEmpty();
+
     // constrain the region to the display
     // the bottom of the region is capped to the number of lines in the display's
     // internal image - 2, so that the height of 'region' is strictly less
@@ -1056,7 +1065,10 @@ void TerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
     Q_ASSERT(scrollRect.isValid() && !scrollRect.isEmpty());
 
     //scroll the display vertically to match internal _image
-    scroll( 0 , _fontHeight * (-lines) , scrollRect );
+    if (hasSixelImages)
+        update();
+    else
+        scroll( 0 , _fontHeight * (-lines) , scrollRect );
 }
 
 QRegion TerminalDisplay::hotSpotRegion() const
@@ -1551,9 +1563,37 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     drawBackground(paint,*rect,palette().window().color(),
                    true /* use opacity setting */);
     drawContents(paint, *rect);
+    drawSixelImages(paint, *rect);
   }
   drawInputMethodPreeditString(paint,preeditRect());
   paintFilters(paint);
+}
+
+void TerminalDisplay::drawSixelImages(QPainter& paint, const QRect& rect)
+{
+    if (!_screenWindow)
+        return;
+    Screen* screen = _screenWindow->screen();
+    if (!screen || _fontWidth <= 0 || _fontHeight <= 0)
+        return;
+
+    const qint64 windowTop    = _screenWindow->currentLine();
+    const qint64 windowBottom = windowTop + _screenWindow->windowLines() - 1;
+
+    const QList<SixelImage> images = screen->sixelImagesInRange(windowTop, windowBottom);
+    if (images.isEmpty())
+        return;
+
+    paint.save();
+    paint.setClipRect(rect);
+    for (const SixelImage& img : images)
+    {
+        const int x = _leftMargin + img.anchorColumn * _fontWidth;
+        const int y = _topMargin
+                      + static_cast<int>(img.anchorLine - windowTop) * _fontHeight;
+        paint.drawImage(QPoint(x, y), img.image);
+    }
+    paint.restore();
 }
 
 QPoint TerminalDisplay::cursorPosition() const

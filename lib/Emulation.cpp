@@ -51,6 +51,8 @@ using namespace Konsole;
 
 Emulation::Emulation() :
   _currentScreen(nullptr),
+  _cellPixelWidth(0),
+  _cellPixelHeight(0),
   _keyTranslator(nullptr),
   _usesMouse(false),
   _bracketedPasteMode(false),
@@ -74,6 +76,17 @@ Emulation::Emulation() :
     emit titleChanged( 50, QString(QLatin1String("CursorShape=%1;BlinkingCursorEnabled=%2"))
                                .arg(static_cast<int>(cursorShape)).arg(blinkingCursorEnabled) );
   });
+}
+
+void Emulation::setCellPixelSize(int width, int height)
+{
+    _cellPixelWidth  = qMax(0, width);
+    _cellPixelHeight = qMax(0, height);
+}
+
+void Emulation::setBackgroundColor(const QColor& color)
+{
+    _backgroundColor = color;
 }
 
 bool Emulation::programUsesMouse() const
@@ -146,6 +159,12 @@ void Emulation::setScreen(int n)
 void Emulation::clearHistory()
 {
     _screen[0]->setScroll( _screen[0]->getScroll() , false );
+    // `clear` sends ESC[2J ESC[3J — the 2J just scrolls content (including
+    // sixel images) into history, and 3J resets that history. Drop the now-
+    // orphaned image anchors so the visible canvas is actually empty.
+    _screen[0]->clearSixelImages();
+    _screen[1]->clearSixelImages();
+    emit sixelImagesChanged();
 }
 void Emulation::setHistory(const HistoryType& t)
 {
