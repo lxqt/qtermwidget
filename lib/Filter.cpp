@@ -701,7 +701,8 @@ void HyperlinkFilter::process()
                 ++col;
 
             int endLine = line;
-            int endCol = col - 1;
+            // Exclusive end column (one past the last linked cell), same convention as UrlFilter.
+            int endCol = col;
 
             // Merge with following wrapped lines that continue the same link id
             int mergeLine = line;
@@ -713,11 +714,11 @@ void HyperlinkFilter::process()
                 while (c < _columns && _image[mergeLine * _columns + c].hyperlinkId == id)
                     ++c;
                 endLine = mergeLine;
-                endCol = c - 1;
+                endCol = c;
             }
 
             const QString href = HyperlinkTable::instance.href(id);
-            if (!href.isEmpty() && endCol >= startCol) {
+            if (!href.isEmpty() && endCol > startCol) {
                 auto* spot = new HotSpot(startLine, startCol, endLine, endCol, href);
                 connect(spot->getUrlObject(), &FilterObject::activated,
                         this, &HyperlinkFilter::activated);
@@ -727,7 +728,7 @@ void HyperlinkFilter::process()
             if (endLine > line) {
                 // Skip the merged lines; continue scanning after the run on the last line
                 line = endLine;
-                col = endCol + 1;
+                col = endCol;
             }
         }
         ++line;
