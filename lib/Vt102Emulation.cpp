@@ -174,6 +174,20 @@ void Vt102Emulation::resetTokenizer()
   prevCC = 0;
 }
 
+void Vt102Emulation::clearHyperlinkPens()
+{
+  _screen[0]->clearCurrentHyperlink();
+  _screen[1]->clearCurrentHyperlink();
+}
+
+void Vt102Emulation::abortControlString()
+{
+  // Unterminated / interrupted OSC can leave OSC-8 "open" with no close.
+  // Drop the sticky pen on both screens so later prompts are not linked.
+  clearHyperlinkPens();
+  resetTokenizer();
+}
+
 void Vt102Emulation::addDigit(int digit)
 {
   if (argv[argc] < MAX_ARGUMENT)
@@ -278,11 +292,13 @@ void Vt102Emulation::receiveChar(wchar_t cc)
     // "ESCP", APC "ESC_", SOS "ESCX", and PM  "ESC^".  This matches ECMA-48 5.6 Control strings and
     // XTerm ctlseqs.html, Section "VT100 Mode", heading "Controls beginning with ESC"
     if (Cse) {
+        // CAN / SUB abort an unterminated control string (xterm-compatible recovery).
+        if (cc == CNTL('X') || cc == CNTL('Z')) {
+            abortControlString();
+            return;
+        }
         // Store in prevCC so Cte can detect the ST terminator (prevCC == 27 && cc == 92 => ESC \).
-        //
-        // Unterminated strings freeze the parser. Unlike Konsole and xterm which feature state
-        // tracking, RIS (\033c) cannot interrupt string mode, e.g. '\x1b]0;OSC-NO-TERM \033c' does
-        // not recover the terminal.
+        // RIS (ESC c) is handled below once 'c' arrives after ESC.
         prevCC = cc;
         return;
     }
@@ -291,14 +307,25 @@ void Vt102Emulation::receiveChar(wchar_t cc)
     // This means, they do neither a resetTokenizer() nor a pushToToken(). Some of them, do
     // of course. Guess this originates from a weakly layered handling of the X-on
     // X-off protocol, which comes really below this level.
-    if (cc == CNTL('X') || cc == CNTL('Z') || cc == ESC)
+    if (cc == CNTL('X') || cc == CNTL('Z') || cc == ESC) {
         resetTokenizer(); //VT100: CAN or SUB
+        // Also drop a sticky OSC-8 pen if an app was interrupted mid-link.
+        if (cc == CNTL('X') || cc == CNTL('Z'))
+            clearHyperlinkPens();
+    }
     if (cc != ESC)
     {
         processToken(TY_CTL(cc+'@' ),0,0);
         return;
     }
   }
+
+  // RIS (ESC c) may interrupt an unterminated OSC/DCS string; recover fully.
+  if (Cse && prevCC == ESC && cc == L'c') {
+      reset();
+      return;
+  }
+
   // advance the state
   addToCurrentToken(cc);
 
@@ -316,7 +343,15 @@ void Vt102Emulation::receiveChar(wchar_t cc)
         resetTokenizer();
         return;
     }
-    if (Cse         ) { prevCC = cc; return; }
+    if (Cse         ) {
+        // Oversized unterminated OSC would otherwise freeze the parser forever.
+        if (tokenBufferPos >= MAX_TOKEN_LENGTH - 1) {
+            abortControlString();
+            return;
+        }
+        prevCC = cc;
+        return;
+    }
     if (lec(3,2,'?')) { return; }
     if (lec(3,2,'>')) { return; }
     if (lec(3,2,'!')) { return; }
@@ -447,6 +482,9 @@ void Vt102Emulation::processWindowAttributeChange()
   if (tokenBuffer[i] != ';')
   {
     reportDecodingError();
+    // Broken OSC-8 must not leave a previously opened pen stuck.
+    if (attributeToChange == 8)
+      clearHyperlinkPens();
     return;
   }
 
@@ -473,6 +511,12 @@ void Vt102Emulation::processWindowAttributeChange()
     _currentScreen->setHyperlinkFromOsc(params, uri);
     return;
   }
+
+  // Shells commonly emit OSC 0/1/2 (window/icon title) at each prompt.
+  // Treat that as a boundary and close any OSC-8 pen left open by mangled
+  // or interrupted output, so the prompt itself is never stamped as a link.
+  if (attributeToChange == 0 || attributeToChange == 1 || attributeToChange == 2)
+      clearHyperlinkPens();
 
   _pendingTitleUpdates[attributeToChange] = newValue;
   _titleUpdateTimer->start(20);
@@ -879,7 +923,10 @@ void Vt102Emulation::processToken(int token, wchar_t p, int q)
     case TY_CSI_PR('r', 2004) :      restoreMode      (MODE_BracketedPaste); break; //XTERM
 
     //FIXME: weird DEC reset sequence
-    case TY_CSI_PE('p'      ) : /* IGNORED: reset         (        ) */ break;
+    case TY_CSI_PE('p'      ) : // DECSTR soft terminal reset
+                                clearHyperlinkPens();
+                                _currentScreen->setDefaultRendition();
+                                break;
 
     // DECRQM — Request Mode (Host To Terminal)
     // When the '$' intermediate byte is absorbed by the tokenizer, the natural
@@ -1163,8 +1210,13 @@ void Vt102Emulation::sendKeyEvent(QKeyEvent* event, bool fromPaste)
             emit flowControlKeyPressed(true);
             break;
         case Qt::Key_Q:
-        case Qt::Key_C: // cancel flow control
             emit flowControlKeyPressed(false);
+            break;
+        case Qt::Key_C: // cancel flow control / interrupt
+            emit flowControlKeyPressed(false);
+            // Ctrl+C often interrupts an app mid OSC-8 open; drop the sticky pen
+            // so the next shell prompt is not treated as a hyperlink.
+            clearHyperlinkPens();
             break;
         }
     }

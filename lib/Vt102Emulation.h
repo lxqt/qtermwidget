@@ -133,6 +133,10 @@ private:
   void resetModes();
 
   void resetTokenizer();
+  /** Abort an unterminated OSC/DCS/APC/PM/SOS string and clear OSC-8 pens. */
+  void abortControlString();
+  /** Clear current OSC-8 hyperlink pen state on both screens. */
+  void clearHyperlinkPens();
   // Large enough for OSC-8 URIs and long window titles
   #define MAX_TOKEN_LENGTH 4096
   void addToCurrentToken(wchar_t cc);
