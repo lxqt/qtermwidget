@@ -778,28 +778,25 @@ void TerminalDisplay::drawCursor(QPainter& painter,
 {
     QRectF cursorRect = rect;
     cursorRect.setHeight(_fontHeight - _lineSpacing - 1);
+    cursorRect.translate(0,(rect.height()-cursorRect.height())/2.0);
 
     if (!_cursorBlinking)
     {
-       if ( _cursorColor.isValid() )
-           painter.setPen(_cursorColor);
-       else
-           painter.setPen(foregroundColor);
+        if ( _cursorColor.isValid() )
+            painter.setPen(_cursorColor);
+        else
+            painter.setPen(foregroundColor);
 
-       if ( _cursorShape == Emulation::KeyboardCursorShape::BlockCursor )
-       {
-            // draw the cursor outline, adjusting the area so that
-            // it is draw entirely inside 'rect'
-            float penWidth = qMax(1,painter.pen().width());
+        // draw the cursor outline, adjusting the area so that
+        // it is draw entirely inside 'rect'
+        float halfStroke = qMax(1,painter.pen().width())/2.0f;
+        cursorRect.adjust(halfStroke, halfStroke, -halfStroke, -halfStroke);
 
-            painter.drawRect(cursorRect.adjusted(penWidth/2,
-                                                 penWidth/2,
-                                                 - penWidth/2,
-                                                 - penWidth/2));
+        if ( _cursorShape == Emulation::KeyboardCursorShape::BlockCursor )
+        {
             if ( hasFocus() )
             {
-                painter.fillRect(cursorRect, _cursorColor.isValid() ? _cursorColor : foregroundColor);
-
+                painter.setBrush(painter.pen().color());
                 if ( !_cursorColor.isValid() )
                 {
                     // invert the colour used to draw the text to ensure that the character at
@@ -807,17 +804,24 @@ void TerminalDisplay::drawCursor(QPainter& painter,
                     invertCharacterColor = true;
                 }
             }
-       }
-       else if ( _cursorShape == Emulation::KeyboardCursorShape::UnderlineCursor )
+            painter.drawRect(cursorRect);
+        }
+        else if ( _cursorShape == Emulation::KeyboardCursorShape::UnderlineCursor )
+        {
+            cursorRect.adjust(halfStroke, halfStroke, -halfStroke, -halfStroke);
             painter.drawLine(cursorRect.left(),
                              cursorRect.bottom(),
                              cursorRect.right(),
                              cursorRect.bottom());
-       else if ( _cursorShape == Emulation::KeyboardCursorShape::IBeamCursor )
+        }
+        else if ( _cursorShape == Emulation::KeyboardCursorShape::IBeamCursor )
+        {
+            cursorRect.adjust(halfStroke, halfStroke, -halfStroke, -halfStroke);
             painter.drawLine(cursorRect.left(),
                              cursorRect.top(),
                              cursorRect.left(),
                              cursorRect.bottom());
+        }
 
     }
 }
