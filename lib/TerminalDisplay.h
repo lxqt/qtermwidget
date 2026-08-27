@@ -68,7 +68,12 @@ namespace Konsole
         Zoom,
         Fit,
         Center,
-        Fill
+        Fill,
+        Tiled,
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
     };
 
 extern unsigned short vt100_graphics[32];

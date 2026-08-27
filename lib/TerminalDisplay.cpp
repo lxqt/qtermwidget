@@ -1562,9 +1562,15 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
             bgr.moveCenter(cr.center());
             break;
         }
-        case Center:
-        { // center the image without scaling/zooming
-            bgr.moveCenter(cr.center());
+        // position the image without scaling/zooming
+        case Center:        bgr.moveCenter(cr.center());            break;
+        case TopLeft:       bgr.moveTopLeft(cr.topLeft());          break;
+        case TopRight:      bgr.moveTopRight(cr.topRight());        break;
+        case BottomLeft:    bgr.moveBottomLeft(cr.bottomLeft());    break;
+        case BottomRight:   bgr.moveBottomRight(cr.bottomRight());  break;
+        case Tiled:
+        {
+            paint.setBrush(pix);
             break;
         }
         case None:
@@ -1573,7 +1579,10 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
             break;
     }
 
-    paint.drawPixmap(bgr, pix, pix.rect());
+    if (_backgroundMode == Tiled)
+        paint.drawRect(cr);
+    else
+        paint.drawPixmap(bgr, pix, pix.rect());
     paint.restore();
   }
 
