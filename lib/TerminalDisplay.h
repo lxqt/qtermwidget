@@ -857,7 +857,6 @@ private:
     qreal _opacity;
 
     QString _backgroundImage;
-    QSize _backgroundImageSize;
     BackgroundMode _backgroundMode;
 
     // list of filters currently applied to the display.  used for links and

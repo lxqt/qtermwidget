@@ -147,24 +147,28 @@ inline int TerminalDisplay::loc(int x, int y) const
 static QPoint gs_deadSpot(-1,-1);
 static QPoint gs_futureDeadSpot;
 std::shared_ptr<QTimer> TerminalDisplay::_hideMouseTimer;
+
+// Share the smae background pixmap across mutliple tabs, windows, …
 typedef QPair<QPixmap,QList<void*>> SharedPixmap;
 class ScaledPixmapCache : public QMap<QString,SharedPixmap>
 {
     public:
-        QSize attach(void *hook, QString imageFile)
+        bool attach(void *hook, QString imageFile)
         {
+            if (imageFile.isEmpty())
+                return false;
             ScaledPixmapCache::iterator it = find(imageFile);
             if (it == end())
             {
                 QPixmap pix;
                 if (!pix.load(imageFile))
-                    return QSize(); // bogus image path, stupid user
+                    return false; // bogus image path, stupid user
                 it = insert(imageFile, SharedPixmap(pix, QList<void*>() << hook));
-                return pix.size();
+                return true;
             }
             if (!it->second.contains(hook))
                 it->second << hook;
-            return it->first.size();
+            return true;
         }
         bool detach(void *hook, QString imageFile)
         {
@@ -176,16 +180,11 @@ class ScaledPixmapCache : public QMap<QString,SharedPixmap>
                 erase(it);
             return true;
         }
-        void detach(void *hook, bool onlyScales = false)
+        void detach(void *hook)
         {
             ScaledPixmapCache::iterator it = begin();
             while (it != end())
             {
-                if (onlyScales && !it.key().startsWith(QStringLiteral(":$:")))
-                {
-                    ++it;
-                    continue;
-                }
                 it->second.removeAll(hook);
                 if (it->second.isEmpty())
                     it = erase(it);
@@ -193,37 +192,10 @@ class ScaledPixmapCache : public QMap<QString,SharedPixmap>
                     ++it;
             }
         }
-        QPixmap scaled(void *hook, QString imageFile, QSize sz = QSize())
+        QPixmap pixmap(QString imageFile)
         {
-            if (!sz.isValid())
-            {   // return unscaled base
-                detach(hook, true);
-                ScaledPixmapCache::const_iterator it = constFind(imageFile);
-                return it == constEnd() ? QPixmap() : it->first;
-            }
-            const QString key = QStringLiteral(":$:%1:%2:%3").arg(sz.width()).arg(sz.height()).arg(imageFile);
-            ScaledPixmapCache::iterator it = find(key);
-            if (it != end())
-            {
-                if (!it->second.contains(hook))
-                {
-                    detach(hook, true); // invalidates iterator
-                    it = find(key);
-                    it->second << hook;
-                }
-                return it->first;
-            }
-            QPixmap base = scaled(hook, imageFile, QSize());
-            if (base.isNull())
-            {
-                qDebug() << "Scaled " << imageFile << " requested, but was not attached!";
-                return base;
-            }
-            if (base.size() == sz)
-                return base; //yay, free scale
-            base = base.scaled(sz, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-            insert(key, SharedPixmap(base, QList<void*>() << hook));
-            return base;
+            ScaledPixmapCache::const_iterator it = constFind(imageFile);
+            return it == constEnd() ? QPixmap() : it->first;
         }
 };
 static ScaledPixmapCache gs_backgroundCache;
@@ -826,8 +798,10 @@ void TerminalDisplay::setBackgroundImage(const QString& backgroundImage)
         return;
     gs_backgroundCache.detach(this, _backgroundImage);
     _backgroundImage = backgroundImage;
-    _backgroundImageSize = gs_backgroundCache.attach(this, _backgroundImage);
-    setAttribute(Qt::WA_OpaquePaintEvent, _backgroundImageSize.isEmpty());
+    const bool haveImage = gs_backgroundCache.attach(this, _backgroundImage);
+    if (!haveImage)
+        _backgroundImage = QString();
+    setAttribute(Qt::WA_OpaquePaintEvent, !haveImage);
 }
 
 void TerminalDisplay::setBackgroundMode(BackgroundMode mode)
@@ -1528,14 +1502,12 @@ void TerminalDisplay::leaveEvent(QEvent* event)
   QWidget::leaveEvent(event);
 }
 
-#include <QElapsedTimer>
-
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
 {
   QPainter paint(this);
   QRect cr = contentsRect();
 
-  if (!_backgroundImageSize.isEmpty())
+  if (!_backgroundImage.isEmpty())
   {
     QColor background = _colorTable[DEFAULT_BACK_COLOR].color;
     if (_opacity < static_cast<qreal>(1))
@@ -1554,7 +1526,8 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     paint.save();
     paint.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-    QRect bgr(QPoint(0,0), _backgroundImageSize);
+    QPixmap pix = gs_backgroundCache.pixmap(_backgroundImage);
+    QRect bgr = pix.rect();
     switch (_backgroundMode)
     {
         case Stretch:
@@ -1592,25 +1565,15 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
         case Center:
         { // center the image without scaling/zooming
             bgr.moveCenter(cr.center());
-            bgr.setSize(QSize()); // invalidate for unscaled
             break;
         }
         case None:
             [[fallthrough]];
         default:
-            bgr.setSize(QSize()); // invalidate for unscaled
             break;
     }
 
-//    QElapsedTimer profiler;
-//    profiler.start();
-      qreal ratio = window() ? window()->devicePixelRatio() : 1.0;
-      QPixmap pix = gs_backgroundCache.scaled(this, _backgroundImage, bgr.size() * ratio);
-      pix.setDevicePixelRatio(ratio);
-//    for (int i=0;i<1000;++i)
-      paint.drawPixmap(bgr.topLeft(), pix);
-//    paint.drawPixmap(bgr, pix, pix.rect());
-//    qDebug() << profiler.elapsed() << cr;
+    paint.drawPixmap(bgr, pix, pix.rect());
     paint.restore();
   }
 
