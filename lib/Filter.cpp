@@ -660,7 +660,12 @@ QList<QAction*> UrlFilter::HotSpot::actions()
 
 HyperlinkFilter::HyperlinkFilter() = default;
 
-HyperlinkFilter::~HyperlinkFilter() = default;
+HyperlinkFilter::~HyperlinkFilter()
+{
+    clear(); // base d-tor must not delete hotspots still owned via _oldHotspotList
+    qDeleteAll(_oldHotspotList);
+    _oldHotspotList.clear();
+}
 
 void HyperlinkFilter::setEnabled(bool enabled)
 {
@@ -681,57 +686,93 @@ void HyperlinkFilter::setImage(const Character* image, int lines, int columns,
     _lineProperties = lineProperties;
 }
 
+void HyperlinkFilter::reset()
+{
+    // Clear hotspots without deleting them; otherwise Open/Copy actions parented to the
+    // hotspot's FilterObject are destroyed on every refresh.
+    clear();
+}
+
+void HyperlinkFilter::addOrReuseHotSpot(int startLine, int startColumn, int endLine, int endColumn,
+                                        const QString& url)
+{
+    for (HotSpot* hs : std::as_const(_oldHotspotList)) {
+        if (hs->startLine() == startLine &&
+            hs->endLine() == endLine &&
+            hs->startColumn() == startColumn &&
+            hs->endColumn() == endColumn) {
+            hs->setUrl(url);
+            addHotSpot(hs);
+            return;
+        }
+    }
+
+    auto* spot = new HotSpot(startLine, startColumn, endLine, endColumn, url);
+    connect(spot->getUrlObject(), &FilterObject::activated,
+            this, &HyperlinkFilter::activated);
+    addHotSpot(spot);
+}
+
 void HyperlinkFilter::process()
 {
-    if (!_enabled || !_image || _lines <= 0 || _columns <= 0)
-        return;
+    if (_enabled && _image && _lines > 0 && _columns > 0) {
+        for (int line = 0; line < _lines; ) {
+            int col = 0;
+            while (col < _columns) {
+                const quint16 id = _image[line * _columns + col].hyperlinkId;
+                if (id == 0) {
+                    ++col;
+                    continue;
+                }
 
-    for (int line = 0; line < _lines; ) {
-        int col = 0;
-        while (col < _columns) {
-            const quint16 id = _image[line * _columns + col].hyperlinkId;
-            if (id == 0) {
-                ++col;
-                continue;
+                const int startLine = line;
+                const int startCol = col;
+                while (col < _columns && _image[line * _columns + col].hyperlinkId == id)
+                    ++col;
+
+                int endLine = line;
+                // Exclusive end column (one past the last linked cell), same convention as UrlFilter.
+                int endCol = col;
+
+                // Merge with following wrapped lines that continue the same link id
+                int mergeLine = line;
+                while (mergeLine + 1 < _lines
+                       && (_lineProperties.value(mergeLine, LINE_DEFAULT) & LINE_WRAPPED)
+                       && _image[(mergeLine + 1) * _columns].hyperlinkId == id) {
+                    ++mergeLine;
+                    int c = 0;
+                    while (c < _columns && _image[mergeLine * _columns + c].hyperlinkId == id)
+                        ++c;
+                    endLine = mergeLine;
+                    endCol = c;
+                }
+
+                const QString href = HyperlinkTable::instance.href(id);
+                if (!href.isEmpty() && endCol > startCol)
+                    addOrReuseHotSpot(startLine, startCol, endLine, endCol, href);
+
+                if (endLine > line) {
+                    // Skip the merged lines; continue scanning after the run on the last line
+                    line = endLine;
+                    col = endCol;
+                }
             }
-
-            const int startLine = line;
-            const int startCol = col;
-            while (col < _columns && _image[line * _columns + col].hyperlinkId == id)
-                ++col;
-
-            int endLine = line;
-            // Exclusive end column (one past the last linked cell), same convention as UrlFilter.
-            int endCol = col;
-
-            // Merge with following wrapped lines that continue the same link id
-            int mergeLine = line;
-            while (mergeLine + 1 < _lines
-                   && (_lineProperties.value(mergeLine, LINE_DEFAULT) & LINE_WRAPPED)
-                   && _image[(mergeLine + 1) * _columns].hyperlinkId == id) {
-                ++mergeLine;
-                int c = 0;
-                while (c < _columns && _image[mergeLine * _columns + c].hyperlinkId == id)
-                    ++c;
-                endLine = mergeLine;
-                endCol = c;
-            }
-
-            const QString href = HyperlinkTable::instance.href(id);
-            if (!href.isEmpty() && endCol > startCol) {
-                auto* spot = new HotSpot(startLine, startCol, endLine, endCol, href);
-                connect(spot->getUrlObject(), &FilterObject::activated,
-                        this, &HyperlinkFilter::activated);
-                addHotSpot(spot);
-            }
-
-            if (endLine > line) {
-                // Skip the merged lines; continue scanning after the run on the last line
-                line = endLine;
-                col = endCol;
-            }
+            ++line;
         }
-        ++line;
+    }
+
+    // Delete invalid old hotspots if any; keep still-valid ones (and their actions).
+    const auto hotspotList = hotSpots();
+    for (Filter::HotSpot* hs : hotspotList) {
+        if (auto* linkHs = dynamic_cast<HotSpot*>(hs))
+            _oldHotspotList.removeAll(linkHs);
+    }
+    qDeleteAll(_oldHotspotList);
+    _oldHotspotList.clear();
+
+    for (Filter::HotSpot* hs : hotspotList) {
+        if (auto* linkHs = dynamic_cast<HotSpot*>(hs))
+            _oldHotspotList << linkHs;
     }
 
     _image = nullptr;
@@ -759,6 +800,11 @@ FilterObject* HyperlinkFilter::HotSpot::getUrlObject() const
 QString HyperlinkFilter::HotSpot::url() const
 {
     return _url;
+}
+
+void HyperlinkFilter::HotSpot::setUrl(const QString& url)
+{
+    _url = url;
 }
 
 QString HyperlinkFilter::HotSpot::tooltip() const

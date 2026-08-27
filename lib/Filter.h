@@ -335,6 +335,7 @@ public:
 
         FilterObject* getUrlObject() const;
         QString url() const;
+        void setUrl(const QString& url);
 
         QList<QAction*> actions() override;
         void activate(const QString& action = QString()) override;
@@ -363,16 +364,23 @@ public:
                   const QVector<LineProperty>& lineProperties);
 
     void process() override;
+    void reset() override;
 
 signals:
     void activated(const QUrl& url, bool fromContextMenu);
 
 private:
+    void addOrReuseHotSpot(int startLine, int startColumn, int endLine, int endColumn,
+                           const QString& url);
+
     const Character* _image = nullptr;
     int _lines = 0;
     int _columns = 0;
     QVector<LineProperty> _lineProperties;
     bool _enabled = true;
+    // Kept across reset()/process() so Open/Copy actions are not destroyed on refresh
+    // (same approach as UrlFilter).
+    QList<HotSpot*> _oldHotspotList;
 };
 
 class QTERMWIDGET_NO_EXPORT FilterObject : public QObject
