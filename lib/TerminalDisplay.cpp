@@ -147,6 +147,86 @@ inline int TerminalDisplay::loc(int x, int y) const
 static QPoint gs_deadSpot(-1,-1);
 static QPoint gs_futureDeadSpot;
 std::shared_ptr<QTimer> TerminalDisplay::_hideMouseTimer;
+typedef QPair<QPixmap,QList<void*>> SharedPixmap;
+class ScaledPixmapCache : public QMap<QString,SharedPixmap>
+{
+    public:
+        QSize attach(void *hook, QString imageFile)
+        {
+            ScaledPixmapCache::iterator it = find(imageFile);
+            if (it == end())
+            {
+                QPixmap pix;
+                if (!pix.load(imageFile))
+                    return QSize(); // bogus image path, stupid user
+                it = insert(imageFile, SharedPixmap(pix, QList<void*>() << hook));
+                return pix.size();
+            }
+            if (!it->second.contains(hook))
+                it->second << hook;
+            return it->first.size();
+        }
+        bool detach(void *hook, QString imageFile)
+        {
+            ScaledPixmapCache::iterator it = find(imageFile);
+            if (it == end() || !it->second.contains(hook))
+                return false;
+            it->second.removeAll(hook);
+            if (it->second.isEmpty())
+                erase(it);
+            return true;
+        }
+        void detach(void *hook, bool onlyScales = false)
+        {
+            ScaledPixmapCache::iterator it = begin();
+            while (it != end())
+            {
+                if (onlyScales && !it.key().startsWith(QStringLiteral(":$:")))
+                {
+                    ++it;
+                    continue;
+                }
+                it->second.removeAll(hook);
+                if (it->second.isEmpty())
+                    it = erase(it);
+                else
+                    ++it;
+            }
+        }
+        QPixmap scaled(void *hook, QString imageFile, QSize sz = QSize())
+        {
+            if (!sz.isValid())
+            {   // return unscaled base
+                detach(hook, true);
+                ScaledPixmapCache::const_iterator it = constFind(imageFile);
+                return it == constEnd() ? QPixmap() : it->first;
+            }
+            const QString key = QStringLiteral(":$:%1:%2:%3").arg(sz.width()).arg(sz.height()).arg(imageFile);
+            ScaledPixmapCache::iterator it = find(key);
+            if (it != end())
+            {
+                if (!it->second.contains(hook))
+                {
+                    detach(hook, true); // invalidates iterator
+                    it = find(key);
+                    it->second << hook;
+                }
+                return it->first;
+            }
+            QPixmap base = scaled(hook, imageFile, QSize());
+            if (base.isNull())
+            {
+                qDebug() << "Scaled " << imageFile << " requested, but was not attached!";
+                return base;
+            }
+            if (base.size() == sz)
+                return base; //yay, free scale
+            base = base.scaled(sz, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            insert(key, SharedPixmap(base, QList<void*>() << hook));
+            return base;
+        }
+};
+static ScaledPixmapCache gs_backgroundCache;
 
 ScreenWindow* TerminalDisplay::screenWindow() const
 {
@@ -468,6 +548,7 @@ TerminalDisplay::TerminalDisplay(QWidget *parent)
 
 TerminalDisplay::~TerminalDisplay()
 {
+  gs_backgroundCache.detach(this);
   disconnect(_blinkTimer);
   disconnect(_blinkCursorTimer);
   if (_hideMouseTimer)
@@ -741,16 +822,12 @@ void TerminalDisplay::setOpacity(qreal opacity)
 
 void TerminalDisplay::setBackgroundImage(const QString& backgroundImage)
 {
-    if (!backgroundImage.isEmpty())
-    {
-        _backgroundImage.load(backgroundImage);
-        setAttribute(Qt::WA_OpaquePaintEvent, false);
-    }
-    else
-    {
-        _backgroundImage = QPixmap();
-        setAttribute(Qt::WA_OpaquePaintEvent, true);
-    }
+    if (_backgroundImage == backgroundImage)
+        return;
+    gs_backgroundCache.detach(this, _backgroundImage);
+    _backgroundImage = backgroundImage;
+    _backgroundImageSize = gs_backgroundCache.attach(this, _backgroundImage);
+    setAttribute(Qt::WA_OpaquePaintEvent, _backgroundImageSize.isEmpty());
 }
 
 void TerminalDisplay::setBackgroundMode(BackgroundMode mode)
@@ -765,7 +842,7 @@ void TerminalDisplay::drawBackground(QPainter& painter, const QRect& rect, const
         // left to the widget style for a consistent look.
         if ( useOpacitySetting )
         {
-            if (_backgroundImage.isNull()) {
+            if (testAttribute(Qt::WA_OpaquePaintEvent)) {
                 QColor color(backgroundColor);
                 color.setAlphaF(_opacity);
 
@@ -1451,12 +1528,14 @@ void TerminalDisplay::leaveEvent(QEvent* event)
   QWidget::leaveEvent(event);
 }
 
+#include <QElapsedTimer>
+
 void TerminalDisplay::paintEvent( QPaintEvent* pe )
 {
   QPainter paint(this);
   QRect cr = contentsRect();
 
-  if ( !_backgroundImage.isNull() )
+  if (!_backgroundImageSize.isEmpty())
   {
     QColor background = _colorTable[DEFAULT_BACK_COLOR].color;
     if (_opacity < static_cast<qreal>(1))
@@ -1475,83 +1554,63 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     paint.save();
     paint.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
-    if (_backgroundMode == Stretch)
-    { // scale the image without keeping its proportions to fill the screen
-        paint.drawPixmap(cr, _backgroundImage, _backgroundImage.rect());
-    }
-    else if (_backgroundMode == Zoom)
-    { // zoom in/out the image to fit it
-        QRect r = _backgroundImage.rect();
-        qreal wRatio = static_cast<qreal>(cr.width()) / r.width();
-        qreal hRatio = static_cast<qreal>(cr.height()) / r.height();
-        if (wRatio > hRatio)
-        {
-            r.setWidth(qRound(r.width() * hRatio));
-            r.setHeight(cr.height());
-        }
-        else
-        {
-            r.setHeight(qRound(r.height() * wRatio));
-            r.setWidth(cr.width());
-        }
-        r.moveCenter(cr.center());
-        paint.drawPixmap(r, _backgroundImage, _backgroundImage.rect());
-    }
-    else if (_backgroundMode == Fit)
-    { // if the image is bigger than the terminal, zoom it out to fit it
-        QRect r = _backgroundImage.rect();
-        qreal wRatio = static_cast<qreal>(cr.width()) / r.width();
-        qreal hRatio = static_cast<qreal>(cr.height()) / r.height();
-        if (r.width() > cr.width())
-        {
-            if (wRatio <= hRatio)
-            {
-                r.setHeight(qRound(r.height() * wRatio));
-                r.setWidth(cr.width());
-            }
-            else
-            {
-                r.setWidth(qRound(r.width() * hRatio));
-                r.setHeight(cr.height());
-            }
-        }
-        else if (r.height() > cr.height())
-        {
-            r.setWidth(qRound(r.width() * hRatio));
-            r.setHeight(cr.height());
-        }
-        r.moveCenter(cr.center());
-        paint.drawPixmap(r, _backgroundImage, _backgroundImage.rect());
-    }
-    else if (_backgroundMode == Center)
-    { // center the image without scaling/zooming
-        QRect r = _backgroundImage.rect();
-        r.moveCenter(cr.center());
-        paint.drawPixmap(r.topLeft(), _backgroundImage);
-    }
-    else if (_backgroundMode == Fill)
-    { // zoom in/out the image to fill all empty space
-        QRect r = _backgroundImage.rect();
-        qreal wRatio = static_cast<qreal>(cr.width()) / r.width();
-        qreal hRatio = static_cast<qreal>(cr.height()) / r.height();
-        if (wRatio < hRatio)
-        {
-            r.setWidth(qRound(r.width() * hRatio));
-            r.setHeight(cr.height());
-        }
-        else
-        {
-            r.setHeight(qRound(r.height() * wRatio));
-            r.setWidth(cr.width());
-        }
-        r.moveCenter(cr.center());
-        paint.drawPixmap(r, _backgroundImage, _backgroundImage.rect());
-    }
-    else //if (_backgroundMode == None)
+    QRect bgr(QPoint(0,0), _backgroundImageSize);
+    switch (_backgroundMode)
     {
-        paint.drawPixmap(0, 0, _backgroundImage);
+        case Stretch:
+        { // scale the image without keeping its proportions to fill the screen
+            bgr.setSize(cr.size());
+            break;
+        }
+        case Zoom:
+            // zoom in/out the image to fit it
+            [[fallthrough]];
+        case Fill:
+            // zoom in/out the image to fill all empty space
+            [[fallthrough]];
+        case Fit:
+        { // if the image is bigger than the terminal, zoom it out to fit it
+            if (_backgroundMode != Fit || bgr.width() > cr.width() || bgr.height() > cr.height())
+            {
+                qreal wRatio = static_cast<qreal>(cr.width()) / bgr.width();
+                qreal hRatio = static_cast<qreal>(cr.height()) / bgr.height();
+                if ((_backgroundMode != Fill && wRatio > hRatio) ||
+                    (_backgroundMode == Fill && wRatio < hRatio))
+                {
+                    bgr.setWidth(qRound(bgr.width() * hRatio));
+                    bgr.setHeight(cr.height());
+                }
+                else
+                {
+                    bgr.setHeight(qRound(bgr.height() * wRatio));
+                    bgr.setWidth(cr.width());
+                }
+            }
+            bgr.moveCenter(cr.center());
+            break;
+        }
+        case Center:
+        { // center the image without scaling/zooming
+            bgr.moveCenter(cr.center());
+            bgr.setSize(QSize()); // invalidate for unscaled
+            break;
+        }
+        case None:
+            [[fallthrough]];
+        default:
+            bgr.setSize(QSize()); // invalidate for unscaled
+            break;
     }
 
+//    QElapsedTimer profiler;
+//    profiler.start();
+      qreal ratio = window() ? window()->devicePixelRatio() : 1.0;
+      QPixmap pix = gs_backgroundCache.scaled(this, _backgroundImage, bgr.size() * ratio);
+      pix.setDevicePixelRatio(ratio);
+//    for (int i=0;i<1000;++i)
+      paint.drawPixmap(bgr.topLeft(), pix);
+//    paint.drawPixmap(bgr, pix, pix.rect());
+//    qDebug() << profiler.elapsed() << cr;
     paint.restore();
   }
 
