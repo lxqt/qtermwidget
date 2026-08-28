@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1312"/>
+        <location filename="../TerminalDisplay.cpp" line="1337"/>
         <source>Size: XXX x XXX</source>
         <translation>Veličina: XXX × XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1324"/>
+        <location filename="../TerminalDisplay.cpp" line="1349"/>
         <source>Size: %1 x %2</source>
         <translation>Veličina: %1 × %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2989"/>
+        <location filename="../TerminalDisplay.cpp" line="3177"/>
         <source>Paste multiline text</source>
         <translation>Umetni višeredan tekst</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2990"/>
+        <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Stvarno želiš umetnuti ovaj tekst?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3462"/>
+        <location filename="../TerminalDisplay.cpp" line="3676"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rezultat je &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;obustavljen&lt;/a&gt; pritiskom Ctrl+S. Pritisni &lt;b&gt;Ctrl+Q&lt;/b&gt; za nastavak.&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1150"/>
+        <location filename="../Vt102Emulation.cpp" line="1297"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Nema interpretera tipkovnice. Nedostaju podaci za pretvaranje tipki u znakove koji se šalju u terminal.</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2996"/>
+        <location filename="../TerminalDisplay.cpp" line="3184"/>
         <source>Show Details...</source>
         <translation>Prikaži detalje …</translation>
     </message>
@@ -82,22 +82,24 @@
         <translation>Dostupna shema boja</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="603"/>
+        <location filename="../Filter.cpp" line="635"/>
+        <location filename="../Filter.cpp" line="837"/>
         <source>Open Link</source>
         <translation>Otvori poveznicu</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="604"/>
+        <location filename="../Filter.cpp" line="636"/>
+        <location filename="../Filter.cpp" line="838"/>
         <source>Copy Link Address</source>
         <translation>Otvori adresu poveznice</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="608"/>
+        <location filename="../Filter.cpp" line="640"/>
         <source>Send Email To...</source>
         <translation>Pošalji e-mail na …</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="609"/>
+        <location filename="../Filter.cpp" line="641"/>
         <source>Copy Email Address</source>
         <translation>Kopiraj e-adresu</translation>
     </message>
@@ -105,12 +107,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="481"/>
+        <location filename="../qtermwidget.cpp" line="486"/>
         <source>Color Scheme Error</source>
         <translation>Greška u shemi boja</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="482"/>
+        <location filename="../qtermwidget.cpp" line="487"/>
         <source>Cannot load color scheme: %1</source>
         <translation>Nije moguće učitati shemu boja: %1</translation>
     </message>

@@ -27,27 +27,27 @@
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1312"/>
+        <location filename="../TerminalDisplay.cpp" line="1337"/>
         <source>Size: XXX x XXX</source>
         <translation>大小： XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1324"/>
+        <location filename="../TerminalDisplay.cpp" line="1349"/>
         <source>Size: %1 x %2</source>
         <translation>大小： %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2989"/>
+        <location filename="../TerminalDisplay.cpp" line="3177"/>
         <source>Paste multiline text</source>
         <translation>貼上多行文字</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2990"/>
+        <location filename="../TerminalDisplay.cpp" line="3178"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>確定要貼上這段文字嗎？</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3462"/>
+        <location filename="../TerminalDisplay.cpp" line="3676"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;按下 Ctrl+S 則輸出已經 &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暫停&lt;/a&gt; 。 按下 &lt;b&gt;Ctrl+Q&lt;/b&gt; 鍵重新繼續。&lt;/qt&gt;</translation>
     </message>
@@ -55,7 +55,7 @@
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1150"/>
+        <location filename="../Vt102Emulation.cpp" line="1297"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>沒有可用的鍵碼轉換表。.  用來將按鍵轉換成終端機字元的資訊遺失。</translation>
     </message>
@@ -63,7 +63,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="2996"/>
+        <location filename="../TerminalDisplay.cpp" line="3184"/>
         <source>Show Details...</source>
         <translation>顯示細節…</translation>
     </message>
@@ -82,22 +82,24 @@
         <translation>可以取用的配色方案</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="603"/>
+        <location filename="../Filter.cpp" line="635"/>
+        <location filename="../Filter.cpp" line="837"/>
         <source>Open Link</source>
         <translation>開啟連結</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="604"/>
+        <location filename="../Filter.cpp" line="636"/>
+        <location filename="../Filter.cpp" line="838"/>
         <source>Copy Link Address</source>
         <translation>複製連結網址</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="608"/>
+        <location filename="../Filter.cpp" line="640"/>
         <source>Send Email To...</source>
         <translation>傳送電子郵件至…</translation>
     </message>
     <message>
-        <location filename="../Filter.cpp" line="609"/>
+        <location filename="../Filter.cpp" line="641"/>
         <source>Copy Email Address</source>
         <translation>複製電子信箱位址</translation>
     </message>
@@ -105,12 +107,12 @@
 <context>
     <name>QTermWidget</name>
     <message>
-        <location filename="../qtermwidget.cpp" line="481"/>
+        <location filename="../qtermwidget.cpp" line="486"/>
         <source>Color Scheme Error</source>
         <translation>配色方案錯誤</translation>
     </message>
     <message>
-        <location filename="../qtermwidget.cpp" line="482"/>
+        <location filename="../qtermwidget.cpp" line="487"/>
         <source>Cannot load color scheme: %1</source>
         <translation>無法載入配色方案： %1</translation>
     </message>
