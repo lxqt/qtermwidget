@@ -1963,8 +1963,12 @@ QRect TerminalDisplay::imageToWidget(const QRect& imageArea) const
 
 void TerminalDisplay::updateCursor()
 {
-  QRect cursorRect = imageToWidget( QRect(cursorPosition(),QSize(1,1)) );
-  update(cursorRect);
+    QPoint cPos = cursorPosition();
+    int cWidth = 1;
+    if (_image && _image[ qMin(loc(cPos.x(),cPos.y())+1,_imageSize) ].character == 0)
+        cWidth = 2;
+    QRect cursorRect = imageToWidget( QRect(cPos,QSize(cWidth,1)) );
+    update(cursorRect);
 }
 
 void TerminalDisplay::blinkCursorEvent()
