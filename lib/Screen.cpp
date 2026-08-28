@@ -1194,7 +1194,8 @@ void Screen::setHyperlinkFromOsc(const QString& params, const QString& uri)
                                 || scheme == QLatin1String("https")
                                 || scheme == QLatin1String("file")
                                 || scheme == QLatin1String("mailto")
-                                || scheme == QLatin1String("ftp"));
+                                || scheme == QLatin1String("ftp")
+                                || scheme == QLatin1String("man"));
     if (!url.isValid() || !allowedScheme) {
         currentHyperlinkId = 0;
         return;
