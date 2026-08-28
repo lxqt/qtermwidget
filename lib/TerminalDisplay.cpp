@@ -2279,6 +2279,8 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
   Filter::HotSpot* spot = _filterChain->hotSpotAt(charLine,charColumn);
   if ( spot && spot->type() == Filter::HotSpot::Link)
   {
+    setCursor( Qt::PointingHandCursor );
+
     QRegion previousHotspotArea = _mouseOverHotspotArea;
     _mouseOverHotspotArea = QRegion();
     QRect r;
@@ -2336,14 +2338,16 @@ void TerminalDisplay::mouseMoveEvent(QMouseEvent* ev)
         }
     }
   }
-  else if ( !_mouseOverHotspotArea.isEmpty() )
+  else
   {
+    setCursor( _mouseMarks ? Qt::IBeamCursor : Qt::ArrowCursor );
+    if ( !_mouseOverHotspotArea.isEmpty() )
+    {
         update( _mouseOverHotspotArea );
         // set hotspot area to an invalid rectangle
         _mouseOverHotspotArea = QRegion();
-        clearLinkTooltip();
-  } else {
-        clearLinkTooltip();
+    }
+    clearLinkTooltip();
   }
 
   // for auto-hiding the cursor, we need mouseTracking
