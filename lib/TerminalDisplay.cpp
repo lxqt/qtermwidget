@@ -2794,6 +2794,10 @@ QPoint TerminalDisplay::findWordStart(const QPoint &pnt)
     }
 
     int imgLoc = loc(x, imgLine);
+    if (image[imgLoc].character == 0 && x > 0) { // second half of double width char?!
+        --imgLoc; // handle the main one instead
+        --x;
+    }
     const QChar selClass = charClass(image[imgLoc]);
 
     while (true) {
@@ -2804,7 +2808,7 @@ QPoint TerminalDisplay::findWordStart(const QPoint &pnt)
             }
             if (x > 0) {
                 // has previous char on this line
-                if (charClass(image[imgLoc - 1]) == selClass) {
+                if (image[imgLoc - 1].character == 0 || charClass(image[imgLoc - 1]) == selClass) {
                     continue;
                 }
                 goto out;
@@ -2878,12 +2882,18 @@ QPoint TerminalDisplay::findWordEnd(const QPoint &pnt)
     }
 
     int imgLoc = loc(x, imgLine);
+    if (image[imgLoc].character == 0 && x > 0) { // second half of double width char?!
+        --imgLoc; // handle the main one instead
+        --x;
+    }
     const QChar selClass = charClass(image[imgLoc]);
 
     while (true) {
         const int lineCount = lineProperties.count();
         for (;; imgLoc++, x++) {
             if (x < maxX) {
+                if (image[imgLoc + 1].character == 0)
+                    continue;
                 if (charClass(image[imgLoc + 1]) == selClass &&
                     // A colon right before whitespace is never part of a word
                     !(image[imgLoc + 1].character == ':' &&
