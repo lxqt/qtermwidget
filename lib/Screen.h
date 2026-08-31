@@ -383,8 +383,16 @@ public:
      * @param size Size of @p dest in Characters
      * @param startLine Index of first line to copy
      * @param endLine Index of last line to copy
+     * @param cols optional width of the image, defaults to screen width
      */
-    void getImage( Character* dest , int size , int startLine , int endLine ) const;
+    void getImage( Character* dest , int size , int startLine , int endLine, int cols = -1) const;
+
+    /**
+     * Returns the width of the longest line between
+     * @param startLine Index of first line to count
+     * @param endLine Index of last line to count
+     */
+    int getColumnCeil(int startLine , int endLine) const;
 
     /**
      * Returns the additional attributes associated with lines in the image.
@@ -641,10 +649,10 @@ private:
                        int endIndex, bool preserveLineBreaks = true) const;
     // copies 'count' lines from the screen buffer into 'dest',
     // starting from 'startLine', where 0 is the first line in the screen buffer
-    void copyFromScreen(Character* dest, int startLine, int count) const;
+    void copyFromScreen(Character* dest, int startLine, int count, int cols) const;
     // copies 'count' lines from the history buffer into 'dest',
     // starting from 'startLine', where 0 is the first line in the history
-    void copyFromHistory(Character* dest, int startLine, int count) const;
+    void copyFromHistory(Character* dest, int startLine, int count, int cols) const;
 
 
     // screen image ----------------
@@ -720,6 +728,7 @@ private:
     unsigned short lastDrawnChar;
 
     static Character defaultChar;
+    static Character nullChar;
 };
 
 }

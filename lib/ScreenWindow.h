@@ -83,6 +83,17 @@ public:
     Character* getImage();
 
     /**
+     * Returns the image of characters which are currently visible through this window
+     * onto the screen if the window had infinite width
+     *
+     * The @p uncutColumns parameter will be updated to report the actual width of the image
+     *
+     * The returned buffer is managed by the ScreenWindow instance and does not need to be
+     * deleted by the caller.
+     */
+    Character* getUncutImage(int &uncutColumns);
+
+    /**
      * Returns the line attributes associated with the lines of characters which
      * are currently visible through this window
      */
@@ -246,12 +257,15 @@ signals:
 
 private:
     int endWindowLine() const;
-    void fillUnusedArea();
+    void fillUnusedArea(Character *end, int cols);
 
     Screen* _screen; // see setScreen() , screen()
     Character* _windowBuffer;
     int _windowBufferSize;
     bool _bufferNeedsUpdate;
+    Character* _uncutBuffer;
+    int _uncutBufferSize;
+    int _uncutColumns;
 
     int  _windowLines;
     int  _currentLine; // see scrollTo() , currentLine()
