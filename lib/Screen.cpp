@@ -1409,7 +1409,8 @@ void Screen::writeToStream(TerminalCharacterDecoder* decoder,
                 count,
                 decoder,
                 appendNewLine,
-                preserveLineBreaks );
+                preserveLineBreaks,
+                !(y == bottom || blockSelectionMode));
 
         // if the selection goes beyond the end of the last line then
         // append a new line character.
@@ -1430,7 +1431,8 @@ int Screen::copyLineToStream(int line ,
         int count,
         TerminalCharacterDecoder* decoder,
         bool appendNewLine,
-        bool preserveLineBreaks) const
+        bool preserveLineBreaks,
+        bool fullLine) const
 {
     //buffer to hold characters for decoding
     //the buffer is static to avoid initialising every
@@ -1475,15 +1477,15 @@ int Screen::copyLineToStream(int line ,
     }
     else
     {
-        if ( count == -1 )
-            count = columns - start;
-
-        Q_ASSERT( count >= 0 );
-
         const int screenLine = line-history->getLines();
 
         Character* data = screenLines[screenLine].data();
         int length = screenLines[screenLine].count();
+
+        if ( count == -1 )
+            count = (fullLine ? length : columns) - start;
+
+        Q_ASSERT( count >= 0 );
 
         //retrieve line from screen image
         for (int i=start;i < qMin(start+count,length);i++)
