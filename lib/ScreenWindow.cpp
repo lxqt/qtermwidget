@@ -34,6 +34,9 @@ ScreenWindow::ScreenWindow(QObject* parent)
     , _windowBuffer(nullptr)
     , _windowBufferSize(0)
     , _bufferNeedsUpdate(true)
+    , _uncutBuffer(nullptr)
+    , _uncutBufferSize(0)
+    , _uncutColumns(0)
     , _windowLines(1)
     , _currentLine(0)
     , _trackOutput(true)
@@ -43,6 +46,7 @@ ScreenWindow::ScreenWindow(QObject* parent)
 ScreenWindow::~ScreenWindow()
 {
     delete[] _windowBuffer;
+    delete[] _uncutBuffer;
 }
 void ScreenWindow::setScreen(Screen* screen)
 {
@@ -54,6 +58,35 @@ void ScreenWindow::setScreen(Screen* screen)
 Screen* ScreenWindow::screen() const
 {
     return _screen;
+}
+
+Character* ScreenWindow::getUncutImage(int &uncutColumns)
+{
+    int cols = windowColumns();
+    int lines = windowLines();
+
+    _uncutColumns = _screen->getColumnCeil(currentLine(),endWindowLine());
+    if (_uncutColumns > cols)
+    {
+        int size = lines*_uncutColumns;
+        uncutColumns = _uncutColumns;
+        if (_uncutBufferSize != size)
+        {
+            delete[] _uncutBuffer;
+            _uncutBuffer = new Character[size];
+        }
+        _screen->getImage(_uncutBuffer, size, currentLine(), endWindowLine(), _uncutColumns);
+        // the filters don't need this but maybe enable for later use elsewhere
+//        fillUnusedArea(_uncutBuffer + _uncutBufferSize, _uncutColumns);
+        return _uncutBuffer;
+    }
+
+    _uncutColumns = 0;
+    _uncutBufferSize = 0;
+    delete[] _uncutBuffer;
+    _uncutBuffer = nullptr;
+    uncutColumns = cols;
+    return getImage();
 }
 
 Character* ScreenWindow::getImage()
@@ -77,21 +110,21 @@ Character* ScreenWindow::getImage()
     // this window may look beyond the end of the screen, in which
     // case there will be an unused area which needs to be filled
     // with blank characters
-    fillUnusedArea();
+    fillUnusedArea(_windowBuffer + _windowBufferSize, windowColumns());
 
     _bufferNeedsUpdate = false;
     return _windowBuffer;
 }
 
-void ScreenWindow::fillUnusedArea()
+void ScreenWindow::fillUnusedArea(Character *end, int cols)
 {
     int screenEndLine = _screen->getHistLines() + _screen->getLines() - 1;
     int windowEndLine = currentLine() + windowLines() - 1;
 
     int unusedLines = windowEndLine - screenEndLine;
-    int charsToFill = unusedLines * windowColumns();
+    int charsToFill = unusedLines * cols;
 
-    Screen::fillWithDefaultChar(_windowBuffer + _windowBufferSize - charsToFill,charsToFill);
+    Screen::fillWithDefaultChar(end - charsToFill, charsToFill);
 }
 
 // return the index of the line at the end of this window, or if this window

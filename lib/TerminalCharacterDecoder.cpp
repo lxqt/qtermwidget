@@ -110,6 +110,11 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
 
     for (int i = 0; i < outputCount;)
     {
+        if (characters[i] == '\0')
+        {   // ignore non-printable padding
+            ++i;
+            continue;
+        }
         if (characters[i].rendition & RE_EXTENDED_CHAR)
         {
             ushort extendedCharLength = 0;
@@ -185,6 +190,9 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
 
     for (int i=0;i<count;i++)
     {
+        if (characters[i] == '\0')
+            continue; // ignore non-printable padding
+
         //check if appearance of character is different from previous char
         if ( characters[i].rendition != _lastRendition  ||
              characters[i].foregroundColor != _lastForeColor  ||
