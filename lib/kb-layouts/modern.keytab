@@ -7,7 +7,7 @@
 #
 # --------------------------------------------------------------
 
-keyboard "Default (XFree 4)"
+keyboard "Modern (XFree 4)"
 
 # --------------------------------------------------------------
 #
@@ -32,14 +32,14 @@ key Return-Shift+NewLine : "\r\n"
 
 key Return+Shift         : "\EOM"
 
-# Backspace and Delete codes are preserving CTRL-H.
+# Match konsole/VTE and "XTerm.backarrowKeyIsErase:true" behaviour:
 #
-# Backspace without CTRL sends '^H'; this matches XTerm default behaviour
-# BS, hex \x08, \b
-key Backspace -Control : "\b"
+# Backspace without CTRL sends '^?'
+key Backspace -Control : "\x7f"
 
-# Match xterm behaviour: Backspace sends '^?' when Control is pressed
-key Backspace +Control : "\x7f"
+# Backspace sends '^H' when Control is pressed
+# BS, hex \x08, \b
+key Backspace +Control : "\b"
 
 # Arrow keys in VT52 mode
 # shift up/down are reserved for scrolling.
