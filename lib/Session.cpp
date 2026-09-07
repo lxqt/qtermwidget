@@ -32,6 +32,8 @@
 #include <QApplication>
 #include <QDir>
 #include <QFile>
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QStringList>
 #include <QSysInfo>
 #include <QtDebug>
@@ -39,6 +41,7 @@
 
 #include "Pty.h"
 //#include "kptyprocess.h"
+#include "TerminalCharacterDecoder.h"
 #include "TerminalDisplay.h"
 #include "ShellCommand.h"
 #include "Vt102Emulation.h"
@@ -113,7 +116,7 @@ Session::Session(QObject* parent) :
     connect( _emulation,SIGNAL(useUtf8Request(bool)),_shellProcess,SLOT(setUtf8Mode(bool)) );
 
     connect( _shellProcess,SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(done(int,QProcess::ExitStatus)) );
-    // not in kprocess anymore connect( _shellProcess,SIGNAL(done(int)), this, SLOT(done(int)) );
+    connect( _shellProcess, &QProcess::errorOccurred, [=,this](QProcess::ProcessError) { done(-1, QProcess::CrashExit); });
 
     //setup timer for monitoring session activity
     _monitorTimer = new QTimer(this);
@@ -330,7 +333,8 @@ void Session::run()
                                       _addToUtmp);
 
     if (result < 0) {
-        qDebug() << "CRASHED! result: " << result;
+//        qDebug() << "CRASHED! result: " << result;
+        // don't run ::done() - QProcess will emit an error we're already handling generically
         return;
     }
 
@@ -646,31 +650,63 @@ QString Session::profileKey() const
 
 void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    // because of the nested event loop of the modal dialogs below and if this is coming from a process error,
+    //  there'd be a subsequent signal that leads us into a coredump
+    disconnect( _shellProcess,SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(done(int,QProcess::ExitStatus)) );
+
     if (!_autoClose) {
         _userTitle = QString::fromLatin1("This session is done. Finished");
         emit titleChanged();
         return;
     }
 
-    // message is not being used. But in the original kpty.cpp file
-    // (https://cgit.kde.org/kpty.git/) it's part of a notification.
-    // So, we make it translatable, hoping that in the future it will
-    // be used in some kind of notification.
-    QString message;
-    if (!_wantedClose || exitCode != 0) {
-
-        if (_shellProcess->exitStatus() == QProcess::NormalExit) {
-            message = tr("Session '%1' exited with code %2.").arg(_nameTitle).arg(exitCode);
-        } else {
-            message = tr("Session '%1' crashed.").arg(_nameTitle);
-        }
+    if (_wantedClose)
+    {
+        emit finished();
+        return;
     }
 
-    if ( !_wantedClose && exitStatus != QProcess::NormalExit )
+    // the client shell unexpectedly died or died with an error - warn the user and offer to save the history
+    QString message;
+    /// @todo, annoy translators who've kept this around pointlessly by incorporating _shellProcess->error()
+    if (exitCode != 0)
+        message = _shellProcess->exitStatus() == QProcess::NormalExit ?
+                  tr("Session '%1' exited with code %2.").arg(_nameTitle).arg(exitCode) :
+                  tr("Session '%1' crashed.").arg(_nameTitle);
+    else if (exitStatus != QProcess::NormalExit)
         message = tr("Session '%1' exited unexpectedly.").arg(_nameTitle);
-    else
-        emit finished();
-
+    if (!message.isEmpty())
+    {
+        message += tr("\nDo you want to save the scrollback buffer?");
+        QWidget *widget = nullptr;
+        while (QObject *o = parent())
+        {
+            if ((widget = qobject_cast<QWidget*>(o)))
+                break;
+            o = o->parent();
+        }
+        QMessageBox::StandardButton ret =
+                    QMessageBox::critical(widget, tr("The client crashed"), message,
+                                            QMessageBox::Save|QMessageBox::Discard);
+        if (ret == QMessageBox::Save)
+        {
+            const QString where = QFileDialog::getSaveFileName(widget, tr("Save history"));
+            if (!where.isEmpty())
+            {
+                QFile file(where);
+                if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+                {
+                    QTextStream stream(&file);
+                    PlainTextDecoder decoder;
+                    decoder.begin(&stream);
+                    _emulation->writeToStream(&decoder, 0, _emulation->lineCount());
+                    file.close();
+                }
+            }
+        }
+    }
+    // escape the current event cycle to avoid a coredump
+    QTimer::singleShot(0, [=,this]() { emit finished(); });
 }
 
 Emulation * Session::emulation() const
