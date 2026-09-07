@@ -68,7 +68,12 @@ namespace Konsole
         Zoom,
         Fit,
         Center,
-        Fill
+        Fill,
+        Tiled,
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
     };
 
 extern unsigned short vt100_graphics[32];
@@ -856,7 +861,7 @@ private:
 
     qreal _opacity;
 
-    QPixmap _backgroundImage;
+    QString _backgroundImage;
     BackgroundMode _backgroundMode;
 
     // list of filters currently applied to the display.  used for links and
