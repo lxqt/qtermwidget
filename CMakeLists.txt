@@ -59,9 +59,29 @@ set(QTERMWIDGET_LIBRARY_NAME qtermwidget6)
 
 
 # main library
+if(WIN32)
+    set(WIN_SRCS
+        lib/ptyqt/conptyprocess.cpp
+        lib/ptyqt/iptyprocess.cpp
+    )
+    set(WIN_HDRS
+        lib/ptyqt/conptyprocess.h
+        lib/ptyqt/iptyprocess.h
+    )
+else()
+    set(UNIX_SRCS
+        lib/kpty.cpp
+        lib/kptydevice.cpp
+        lib/kptyprocess.cpp
+        lib/BlockArray.cpp
+    )
+    set(UNIX_HDRS
+        lib/kptydevice.h
+        lib/kptyprocess.h
+    )
+endif()
 
 set(SRCS
-    lib/BlockArray.cpp
     lib/ColorScheme.cpp
     lib/Emulation.cpp
     lib/Filter.cpp
@@ -71,9 +91,6 @@ set(SRCS
     lib/KeyboardTranslator.cpp
     lib/konsole_wcwidth.cpp
     lib/kprocess.cpp
-    lib/kpty.cpp
-    lib/kptydevice.cpp
-    lib/kptyprocess.cpp
     lib/Pty.cpp
     lib/qtermwidget.cpp
     lib/Screen.cpp
@@ -85,6 +102,8 @@ set(SRCS
     lib/TerminalDisplay.cpp
     lib/tools.cpp
     lib/Vt102Emulation.cpp
+    ${WIN_SRCS}
+    ${UNIX_SRCS}
 )
 
 # Only the Headers that need to be moc'd go here
@@ -93,8 +112,6 @@ set(HDRS
     lib/Filter.h
     lib/HistorySearch.h
     lib/kprocess.h
-    lib/kptydevice.h
-    lib/kptyprocess.h
     lib/Pty.h
     lib/qtermwidget.h
     lib/ScreenWindow.h
@@ -102,6 +119,8 @@ set(HDRS
     lib/Session.h
     lib/TerminalDisplay.h
     lib/Vt102Emulation.h
+    ${WIN_HDRS}
+    ${UNIX_HDRS}
 )
 
 set(UI

@@ -86,7 +86,11 @@ Session *TermWidgetImpl::createSession(QWidget* parent)
      */
     //session->setProgram("/bin/bash");
 
+#ifdef Q_OS_WIN
+    session->setProgram(QStringLiteral("C:\\WINDOWS\\system32\\cmd.exe"));
+#else
     session->setProgram(QString::fromLocal8Bit(qgetenv("SHELL")));
+#endif
 
 
 
@@ -234,6 +238,10 @@ int QTermWidget::getForegroundProcessId()
 
 void QTermWidget::changeDir(const QString & dir)
 {
+#ifdef Q_OS_WIN
+    qWarning() << "QTermWidget::changeDir is not supported on Windows";
+    return;
+#endif
     /*
        this is a very hackish way of trying to determine if the shell is in
        the foreground before attempting to change the directory.  It may not
@@ -296,13 +304,18 @@ void QTermWidget::init(int startnow)
     setLayout(m_layout);
 
     // translations
+    QStringList dirs;
+#ifndef Q_OS_WIN
     // First check $XDG_DATA_DIRS. This follows the implementation in libqtxdg
     QString d = QFile::decodeName(qgetenv("XDG_DATA_DIRS"));
-    QStringList dirs = d.split(QLatin1Char(':'), Qt::SkipEmptyParts);
+    dirs = d.split(QLatin1Char(':'), Qt::SkipEmptyParts);
     if (dirs.isEmpty()) {
         dirs.append(QString::fromLatin1("/usr/local/share"));
         dirs.append(QString::fromLatin1("/usr/share"));
     }
+#else
+    dirs.append(QCoreApplication::applicationDirPath() + QStringLiteral("/translations/"));
+#endif
     dirs.append(QFile::decodeName(TRANSLATIONS_DIR));
 
     m_translator = new QTranslator(this);

@@ -9,10 +9,12 @@
 
 #include <QString>
 
+#include <cwchar>
+
 #ifdef HAVE_UTF8PROC
 #include <utf8proc.h>
-#else
-#include <cwchar>
+#elif defined(WIN32)
+#include "wcwidth.c"
 #endif
 
 #include "konsole_wcwidth.h"
@@ -27,6 +29,8 @@ int konsole_wcwidth(wchar_t ucs)
         return 1;
     }
     return utf8proc_charwidth( ucs );
+#elif defined(WIN32)
+    return mk_wcwidth(ucs);
 #else
     return wcwidth( ucs );
 #endif

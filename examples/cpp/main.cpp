@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
     font.setFamily(QStringLiteral("Monaco"));
 #elif defined(Q_WS_QWS)
     font.setFamily(QStringLiteral("fixed"));
+#elif defined(Q_OS_WIN)
+    font.setFamily(QStringLiteral("Courier New"));
 #else
     font.setFamily(QStringLiteral("Monospace"));
 #endif
