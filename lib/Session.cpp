@@ -202,6 +202,13 @@ void Session::addView(TerminalDisplay * widget)
         connect( widget , SIGNAL(sendStringToEmu(const char *)) , _emulation ,
                  SLOT(sendString(const char *)) );
 
+        // connect focus events for DECSET 1004 focus reporting
+        // (sends \033[I on focus gain, \033[O on focus loss)
+        connect( widget , SIGNAL(termGetFocus()) , _emulation ,
+                 SLOT(focusGained()) );
+        connect( widget , SIGNAL(termLostFocus()) , _emulation ,
+                 SLOT(focusLost()) );
+
         // allow emulation to notify view when the foreground process
         // indicates whether or not it is interested in mouse signals
         connect( _emulation , SIGNAL(programUsesMouseChanged(bool)) , widget ,
