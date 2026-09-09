@@ -1525,13 +1525,21 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     paint.save();
     paint.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
+    if (_scrollBar->isVisibleTo(this) && _scrollBar->autoFillBackground())
+    {
+        if (_scrollbarLocation == QTermWidget::ScrollBarRight)
+            cr.setRight(_scrollBar->geometry().left());
+        else if (_scrollbarLocation == QTermWidget::ScrollBarLeft)
+            cr.setLeft(_scrollBar->geometry().right());
+    }
+
     QPixmap pix = gs_backgroundCache.pixmap(_backgroundImage);
     QRect bgr = pix.rect();
     switch (_backgroundMode)
     {
         case Stretch:
         { // scale the image without keeping its proportions to fill the screen
-            bgr.setSize(cr.size());
+            bgr = cr;
             break;
         }
         case Zoom:
@@ -1570,9 +1578,11 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
         case Tiled:
         {
             paint.setBrush(pix);
+            paint.setBrushOrigin(cr.topLeft());
             break;
         }
         case None:
+            bgr.moveTopLeft(cr.topLeft());
             [[fallthrough]];
         default:
             break;
@@ -1583,6 +1593,7 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
     else
         paint.drawPixmap(bgr, pix, pix.rect());
     paint.restore();
+    cr = contentsRect();
   }
 
   if(_drawTextTestFlag)
