@@ -217,6 +217,12 @@ public:
     int getPtySlaveFd() const override;
 
     /**
+     * Returns the pty name (usually under /dev/pts/)
+     * This can be used for external access via a device node.
+     */
+    QString getPtyName() const override;
+
+    /**
      * Sets the shape of the keyboard cursor.  This is the cursor drawn
      * at the position in the terminal where keyboard input will appear.
      */

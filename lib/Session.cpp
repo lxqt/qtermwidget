@@ -991,6 +991,10 @@ int Session::getPtySlaveFd() const
 {
     return ptySlaveFd;
 }
+QString Session::getPtyName() const
+{
+    return QString::fromLatin1(_shellProcess->pty()->ttyName());
+}
 
 SessionGroup::SessionGroup()
         : _masterMode(0)

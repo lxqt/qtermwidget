@@ -81,6 +81,7 @@ class QTermWidgetInterface {
    virtual void setSilenceTimeout(int seconds) = 0;
    virtual QList<QAction*> filterActions(const QPoint& position) = 0;
    virtual int getPtySlaveFd() const = 0;
+   virtual QString getPtyName() const = 0;
    virtual void setBlinkingCursor(bool blink) = 0;
    virtual void setBidiEnabled(bool enabled) = 0;
    virtual bool isBidiEnabled() = 0;
