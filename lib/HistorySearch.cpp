@@ -16,9 +16,7 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301  USA.
 */
-#include <QApplication>
 #include <QTextStream>
-#include <QDebug>
 
 #include "TerminalCharacterDecoder.h"
 #include "Emulation.h"
@@ -61,13 +59,12 @@ void HistorySearch::search() {
 }
 
 bool HistorySearch::search(int startColumn, int startLine, int endColumn, int endLine) {
-    //qDebug() << "search from" << startColumn << "," << startLine
-    //        <<  "to" << endColumn << "," << endLine;
+    if (endLine < startLine) {
+        return false;
+    }
 
     int linesRead = 0;
-    int linesToRead = endLine - startLine + 1;
-
-    //qDebug() << "linesToRead:" << linesToRead;
+    const int linesToRead = endLine - startLine + 1;
 
     // We read process history from (and including) startLine to (and including) endLine in
     // blocks of at most 10K lines so that we do not use unhealthy amounts of memory
@@ -85,57 +82,51 @@ bool HistorySearch::search(int startColumn, int startLine, int endColumn, int en
         int chunkEndLine = blockStartLine + blockSize - 1;
         m_emulation->writeToStream(&decoder, blockStartLine, chunkEndLine);
 
-        // We search between startColumn in the first line of the string and endColumn in the last
-        // line of the string. First we calculate the position (in the string) of endColumn in the
-        // last line of the string
-        int endPosition;
+        // Columns are only meaningful on chunk boundaries that include the corresponding lines.
+        const bool containsStartLine = blockStartLine == startLine;
+        const bool containsEndLine = chunkEndLine == endLine;
+        const int chunkStartColumn = containsStartLine ? startColumn : 0;
+
+        // We search between chunkStartColumn in the first line and chunkEndPosition in the last line.
+        int chunkEndPosition = string.size();
 
         // The String that Emulator.writeToStream produces has a newline at the end, and so ends with an
         // empty line - we ignore that.
         int numberOfLinesInString = decoder.linePositions().size() - 1;
-        if (numberOfLinesInString > 0 && endColumn > -1 )
+        if (numberOfLinesInString > 0 && containsEndLine && endColumn > -1 )
         {
-            endPosition = decoder.linePositions().at(numberOfLinesInString - 1) + endColumn;
-        }
-        else
-        {
-            endPosition = string.size();
+            const int lastLineStart = decoder.linePositions().at(numberOfLinesInString - 1);
+            const int lineAfterLast = decoder.linePositions().at(numberOfLinesInString);
+            chunkEndPosition = qBound(lastLineStart, lastLineStart + endColumn, lineAfterLast);
         }
 
-        // So now we can log for m_regExp in the string between startColumn and endPosition
+        // Search in the chunk with local bounds.
         int matchStart;
 	QRegularExpressionMatch match;
         if (m_forwards)
         {
-            matchStart = string.indexOf(m_regExp, startColumn, &match);
-            if (matchStart >= endPosition)
+            matchStart = string.indexOf(m_regExp, chunkStartColumn, &match);
+            if (matchStart >= chunkEndPosition)
                 matchStart = -1;
         }
         else
         {
-            matchStart = string.lastIndexOf(m_regExp, endPosition - 1, &match);
-            if (matchStart < startColumn)
+            matchStart = string.lastIndexOf(m_regExp, chunkEndPosition - 1, &match);
+            if (matchStart < chunkStartColumn)
                 matchStart = -1;
         }
 
         if (matchStart > -1)
         {
             int matchEnd = matchStart + match.capturedLength() - 1;
-            //qDebug() << "Found in string from" << matchStart << "to" << matchEnd;
-
             // Translate startPos and endPos to startColum, startLine, endColumn and endLine in history.
             int startLineNumberInString = findLineNumberInString(decoder.linePositions(), matchStart);
             m_foundStartColumn = matchStart - decoder.linePositions().at(startLineNumberInString);
-            m_foundStartLine = startLineNumberInString + startLine + linesRead;
+            m_foundStartLine = startLineNumberInString + blockStartLine;
 
             int endLineNumberInString = findLineNumberInString(decoder.linePositions(), matchEnd);
             m_foundEndColumn = matchEnd - decoder.linePositions().at(endLineNumberInString);
-            m_foundEndLine = endLineNumberInString + startLine + linesRead;
-
-            //qDebug() << "m_foundStartColumn" << m_foundStartColumn
-            //        << "m_foundStartLine" << m_foundEndLine
-            //        << "m_foundEndColumn" << m_foundEndColumn
-            //        << "m_foundEndLine" << m_foundEndLine;
+            m_foundEndLine = endLineNumberInString + blockStartLine;
 
             return true;
         }
@@ -144,7 +135,6 @@ bool HistorySearch::search(int startColumn, int startLine, int endColumn, int en
         linesRead += blockSize;
     }
 
-    //qDebug() << "Not found";
     return false;
 }
 
