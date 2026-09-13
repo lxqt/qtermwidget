@@ -16,6 +16,7 @@ option(UPDATE_TRANSLATIONS "Update source translation translations/*.ts files" O
 option(BUILD_EXAMPLE "Build example application. Default OFF." OFF)
 option(QTERMWIDGET_USE_UTEMPTER "Uses libutempter on Linux or libulog on FreeBSD for login records." OFF)
 option(QTERMWIDGET_BUILD_PYTHON_BINDING "Build python binding" OFF)
+option(QTERMWIDGET_BUILD_TESTS "Build qtermwidget tests" OFF)
 option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OFF)
 
 
@@ -149,6 +150,14 @@ lxqt_translate_ts(QTERMWIDGET_QM
 
 add_library(${QTERMWIDGET_LIBRARY_NAME} SHARED ${SRCS} ${MOCS} ${UI_SRCS} ${QTERMWIDGET_QM})
 target_link_libraries(${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets)
+
+if(QTERMWIDGET_BUILD_TESTS)
+    enable_testing()
+    add_executable(urlfilter_test test/urlfilter_test.cpp)
+    target_include_directories(urlfilter_test PRIVATE lib)
+    target_link_libraries(urlfilter_test ${QTERMWIDGET_LIBRARY_NAME} Qt6::Widgets)
+    add_test(NAME urlfilter_test COMMAND urlfilter_test)
+endif()
 set_target_properties( ${QTERMWIDGET_LIBRARY_NAME} PROPERTIES
                        SOVERSION ${QTERMWIDGET_VERSION_MAJOR}
                        VERSION ${QTERMWIDGET_VERSION}
