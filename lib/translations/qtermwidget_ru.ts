@@ -4,50 +4,66 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="481"/>
+        <location filename="../Session.cpp" line="485"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Звуковой сигнал в сеансе «%1»</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="663"/>
+        <location filename="../Session.cpp" line="674"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Сеанс «%1» завершился с кодом %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="665"/>
+        <location filename="../Session.cpp" line="675"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Сбой сеанса «%1».</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="670"/>
+        <location filename="../Session.cpp" line="677"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Сеанс «%1» завершился неожиданно.</translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="680"/>
+        <source>
+Do you want to save the scrollback buffer?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="689"/>
+        <source>The client crashed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="693"/>
+        <source>Save history</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Konsole::TerminalDisplay</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1337"/>
+        <location filename="../TerminalDisplay.cpp" line="1391"/>
         <source>Size: XXX x XXX</source>
         <translation>Размер: XXX x XXX</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="1349"/>
+        <location filename="../TerminalDisplay.cpp" line="1403"/>
         <source>Size: %1 x %2</source>
         <translation>Размер: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3177"/>
+        <location filename="../TerminalDisplay.cpp" line="3228"/>
         <source>Paste multiline text</source>
         <translation>Вставить многострочный текст</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3178"/>
+        <location filename="../TerminalDisplay.cpp" line="3229"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Уверены, что хотите вставить этот текст?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3676"/>
+        <location filename="../TerminalDisplay.cpp" line="3727"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Вывод был &lt;a href=&quot;https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C_%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%D0%B0&quot;&gt;приостановлен&lt;/a&gt; нажатием Ctrl+S. Нажмите &lt;b&gt;Ctrl+Q&lt;/b&gt; для продолжения.&lt;/qt&gt;</translation>
     </message>
@@ -63,7 +79,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3184"/>
+        <location filename="../TerminalDisplay.cpp" line="3235"/>
         <source>Show Details...</source>
         <translation>Показать подробности...</translation>
     </message>
