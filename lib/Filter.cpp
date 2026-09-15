@@ -1,5 +1,6 @@
 /*
     Copyright 2007-2008 by Robert Knight <robertknight@gmail.com>
+    Copyright 2020 by Tomaz Canabrava <tcanabrava@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -486,6 +487,16 @@ void UrlFilter::process()
 void UrlFilter::newHotSpot(int startLine, int startColumn, int endLine, int endColumn,
                            const QStringList& captureList)
 {
+    QStringList texts(captureList);
+    static const QRegularExpression trailingPunctuation(QLatin1String("[',.:;]+$"));
+    const auto match = trailingPunctuation.match(texts.constFirst());
+    if (match.hasMatch())
+    {
+        const int length = match.capturedLength();
+        texts[0].chop(length);
+        endColumn = qMax(0, endColumn - length);
+    }
+
     // Use the old hotspot if existing.
     for (const auto& hs : std::as_const(_oldHotspotList))
     {
@@ -494,7 +505,7 @@ void UrlFilter::newHotSpot(int startLine, int startColumn, int endLine, int endC
             hs->startColumn() == startColumn &&
             hs->endColumn() == endColumn)
         {
-            hs->setCapturedTexts(captureList);
+            hs->setCapturedTexts(texts);
             addHotSpot(hs);
             return;
         }
@@ -502,7 +513,7 @@ void UrlFilter::newHotSpot(int startLine, int startColumn, int endLine, int endC
 
     UrlFilter::HotSpot* spot = new UrlFilter::HotSpot(startLine, startColumn, endLine, endColumn);
     connect(spot->getUrlObject(), &FilterObject::activated, this, &UrlFilter::activated);
-    spot->setCapturedTexts(captureList);
+    spot->setCapturedTexts(texts);
     addHotSpot(spot);
 }
 
@@ -570,17 +581,38 @@ void UrlFilter::HotSpot::activate(const QString& actionName)
 // pieces of text.
 // Please be careful when altering them.
 
-//regexp matches:
-// full url:
-// NOTE: It is supposed that a URL does not end with a punctuation mark, parenthesis, bracket or single-quotation mark.
-const QRegularExpression UrlFilter::FullUrlRegExp(QLatin1String("[A-Za-z0-9_\\-]+://((?!&quot;|&gt;|&lt;)[A-Za-z0-9_.+/\\?\\=~&%#,;!@\\*\'\\-:\\(\\)\\[\\]])+(?<!\\.|\\?|!|:|;|,|\\(|\\)|\\[|\\]|\')"));
+// URL grammar adapted from modern Konsole. Balanced parentheses keep Markdown's
+// closing delimiter out while preserving parentheses that belong to the URL.
+static const char schemeOrWww[] = "\\b(?:www\\.|[a-z][a-z0-9+\\-.]*+://";
+#define URL_COMMON_1 "a-z0-9\\-._~%!$&'*+,;="
+#define URL_BALANCED_PARENS(CHARS) "(?:[" CHARS "]++(\\((?:[" CHARS "]++|(?-1))*+\\))?+)"
+
+static const char userInfo[] = "(?:[" URL_COMMON_1 ":()" "]++@)?+";
+static const char host[] = "(?:[" URL_COMMON_1 "]++|\\[[0-9a-fA-F:.]++\\])?+";
+static const char port[] = "(?::[0-9]+)?+";
+#define URL_COMMON_2 "a-z0-9\\-._~%!$&'*+,;=:@/"
+static const char path[] = "(?:/" URL_BALANCED_PARENS(URL_COMMON_2) "*+)?+";
+static const char query[] = "(?:\\?" URL_BALANCED_PARENS(URL_COMMON_2 "?") "*+)?+";
+static const char fragment[] = "(?:#" URL_BALANCED_PARENS(URL_COMMON_2 "?") "*+)?+";
+
+#undef URL_BALANCED_PARENS
+#undef URL_COMMON_1
+#undef URL_COMMON_2
+
+const QRegularExpression UrlFilter::FullUrlRegExp(
+    QLatin1String(schemeOrWww) + QLatin1String(userInfo) + QLatin1Char(')')
+    + QLatin1String(host) + QLatin1String(port) + QLatin1String(path)
+    + QLatin1String(query) + QLatin1String(fragment),
+    QRegularExpression::CaseInsensitiveOption);
 // email address:
 // [word chars, dots or dashes]@[word chars, dots or dashes].[word chars]
 const QRegularExpression UrlFilter::EmailAddressRegExp(QLatin1String("([A-Za-z0-9_.\\-]+@[A-Za-z0-9_\\-]+\\.[A-Za-z0-9.]+)(?<!\\.)"));
 
 // matches full url or email address
-const QRegularExpression UrlFilter::CompleteUrlRegExp(QLatin1Char('(')+FullUrlRegExp.pattern()+QLatin1Char('|')+
-                                            EmailAddressRegExp.pattern()+QLatin1Char(')'));
+const QRegularExpression UrlFilter::CompleteUrlRegExp(
+    QLatin1String("(?:") + FullUrlRegExp.pattern() + QLatin1Char('|')
+    + EmailAddressRegExp.pattern() + QLatin1Char(')'),
+    QRegularExpression::CaseInsensitiveOption);
 
 UrlFilter::UrlFilter()
 {
