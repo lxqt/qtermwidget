@@ -517,6 +517,9 @@ private slots:
     void onViewSizeChange(int height, int width);
     void onEmulationSizeChange(QSize);
 
+    void postColor(int forWhat);
+    void setColor(int forWhat, QString color);
+
     void activityStateSet(int);
 
     //automatically detach views from sessions when view is destroyed

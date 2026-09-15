@@ -512,6 +512,15 @@ void Vt102Emulation::processWindowAttributeChange()
     return;
   }
 
+  if (attributeToChange >=10 && attributeToChange <=12)
+  {
+      if (newValue.contains(QLatin1Char('?'))) // sloppy test, but the user wants the current color for something
+          emit oscColorQuery(attributeToChange); // xterm and urxvt respond wildly different for grouped queries
+      else
+          emit oscColorChangeRequest(attributeToChange, newValue);
+      return;
+  }
+
   // Shells commonly emit OSC 0/1/2 (window/icon title) at each prompt.
   // Treat that as a boundary and close any OSC-8 pen left open by mangled
   // or interrupted output, so the prompt itself is never stamped as a link.
@@ -652,7 +661,9 @@ void Vt102Emulation::processToken(int token, wchar_t p, int q)
     case TY_CSI_PS('t',   8) : setImageSize( p /*lines */, q /* columns */ );
                                emit imageResizeRequest(QSize(q, p));
                                break;
-
+    case TY_CSI_PS('t',  18) : sendText(QLatin1String(";%1;%2t").arg(QString::number(_currentScreen->getLines())
+                                                               ).arg(QString::number(_currentScreen->getColumns())));
+                                break;
 // change tab text color : \e[28;<color>t  color: 0-16,777,215
     case TY_CSI_PS('t',   28) : emit changeTabTextColorRequest      ( p        );          break;
 

@@ -105,6 +105,9 @@ Session::Session(QObject* parent) :
     connect(_emulation, &Vt102Emulation::cursorChanged,
             this, &Session::cursorChanged);
 
+    connect(_emulation, &Vt102Emulation::oscColorQuery, this, &Session::postColor);
+    connect(_emulation, &Vt102Emulation::oscColorChangeRequest, this, &Session::setColor);
+
     //connect teletype to emulation backend
     _shellProcess->setUtf8Mode(true);
 
@@ -1000,6 +1003,67 @@ void Session::onReceiveBlock( const char * buf, int len )
 {
     _emulation->receiveData( buf, len );
     emit receivedData( QString::fromLatin1( buf, len ) );
+}
+
+void Session::postColor(int forWhat)
+{
+    if (_views.isEmpty())
+        return;
+    QColor c;
+    switch (forWhat)
+    {
+        case 10: c = _views.at(0)->foregroundColor(); break;
+        case 11: c = _views.at(0)->backgroundColor(); break;
+        case 12: c = _views.at(0)->keyboardCursorColor(); break;
+        default: c = QColor(0xff1cb3); // pink, urxvt uses that as "wtf do you want from me"
+    }
+    auto to16bpc = [](uint c) {
+        return QString::number(c*0xffff/0xff, 16);
+    };
+    QString s;
+    if (c.alpha() != 0xff)
+        s = QLatin1String("rgba:%1/%2/%3/%4").arg(to16bpc(c.red())).arg(to16bpc(c.green())).arg(to16bpc(c.blue())).arg(to16bpc(c.alpha()));
+    else
+        s = QLatin1String("rgb:%1/%2/%3").arg(to16bpc(c.red())).arg(to16bpc(c.green())).arg(to16bpc(c.blue()));
+    sendText(s);
+}
+
+void Session::setColor(int forWhat, QString color)
+{
+    QColor c;
+    auto from16bpc = [](const QString &s) {
+        uint u = s.toUInt(nullptr, 16);
+        return u*0xff/0xffff;
+    };
+    if (color.startsWith(QLatin1String("rgb")))
+    {   // this sucks, but the 16bpc rrrr/gggg/bbbb/aaaa is xterm's preferred format
+        int split = color.indexOf(QLatin1Char(':'));
+        if (split < 0)
+            return; // ill-formated
+        // we'll interpret this relaxed based on the filed count, not the indicator
+        QStringList v = color.mid(split+1).split(QLatin1Char('/'));
+        QRgb argb(0xff000000); // argb black
+        // … and just use the values we get, ie. "rgba:ffff" would get you red
+        for (int i = 0; i < qMin(3,v.size()); ++i)
+            argb |= (from16bpc(v.at(i)) << (2-i)*8);
+        if (v.size() > 3)
+            argb = (argb & 0x00ffffff) | (from16bpc(v.at(3))<<24);
+        c = QColor::fromRgba(argb);
+    }
+    else // still support the more common color syntax #rgb or #rrggbbaa
+    {   // just hope that the user provided a reasonable #rrggbbaa string
+        c = QColor(color);
+    }
+
+    for (TerminalDisplay *td : _views)
+    {
+        if (forWhat == 10)
+            td->setForegroundColor(c);
+        else if (forWhat == 11)
+            td->setBackgroundColor(c);
+        else if (forWhat == 12)
+            td->setKeyboardCursorColor(false, c);
+    }
 }
 
 QSize Session::size()
