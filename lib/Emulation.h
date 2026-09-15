@@ -427,6 +427,21 @@ signals:
    */
   void cursorChanged(KeyboardCursorShape cursorShape, bool blinkingCursorEnabled);
 
+  /**
+   * Emitted when a color is queried via OSC-10/11/12
+   *
+   * @param forWhat is the OSC value (10/11/12) for foreground, background and cursor
+   */
+  void oscColorQuery(int forWhat);
+
+  /**
+   * Emitted when a color shall be changed via OSC-10/11/12
+   *
+   * @param forWhat is the OSC value (10/11/12) for foreground, background and cursor
+   * @param color is a string representation of the color in either #rgb(a), #rrggbb(aa) or rgb(a):RRRR/GGGG/BBBB(/AAAA)
+   */
+  void oscColorChangeRequest(int forWhat, QString color);
+
   void handleCommandFromKeyboard(KeyboardTranslator::Command command);
   void outputFromKeypressEvent(void);
 

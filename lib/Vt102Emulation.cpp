@@ -512,6 +512,15 @@ void Vt102Emulation::processWindowAttributeChange()
     return;
   }
 
+  if (attributeToChange >=10 && attributeToChange <=12)
+  {
+      if (newValue.contains(QLatin1Char('?'))) // sloppy test, but the user wants the current color for something
+          emit oscColorQuery(attributeToChange); // xterm and urxvt respond wildly different for grouped queries
+      else
+          emit oscColorChangeRequest(attributeToChange, newValue);
+      return;
+  }
+
   // Shells commonly emit OSC 0/1/2 (window/icon title) at each prompt.
   // Treat that as a boundary and close any OSC-8 pen left open by mangled
   // or interrupted output, so the prompt itself is never stamped as a link.
