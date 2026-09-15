@@ -380,6 +380,12 @@ public:
      */
     int getPtySlaveFd() const;
 
+    /**
+     * Returns the pty name (usually under /dev/pts/)
+     * This can be used for external access via a device node.
+     */
+    QString getPtyName() const;
+
 public slots:
 
     /**

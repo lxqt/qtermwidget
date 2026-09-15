@@ -764,6 +764,11 @@ int QTermWidget::getPtySlaveFd() const
     return m_impl->m_session->getPtySlaveFd();
 }
 
+QString QTermWidget::getPtyName() const
+{
+    return m_impl->m_session->getPtyName();
+}
+
 void QTermWidget::setKeyboardCursorShape(KeyboardCursorShape shape)
 {
     m_impl->m_terminalDisplay->setKeyboardCursorShape(shape);
