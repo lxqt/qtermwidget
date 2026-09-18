@@ -25,6 +25,7 @@
 #ifndef SESSION_H
 #define SESSION_H
 
+#include <QElapsedTimer>
 #include <QProcess>
 #include <QStringList>
 #include <QUrl>
@@ -546,6 +547,7 @@ private:
     bool           _autoClose;
     bool           _wantedClose;
     QTimer    *    _monitorTimer;
+    QElapsedTimer  _uptime;
 
     int            _silenceSeconds;
 

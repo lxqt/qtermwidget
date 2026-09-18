@@ -326,6 +326,7 @@ void Session::run()
      * Dont know about the arguments though.. maybe youll need some more checking im not sure
      * However this works on Arch and FreeBSD now.
      */
+    _uptime.start();
     int result = _shellProcess->start(exec,
                                       arguments,
                                       _environment << backgroundColorHint,
@@ -666,15 +667,29 @@ void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
         return;
     }
 
+    auto isInteractiveShell = [=,this]() {
+        if (_program.isEmpty())
+            return true; // defaults to the below
+        if (_program == QString::fromLocal8Bit(qgetenv("SHELL")) && _arguments.isEmpty())
+            return true; // the default scenario
+        // heuristics
+        if (_uptime.elapsed() > 500 && // **interactive** shell hopefully ran > 500ms
+            _program.endsWith(QLatin1String("sh")) && // ash, bash, fish, pwsh, ssh, zsh …
+                                                      // not all will be in /etc/shells and false positives rare
+            ! _program.endsWith(QLatin1String(".sh"))) // but exclude scripts!
+            return true;
+        return false;
+    };
+
     // the client shell unexpectedly died or died with an error - warn the user and offer to save the history
     QString message;
     /// @todo, annoy translators who've kept this around pointlessly by incorporating _shellProcess->error()
-    if (exitCode != 0)
+    if (exitStatus != QProcess::NormalExit)
+        message = tr("Session '%1' exited unexpectedly.").arg(_nameTitle);
+    else if (exitCode != 0 && !isInteractiveShell()) // interactive shell likely just exited $? which the user has seen
         message = _shellProcess->exitStatus() == QProcess::NormalExit ?
                   tr("Session '%1' exited with code %2.").arg(_nameTitle).arg(exitCode) :
                   tr("Session '%1' crashed.").arg(_nameTitle);
-    else if (exitStatus != QProcess::NormalExit)
-        message = tr("Session '%1' exited unexpectedly.").arg(_nameTitle);
     if (!message.isEmpty())
     {
         message += tr("\nDo you want to save the scrollback buffer?");
