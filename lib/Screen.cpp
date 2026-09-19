@@ -549,9 +549,6 @@ void Screen::getImage( Character* dest, int size, int startLine, int endLine, in
         // the cursor would disappear over a non-printable character
         if (dest[cursorIndex].character == '\0')
             dest[cursorIndex].character = ' ';
-        // because of wide chars also check the next or you get a double-width cursor
-        if (cursorIndex+1 < cols*mergedLines && dest[cursorIndex+1].character == '\0')
-            dest[cursorIndex+1].character = ' ';
     }
 }
 
