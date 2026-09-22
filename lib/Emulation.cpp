@@ -320,6 +320,7 @@ void Emulation::showBulk()
 
     _currentScreen->resetScrolledLines();
     _currentScreen->resetDroppedLines();
+    _currentScreen->resetResizePushedLines();
 }
 
 void Emulation::bufferedUpdate()
