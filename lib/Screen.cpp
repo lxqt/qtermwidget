@@ -467,7 +467,10 @@ void Screen::copyFromHistory(Character* dest, int startLine, int count, int cols
 
         history->getCells(line,0,length,dest + destLineOffset);
 
-        for (int column = length; column < cols; column++)
+        int column = length;
+        if (column == 0 && cols > 0)
+            dest[destLineOffset+column++] = defaultChar;
+        for (; column < cols; column++)
             dest[destLineOffset+column] = nullChar;
 
         // invert selected text
