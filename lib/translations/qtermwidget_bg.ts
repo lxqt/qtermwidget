@@ -27,17 +27,18 @@
         <location filename="../Session.cpp" line="680"/>
         <source>
 Do you want to save the scrollback buffer?</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Искате ли да запазите буфера за превъртане назад?</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="689"/>
         <source>The client crashed</source>
-        <translation type="unfinished"></translation>
+        <translation>Клиентът се срина</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="693"/>
         <source>Save history</source>
-        <translation type="unfinished"></translation>
+        <translation>Запазване на историята</translation>
     </message>
 </context>
 <context>
