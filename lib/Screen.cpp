@@ -927,8 +927,18 @@ void Screen::resetScrolledLines()
 void Screen::scrollUp(int n)
 {
     if (n == 0) n = 1; // Default
-    if (_topMargin == 0) addHistLine(); // history.history
-    scrollUp(_topMargin, n);
+    if (_topMargin != 0)
+    {
+        scrollUp(_topMargin, n);
+        return;
+    }
+
+    n = qMin(n, _bottomMargin + 1);
+    for (int i = 0; i < n; i++)
+    {
+        addHistLine();
+        scrollUp(_topMargin, 1);
+    }
 }
 
 QRect Screen::lastScrolledRegion() const
