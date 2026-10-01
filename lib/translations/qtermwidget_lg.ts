@@ -4,39 +4,39 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="485"/>
+        <location filename="../Session.cpp" line="489"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Akade kavugenga mu lutuula lwa mu katimbe &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="674"/>
+        <location filename="../Session.cpp" line="694"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Ennamba y&apos;emmala ey&apos;olutuula lwa mu katimbe &apos;%1&apos; eri %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="675"/>
+        <location filename="../Session.cpp" line="695"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Olutuula lwa mu katimbe &apos;%1&apos; lutabuse.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="677"/>
+        <location filename="../Session.cpp" line="707"/>
+        <source>Exited Unexpectedly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="691"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Olutuula lwa mu katimbe &apos;%1&apos; lumaze nga ssi kigenderere.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="680"/>
+        <location filename="../Session.cpp" line="698"/>
         <source>
 Do you want to save the scrollback buffer?</source>
         <translation>
 Ebirabikidde ku kiwandikiro ebikwatidwa mu ggwanika lya kyo ezzibizi tubikuume?</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="689"/>
-        <source>The client crashed</source>
-        <translation>Puloguramu enzivvunuzi etabuse</translation>
-    </message>
-    <message>
-        <location filename="../Session.cpp" line="693"/>
+        <location filename="../Session.cpp" line="711"/>
         <source>Save history</source>
         <translation>Olukalala lw&apos;ebikoledwa lukuume</translation>
     </message>
@@ -54,17 +54,17 @@ Ebirabikidde ku kiwandikiro ebikwatidwa mu ggwanika lya kyo ezzibizi tubikuume?<
         <translation>Obunene: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3228"/>
+        <location filename="../TerminalDisplay.cpp" line="3229"/>
         <source>Paste multiline text</source>
         <translation>Paatiika ebigambo ebiri ku nnyiriri ezisukka mu lumu</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3229"/>
+        <location filename="../TerminalDisplay.cpp" line="3230"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Ddala oyagala kupaatiika ebigambo bino?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3727"/>
+        <location filename="../TerminalDisplay.cpp" line="3728"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Amapeesa Ctrl+S ganyigidwa ne &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;kiyimiriza&lt;/a&gt; omulimu.  Okugusumulula gweyongere mu maaso nyiga &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
@@ -72,7 +72,7 @@ Ebirabikidde ku kiwandikiro ebikwatidwa mu ggwanika lya kyo ezzibizi tubikuume?<
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1297"/>
+        <location filename="../Vt102Emulation.cpp" line="1308"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Tewali kivvuunula ebiva ku mapeesa. Kubulako ekikwataganya amapeesa aganyigibwa n&apos;obubonero obuba busindikibwa mu kiwandikiro.</translation>
     </message>
@@ -80,7 +80,7 @@ Ebirabikidde ku kiwandikiro ebikwatidwa mu ggwanika lya kyo ezzibizi tubikuume?<
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3235"/>
+        <location filename="../TerminalDisplay.cpp" line="3236"/>
         <source>Show Details...</source>
         <translation>Laga ebisingawo...</translation>
     </message>

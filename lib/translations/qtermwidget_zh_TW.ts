@@ -4,39 +4,39 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="485"/>
+        <location filename="../Session.cpp" line="489"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>在工作階段中 &apos;%1&apos; 的鈴聲</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="674"/>
+        <location filename="../Session.cpp" line="694"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>工作階段 &apos;%1&apos; 已經退出，使用程式碼 &apos;%2&apos;。</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="675"/>
+        <location filename="../Session.cpp" line="695"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>工作階段 &apos;%1&apos; 已經崩潰。</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="677"/>
+        <location filename="../Session.cpp" line="707"/>
+        <source>Exited Unexpectedly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="691"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>工作階段 &apos;%1&apos; 已經意外退出。</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="680"/>
+        <location filename="../Session.cpp" line="698"/>
         <source>
 Do you want to save the scrollback buffer?</source>
         <translation>
 是否要儲存此滾動緩衝區？</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="689"/>
-        <source>The client crashed</source>
-        <translation>客戶端已經崩潰</translation>
-    </message>
-    <message>
-        <location filename="../Session.cpp" line="693"/>
+        <location filename="../Session.cpp" line="711"/>
         <source>Save history</source>
         <translation>儲存歷史記錄</translation>
     </message>
@@ -54,17 +54,17 @@ Do you want to save the scrollback buffer?</source>
         <translation>大小： %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3228"/>
+        <location filename="../TerminalDisplay.cpp" line="3229"/>
         <source>Paste multiline text</source>
         <translation>貼上多行文字</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3229"/>
+        <location filename="../TerminalDisplay.cpp" line="3230"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>確定要貼上這段文字嗎？</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3727"/>
+        <location filename="../TerminalDisplay.cpp" line="3728"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;按下 Ctrl+S 則輸出已經 &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;暫停&lt;/a&gt; 。 按下 &lt;b&gt;Ctrl+Q&lt;/b&gt; 鍵重新繼續。&lt;/qt&gt;</translation>
     </message>
@@ -72,7 +72,7 @@ Do you want to save the scrollback buffer?</source>
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1297"/>
+        <location filename="../Vt102Emulation.cpp" line="1308"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>沒有可用的鍵碼轉換表。.  用來將按鍵轉換成終端機字元的資訊遺失。</translation>
     </message>
@@ -80,7 +80,7 @@ Do you want to save the scrollback buffer?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3235"/>
+        <location filename="../TerminalDisplay.cpp" line="3236"/>
         <source>Show Details...</source>
         <translation>顯示細節…</translation>
     </message>

@@ -4,39 +4,39 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="485"/>
+        <location filename="../Session.cpp" line="489"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>Звуковой сигнал в сеансе «%1»</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="674"/>
+        <location filename="../Session.cpp" line="694"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>Сеанс «%1» завершился с кодом %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="675"/>
+        <location filename="../Session.cpp" line="695"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>Сбой сеанса «%1».</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="677"/>
+        <location filename="../Session.cpp" line="707"/>
+        <source>Exited Unexpectedly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="691"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>Сеанс «%1» завершился неожиданно.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="680"/>
+        <location filename="../Session.cpp" line="698"/>
         <source>
 Do you want to save the scrollback buffer?</source>
         <translation>
 Сохранить буфер прокрутки?</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="689"/>
-        <source>The client crashed</source>
-        <translation>Клиент аварийно завершился</translation>
-    </message>
-    <message>
-        <location filename="../Session.cpp" line="693"/>
+        <location filename="../Session.cpp" line="711"/>
         <source>Save history</source>
         <translation>Сохранить историю</translation>
     </message>
@@ -54,17 +54,17 @@ Do you want to save the scrollback buffer?</source>
         <translation>Размер: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3228"/>
+        <location filename="../TerminalDisplay.cpp" line="3229"/>
         <source>Paste multiline text</source>
         <translation>Вставить многострочный текст</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3229"/>
+        <location filename="../TerminalDisplay.cpp" line="3230"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>Уверены, что хотите вставить этот текст?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3727"/>
+        <location filename="../TerminalDisplay.cpp" line="3728"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Вывод был &lt;a href=&quot;https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D1%8C_%D0%BF%D0%BE%D1%82%D0%BE%D0%BA%D0%B0&quot;&gt;приостановлен&lt;/a&gt; нажатием Ctrl+S. Нажмите &lt;b&gt;Ctrl+Q&lt;/b&gt; для продолжения.&lt;/qt&gt;</translation>
     </message>
@@ -72,7 +72,7 @@ Do you want to save the scrollback buffer?</source>
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1297"/>
+        <location filename="../Vt102Emulation.cpp" line="1308"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>Нет доступных трансляторов клавиатуры. Информация, необходимая, чтобы преобразовать нажатия клавиш в символы, которые будут отправлены на терминал, не найдена.</translation>
     </message>
@@ -80,7 +80,7 @@ Do you want to save the scrollback buffer?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3235"/>
+        <location filename="../TerminalDisplay.cpp" line="3236"/>
         <source>Show Details...</source>
         <translation>Показать подробности...</translation>
     </message>

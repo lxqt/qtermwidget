@@ -4,39 +4,39 @@
 <context>
     <name>Konsole::Session</name>
     <message>
-        <location filename="../Session.cpp" line="485"/>
+        <location filename="../Session.cpp" line="489"/>
         <source>Bell in session &apos;%1&apos;</source>
         <translation>ზარი სესიაში &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="674"/>
+        <location filename="../Session.cpp" line="694"/>
         <source>Session &apos;%1&apos; exited with code %2.</source>
         <translation>სესია &apos;%1&apos; გამოვიდა კოდით %2.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="675"/>
+        <location filename="../Session.cpp" line="695"/>
         <source>Session &apos;%1&apos; crashed.</source>
         <translation>სესია &apos;%1&apos; ავარიულად დასრულდა.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="677"/>
+        <location filename="../Session.cpp" line="707"/>
+        <source>Exited Unexpectedly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Session.cpp" line="691"/>
         <source>Session &apos;%1&apos; exited unexpectedly.</source>
         <translation>სესია &apos;%1&apos; მოულოდნელად დასრულდა.</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="680"/>
+        <location filename="../Session.cpp" line="698"/>
         <source>
 Do you want to save the scrollback buffer?</source>
         <translation>
 გნებავთ გადახვევის ბუფერის შენახვა?</translation>
     </message>
     <message>
-        <location filename="../Session.cpp" line="689"/>
-        <source>The client crashed</source>
-        <translation>კლიენტმა მუშაობა ავარიულად დაასრულა</translation>
-    </message>
-    <message>
-        <location filename="../Session.cpp" line="693"/>
+        <location filename="../Session.cpp" line="711"/>
         <source>Save history</source>
         <translation>ისტორიის შენახვა</translation>
     </message>
@@ -54,17 +54,17 @@ Do you want to save the scrollback buffer?</source>
         <translation>ზომა: %1 x %2</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3228"/>
+        <location filename="../TerminalDisplay.cpp" line="3229"/>
         <source>Paste multiline text</source>
         <translation>მრავალხაზიანი ტექსტის ჩასმა</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3229"/>
+        <location filename="../TerminalDisplay.cpp" line="3230"/>
         <source>Are you sure you want to paste this text?</source>
         <translation>მართლა გნებავთ ამ ტექსტის ჩასმა?</translation>
     </message>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3727"/>
+        <location filename="../TerminalDisplay.cpp" line="3728"/>
         <source>&lt;qt&gt;Output has been &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;suspended&lt;/a&gt; by pressing Ctrl+S.  Press &lt;b&gt;Ctrl+Q&lt;/b&gt; to resume.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;გამოტანა &lt;a href=&quot;http://en.wikipedia.org/wiki/Flow_control&quot;&gt;შეჩერდა&lt;/a&gt; ღილაკებით Ctrl+S.  გასაგრძელებლად დააწექით &lt;b&gt;Ctrl+Q&lt;/b&gt;.&lt;/qt&gt;</translation>
     </message>
@@ -72,7 +72,7 @@ Do you want to save the scrollback buffer?</source>
 <context>
     <name>Konsole::Vt102Emulation</name>
     <message>
-        <location filename="../Vt102Emulation.cpp" line="1297"/>
+        <location filename="../Vt102Emulation.cpp" line="1308"/>
         <source>No keyboard translator available.  The information needed to convert key presses into characters to send to the terminal is missing.</source>
         <translation>კლავიატურის მთარგმნელი ხელმისაწვდომი არაა.  ინფორმაცია, რომელიც საჭიროა ღილაკის დაწოლების სიმბოლოებში გადასაყვანად, რომ ტერმინალს გავუგზავნო, ვერ ვიპოვე.</translation>
     </message>
@@ -80,7 +80,7 @@ Do you want to save the scrollback buffer?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../TerminalDisplay.cpp" line="3235"/>
+        <location filename="../TerminalDisplay.cpp" line="3236"/>
         <source>Show Details...</source>
         <translation>დეტალების ჩვენება...</translation>
     </message>
