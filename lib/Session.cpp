@@ -705,7 +705,7 @@ void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
         }
         QMessageBox::StandardButton ret =
                     QMessageBox::critical(widget, tr("The client crashed"), message,
-                                            QMessageBox::Save|QMessageBox::Discard);
+                                            QMessageBox::Save|QMessageBox::Cancel);
         if (ret == QMessageBox::Save)
         {
             const QString where = QFileDialog::getSaveFileName(widget, tr("Save history"));
