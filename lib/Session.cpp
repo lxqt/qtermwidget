@@ -704,7 +704,7 @@ void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
             o = o->parent();
         }
         QMessageBox::StandardButton ret =
-                    QMessageBox::critical(widget, tr("The client crashed"), message,
+                    QMessageBox::critical(widget, tr("Exited Unexpectedly"), message,
                                             QMessageBox::Save|QMessageBox::Cancel);
         if (ret == QMessageBox::Save)
         {
