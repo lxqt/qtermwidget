@@ -1,7 +1,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <qtermwidget5/qtermwidget.h>
+#include "qtermwidget.h"
 
 class QTcpSocket;
 
