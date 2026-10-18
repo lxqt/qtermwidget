@@ -21,7 +21,7 @@
     <message>
         <location filename="../Session.cpp" line="707"/>
         <source>Exited Unexpectedly</source>
-        <translation type="unfinished"></translation>
+        <translation>Күтпегенде жұмысын аяқтады</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="691"/>

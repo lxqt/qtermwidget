@@ -21,7 +21,7 @@
     <message>
         <location filename="../Session.cpp" line="707"/>
         <source>Exited Unexpectedly</source>
-        <translation type="unfinished"></translation>
+        <translation>出乎意料地退出</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="691"/>
