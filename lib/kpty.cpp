@@ -32,6 +32,10 @@
 #define HAVE_LIBUTIL_H
 #endif
 
+#if defined(__FreeBSD__)
+#define HAVE_UTEMPTER
+#endif
+
 #if defined(__OpenBSD__)
 #define HAVE_LOGIN
 #define HAVE_UTIL_H
@@ -97,6 +101,9 @@
 
 #ifdef HAVE_UTEMPTER
 extern "C" {
+# if defined(__FreeBSD__)
+#  include <ulog.h>
+# endif
 # include <utempter.h>
 }
 #else
