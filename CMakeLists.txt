@@ -22,7 +22,7 @@ option(USE_UTF8PROC "Use libutf8proc for better Unicode support. Default OFF" OF
 # just change version for releases
 # keep this in sync with the version in pyqt/pyproject.toml
 set(QTERMWIDGET_VERSION_MAJOR "2")
-set(QTERMWIDGET_VERSION_MINOR "4")
+set(QTERMWIDGET_VERSION_MINOR "5")
 set(QTERMWIDGET_VERSION_PATCH "0")
 
 set(QTERMWIDGET_VERSION "${QTERMWIDGET_VERSION_MAJOR}.${QTERMWIDGET_VERSION_MINOR}.${QTERMWIDGET_VERSION_PATCH}")
@@ -32,8 +32,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Minimum Versions
-set(QT_MINIMUM_VERSION "6.6.0")
-set(LXQTBT_MINIMUM_VERSION "2.4.0")
+set(QT_MINIMUM_VERSION "6.10.0")
+set(LXQTBT_MINIMUM_VERSION "2.5.0")
 
 find_package(Qt6Widgets "${QT_MINIMUM_VERSION}" REQUIRED)
 find_package(Qt6LinguistTools "${QT_MINIMUM_VERSION}" REQUIRED)
