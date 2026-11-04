@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     if(a.arguments().size() != 3){
         qDebug() << "Example(client-side) for remote terminal of QTermWidget.";
-        qDebug() << QString("Usage: %1 ipaddr port").arg(a.arguments()[0]);
+        qDebug() << QStringLiteral("Usage: %1 ipaddr port").arg(a.arguments()[0]);
         return 1;
     }
     QString ipaddr = a.arguments().at(1);
