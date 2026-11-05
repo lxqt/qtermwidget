@@ -563,6 +563,9 @@ public:
      */
     void resetDroppedLines();
 
+    int resizePushedLines() const;
+    void resetResizePushedLines();
+
     /**
       * Fills the buffer @p dest with @p count instances of the default (ie. blank)
       * Character style.
@@ -668,6 +671,7 @@ private:
     QRect _lastScrolledRegion;
 
     int _droppedLines;
+    int _resizePushedLines;
 
     QVarLengthArray<LineProperty,64> lineProperties;
 

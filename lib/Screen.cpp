@@ -75,6 +75,7 @@ Character Screen::nullChar = Character('\0',
     screenLines(new ImageLine[lines+1] ),
     _scrolledLines(0),
     _droppedLines(0),
+    _resizePushedLines(0),
     history(new HistoryScrollNone()),
     cuX(0), cuY(0),
     currentRendition(0),
@@ -355,6 +356,7 @@ void Screen::resizeImage(int new_lines, int new_columns)
         for (int i = 0; i < cuY-(new_lines-1); i++)
         {
             addHistLine(); scrollUp(0,1);
+            ++_resizePushedLines;
         }
     }
 
@@ -922,6 +924,14 @@ void Screen::resetDroppedLines()
 void Screen::resetScrolledLines()
 {
     _scrolledLines = 0;
+}
+int Screen::resizePushedLines() const
+{
+    return _resizePushedLines;
+}
+void Screen::resetResizePushedLines()
+{
+    _resizePushedLines = 0;
 }
 
 void Screen::scrollUp(int n)
