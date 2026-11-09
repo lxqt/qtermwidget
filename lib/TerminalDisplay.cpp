@@ -1584,7 +1584,6 @@ void TerminalDisplay::paintEvent( QPaintEvent* pe )
             break;
         }
         case None:
-            bgr.moveTopLeft(cr.topLeft());
             [[fallthrough]];
         default:
             break;
