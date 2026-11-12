@@ -32,6 +32,10 @@
 #define HAVE_LIBUTIL_H
 #endif
 
+#if defined(__DragonFly__)
+#define HAVE_OPENPTY
+#endif
+
 #if defined(__OpenBSD__)
 #define HAVE_LOGIN
 #define HAVE_UTIL_H
