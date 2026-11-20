@@ -28,6 +28,8 @@
 // Standard
 #include <cstdlib>
 
+#include <utility>
+
 // Qt
 #include <QApplication>
 #include <QDir>
@@ -1070,7 +1072,7 @@ void Session::setColor(int forWhat, QString color)
         c = QColor(color);
     }
 
-    for (TerminalDisplay *td : _views)
+    for (TerminalDisplay *td : std::as_const(_views))
     {
         if (forWhat == 10)
             td->setForegroundColor(c);
