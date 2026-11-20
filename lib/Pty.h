@@ -31,6 +31,13 @@
 #ifndef PTY_H
 #define PTY_H
 
+#include <QtGlobal>
+
+#ifdef Q_OS_WIN
+// Windows port: ConPTY based implementation with the same interface.
+#include "Pty_win.h"
+#else
+
 // Qt
 #include <QStringList>
 #include <QVector>
@@ -217,5 +224,7 @@ Q_OBJECT
 };
 
 }
+
+#endif // Q_OS_WIN
 
 #endif // PTY_H

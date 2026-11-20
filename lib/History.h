@@ -35,7 +35,11 @@
 #include "Character.h"
 
 // map
+#ifdef Q_OS_WIN
+#include <cstdlib>
+#else
 #include <sys/mman.h>
+#endif
 
 namespace Konsole
 {
@@ -297,16 +301,25 @@ public:
 
   CompactHistoryBlock(){
     blockLength = 4096*64; // 256kb
+#ifdef Q_OS_WIN
+    head = (quint8*) std::malloc(blockLength);
+    Q_ASSERT(head != nullptr);
+#else
     head = (quint8*) mmap(nullptr, blockLength, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON, -1, 0);
     //head = (quint8*) malloc(blockLength);
     Q_ASSERT(head != MAP_FAILED);
+#endif
     tail = blockStart = head;
     allocCount=0;
   }
 
   virtual ~CompactHistoryBlock(){
+#ifdef Q_OS_WIN
+    std::free(blockStart);
+#else
     //free(blockStart);
     munmap(blockStart, blockLength);
+#endif
   }
 
   virtual unsigned int remaining(){ return blockStart+blockLength-tail;}

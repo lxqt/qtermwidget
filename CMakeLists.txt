@@ -104,6 +104,26 @@ set(HDRS
     lib/Vt102Emulation.h
 )
 
+if(WIN32)
+    # Windows port: the POSIX pty backend (kpty/kprocess) is replaced by a
+    # ConPTY based implementation of Konsole::Pty (lib/Pty_win.cpp).
+    list(REMOVE_ITEM SRCS
+        lib/kprocess.cpp
+        lib/kpty.cpp
+        lib/kptydevice.cpp
+        lib/kptyprocess.cpp
+        lib/Pty.cpp
+    )
+    list(APPEND SRCS lib/Pty_win.cpp)
+    list(REMOVE_ITEM HDRS
+        lib/kprocess.h
+        lib/kptydevice.h
+        lib/kptyprocess.h
+        lib/Pty.h
+    )
+    list(APPEND HDRS lib/Pty_win.h)
+endif()
+
 set(UI
     lib/SearchBar.ui
 )
@@ -207,9 +227,24 @@ target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
         "KB_LAYOUT_DIR=\"${KB_LAYOUT_DIR}\""
         "COLORSCHEMES_DIR=\"${COLORSCHEMES_DIR}\""
         "TRANSLATIONS_DIR=\"${TRANSLATIONS_DIR}\""
-        "HAVE_POSIX_OPENPT"
-        "HAVE_SYS_TIME_H"
 )
+
+if(WIN32)
+    # ConPTY needs Windows 10 1809+; the API is resolved at runtime anyway.
+    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "_WIN32_WINNT=0x0A00"
+            "WINVER=0x0A00"
+            "NOMINMAX"
+            "WIN32_LEAN_AND_MEAN"
+    )
+else()
+    target_compile_definitions(${QTERMWIDGET_LIBRARY_NAME}
+        PRIVATE
+            "HAVE_POSIX_OPENPT"
+            "HAVE_SYS_TIME_H"
+    )
+endif()
 
 
 generate_export_header(${QTERMWIDGET_LIBRARY_NAME}
@@ -297,6 +332,7 @@ install(FILES
 install(TARGETS ${QTERMWIDGET_LIBRARY_NAME}
     DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     EXPORT "${QTERMWIDGET_LIBRARY_NAME}-targets"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"   # the .dll on Windows
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     PUBLIC_HEADER
     COMPONENT Runtime
