@@ -13,7 +13,14 @@
 // Standard
 #include <string>
 
+#include <QtGlobal>
+
+#ifdef Q_OS_WIN
+// wchar_t is 16 bit on Windows: take a full code point instead.
+int konsole_wcwidth(char32_t ucs);
+#else
 int konsole_wcwidth(wchar_t ucs);
+#endif
 
 int string_width( const std::wstring & wstr );
 

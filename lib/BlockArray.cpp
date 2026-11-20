@@ -27,13 +27,26 @@
 #include "BlockArray.h"
 
 // System
+#ifdef Q_OS_WIN
+// Windows: no mmap(), blocks are read into heap buffers instead
+// (tmpfile() is opened in binary mode by the CRT).
+#include <io.h>
+#else
 #include <sys/mman.h>
 #include <sys/param.h>
+#endif
 #include <unistd.h>
 #include <cstdio>
 
 
 using namespace Konsole;
+
+#ifdef Q_OS_WIN
+static int getpagesize()
+{
+    return 4096;
+}
+#endif
 
 static int blocksize = 0;
 
@@ -151,12 +164,22 @@ const Block * BlockArray::at(size_t i)
     Q_ASSERT(j < size);
     unmap();
 
+#ifdef Q_OS_WIN
+    Block * block = new Block();
+    if (lseek(ion, j * blocksize, SEEK_SET) < 0
+        || read(ion, block, sizeof(Block)) != static_cast<int>(sizeof(Block))) {
+        perror("BlockArray::at.read");
+        delete block;
+        return nullptr;
+    }
+#else
     Block * block = (Block *)mmap(nullptr, blocksize, PROT_READ, MAP_PRIVATE, ion, j * blocksize);
 
     if (block == (Block *)-1) {
         perror("mmap");
         return nullptr;
     }
+#endif
 
     lastmap = block;
     lastmap_index = i;
@@ -167,10 +190,14 @@ const Block * BlockArray::at(size_t i)
 void BlockArray::unmap()
 {
     if (lastmap) {
+#ifdef Q_OS_WIN
+        delete const_cast<Block *>(lastmap);
+#else
         int res = munmap((char *)lastmap, blocksize);
         if (res < 0) {
             perror("munmap");
         }
+#endif
     }
     lastmap = nullptr;
     lastmap_index = size_t(-1);

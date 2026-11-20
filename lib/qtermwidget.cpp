@@ -298,11 +298,17 @@ void QTermWidget::init(int startnow)
     // translations
     // First check $XDG_DATA_DIRS. This follows the implementation in libqtxdg
     QString d = QFile::decodeName(qgetenv("XDG_DATA_DIRS"));
+#ifdef Q_OS_WIN
+    // ';' separates paths on Windows (':' would split drive letters)
+    QStringList dirs = d.split(QLatin1Char(';'), Qt::SkipEmptyParts);
+    dirs.append(QCoreApplication::applicationDirPath() + QLatin1String("/translations"));
+#else
     QStringList dirs = d.split(QLatin1Char(':'), Qt::SkipEmptyParts);
     if (dirs.isEmpty()) {
         dirs.append(QString::fromLatin1("/usr/local/share"));
         dirs.append(QString::fromLatin1("/usr/share"));
     }
+#endif
     dirs.append(QFile::decodeName(TRANSLATIONS_DIR));
 
     m_translator = new QTranslator(this);

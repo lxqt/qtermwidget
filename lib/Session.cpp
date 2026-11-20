@@ -82,7 +82,11 @@ Session::Session(QObject* parent) :
 
     //create teletype for I/O with shell process
     _shellProcess = new Pty();
+#ifdef Q_OS_WIN
+    ptySlaveFd = -1; // ConPTY has no slave file descriptor
+#else
     ptySlaveFd = _shellProcess->pty()->slaveFd();
+#endif
 
     //create emulation backend
     _emulation = new Vt102Emulation();
@@ -119,7 +123,7 @@ Session::Session(QObject* parent) :
     connect( _emulation,SIGNAL(useUtf8Request(bool)),_shellProcess,SLOT(setUtf8Mode(bool)) );
 
     connect( _shellProcess,SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(done(int,QProcess::ExitStatus)) );
-    connect( _shellProcess, &QProcess::errorOccurred, [=,this](QProcess::ProcessError) { done(-1, QProcess::CrashExit); });
+    connect( _shellProcess, &Pty::errorOccurred, [=,this](QProcess::ProcessError) { done(-1, QProcess::CrashExit); });
 
     //setup timer for monitoring session activity
     _monitorTimer = new QTimer(this);
@@ -280,6 +284,15 @@ void Session::run()
      * their computing time on any system - especially with the problem on arch linux being there too.
      */
     QString exec = QString::fromLocal8Bit(QFile::encodeName(_program));
+#ifdef Q_OS_WIN
+    // No $SHELL on Windows: fall back to the command interpreter. Relative
+    // names are looked up in PATH by Pty::start().
+    if (exec.isEmpty()) {
+        exec = QString::fromLocal8Bit(qgetenv("COMSPEC"));
+        if (exec.isEmpty())
+            exec = QStringLiteral("cmd.exe");
+    }
+#else
     // if 'exec' is not specified, fall back to default shell.  if that
     // is not set then fall back to /bin/sh
 
@@ -300,6 +313,7 @@ void Session::run()
             exec = defaultShell;
         }
     }
+#endif
 
     // _arguments sometimes contain ("") so isEmpty()
     // or count() does not work as expected...
@@ -579,6 +593,12 @@ bool Session::sendSignal(int signal)
         return false;
     }
 
+#ifdef Q_OS_WIN
+    // No POSIX signals: every signal is mapped to TerminateProcess().
+    Q_UNUSED(signal)
+    _shellProcess->kill();
+    return _shellProcess->waitForFinished(1000);
+#else
     int result = ::kill(static_cast<pid_t>(_shellProcess->processId()), signal);
 
      if ( result == 0 )
@@ -589,6 +609,7 @@ bool Session::sendSignal(int signal)
      {
          return false;
      }
+#endif
 }
 
 void Session::close()
@@ -598,6 +619,20 @@ void Session::close()
 
     if (isRunning())
     {
+#ifdef Q_OS_WIN
+        // Closing the pseudo console sends CTRL_CLOSE_EVENT to the attached
+        // processes (the SIGHUP equivalent); if that is not enough, terminate.
+        _shellProcess->closePty();
+        if (_shellProcess->waitForFinished(1000))
+        {
+            return;
+        }
+        qWarning() << "Process " << processId() << " did not exit after closing the console";
+        if (!sendSignal(0))
+        {
+            QTimer::singleShot(1, this, SIGNAL(finished()));
+        }
+#else
         // Try SIGHUP, and if unsuccessful, do a hard kill.
         // This is the sequence used by most other terminal emulators like xterm, gnome-terminal, ...
         if (sendSignal(SIGHUP))
@@ -616,6 +651,7 @@ void Session::close()
                 QTimer::singleShot(1, this, SIGNAL(finished()));
             }
         }
+#endif
     }
     else
     {
@@ -1108,7 +1144,11 @@ int Session::getPtySlaveFd() const
 }
 QString Session::getPtyName() const
 {
+#ifdef Q_OS_WIN
+    return QString();
+#else
     return QString::fromLatin1(_shellProcess->pty()->ttyName());
+#endif
 }
 
 SessionGroup::SessionGroup()
