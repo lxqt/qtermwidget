@@ -21,7 +21,7 @@
     <message>
         <location filename="../Session.cpp" line="707"/>
         <source>Exited Unexpectedly</source>
-        <translation type="unfinished"></translation>
+        <translation>Terminou de forma inesperada</translation>
     </message>
     <message>
         <location filename="../Session.cpp" line="691"/>
@@ -37,7 +37,7 @@ Do you want to save the scrollback buffer?</source>
     <message>
         <location filename="../Session.cpp" line="711"/>
         <source>Save history</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar histórico</translation>
     </message>
 </context>
 <context>
