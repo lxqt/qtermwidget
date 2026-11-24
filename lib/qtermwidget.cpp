@@ -293,6 +293,7 @@ void QTermWidget::init(int startnow)
 {
     m_layout = new QVBoxLayout();
     m_layout->setContentsMargins(0,0,0,0);
+    m_layout->setSpacing(0);
     setLayout(m_layout);
 
     // translations
