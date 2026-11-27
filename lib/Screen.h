@@ -728,6 +728,10 @@ private:
 
     // used in REP (repeating char)
     unsigned short lastDrawnChar;
+#ifdef Q_OS_WIN
+    // wchar_t is UTF-16 on Windows: high surrogate waiting for its pair
+    wchar_t pendingHighSurrogate = 0;
+#endif
 
     static Character defaultChar;
     static Character nullChar;

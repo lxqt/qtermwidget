@@ -8,6 +8,7 @@ QTermWidget is an open-source project originally based on the KDE4 Konsole appli
 The main goal of this project is to provide a Unicode-enabled, embeddable Qt widget for using as a built-in console (or terminal emulation widget).
 
 It is compatible with BSD, Linux and OS X.
+On Windows 10 (version 1809 or later) the shell is driven through the Windows Pseudo Console (ConPTY).
 
 This project is licensed under the terms of the [GPLv2](https://www.gnu.org/licenses/gpl-2.0.en.html) or any later version. See the LICENSE file for the full text of the license. Some files are published under compatible licenses:
 ```
@@ -56,6 +57,25 @@ Code configuration is handled by CMake. CMake variable `CMAKE_INSTALL_PREFIX` wi
 To build, run `make`. To install, run `make install` which accepts variable `DESTDIR` as usual.
 
 To build PyQt bindings, build this library first, and then invoke `sip-wheel` in pyqt/ directory. Environment variables `CXXFLAGS` and `LDFLAGS` can be used to specify non-installed or non-standard directories for headers and shared libraries, and the built Python wheel can be installed by standard tools like `pip`. See [the CI script](.ci/build.sh) for a complete example.
+
+#### Windows
+
+Windows has no POSIX pseudo terminal: the shell is driven through the Windows Pseudo Console (ConPTY) instead, so Windows 10 version 1809 (October 2018) or later is required.
+The ConPTY entry points are resolved at runtime, so the library still loads on older versions, where starting a terminal fails with an error instead of a missing symbol.
+
+Build with MSVC (Visual Studio 2022) and a Qt 6 build for MSVC 2022 64-bit:
+
+```
+cmake -B build -S . -DCMAKE_PREFIX_PATH="C:/Qt/6.x.x/msvc2022_64"
+cmake --build build --config Release
+```
+
+`lxqt-build-tools`, listed above, is required on Windows as well.
+
+Limitations of the Windows backend:
+- `getPtySlaveFd()` returns `-1` and `getPtyName()` an empty string, because a ConPTY session has no slave device.
+- `changeDir()` only works on Linux.
+- No login records (utmp/utempter) are written.
 
 ### Binary packages
 
@@ -205,6 +225,7 @@ Returns whether flow control is enabled.
 
 **getPtySlaveFd : const int**\
 Returns a pty slave file descriptor. This can be used for display and control a remote terminal.
+On Windows `-1` is returned, because a ConPTY session has no slave device.
 
 <!--**getShellPID : int**\-->
 **getForegroundProcessId : int**\

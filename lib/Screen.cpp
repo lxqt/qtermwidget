@@ -704,7 +704,7 @@ void Screen::checkSelection(int from, int to)
         clearSelection();
 }
 
-static inline bool isRegionalIndicator(wchar_t c)
+static inline bool isRegionalIndicator(uint c)
 {
     return (c >= 0x1F1E6 && c <= 0x1F1FF); // for creating flag codes
 }
@@ -716,7 +716,40 @@ void Screen::displayCharacter(wchar_t c)
     // We indicate the fact that a newline has to be triggered by
     // putting the cursor one right to the last column of the screen.
 
+#ifdef Q_OS_WIN
+    // On Windows the emulation delivers UTF-16 code units: a code point
+    // above U+FFFF (emoji, CJK ext. B, ...) arrives as a surrogate pair.
+    // Store it as an extended character made of the two units (rendered
+    // as-is by TerminalDisplay) and size it from the full code point.
+    bool surrogatePair = false;
+    int w;
+    if (QChar::isHighSurrogate(static_cast<char16_t>(c)))
+    {
+        pendingHighSurrogate = c;
+        return;
+    }
+    if (QChar::isLowSurrogate(static_cast<char16_t>(c)))
+    {
+        if (!pendingHighSurrogate)
+            return; // stray low surrogate
+        uint units[2] = { static_cast<uint>(pendingHighSurrogate), static_cast<uint>(c) };
+        const char32_t ucs = QChar::surrogateToUcs4(static_cast<char16_t>(pendingHighSurrogate),
+                                                    static_cast<char16_t>(c));
+        pendingHighSurrogate = 0;
+        w = konsole_wcwidth(ucs);
+        if (w <= 0)
+            return; // zero width / non printable supplementary characters are dropped
+        c = static_cast<wchar_t>(ExtendedCharTable::instance.createExtendedChar(units, 2));
+        if (!c)
+            return;
+        surrogatePair = true;
+        goto notcombine;
+    }
+    pendingHighSurrogate = 0;
+    w = konsole_wcwidth(c);
+#else
     int w = konsole_wcwidth(c);
+#endif
     if (w < 0)
         return; // Non-printable character
     if (w == 0
@@ -870,6 +903,10 @@ notcombine:
     currentChar.backgroundColor = effectiveBackground;
     currentChar.rendition = effectiveRendition;
     currentChar.hyperlinkId = currentHyperlinkId;
+#ifdef Q_OS_WIN
+    if (surrogatePair)
+        currentChar.rendition |= RE_EXTENDED_CHAR;
+#endif
 
     lastDrawnChar = c;
 

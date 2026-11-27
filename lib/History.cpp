@@ -27,7 +27,9 @@
 #include <cstdlib>
 #include <cstdio>
 #include <sys/types.h>
+#ifndef Q_OS_WIN
 #include <sys/mman.h>
+#endif
 #include <unistd.h>
 #include <cerrno>
 
@@ -113,6 +115,16 @@ void HistoryFile::map()
 {
     Q_ASSERT( fileMap == nullptr );
 
+#ifdef Q_OS_WIN
+    // Windows: go through QFile, the CRT descriptor returned by handle()
+    // is in text mode and has no mmap().
+    tmpFile.flush();
+    fileMap = length > 0 ? (char*)tmpFile.map( 0 , length ) : nullptr;
+    if ( !fileMap )
+    {
+            readWriteBalance = 0;
+    }
+#else
     fileMap = (char*)mmap( nullptr , length , PROT_READ , MAP_PRIVATE , ion , 0 );
 
     //if mmap'ing fails, fall back to the read-lseek combination
@@ -122,12 +134,18 @@ void HistoryFile::map()
             fileMap = nullptr;
             //qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
     }
+#endif
 }
 
 void HistoryFile::unmap()
 {
+#ifdef Q_OS_WIN
+    bool result = tmpFile.unmap( (uchar*)fileMap );
+    Q_ASSERT( result ); Q_UNUSED( result )
+#else
     int result = munmap( fileMap , length );
     Q_ASSERT( result == 0 ); Q_UNUSED( result )
+#endif
 
     fileMap = nullptr;
 }
@@ -144,11 +162,18 @@ void HistoryFile::add(const unsigned char* bytes, int len)
 
   readWriteBalance++;
 
+#ifdef Q_OS_WIN
+  if (!tmpFile.seek(length)) { qWarning("HistoryFile::add.seek failed"); return; }
+  const qint64 rc = tmpFile.write(reinterpret_cast<const char*>(bytes), len);
+  if (rc < 0) { qWarning("HistoryFile::add.write failed"); return; }
+  length += static_cast<int>(rc);
+#else
   int rc = 0;
 
   rc = KDE_lseek(ion,length,SEEK_SET); if (rc < 0) { perror("HistoryFile::add.seek"); return; }
   rc = write(ion,bytes,len);       if (rc < 0) { perror("HistoryFile::add.write"); return; }
   length += rc;
+#endif
 }
 
 void HistoryFile::get(unsigned char* bytes, int len, int loc)
@@ -168,12 +193,17 @@ void HistoryFile::get(unsigned char* bytes, int len, int loc)
   }
   else
   {
-      int rc = 0;
-
       if (loc < 0 || len < 0 || loc + len > length)
         fprintf(stderr,"getHist(...,%d,%d): invalid args.\n",len,loc);
+#ifdef Q_OS_WIN
+      if (!tmpFile.seek(loc)) { qWarning("HistoryFile::get.seek failed"); return; }
+      if (tmpFile.read(reinterpret_cast<char*>(bytes), len) < 0) { qWarning("HistoryFile::get.read failed"); return; }
+#else
+      int rc = 0;
+
       rc = KDE_lseek(ion,loc,SEEK_SET); if (rc < 0) { perror("HistoryFile::get.seek"); return; }
       rc = read(ion,bytes,len);     if (rc < 0) { perror("HistoryFile::get.read"); return; }
+#endif
   }
 }
 

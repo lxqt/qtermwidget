@@ -375,6 +375,12 @@ uint ExtendedCharTable::extendedCharHash(uint* unicodePoints , ushort length) co
     {
         hash = 31*hash + unicodePoints[i];
     }
+#ifdef Q_OS_WIN
+    // Character::character is a 16 bit wchar_t on Windows: the key must fit.
+    hash &= 0xFFFF;
+    if (hash == 0)
+        hash = 1;
+#endif
     return hash;
 }
 bool ExtendedCharTable::extendedCharMatch(uint hash , uint* unicodePoints , ushort length) const
@@ -415,6 +421,10 @@ uint ExtendedCharTable::createExtendedChar(uint* unicodePoints , ushort length)
             // if hash is already used by another, different sequence of
             // unicode character points, then try next hash
             hash++;
+#ifdef Q_OS_WIN
+            if (hash > 0xFFFF)
+                hash = 1;
+#endif
 
             if (hash == initialHash)
             {
