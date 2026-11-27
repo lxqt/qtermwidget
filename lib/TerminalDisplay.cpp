@@ -735,13 +735,36 @@ static void drawOtherChar(QPainter& paint, int x, int y, int w, int h, uchar cod
             break;
         }
     }
+
+    // dotted lines ┄	┅	┆	┇	┈	┉	┊	┋
+    else if (0x4 <= code && code <= 0xb)
+    {
+        const QPen &oldPen = paint.pen();
+
+        QPen dots = oldPen;
+        dots.setWidthF(dots.widthF() * (code%2 ? 2 : 1));
+        qreal space = 3.0f;
+        qreal cnt = code < 8 ? 3.0f : 4.0f;
+        qreal ln = (code & 0x2) ? h/cnt : w/(cnt-1.0);
+        if (ln < 4.0f)
+            space = ln/(code < 8 ? 3.0f : 2.0f);
+        ln -= space;
+        dots.setDashPattern(QList<qreal>() << ln/dots.widthF() << space/dots.widthF());
+        paint.setPen(dots);
+        if (code & 0x2)
+            paint.drawLine(cx, y, cx, ey);
+        else
+            paint.drawLine(x, cy, ex, cy);
+        paint.setPen(oldPen);
+    }
 }
 
 void TerminalDisplay::drawLineCharString(    QPainter& painter, int x, int y, const std::wstring& str,
                                     const Character* attributes) const
 {
         const QPen& currentPen = painter.pen();
-
+        const bool hadAlias = !(painter.renderHints() & QPainter::Antialiasing);
+        painter.setRenderHints(painter.renderHints() | QPainter::Antialiasing);
         if ( (attributes->rendition & RE_BOLD) && _boldIntense )
         {
             QPen boldPen(currentPen);
@@ -759,6 +782,8 @@ void TerminalDisplay::drawLineCharString(    QPainter& painter, int x, int y, co
         }
 
         painter.setPen( currentPen );
+        if (hadAlias)
+           painter.setRenderHints(painter.renderHints() & ~QPainter::Antialiasing);
 }
 
 void TerminalDisplay::setKeyboardCursorShape(QTermWidget::KeyboardCursorShape shape)
